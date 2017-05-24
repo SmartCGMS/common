@@ -1,0 +1,26 @@
+//#include <verrsrc.h>
+#include <winver.h>
+
+
+#define VER_COMPANYNAME_STR			"Tomas Koutny\0"
+#define VER_LEGALCOPYRIGHT_STR		"ZCU-FAV-KIV\0"
+
+#define VER_PRODUCTVERSION          3,0,0,0
+#define VER_PRODUCTVERSION_STR      "3.0 Alpha 1\0"
+#define VER_PRODUCTNAME_STR			"Glucose Predictor\0"
+
+#ifndef DEBUG
+#define VER_FILEFLAGS               VS_FF_PRERELEASE
+#else
+#define VER_FILEFLAGS              (VS_FF_PRIVATEBUILD|VS_FF_PRERELEASE|VS_FF_DEBUG)
+#endif
+
+
+//define VER_LANGNEUTRAL in files, which do not throw anything in English
+
+#ifdef VER_LANGNEUTRAL
+#define VER_VERSION_UNICODE_LANG  "000004B0" /* LANG_NEUTRAL/SUBLANG_NEUTRAL, Unicode CP */
+#else
+#define VER_VERSION_UNICODE_LANG  "040904B0" /* LANG_ENGLISH/SUBLANG_ENGLISH_US, Unicode CP */
+#endif
+
