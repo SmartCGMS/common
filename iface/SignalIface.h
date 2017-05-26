@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ModelIface.h"
-#include "referencedIface.h"
+#include "LogicalClockIface.h"
 
 namespace glucose {
 
@@ -48,22 +48,28 @@ namespace glucose {
 				  Max_Level;
 	} TBounds;
 
-	class IDiscrete_Signal : public virtual IReferenced {
+	
+	class IDiscrete_Signal : public virtual IReferenced, public virtual ILogical_Clock {
 	public:
-		virtual HRESULT IfaceCalling Get_Levels(const TLevel *dst, const size_t dst_size, size_t *filled) = S_OK;
+		virtual HRESULT IfaceCalling Get_Levels(const TLevel *dst, const size_t dst_size, size_t *filled) = 0;
 			//on S_OK, *filled TLevel elements were copied into the dst buffer of dst_size size
 
 		virtual HRESULT IfaceCalling Get_Bounds(TBounds *bounds, size_t *level_count) = 0;
 			//gets bounds and level_count, any of these parameters can be nullptr
 
 		virtual HRESULT IfaceCalling Add_Levels(const TLevel *src, const size_t src_size) = 0;	
+			//incerements ILogical_Clock::Clock
 	};
 
 	class IContinuous_Signal : public virtual IReferenced {
 	public:
-		virtual HRESULT IfaceCalling Get_Levels(const floattype *times, const floattype *levels, const size_t count,
-												size_t *filled, const size_t derivation_order) = 0;
+		virtual HRESULT IfaceCalling Get_Levels(const TModel_Params *params,
+												const floattype *times, const floattype *levels, const size_t count,
+												size_t *filled, const size_t derivation_order) = 0 const;
 		/* 
+		this method will be called in parallel by solvers and therefore it has to be const
+
+		params - params from which to calculate the signal
 		times - times at which to get the levels, i.e., y values for x values		
 		count - the total number of times for which to get the levels
 		levels - the levels, must be already allocated with size of count
@@ -72,9 +78,6 @@ namespace glucose {
 
 		virtual HRESULT IfaceCalling Get_Control_Levels(IDiscrete_Signal **control_levels) = 0;
 			//Gets levels, which drive shape of the continuous signal - e.g.; measured levels, which we approximate
-
-		virtual HRESULT IfaceCalling Invalidate(const TModel_Params *params);
-			//on S_OK, marks the signal to be recalculated at the next call to Get_Levels
 	};
 
 }
