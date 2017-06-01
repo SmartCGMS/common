@@ -70,7 +70,7 @@ namespace glucose {
 		};
 	} TDiffusion_4_Params;
 
-		typedef struct {
+	typedef struct {
 		floattype weight;
 		floattype delta;
 	} TWeight_Delta;
@@ -105,8 +105,8 @@ namespace glucose {
 		constexpr static size_t count = 4;
 		union {
 			struct {
-				floattype tau, g;
-				floattype beta, alpha;
+				floattype tau,;
+				floattype alpha, beta, gamma;
 			};
 			floattype vector[count];
 		};
