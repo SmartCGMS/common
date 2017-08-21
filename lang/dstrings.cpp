@@ -20,6 +20,16 @@ const char* dsAbout = "About";
 const char* dsAbout_Amp = "&About";
 const char* dsGlucose_Prediction = "Glucose Prediction - %1";
 
+const char* dsAdd = "Add";
+const char* dsDelete = "Delete";
+const char* dsMove_Up = "Move up";
+const char* dsMove_Down = "Move down";
+
+const char* dsFilters_Window = "Filters window";
+const char* dsApplied_Filters = "Applied filters";
+const char* dsAvailable_Filters = "Available filters";
+
+
 
 //--------------------------------- do not translate any of the rs-prefixed texts --
 
