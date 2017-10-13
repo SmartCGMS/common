@@ -26,6 +26,7 @@ extern const char* dsGlucose_Prediction;
 
 extern const char* dsAdd;
 extern const char* dsDelete;
+extern const char* dsRemove;
 extern const char* dsMove_Up;
 extern const char* dsMove_Down;
 

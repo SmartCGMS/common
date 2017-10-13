@@ -22,6 +22,7 @@ const char* dsGlucose_Prediction = "Glucose Prediction - %1";
 
 const char* dsAdd = "Add";
 const char* dsDelete = "Delete";
+const char* dsRemove = "Remove";
 const char* dsMove_Up = "Move up";
 const char* dsMove_Down = "Move down";
 
