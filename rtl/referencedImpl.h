@@ -4,6 +4,7 @@
 
 #include <atomic>
 
+
 namespace refcnt {
 
 	class CReferenced : public virtual IReferenced {

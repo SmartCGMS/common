@@ -7,11 +7,12 @@
 #include "../rtl/hresult.h"
 /*
   Note that we have to split this class into interface and its implementation,
-  as we can use several different compilers with different settings. This is 
-  to guarantee that the method implementations will be consistent - i.e. that 
-  each object will have the methods compiled with the same compiler.
+  as we can use several different compilers. This is to guarantee that the method
+  implementations will be consistent - i.e. that each object will have the methods
+  compiled with the same compiler.
 
 */
+
 namespace refcnt {
 
 	class IReferenced {

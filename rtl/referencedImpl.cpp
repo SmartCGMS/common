@@ -1,15 +1,13 @@
 #include "referencedImpl.h"
 
-#include "cfixes.h"
 
 #include <limits>
 
+#undef max
+
 namespace refcnt {
 
-
-	HRESULT CReferenced::QueryInterface(/*REFIID */ void*  riid, void ** ppvObj) {
-		unused(ppvObj);
-		unused(riid);
+	[[maybe_unused]] HRESULT CReferenced::QueryInterface(/*REFIID */ void*  riid, void ** ppvObj) {
 		return E_NOTIMPL;
 	}
 
@@ -24,8 +22,7 @@ namespace refcnt {
 		return rc;
 	}
 
-
-#undef max
+	
 
 	ULONG IfaceCalling CNotReferenced::AddRef() {
 		return std::numeric_limits<ULONG>::max();
