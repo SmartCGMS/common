@@ -9,8 +9,9 @@ namespace glucose {
 
 		#ifdef _WIN32
 			extern "C" __declspec(dllimport)  HRESULT IfaceCalling get_filter_descriptors(TFilter_Descriptor **begin, TFilter_Descriptor **end);
+			extern "C" __declspec(dllimport)  HRESULT IfaceCalling advertise_filter_descriptors(const TFilter_Descriptor *begin, const TFilter_Descriptor *end);
 			extern "C" __declspec(dllimport)  HRESULT IfaceCalling create_filter_pipe(IFilter_Pipe **pipe);
-			extern "C" __declspec(dllimport)  HRESULT IfaceCalling create_filter(const GUID *id, glucose::IFilter_Pipe *input, glucose::IFilter_Pipe *output, glucose::IFilter **filter);
+			extern "C" __declspec(dllimport)  HRESULT IfaceCalling create_filter(const GUID *id, IFilter_Pipe *input, IFilter_Pipe *output, IFilter **filter);
 		#endif
 	}
 
@@ -24,6 +25,10 @@ namespace glucose {
 		}
 
 		return result;
+	}
+
+	bool advertise_filter_descriptors(const TFilter_Descriptor *begin, const TFilter_Descriptor *end) {
+		return imported::advertise_filter_descriptors(begin, end) == S_OK;
 	}
 
 	SFilter_Pipe create_filter_pipe() {

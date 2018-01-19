@@ -23,6 +23,7 @@ const char* dsGlucose_Prediction = "Glucose Prediction - %1";
 const char* dsAdd = "Add";
 const char* dsDelete = "Delete";
 const char* dsRemove = "Remove";
+const char* dsConfigure= "Configure";
 const char* dsMove_Up = "Move up";
 const char* dsMove_Down = "Move down";
 
@@ -30,7 +31,7 @@ const char* dsFilters_Window = "Filters window";
 const char* dsApplied_Filters = "Applied filters";
 const char* dsAvailable_Filters = "Available filters";
 
-
+const wchar_t *dsDb_Reader = L"Db Reader";
 
 //--------------------------------- do not translate any of the rs-prefixed texts --
 

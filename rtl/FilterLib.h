@@ -15,5 +15,7 @@ namespace glucose {
 	SFilter create_filter(const GUID &id, SFilter_Pipe &input, SFilter_Pipe &output);
 	//instiantiate a filter and connects it to its input and output
 
+
+	bool advertise_filter_descriptors(const TFilter_Descriptor *begin, const TFilter_Descriptor *end);
 	
 }

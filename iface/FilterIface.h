@@ -20,6 +20,7 @@ namespace glucose {
 
 	class IFilter : public virtual refcnt::IReferenced {
 	public:
+		virtual HRESULT configure(const std::string &configuration) = 0;		
 	};
 
 }

@@ -27,12 +27,15 @@ extern const char* dsGlucose_Prediction;
 extern const char* dsAdd;
 extern const char* dsDelete;
 extern const char* dsRemove;
+extern const char* dsConfigure;
 extern const char* dsMove_Up;
 extern const char* dsMove_Down;
 
 extern const char* dsFilters_Window;
 extern const char* dsApplied_Filters;
 extern const char* dsAvailable_Filters;
+
+extern const wchar_t *dsDb_Reader;
 
 //--------------------------------- do not translate any of the rs-prefixed texts --
 
