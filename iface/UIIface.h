@@ -15,16 +15,13 @@
 
 namespace glucose {
 
-	using TConfigure_Filter = HRESULT(IfaceCalling *)(std::string &configuration);
-		//accept configuration and possiblyc changes it
-		//	S_OK configuration was changed
-		//	S_FALSE configuration was not changed
-		//	other code means an error
-
 	struct TFilter_Descriptor {
 		const GUID id;
 		const wchar_t *description;
-		TConfigure_Filter configurator;	//can be nullptr
+		const size_t parameters_count;	//can be zero
+		const NParameter_Type* parameter_type;
+		const wchar_t** ui_parameter_name;		
+		const wchar_t** config_parameter_name;
 	};
 
 

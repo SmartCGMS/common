@@ -36,7 +36,20 @@ extern const char* dsApplied_Filters;
 extern const char* dsAvailable_Filters;
 
 extern const wchar_t *dsDb_Reader;
+extern const wchar_t *dsDb_Host;
+extern const wchar_t *dsDb_Provider;
+extern const wchar_t *dsDb_Name;
+extern const wchar_t *dsDb_User_Name;
+extern const wchar_t *dsDb_Password;
 
 //--------------------------------- do not translate any of the rs-prefixed texts --
 
 extern const char* rsAbout_Text;
+
+
+extern const wchar_t *rsDb_Reader;
+extern const wchar_t *rsDb_Host;
+extern const wchar_t *rsDb_Provider;
+extern const wchar_t *rsDb_Name;
+extern const wchar_t *rsDb_User_Name;
+extern const wchar_t *rsDb_Password;

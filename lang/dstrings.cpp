@@ -33,6 +33,12 @@ const char* dsAvailable_Filters = "Available filters";
 
 const wchar_t *dsDb_Reader = L"Db Reader";
 
+const wchar_t *dsDb_Host = L"Host";
+const wchar_t *dsDb_Provider = L"Provider";
+const wchar_t *dsDb_Name = L"Name";
+const wchar_t *dsDb_User_Name = L"User name";
+const wchar_t *dsDb_Password = L"Password";
+
 //--------------------------------- do not translate any of the rs-prefixed texts --
 
 const char* rsAbout_Text =	"<b>Glucose Predictor</b>, Version 3.0 Alpha<br>&nbsp;<br>"\
@@ -42,3 +48,8 @@ const char* rsAbout_Text =	"<b>Glucose Predictor</b>, Version 3.0 Alpha<br>&nbsp
 							"Plze\xc5\x88 306 14, Czech Republic<br>"\
 							"&nbsp;<hr>diabetes.zcu.cz";
 							
+const wchar_t *rsDb_Host = L"Host";
+const wchar_t *rsDb_Provider = L"Provider";
+const wchar_t *rsDb_Name = L"Name";
+const wchar_t *rsDb_User_Name = L"UserName";
+const wchar_t *rsDb_Password = L"Password";

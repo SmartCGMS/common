@@ -16,11 +16,25 @@ namespace glucose {
 		virtual HRESULT receive(TSensor_Event *event) = 0;
 	};
 
+
+	enum class NParameter_Type : size_t {
+		ptInvalid = 0,
+		ptString
+	};
+
+	struct TFilter_Parameter {
+		//data marshalling to enable inter-operability
+		NParameter_Type type;
+		
+		union {
+			const char* c_str;
+		};
+	};
 	
 
 	class IFilter : public virtual refcnt::IReferenced {
 	public:
-		virtual HRESULT configure(const std::string &configuration) = 0;		
+		virtual HRESULT configure(const TFilter_Parameter *configuration, const size_t count) = 0;
 	};
 
 }

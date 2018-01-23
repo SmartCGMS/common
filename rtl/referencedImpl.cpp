@@ -7,7 +7,10 @@
 
 namespace refcnt {
 
-	[[maybe_unused]] HRESULT CReferenced::QueryInterface(/*REFIID */ void*  riid, void ** ppvObj) {
+	#ifdef __INTEL_COMPILER
+	[[maybe_unused]] 
+	#endif
+	HRESULT CReferenced::QueryInterface(/*REFIID */ void*  riid, void ** ppvObj) {
 		return E_NOTIMPL;
 	}
 
