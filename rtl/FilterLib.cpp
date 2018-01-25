@@ -1,6 +1,6 @@
 #include "FilterLib.h"
 
-#include "referencedImpl.h"
+
 
 namespace glucose {
 
@@ -46,4 +46,8 @@ namespace glucose {
 		return result;
 	}
 
+	
+
 }
+
+

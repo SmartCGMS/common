@@ -1,6 +1,7 @@
 #include "dstrings.h"
 
 const char* dsFile = "File";
+const char* dsSave_Configuration = "Save Configruation";
 const char* dsQuit = "Quit";
 const char* dsTools = "Tools";
 const char* dsFilters = "Filters";
@@ -39,6 +40,18 @@ const wchar_t *dsDb_Name = L"Name";
 const wchar_t *dsDb_User_Name = L"User name";
 const wchar_t *dsDb_Password = L"Password";
 
+const char *dsConfiguration = "Configuration";
+const char *dsSelect_Just_One_Item = "Select just one item.";
+
+const char *dsInformation = "Information";
+const char *dsMain_Parameters = "Main parameters";
+
+const char* dsOK = "OK";
+const char* dsCancel = "Cancel";
+const char* dsApply = "Apply";
+const char* dsCommit = "Commit";
+
+
 //--------------------------------- do not translate any of the rs-prefixed texts --
 
 const char* rsAbout_Text =	"<b>Glucose Predictor</b>, Version 3.0 Alpha<br>&nbsp;<br>"\
@@ -53,3 +66,5 @@ const wchar_t *rsDb_Provider = L"Provider";
 const wchar_t *rsDb_Name = L"Name";
 const wchar_t *rsDb_User_Name = L"UserName";
 const wchar_t *rsDb_Password = L"Password";
+
+const wchar_t *rsConfig_File_Name = L"config.ini";

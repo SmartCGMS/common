@@ -17,9 +17,18 @@ namespace glucose {
 	};
 
 
+	template <typename T>
+	class IParameter_Container : public virtual refcnt::IReferenced {
+	public:
+		virtual HRESULT set(const T *begin, const T *end) = 0;
+		virtual HRESULT get(T **begin, T **end) = 0;
+	};
+
 	enum class NParameter_Type : size_t {
-		ptInvalid = 0,
-		ptString
+		ptNull = 0,
+		ptWChar_Container,	//IParameter_Container<wchar_t>
+		ptInt64_Container,  //IParameter_Container<int64_t>
+		ptDouble
 	};
 
 	struct TFilter_Parameter {
@@ -27,7 +36,9 @@ namespace glucose {
 		NParameter_Type type;
 		
 		union {
-			const char* c_str;
+			IParameter_Container<wchar_t>* wstr;		//ptWChar_Container
+			IParameter_Container<int64_t>* vec_int64;
+			double dbl;
 		};
 	};
 	

@@ -2,9 +2,9 @@
 
 
 //UI strings used by the entire application
-//all strings must be UTF-8 encoded
 
 extern const char* dsFile;
+extern const char* dsSave_Configuration;
 extern const char* dsQuit;
 extern const char* dsTools;
 extern const char* dsFilters;
@@ -42,6 +42,18 @@ extern const wchar_t *dsDb_Name;
 extern const wchar_t *dsDb_User_Name;
 extern const wchar_t *dsDb_Password;
 
+extern const char *dsConfiguration;
+extern const char *dsSelect_Just_One_Item;
+
+extern const char *dsInformation;
+extern const char *dsMain_Parameters;
+
+extern const char* dsOK;
+extern const char* dsCancel;
+extern const char* dsApply;
+extern const char* dsCommit;
+
+
 //--------------------------------- do not translate any of the rs-prefixed texts --
 
 extern const char* rsAbout_Text;
@@ -53,3 +65,5 @@ extern const wchar_t *rsDb_Provider;
 extern const wchar_t *rsDb_Name;
 extern const wchar_t *rsDb_User_Name;
 extern const wchar_t *rsDb_Password;
+
+extern const wchar_t *rsConfig_File_Name;
