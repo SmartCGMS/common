@@ -68,3 +68,5 @@ const wchar_t *rsDb_User_Name = L"UserName";
 const wchar_t *rsDb_Password = L"Password";
 
 const wchar_t *rsConfig_File_Name = L"config.ini";
+const wchar_t *rs_Filter_Section_Prefix = L"Filter_";
+const wchar_t *rsIni_Comment_Prefix = L"; ";

@@ -67,3 +67,5 @@ extern const wchar_t *rsDb_User_Name;
 extern const wchar_t *rsDb_Password;
 
 extern const wchar_t *rsConfig_File_Name;
+extern const wchar_t *rs_Filter_Section_Prefix;
+extern const wchar_t *rsIni_Comment_Prefix;

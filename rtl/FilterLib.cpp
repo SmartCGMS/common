@@ -26,6 +26,23 @@ namespace glucose {
 		return result;
 	}
 
+	bool get_filter_descriptors_by_id(const GUID &id, TFilter_Descriptor &desc) {
+		TFilter_Descriptor *desc_begin, *desc_end;
+
+		bool result = imported::get_filter_descriptors(&desc_begin, &desc_end) == S_OK;
+		if (result) {
+			result = false;	//we have to find the filter yet
+			for (auto iter=desc_begin; iter != desc_end; iter++)
+				if (iter->id == id) {
+					desc = *iter;
+					result = true;
+					break;
+				}
+		}
+
+		return result;
+	}
+
 
 	SFilter_Pipe create_filter_pipe() {
 		SFilter_Pipe result;
@@ -48,6 +65,25 @@ namespace glucose {
 
 	
 
+
 }
 
+std::wstring WChar_Container_To_WString(glucose::wstr_contrainer *container) {
+	wchar_t *begin, *end;
+	if (container->get(&begin, &end)) {
+		return std::wstring{ begin, end };
+	}
+	else
+		return std::wstring{};
+}
 
+glucose::wstr_contrainer* WString_To_WChar_Container(const wchar_t* str) {
+	glucose::IParameter_Container<wchar_t> *obj = nullptr;
+	if (Manufacture_Object<glucose::internal::CParameter_Container<wchar_t>, glucose::IParameter_Container<wchar_t>>(&obj) == S_OK) {
+		obj->set(str, str + wcslen(str));
+		return obj;
+	}
+	else return
+		nullptr;
+	
+}

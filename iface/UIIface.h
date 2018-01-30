@@ -16,12 +16,12 @@
 namespace glucose {
 
 	struct TFilter_Descriptor {
-		const GUID id;
-		const wchar_t *description;
-		const size_t parameters_count;	//can be zero
-		const NParameter_Type* parameter_type;
-		const wchar_t** ui_parameter_name;		
-		const wchar_t** config_parameter_name;		
+		GUID id;
+		wchar_t *description;
+		size_t parameters_count;	//can be zero
+		NParameter_Type* parameter_type;
+		wchar_t** ui_parameter_name;		
+		wchar_t** config_parameter_name;		
 	};
 
 

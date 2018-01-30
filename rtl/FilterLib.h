@@ -12,6 +12,7 @@ namespace glucose {
 	using SFilter = std::shared_ptr<IFilter>;
 
 	std::vector<TFilter_Descriptor> get_filter_descriptors();
+	bool get_filter_descriptors_by_id(const GUID &id, TFilter_Descriptor &desc);
 	SFilter_Pipe create_filter_pipe();
 	SFilter create_filter(const GUID &id, SFilter_Pipe &input, SFilter_Pipe &output);
 	//instiantiate a filter and connects it to its input and output
@@ -33,9 +34,9 @@ namespace glucose {
 				return S_OK;
 			}
 
-			virtual HRESULT get(T **begin, T **end) final {
-				*begin = data();
-				*end = data()+size();
+			virtual HRESULT get(T **begin, T **end) const final {
+				*begin = const_cast<wchar_t*>(data());
+				*end = const_cast<wchar_t*>(data()) +size();
 				return S_OK;
 			}
 		};
@@ -50,4 +51,8 @@ namespace glucose {
 		Manufacture_Object<internal::CParameter_Container<T>, IParameter_Container<T>>(&obj);
 		return refcnt::make_shared_reference_ext <std::shared_ptr<IParameter_Container<T>>, IParameter_Container<T>>(obj, false);	
 	}
+
 }
+
+std::wstring WChar_Container_To_WString(glucose::wstr_contrainer *container);
+glucose::wstr_contrainer* WString_To_WChar_Container(const wchar_t* str);
