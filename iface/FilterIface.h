@@ -28,9 +28,9 @@ namespace glucose {
 
 	enum class NParameter_Type : size_t {
 		ptNull = 0,
-		ptWChar_Container,	//IParameter_Container<wchar_t>
-		ptInt64_Container,  //IParameter_Container<int64_t>
-		ptDouble
+		ptWChar_Container,	//IParameter_Container<wchar_t>		
+		ptSelect_Time_Segment_ID,	//alias for IParameter_Container<int64_t> that selects time segments id
+		ptDouble,		
 	};
 
 	struct TFilter_Parameter {
@@ -39,7 +39,7 @@ namespace glucose {
 		wstr_contrainer *config_name;
 		union {
 			wstr_contrainer* wstr;		//ptWChar_Container
-			IParameter_Container<int64_t>* vec_int64;
+			IParameter_Container<int64_t>* select_time_segment_id;
 			double dbl;
 		};
 	};

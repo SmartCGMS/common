@@ -48,7 +48,8 @@ namespace glucose {
 	template <typename T>
 	std::shared_ptr<IParameter_Container<T>> Create_Parameter_Container(const T *begin, const T *end) {
 		IParameter_Container<T> *obj = nullptr;
-		Manufacture_Object<internal::CParameter_Container<T>, IParameter_Container<T>>(&obj);
+		if (Manufacture_Object<internal::CParameter_Container<T>, IParameter_Container<T>>(&obj) == S_OK)
+			obj->set(begin, end);
 		return refcnt::make_shared_reference_ext <std::shared_ptr<IParameter_Container<T>>, IParameter_Container<T>>(obj, false);	
 	}
 
