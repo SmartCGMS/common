@@ -70,7 +70,7 @@ namespace glucose {
 
 std::wstring WChar_Container_To_WString(glucose::wstr_contrainer *container) {
 	wchar_t *begin, *end;
-	if (container->get(&begin, &end)) {
+	if (container->get(&begin, &end) == S_OK) {
 		return std::wstring{ begin, end };
 	}
 	else

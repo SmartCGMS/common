@@ -15,7 +15,7 @@ namespace glucose {
 	bool get_filter_descriptors_by_id(const GUID &id, TFilter_Descriptor &desc);
 	SFilter_Pipe create_filter_pipe();
 	SFilter create_filter(const GUID &id, SFilter_Pipe &input, SFilter_Pipe &output);
-	//instiantiate a filter and connects it to its input and output
+	//instantiate a filter and connects it to its input and output
 
 
 	namespace internal {
