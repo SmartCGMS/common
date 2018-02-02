@@ -39,6 +39,7 @@ const wchar_t *dsDb_Provider = L"Provider";
 const wchar_t *dsDb_Name = L"Name";
 const wchar_t *dsDb_User_Name = L"User name";
 const wchar_t *dsDb_Password = L"Password";
+const wchar_t *dsTime_Segment_ID = L"Time Segment Id";
 
 const char *dsConfiguration = "Configuration";
 const char *dsSelect_Just_One_Item = "Select just one item.";
@@ -50,6 +51,9 @@ const char* dsOK = "OK";
 const char* dsCancel = "Cancel";
 const char* dsApply = "Apply";
 const char* dsCommit = "Commit";
+
+const char* dsSubject = "Subject";
+const char* dsSegment = "Segment";
 
 
 //--------------------------------- do not translate any of the rs-prefixed texts --
@@ -66,7 +70,10 @@ const wchar_t *rsDb_Provider = L"Provider";
 const wchar_t *rsDb_Name = L"Name";
 const wchar_t *rsDb_User_Name = L"UserName";
 const wchar_t *rsDb_Password = L"Password";
+const wchar_t *rsTime_Segment_ID = L"TimeSegmentId";
 
 const wchar_t *rsConfig_File_Name = L"config.ini";
 const wchar_t *rs_Filter_Section_Prefix = L"Filter_";
 const wchar_t *rsIni_Comment_Prefix = L"; ";
+
+const char* rsSelect_Subjects_And_Segments_For_Db_Reader_Filter = "select timesegment.id, subject.name, timesegment.name from subject, timesegment where subject.id = timesegment.subjectid order by subject.name, timesegment.name asc";

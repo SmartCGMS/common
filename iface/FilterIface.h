@@ -25,6 +25,7 @@ namespace glucose {
 	};
 
 	using wstr_contrainer = IParameter_Container<wchar_t>;
+	using time_segment_id_container = IParameter_Container<int64_t>;
 
 	enum class NParameter_Type : size_t {
 		ptNull = 0,

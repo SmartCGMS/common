@@ -1,5 +1,6 @@
 #include "FilterLib.h"
 
+#include <sstream>
 
 
 namespace glucose {
@@ -86,4 +87,40 @@ glucose::wstr_contrainer* WString_To_WChar_Container(const wchar_t* str) {
 	else return
 		nullptr;
 	
+}
+
+
+
+
+std::wstring Select_Time_Segments_Id_To_WString(glucose::time_segment_id_container *container) {
+	int64_t *begin, *end;
+	if (container->get(&begin, &end) == S_OK) {
+		std::wstring result;
+		for (auto iter = begin; iter != end; iter++) {
+			if (result.size() > 0) result.append(L" ");
+
+			result.append(std::to_wstring(*iter));
+		}
+		return result;
+	}
+	else
+		return std::wstring{};
+}
+
+glucose::time_segment_id_container* WString_To_Select_Time_Segments_Id(const wchar_t *str) {
+	glucose::IParameter_Container<int64_t> *obj = nullptr;
+	if (Manufacture_Object<glucose::internal::CParameter_Container<int64_t>, glucose::IParameter_Container<int64_t>>(&obj) == S_OK) {
+		std::vector<int64_t> ids;
+
+		std::wstringstream value_str(str);
+		int64_t value;
+		while (value_str >> value)
+			ids.push_back(value);
+		
+		obj->set(ids.data(), ids.data()+ ids.size());
+		return obj;
+	}
+	else return
+		nullptr;
+
 }

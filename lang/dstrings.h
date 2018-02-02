@@ -41,6 +41,7 @@ extern const wchar_t *dsDb_Provider;
 extern const wchar_t *dsDb_Name;
 extern const wchar_t *dsDb_User_Name;
 extern const wchar_t *dsDb_Password;
+extern const wchar_t *dsTime_Segment_ID;
 
 extern const char *dsConfiguration;
 extern const char *dsSelect_Just_One_Item;
@@ -52,6 +53,9 @@ extern const char* dsOK;
 extern const char* dsCancel;
 extern const char* dsApply;
 extern const char* dsCommit;
+
+extern const char* dsSubject;
+extern const char* dsSegment;
 
 
 //--------------------------------- do not translate any of the rs-prefixed texts --
@@ -65,7 +69,10 @@ extern const wchar_t *rsDb_Provider;
 extern const wchar_t *rsDb_Name;
 extern const wchar_t *rsDb_User_Name;
 extern const wchar_t *rsDb_Password;
+extern const wchar_t *rsTime_Segment_ID;
 
 extern const wchar_t *rsConfig_File_Name;
 extern const wchar_t *rs_Filter_Section_Prefix;
 extern const wchar_t *rsIni_Comment_Prefix;
+
+extern const char* rsSelect_Subjects_And_Segments_For_Db_Reader_Filter;
