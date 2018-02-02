@@ -57,6 +57,7 @@ namespace glucose {
 
 std::wstring WChar_Container_To_WString(glucose::wstr_contrainer *container);
 glucose::wstr_contrainer* WString_To_WChar_Container(const wchar_t* str);
+bool WChar_Container_Equals_WString(glucose::wstr_contrainer *container, const wchar_t* str);
 
 
 std::wstring Select_Time_Segments_Id_To_WString(glucose::time_segment_id_container *container);

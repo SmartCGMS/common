@@ -89,7 +89,16 @@ glucose::wstr_contrainer* WString_To_WChar_Container(const wchar_t* str) {
 	
 }
 
+bool WChar_Container_Equals_WString(glucose::wstr_contrainer *container, const wchar_t* str) {
+	wchar_t *cont_begin, *cont_end;
+	
+	if (container->get(&cont_begin, &cont_end) != S_OK) return false;	//cannot compare
 
+	size_t cont_len = cont_end - cont_begin;
+	if (cont_len != wcslen(str)) return false;	//different size, thus not equal
+
+	return wmemcmp(cont_begin, str, cont_len) == 0;
+}
 
 
 std::wstring Select_Time_Segments_Id_To_WString(glucose::time_segment_id_container *container) {
