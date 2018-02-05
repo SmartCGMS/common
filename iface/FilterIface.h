@@ -31,7 +31,9 @@ namespace glucose {
 		ptNull = 0,
 		ptWChar_Container,	//IParameter_Container<wchar_t>		
 		ptSelect_Time_Segment_ID,	//alias for IParameter_Container<int64_t> that selects time segments id
-		ptDouble,		
+		ptDouble,	
+		ptInt64,
+		ptBool
 	};
 
 	struct TFilter_Parameter {
@@ -42,6 +44,8 @@ namespace glucose {
 			wstr_contrainer* wstr;		//ptWChar_Container
 			IParameter_Container<int64_t>* select_time_segment_id;
 			double dbl;
+			int64_t int64;
+			uint8_t boolean;
 		};
 	};
 	

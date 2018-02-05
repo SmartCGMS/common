@@ -3,7 +3,7 @@
 namespace glucose {
 
 
-	enum class NSensor_Event_Code {
+	enum class NSensor_Event_Code : uint8_t {
 		Nothing,			//internal event of the object
 
 		Measured_IG,		//level and isig must be valid

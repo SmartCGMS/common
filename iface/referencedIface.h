@@ -1,6 +1,10 @@
 #pragma once
 
+#if defined(PLATFORM) && (PLATFORM == PLATFORM_ANDROID || PLATFORM == PLATFORM_IOS)
+#define IfaceCalling
+#else
 #define IfaceCalling __stdcall
+#endif
 
 #include <memory>
 
@@ -27,6 +31,16 @@ namespace refcnt {
 		virtual ULONG IfaceCalling Release() = 0;
 	};
 
+	template <typename I, typename Y>
+	//this one is designed for extending std::shared_ptr via inheritance
+	I make_shared_reference_ext(Y *obj, bool add_reference) {
+		if ((add_reference) && (obj != nullptr)) obj->AddRef();
+		I result;
+		result.reset(obj, [](Y* obj_to_release) {if (obj_to_release != nullptr) obj_to_release->Release(); });
+		//shared_ptr will overtake the assignment operations and maintain its own counter
+		//when shared_ptr's counter will come to zero, referenced's relase will take action
+		return result;
+	}
 
 	template <typename I>
 	std::shared_ptr<I>  make_shared_reference(I *obj, bool add_reference) {
@@ -39,17 +53,6 @@ namespace refcnt {
 			//when shared_ptr's counter will come to zero, referenced's relase will take action
 		return result;
 		*/
-	}
-
-	template <typename I, typename Y>
-	//this one is designed for extending std::shared_ptr via inheritance
-	I make_shared_reference_ext(Y *obj, bool add_reference) {
-		if ((add_reference) && (obj != nullptr)) obj->AddRef();
-		I result;
-		result.reset(obj, [](Y* obj_to_release) {if (obj_to_release != nullptr) obj_to_release->Release(); });
-		//shared_ptr will overtake the assignment operations and maintain its own counter
-		//when shared_ptr's counter will come to zero, referenced's relase will take action
-		return result;
 	}
 
 

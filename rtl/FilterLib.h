@@ -29,14 +29,14 @@ namespace glucose {
 			virtual ~CParameter_Container() {};
 
 			virtual HRESULT set(const T *begin, const T *end) final {
-				clear();
+				std::vector<T>::clear();
 				std::copy(begin, end, std::back_inserter(*this));
 				return S_OK;
 			}
 
 			virtual HRESULT get(T **begin, T **end) const final {
-				*begin = const_cast<T*>(data());
-				*end = const_cast<T*>(data()) +size();
+				*begin = const_cast<T*>(std::vector<T>::data());
+				*end = const_cast<T*>(std::vector<T>::data()) + std::vector<T>::size();
 				return S_OK;
 			}
 		};
