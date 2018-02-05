@@ -1,7 +1,7 @@
 #include "FilterLib.h"
 
 #include <sstream>
-
+#include "manufactory.h"
 
 namespace glucose {
 
@@ -69,36 +69,6 @@ namespace glucose {
 
 }
 
-std::wstring WChar_Container_To_WString(glucose::wstr_contrainer *container) {
-	wchar_t *begin, *end;
-	if (container->get(&begin, &end) == S_OK) {
-		return std::wstring{ begin, end };
-	}
-	else
-		return std::wstring{};
-}
-
-glucose::wstr_contrainer* WString_To_WChar_Container(const wchar_t* str) {
-	glucose::IParameter_Container<wchar_t> *obj = nullptr;
-	if (Manufacture_Object<glucose::internal::CParameter_Container<wchar_t>, glucose::IParameter_Container<wchar_t>>(&obj) == S_OK) {
-		obj->set(str, str + wcslen(str));
-		return obj;
-	}
-	else return
-		nullptr;
-	
-}
-
-bool WChar_Container_Equals_WString(glucose::wstr_contrainer *container, const wchar_t* str) {
-	wchar_t *cont_begin, *cont_end;
-	
-	if (container->get(&cont_begin, &cont_end) != S_OK) return false;	//cannot compare
-
-	size_t cont_len = cont_end - cont_begin;
-	if (cont_len != wcslen(str)) return false;	//different size, thus not equal
-
-	return wmemcmp(cont_begin, str, cont_len) == 0;
-}
 
 
 std::wstring Select_Time_Segments_Id_To_WString(glucose::time_segment_id_container *container) {
@@ -117,8 +87,8 @@ std::wstring Select_Time_Segments_Id_To_WString(glucose::time_segment_id_contain
 }
 
 glucose::time_segment_id_container* WString_To_Select_Time_Segments_Id(const wchar_t *str) {
-	glucose::IParameter_Container<int64_t> *obj = nullptr;
-	if (Manufacture_Object<glucose::internal::CParameter_Container<int64_t>, glucose::IParameter_Container<int64_t>>(&obj) == S_OK) {
+	glucose::time_segment_id_container *obj = nullptr;
+	if (Manufacture_Object<refcnt::internal::CVector_Container<int64_t>, glucose::time_segment_id_container>(&obj) == S_OK) {
 		std::vector<int64_t> ids;
 
 		std::wstringstream value_str(str);

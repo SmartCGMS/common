@@ -1,9 +1,11 @@
 #pragma once
 
 #include "../iface/referencedIface.h"
+#include "manufactory.h"
 
 #include <atomic>
-
+#include <string>
+#include <vector>
 
 namespace refcnt {
 
@@ -26,4 +28,64 @@ namespace refcnt {
 		virtual ULONG IfaceCalling Release();
 	};
 
+
+
+	namespace internal {
+
+		#pragma warning( push )
+		#pragma warning( disable : 4250 ) // C4250 - 'class1' : inherits 'class2::member' via dominance
+
+		template <typename T>
+		class CVector_Container : public virtual IVector_Container<T>, public virtual CReferenced, public std::vector<T> {
+		public:
+			virtual ~CVector_Container() {};
+
+			virtual HRESULT set(const T *begin, const T *end) final {
+				std::vector<T>::clear();
+				std::copy(begin, end, std::back_inserter(*this));
+				return S_OK;
+			}
+
+			virtual HRESULT get(T **begin, T **end) const final {
+				*begin = const_cast<T*>(std::vector<T>::data());
+				*end = const_cast<T*>(std::vector<T>::data()) + std::vector<T>::size();
+				return S_OK;
+			}
+		};
+
+		#pragma warning( pop ) 
+	}
+
+	template <typename T>
+	IVector_Container<T>* Create_Container(const T *begin, const T *end) {
+		IVector_Container<T> *obj = nullptr;
+		if (Manufacture_Object<internal::CVector_Container<T>, IVector_Container<T>>(&obj) == S_OK)
+			obj->set(begin, end);
+		return obj;		
+	}
+
+
+	template <typename T>
+	std::shared_ptr<IVector_Container<T>> Create_Container_shared(const T *begin, const T *end) {
+		IVector_Container<T> *obj = Create_Parameter_Container<T>(begin, end);		
+		return refcnt::make_shared_reference_ext <std::shared_ptr<IVector_Container<T>>, IVector_Container<T>>(obj, false);
+	}
+
+
+	template <typename T, typename C = std::vector<T>>
+	C Container_To_Vector(IVector_Container<T> *container) {
+		T *begin, *end;
+		if (container->get(&begin, &end) == S_OK) {
+			return C{ begin, end };
+		}
+		else
+			return C{};
+	}
+
+	std::wstring WChar_Container_To_WString(wstr_container *container);
+	wstr_container* WString_To_WChar_Container(const wchar_t* str);
+	bool WChar_Container_Equals_WString(wstr_container *container, const wchar_t* str);
+
+
+	
 }

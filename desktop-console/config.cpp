@@ -59,7 +59,7 @@ void CConfig::Load(CFilter_Chain &filter_chain) {
 				for (size_t i = 0; i < desc.parameters_count; i++) {
 					glucose::TFilter_Parameter filter_parameter;
 					filter_parameter.type = desc.parameter_type[i];
-					filter_parameter.config_name = WString_To_WChar_Container(desc.config_parameter_name[i]);
+					filter_parameter.config_name = refcnt::WString_To_WChar_Container(desc.config_parameter_name[i]);
 
 					//does the value exists?
 					const wchar_t* str_value = mIni.GetValue(section_name.pItem, desc.config_parameter_name[i]);
@@ -71,7 +71,7 @@ void CConfig::Load(CFilter_Chain &filter_chain) {
 						switch (filter_parameter.type)
 						{
 							case glucose::NParameter_Type::ptWChar_Container:
-								filter_parameter.wstr = WString_To_WChar_Container(str_value);
+								filter_parameter.wstr = refcnt::WString_To_WChar_Container(str_value);
 								break;
 
 							case glucose::NParameter_Type::ptSelect_Time_Segment_ID:

@@ -1,9 +1,9 @@
 #pragma once
 
-#if defined(PLATFORM) && (PLATFORM == PLATFORM_ANDROID || PLATFORM == PLATFORM_IOS)
-#define IfaceCalling
+#ifdef _WIN32
+	#define IfaceCalling __stdcall
 #else
-#define IfaceCalling __stdcall
+	#define IfaceCalling
 #endif
 
 #include <memory>
@@ -68,4 +68,14 @@ namespace refcnt {
 		return result;
 	}
 
+
+	template <typename T>
+	class IVector_Container : public virtual refcnt::IReferenced {
+	public:
+		virtual HRESULT set(const T *begin, const T *end) = 0;
+		virtual HRESULT get(T **begin, T **end) const = 0;
+	};
+
+	using wstr_container = IVector_Container<wchar_t>;
+	using double_container = IVector_Container<double>;
 }

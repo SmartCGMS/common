@@ -5,27 +5,19 @@
 #include <vector>
 
 
-#include "referencedIface.h"
-#include "SensorIface.h"
+#include "DeviceIface.h"
 
 namespace glucose {
 
 	class IFilter_Pipe : public virtual refcnt::IReferenced {
 	public:
-		virtual HRESULT send(const TSensor_Event *event) = 0;
-		virtual HRESULT receive(TSensor_Event *event) = 0;
+		virtual HRESULT send(const TDevice_Event *event) = 0;
+		virtual HRESULT receive(TDevice_Event *event) = 0;
 	};
 
 
-	template <typename T>
-	class IParameter_Container : public virtual refcnt::IReferenced {
-	public:
-		virtual HRESULT set(const T *begin, const T *end) = 0;
-		virtual HRESULT get(T **begin, T **end) const = 0;
-	};
-
-	using wstr_contrainer = IParameter_Container<wchar_t>;
-	using time_segment_id_container = IParameter_Container<int64_t>;
+	
+	using time_segment_id_container = refcnt::IVector_Container<int64_t>;
 
 	enum class NParameter_Type : size_t {
 		ptNull = 0,
@@ -39,10 +31,10 @@ namespace glucose {
 	struct TFilter_Parameter {
 		//data marshalling to enable inter-operability
 		NParameter_Type type;
-		wstr_contrainer *config_name;
+		refcnt::wstr_container *config_name;
 		union {
-			wstr_contrainer* wstr;		//ptWChar_Container
-			IParameter_Container<int64_t>* select_time_segment_id;
+			refcnt::wstr_container* wstr;		//ptWChar_Container
+			time_segment_id_container* select_time_segment_id;
 			double dbl;
 			int64_t int64;
 			uint8_t boolean;

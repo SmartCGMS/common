@@ -1,32 +1,20 @@
 #pragma once
 
 #include "FilterIface.h"
-
-#ifdef _WIN32
-	#include <guiddef.h>
-#else
-	struct GUID {
-		unsigned long  Data1;
-		unsigned short Data2;
-		unsigned short Data3;
-		unsigned char  Data4[8];
-	} ;
-
-	inline int IsEqualGUID(const GUID& rguid1, const GUID& rguid2)
-	{
-		return !memcmp(&rguid1, &rguid2, sizeof(GUID));
-	}
-
-	inline bool operator==(const GUID& guidOne, const GUID& guidOther)
-	{
-		return !!IsEqualGUID(guidOne, guidOther);
-	}
-#endif
+#include "guid.h"
 
 namespace glucose {
 
+	//Units used for glucose levels 
+	enum class TUnits : int8_t {
+		MmolPerL = 0, //mmol/l
+		MgPerDl,	//mg/dl
+		DgPerDl,	//dg/dl
+	};
+
+
 	struct TFilter_Descriptor {
-		GUID id;
+		const GUID id;
 		const wchar_t *description;
 		size_t parameters_count;	//can be zero
 		const NParameter_Type* parameter_type;
@@ -35,8 +23,57 @@ namespace glucose {
 	};
 
 
+	struct TMetric_Descriptor {		
+		const GUID id;
+		const wchar_t *description;
+	};
+
+
+	enum class TModel_Parameter_Value : int8_t {
+		//any model parameter must be expressed with double
+		//these constant express how to interpret that double
+
+		mptDouble,
+		mptTime,
+		mptBool
+	};
+
+	struct TModel_Descriptor {
+		const GUID id;
+		const wchar_t *description;
+
+		const size_t number_of_parameters;	//cannot be zero
+		const size_t *parameter_types;		//array of mptConstants
+		const wchar_t **parameter_ui_names;
+
+											//default values
+		const TModel_Parameter_Value *minimum_bounds;
+		const TModel_Parameter_Value *default_values;
+		const TModel_Parameter_Value *maximum_bounds;
+
+		//signals which can be calculated using this model
+		const size_t number_of_calculated_signals;	//cannot be zero
+		const GUID* calculated_signal_ids;			
+		const wchar_t **calculated_signal_names;
+	};
+
+
+	struct TSolver_Descriptor {
+		const GUID id;
+		const wchar_t *description;
+
+		const bool specialized;	//if false, can be applied to any model
+								//if true, the following fields apply
+		const size_t specialized_count;		//can be zero with specialized == false, usually 1
+		const GUID *specialized_models;		//array of models, whose parameters the solver can solve
+	};
+
+
 	using TCreate_Filter = HRESULT(IfaceCalling *)(const GUID *id, IFilter_Pipe *input, IFilter_Pipe *output, glucose::IFilter **filter);
 	using TGet_Filter_Descriptors = HRESULT(IfaceCalling*)(TFilter_Descriptor **begin, TFilter_Descriptor **end);
+	using TGet_Metric_Descriptors = HRESULT(IfaceCalling*)(TMetric_Descriptor **begin, TMetric_Descriptor **end);
+	using TGet_Model_Descriptors = HRESULT(IfaceCalling*)(TModel_Descriptor **begin, TModel_Descriptor **end);
+	using TGet_Solver_Descriptors = HRESULT(IfaceCalling*)(TSolver_Descriptor **begin, TSolver_Descriptor **end);
 
 }
 
