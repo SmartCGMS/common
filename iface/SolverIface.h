@@ -62,7 +62,7 @@ namespace glucose {
 			//alllevelscount is the total number of all levels that could have been calculated under optimal conditions
 		virtual HRESULT IfaceCalling Reset() = 0;
 			//undo all previously called Accumulate
-		virtual HRESULT IfaceCalling Calculate(floattype *metric, size_t *levels_accumulated, size_t levels_required) = 0;
+		virtual HRESULT IfaceCalling Calculate(double *metric, size_t *levels_accumulated, size_t levels_required) = 0;
 			//calculates the metric - the less number is better
 			//levels will be the number of levels accumulated
 			//returns S_FALSE if *levelsaccumulated < levelsrequired
