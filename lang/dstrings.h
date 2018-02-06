@@ -58,6 +58,21 @@ extern const char* dsSubject;
 extern const char* dsSegment;
 
 
+extern const wchar_t* dsAvg_Abs;
+extern const wchar_t* dsMax_Abs;
+extern const wchar_t* dsPerc_Abs;
+extern const wchar_t* dsThresh_Abs;
+extern const wchar_t* dsLeal_2010;
+extern const wchar_t* dsAIC;
+extern const wchar_t* dsStd_Dev;
+extern const wchar_t* dsCrosswalk;
+extern const wchar_t* dsIntegral_CDF;
+extern const wchar_t* dsAvg_Plus_Bessel_Std_Dev;
+
+
+
+
+
 //--------------------------------- do not translate any of the rs-prefixed texts --
 
 extern const char* rsAbout_Text;

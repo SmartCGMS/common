@@ -55,6 +55,17 @@ const char* dsCommit = "Commit";
 const char* dsSubject = "Subject";
 const char* dsSegment = "Segment";
 
+const wchar_t* dsAvg_Abs = L"average error";
+const wchar_t* dsMax_Abs = L"maximum error";
+const wchar_t* dsPerc_Abs = L"error at percentil";
+const wchar_t* dsThresh_Abs = L"number of errors above threshold";
+const wchar_t* dsLeal_2010 = L"Leal 2010";
+const wchar_t* dsAIC = L"Akaike Information Criterion";
+const wchar_t* dsStd_Dev = L"standard deviation, within threshold to 1-threshold percentiles";
+const wchar_t* dsCrosswalk = L"Crosswalk";
+const wchar_t* dsIntegral_CDF = L"area under ECDF";
+const wchar_t* dsAvg_Plus_Bessel_Std_Dev = L"average plus standard deviation with Bessel's correction, within threshold to 1-threshold percentiles";
+
 
 //--------------------------------- do not translate any of the rs-prefixed texts --
 

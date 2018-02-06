@@ -1,7 +1,7 @@
 #pragma once
 
 #include "FilterIface.h"
-#include "guid.h"
+#include "../rtl/guid.h"
 
 namespace glucose {
 
@@ -16,7 +16,7 @@ namespace glucose {
 	struct TFilter_Descriptor {
 		const GUID id;
 		const wchar_t *description;
-		size_t parameters_count;	//can be zero
+		const size_t parameters_count;	//can be zero
 		const NParameter_Type* parameter_type;
 		const wchar_t** ui_parameter_name;
 		const wchar_t** config_parameter_name;

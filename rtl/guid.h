@@ -20,3 +20,9 @@
 		return !!IsEqualGUID(guidOne, guidOther);
 	}
 #endif
+
+
+	inline bool operator<(const GUID& rguid1, const GUID& rguid2)
+	{
+		return memcmp(&rguid1, &rguid2, sizeof(GUID)) < 0;
+	}

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "guid.h"
+#include "../rtl/guid.h"
 #include "referencedIface.h"
 
 namespace glucose {
@@ -50,14 +50,20 @@ namespace glucose {
 
 		//-------- simulation related codes ------
 		Time_Segment_Start,
-		Time_Segment_Stop
+		Time_Segment_Stop,
+
+
+		//-------- codes intended for log parsers ------
+		Information,
+		Warning,
+		Error
 	};
 
 
 	struct TDevice_Event {		
 		NDevice_Event_Code event_code;
 
-		int8_t device_id;				//supporting parallel measurements
+		GUID device_id;					//supporting parallel measurements
 		GUID signal_id;					//blood, ist, isig, model id aka e.g, calculated blood, etc.
 
 		double device_time;				//signal with multiple values are aggregated byt device_time with the same signal_id and device_id
@@ -67,6 +73,7 @@ namespace glucose {
 			double level;
 			TModel_Parameter_Vector* parameters;		//this will have to be marshalled
 														//as different models have different number of parameters, statically sized field would case over-complicated code later on
+			refcnt::wstr_container* info;				//information, warning, error 
 		};
 	};
 
@@ -114,9 +121,5 @@ namespace glucose {
 	using TCreate_Calculated_Signal = HRESULT(IfaceCalling *)(const GUID *calc_id, ITime_Segment *segment, ISignal **signal);
 		//segment provides source levels for the calculation
 		//only ITime_Segment::Get_Signal is supposed to call this function to avoid (although not probihit) creating of over-complex segment-graphs
-
-	using TSolve_Model_Parameters = HRESULT(IfaceCalling*)(const GUID *solver_method, const GUID *signal_id, const ITime_Segment **segments, const size_t segment_count, TModel_Parameter_Vector **solved_parameters);
-		//generic, e.g., evolutionary, solver uses signal_id to calculate its metric function on the given list of segments
-		//specialized solver has the signal ids encoded - i.e., specialized inside
 	
 }
