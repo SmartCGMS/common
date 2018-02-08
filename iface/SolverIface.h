@@ -52,8 +52,9 @@ namespace glucose {
 	using TCreate_Metric = HRESULT(IfaceCalling*)(const GUID *metric_id, const TMetric_Parameters *parameters, IMetric **metric);
 	using TSolve_Model_Parameters = HRESULT(IfaceCalling*)(const GUID *solver_id, const GUID *signal_id, const ITime_Segment **segments, const size_t segment_count, IMetric *metric, 
 														  IModel_Parameter_Vector *lower_bound, IModel_Parameter_Vector *upper_bound, IModel_Parameter_Vector **solved_parameters,
-														  TSolver_Progress *progress);
+														  IModel_Parameter_Vector **solution_hints, const size_t hint_count, TSolver_Progress *progress);
 		//generic, e.g., evolutionary, solver uses signal_id to calculate its metric function on the given list of segments
 		//specialized solver has the signal ids encoded - i.e., specialized inside		
+		//the very first hint, if provided, has to be the best one
 	
 }

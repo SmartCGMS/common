@@ -25,7 +25,11 @@ namespace glucose {
 		ptSelect_Time_Segment_ID,	//alias for IParameter_Container<int64_t> that selects time segments id
 		ptDouble,	
 		ptInt64,
-		ptBool
+		ptBool,
+		ptModel_Id,
+		ptMetric_Id,
+		ptSolver_Id,
+		ptSignal_Id
 	};
 
 	struct TFilter_Parameter {
@@ -38,6 +42,7 @@ namespace glucose {
 			double dbl;
 			int64_t int64;
 			uint8_t boolean;
+			GUID guid;
 		};
 	};
 	
