@@ -108,15 +108,18 @@ namespace glucose {
 				count - the total number of times for which to get the levels
 				levels - the levels, must be already allocated with size of count
 				filled - the number of levels filled
-			*/
-
+			*/		
 	};
 
 
 	class ITime_Segment : public virtual refcnt::IReferenced {
 	public:
-		virtual HRESULT IfaceCalling Get_Signal(const GUID *signal_id, ISignal **signal);
+		virtual HRESULT IfaceCalling Get_Signal(const GUID *signal_id, ISignal **signal) = 0;
 			//calls AddRef on returned object
+		virtual HRESULT IfaceCalling Suggest_Parameters(const GUID *signal_id, IModel_Parameter_Vector **suggestions, const size_t suggestions_count, size_t *suggested) = 0;
+			//returns e.g., parameters which were calculated previously and stored in a non-volatile memory
+			//if there are no such parameters, the segment should attempt to get and return default parameters from the model description that it will lookup via the signal id			
+			//signal_id is to be possibly used by the segment to evalate fitness per signal if model provides more than one
 	};
 
 	using TCreate_Calculated_Signal = HRESULT(IfaceCalling *)(const GUID *calc_id, ITime_Segment *segment, ISignal **signal);

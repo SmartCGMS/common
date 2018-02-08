@@ -41,9 +41,18 @@ namespace glucose {
 
 
 
+	struct TSolver_Progress {
+			//solver sets these values to indicate its progress
+		size_t current_progress, max_progress;	//minimum progress is zero
+		double best_metric;		
+		char cancelled;	//just cast it to bool, if set to true, solver cancels the current operation				   			
+	};
+
+
 	using TCreate_Metric = HRESULT(IfaceCalling*)(const GUID *metric_id, const TMetric_Parameters *parameters, IMetric **metric);
 	using TSolve_Model_Parameters = HRESULT(IfaceCalling*)(const GUID *solver_id, const GUID *signal_id, const ITime_Segment **segments, const size_t segment_count, IMetric *metric, 
-														  IModel_Parameter_Vector *lower_bound, IModel_Parameter_Vector *upper_bound, IModel_Parameter_Vector **solved_parameters);
+														  IModel_Parameter_Vector *lower_bound, IModel_Parameter_Vector *upper_bound, IModel_Parameter_Vector **solved_parameters,
+														  TSolver_Progress *progress);
 		//generic, e.g., evolutionary, solver uses signal_id to calculate its metric function on the given list of segments
 		//specialized solver has the signal ids encoded - i.e., specialized inside		
 	
