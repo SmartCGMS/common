@@ -69,7 +69,25 @@ extern const wchar_t* dsCrosswalk;
 extern const wchar_t* dsIntegral_CDF;
 extern const wchar_t* dsAvg_Plus_Bessel_Std_Dev;
 
+extern const wchar_t* dsBlood;
+extern const wchar_t* dsInterstitial;
 
+extern const wchar_t* dsDiffusion_Model_v2;
+extern const wchar_t* dsSteil_Rebrin;
+
+extern const wchar_t* dsP;
+extern const wchar_t* dsCg;
+extern const wchar_t* dsC;
+extern const wchar_t* dsDt;
+extern const wchar_t* dsK;
+extern const wchar_t* dsH;
+
+extern const wchar_t* dsTau;
+extern const wchar_t* dsAlpha;
+extern const wchar_t* dsBeta;
+extern const wchar_t* dsGamma;
+
+extern const wchar_t* dsNewUOA;
 
 
 

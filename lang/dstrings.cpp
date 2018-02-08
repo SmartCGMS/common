@@ -66,6 +66,26 @@ const wchar_t* dsCrosswalk = L"Crosswalk";
 const wchar_t* dsIntegral_CDF = L"area under ECDF";
 const wchar_t* dsAvg_Plus_Bessel_Std_Dev = L"average plus standard deviation with Bessel's correction, within threshold to 1-threshold percentiles";
 
+const wchar_t* dsBlood = L"blood";
+const wchar_t* dsInterstitial = L"interstitial fluid";
+
+const wchar_t* dsDiffusion_Model_v2 = L"Diffusion model v2";
+const wchar_t* dsSteil_Rebrin = L"Steil-Rebrin";
+
+const wchar_t* dsP = L"p";
+const wchar_t* dsCg = L"cg";
+const wchar_t* dsC = L"c";
+const wchar_t* dsDt = L"dt";
+const wchar_t* dsK = L"k";
+const wchar_t* dsH = L"h";
+
+
+const wchar_t* dsTau = L"tau";
+const wchar_t* dsAlpha = L"alpha";
+const wchar_t* dsBeta = L"beta";
+const wchar_t* dsGamma = L"gamma";
+
+const wchar_t* dsNewUOA = L"NewUOA";
 
 //--------------------------------- do not translate any of the rs-prefixed texts --
 

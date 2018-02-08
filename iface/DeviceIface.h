@@ -39,7 +39,7 @@ namespace glucose {
 	static constexpr GUID signal_Health_Stress = { 0xf4438e9a, 0xdd52, 0x45bd,{ 0x83, 0xce, 0x5e, 0x93, 0x61, 0x5e, 0x62, 0xbd } }; // {F4438E9A-DD52-45BD-83CE-5E93615E62BD}
 
 
-	using TModel_Parameter_Vector = refcnt::double_container;
+	using IModel_Parameter_Vector = refcnt::double_container;
 
 	enum class NDevice_Event_Code : uint8_t {
 		Nothing = 0,		//internal event of the object
@@ -71,7 +71,7 @@ namespace glucose {
 
 		union {
 			double level;
-			TModel_Parameter_Vector* parameters;		//this will have to be marshalled
+			IModel_Parameter_Vector* parameters;		//this will have to be marshalled
 														//as different models have different number of parameters, statically sized field would case over-complicated code later on
 			refcnt::wstr_container* info;				//information, warning, error 
 		};
@@ -96,7 +96,7 @@ namespace glucose {
 
 		virtual HRESULT IfaceCalling Add_Levels(const TLevel *begin, const TLevel *end) = 0;
 
-		virtual HRESULT IfaceCalling Get_Continuous_Levels(TModel_Parameter_Vector *params,
+		virtual HRESULT IfaceCalling Get_Continuous_Levels(IModel_Parameter_Vector *params,
 			const double *times, const double *levels, const size_t count,
 			size_t *filled, const size_t derivation_order) const = 0;
 			/*
@@ -114,6 +114,7 @@ namespace glucose {
 
 
 	class ITime_Segment : public virtual refcnt::IReferenced {
+	public:
 		virtual HRESULT IfaceCalling Get_Signal(const GUID *signal_id, ISignal **signal);
 			//calls AddRef on returned object
 	};

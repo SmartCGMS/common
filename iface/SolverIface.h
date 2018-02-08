@@ -4,6 +4,8 @@
 
 namespace glucose {
 
+	
+
 	struct TDifference_Point {
 		double expected;
 		double calculated;
@@ -41,7 +43,7 @@ namespace glucose {
 
 	using TCreate_Metric = HRESULT(IfaceCalling*)(const GUID *metric_id, const TMetric_Parameters *parameters, IMetric **metric);
 	using TSolve_Model_Parameters = HRESULT(IfaceCalling*)(const GUID *solver_id, const GUID *signal_id, const ITime_Segment **segments, const size_t segment_count, IMetric *metric, 
-														  TModel_Parameter_Vector *lower_bound, TModel_Parameter_Vector *upper_bound, TModel_Parameter_Vector **solved_parameters);
+														  IModel_Parameter_Vector *lower_bound, IModel_Parameter_Vector *upper_bound, IModel_Parameter_Vector **solved_parameters);
 		//generic, e.g., evolutionary, solver uses signal_id to calculate its metric function on the given list of segments
 		//specialized solver has the signal ids encoded - i.e., specialized inside		
 	

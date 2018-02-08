@@ -29,7 +29,7 @@ namespace glucose {
 	};
 
 
-	enum class TModel_Parameter_Value : int8_t {
+	enum class NModel_Parameter_Value : int8_t {
 		//any model parameter must be expressed with double
 		//these constant express how to interpret that double
 
@@ -43,13 +43,13 @@ namespace glucose {
 		const wchar_t *description;
 
 		const size_t number_of_parameters;	//cannot be zero
-		const size_t *parameter_types;		//array of mptConstants
+		const NModel_Parameter_Value *parameter_types;		//array of mptConstants
 		const wchar_t **parameter_ui_names;
 
 											//default values
-		const TModel_Parameter_Value *minimum_bounds;
-		const TModel_Parameter_Value *default_values;
-		const TModel_Parameter_Value *maximum_bounds;
+		const double *lower_bound;
+		const double *default_values;
+		const double *upper_bound;
 
 		//signals which can be calculated using this model
 		const size_t number_of_calculated_signals;	//cannot be zero
