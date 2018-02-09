@@ -87,5 +87,16 @@ namespace refcnt {
 	bool WChar_Container_Equals_WString(wstr_container *container, const wchar_t* str);
 
 
+
+	template <typename S, typename I>
+	std::vector<S> Referenced_To_Vector(I **items, const size_t count) {
+		std::vector<S> result;
+
+		for (size_t i = 0; i < count; i++)
+			result.push_back(refcnt::make_shared_reference_ext<S, I>(const_cast<I*>(items[i]), true));
+
+		return result;
+	}
+
 	
 }

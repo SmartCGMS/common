@@ -16,7 +16,4 @@ namespace glucose {
 		SSignal Get_Signal(const GUID &signal_id);
 	};
 
-
-	std::vector<STime_Segment> Time_Segments_To_Vector(const ITime_Segment **segments, const size_t segment_count);
-
 }
