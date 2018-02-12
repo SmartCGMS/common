@@ -38,6 +38,11 @@ namespace glucose {
 	static constexpr GUID signal_Carb_Intake = { 0x37aa6ac1, 0x6984, 0x4a06,{ 0x92, 0xcc, 0xa6, 0x60, 0x11, 0xd, 0xd, 0xc7 } };	// {37AA6AC1-6984-4A06-92CC-A660110D0DC7}																																		
 	static constexpr GUID signal_Health_Stress = { 0xf4438e9a, 0xdd52, 0x45bd,{ 0x83, 0xce, 0x5e, 0x93, 0x61, 0x5e, 0x62, 0xbd } }; // {F4438E9A-DD52-45BD-83CE-5E93615E62BD}
 
+	//known calculated signals to allow optimizations
+	static constexpr GUID signal_Diffusion_v2_Blood = { 0xd96a559b, 0xe247, 0x41e0,{ 0xbd, 0x8e, 0x78, 0x8d, 0x20, 0xdb, 0x9a, 0x70 } }; // {D96A559B-E247-41E0-BD8E-788D20DB9A70}																							
+	static constexpr GUID signal_Diffusion_v2_Ist = { 0x870ddbd6, 0xdaf1, 0x4877,{ 0xa8, 0x9e, 0x5e, 0x7b, 0x2, 0x8d, 0xa6, 0xc7 } };  // {870DDBD6-DAF1-4877-A89E-5E7B028DA6C7}
+	static constexpr GUID signal_Steil_Rebrin_Blood = { 0x287b9bb8, 0xb73b, 0x4485,{ 0xbe, 0x20, 0x2c, 0x8c, 0x40, 0x98, 0x3b, 0x16 } }; // {287B9BB8-B73B-4485-BE20-2C8C40983B16}
+
 
 	using IModel_Parameter_Vector = refcnt::double_container;
 
@@ -45,6 +50,7 @@ namespace glucose {
 		Nothing = 0,		//internal event of the object
 
 		Level,				//level contains newly measured or calculated level of a given signal
+		Masked_Level,		//level not advertised for solving, i.e., tranining, but for testing set
 		Calibrated,			//given device was calibrated using level
 		Parameters,			//new parameters are available for a given signal
 		Parameters_Hint,	//some solver requires e.g., initial estimate of the model parameters so that

@@ -42,7 +42,8 @@ namespace refcnt {
 
 			virtual HRESULT set(const T *begin, const T *end) final {
 				std::vector<T>::clear();
-				std::copy(begin, end, std::back_inserter(*this));
+				if (begin != nullptr)
+					std::copy(begin, end, std::back_inserter(*this));
 				return S_OK;
 			}
 
