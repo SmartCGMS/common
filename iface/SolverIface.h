@@ -6,12 +6,6 @@ namespace glucose {
 
 	
 
-	struct TDifference_Point {
-		double expected;
-		double calculated;
-		double datetime;		//datetime when the level was measured
-	} ;
-
 
 	struct TMetric_Parameters {
 		const GUID metric_id;
@@ -24,10 +18,12 @@ namespace glucose {
 
 	class IMetric: public virtual refcnt::IReferenced {
 	public:
-		virtual HRESULT IfaceCalling Accumulate(const TDifference_Point *begin, const TDifference_Point *end, size_t all_levels_count) = 0;
+		virtual HRESULT IfaceCalling Accumulate(const double *times, const double *reference, const double *calculated, const size_t count) = 0;
 			//let's the calculator to process a batch of known differences
-			//count is the number of elements of differences
-			//alllevelscount is the total number of all levels that could have been calculated under optimal conditions
+			//count is the number of elements of differences, which are encoded as vectors to exploit SIMD
+			//		this will becaome significant with ist prediction, where increased number of levels is expected compared to blood
+			//count is the total number of all levels that could have been calculated under optimal conditions
+			//		not calculated levels are quiet NaN
 		virtual HRESULT IfaceCalling Reset() = 0;
 			//undo all previously called Accumulate
 		virtual HRESULT IfaceCalling Calculate(double *metric, size_t *levels_accumulated, size_t levels_required) = 0;
@@ -49,10 +45,19 @@ namespace glucose {
 	};
 
 
-	using TCreate_Metric = HRESULT(IfaceCalling*)(const GUID *metric_id, const TMetric_Parameters *parameters, IMetric **metric);
-	using TSolve_Model_Parameters = HRESULT(IfaceCalling*)(const GUID *solver_id, const GUID *signal_id, const ITime_Segment **segments, const size_t segment_count, IMetric *metric, 
-														  IModel_Parameter_Vector *lower_bound, IModel_Parameter_Vector *upper_bound, IModel_Parameter_Vector **solved_parameters,
-														  IModel_Parameter_Vector **solution_hints, const size_t hint_count, TSolver_Progress *progress);
+	struct TSolver_Setup {
+		const GUID solver_id; const GUID signal_id;
+		ITime_Segment **segments; const size_t segment_count;
+		IMetric *metric; const size_t levels_required; const char use_measured_levels;
+		IModel_Parameter_Vector *lower_bound, *upper_bound; 
+		IModel_Parameter_Vector **solution_hints; const size_t hint_count;
+		IModel_Parameter_Vector **solved_parameters;		
+		TSolver_Progress *progress;
+	};
+
+
+	using TCreate_Metric = HRESULT(IfaceCalling*)(const TMetric_Parameters *parameters, IMetric **metric);
+	using TSolve_Model_Parameters = HRESULT(IfaceCalling*)(const TSolver_Setup *setup);
 		//generic, e.g., evolutionary, solver uses signal_id to calculate its metric function on the given list of segments
 		//specialized solver has the signal ids encoded - i.e., specialized inside		
 		//the very first hint, if provided, has to be the best one

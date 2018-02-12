@@ -5,7 +5,11 @@
 #include <memory>
 
 namespace glucose {
-	using SMetric = std::shared_ptr<IMetric>;
+	
+	class SMetric : public std::shared_ptr<IMetric> {
+	public:
+		SMetric Clone();
+	};
 
 
 }

@@ -68,7 +68,7 @@ namespace refcnt {
 
 	template <typename T>
 	std::shared_ptr<IVector_Container<T>> Create_Container_shared(const T *begin, const T *end) {
-		IVector_Container<T> *obj = Create_Parameter_Container<T>(begin, end);		
+		IVector_Container<T> *obj = Create_Container<T>(begin, end);
 		return refcnt::make_shared_reference_ext <std::shared_ptr<IVector_Container<T>>, IVector_Container<T>>(obj, false);
 	}
 

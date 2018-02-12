@@ -11,7 +11,7 @@ glucose::SSignal glucose::STime_Segment::Get_Signal(const GUID &signal_id) {
 
 	if (segment)
 		if (segment->Get_Signal(&signal_id, &obj) == S_OK)
-			result = refcnt::make_shared_reference<glucose::ISignal>(obj, false);
+			result = refcnt::make_shared_reference_ext<glucose::SSignal, glucose::ISignal>(obj, false);
 
 
 		return result;

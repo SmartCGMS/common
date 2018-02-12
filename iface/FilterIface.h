@@ -52,4 +52,6 @@ namespace glucose {
 		virtual HRESULT configure(const TFilter_Parameter *configuration, const size_t count) = 0;
 	};
 
+
+	using TCreate_Filter = HRESULT(IfaceCalling *)(const GUID *id, IFilter_Pipe *input, IFilter_Pipe *output, glucose::IFilter **filter);
 }

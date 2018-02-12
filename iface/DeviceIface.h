@@ -12,6 +12,9 @@ namespace glucose {
 	extern const double One_Minute;
 	extern const double One_Second;
 
+	const size_t apxNo_Derivation = 0;
+	const size_t apxFirst_Order_Derivation = 1;
+
 	struct TLevel {
 		double date_time;	//time of measuring
 		double level;		//the glucose level/concentration measured
@@ -106,8 +109,7 @@ namespace glucose {
 		virtual HRESULT IfaceCalling Add_Levels(const TLevel *begin, const TLevel *end) = 0;
 
 		virtual HRESULT IfaceCalling Get_Continuous_Levels(IModel_Parameter_Vector *params,
-			const double *times, const double *levels, const size_t count,
-			size_t *filled, const size_t derivation_order) const = 0;
+			const double *times, const double *levels, const size_t count, const size_t derivation_order) const = 0;
 			/*
 				this method will be called in parallel by solvers and therefore it has to be const
 
@@ -116,7 +118,7 @@ namespace glucose {
 				times - times at which to get the levels, i.e., y values for x values
 				count - the total number of times for which to get the levels
 				levels - the levels, must be already allocated with size of count
-				filled - the number of levels filled
+						- level that cannot be calculated must be se to quiet nan				
 			*/		
 		virtual HRESULT IfaceCalling Get_Default_Parameters(IModel_Parameter_Vector *parameters) = 0;
 			//must be implemented
