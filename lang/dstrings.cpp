@@ -86,6 +86,7 @@ const wchar_t* dsBeta = L"beta";
 const wchar_t* dsGamma = L"gamma";
 
 const wchar_t* dsNewUOA = L"NewUOA";
+const wchar_t* dsMetaDE = L"MetaDE";
 
 //--------------------------------- do not translate any of the rs-prefixed texts --
 

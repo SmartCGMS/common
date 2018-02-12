@@ -88,7 +88,7 @@ extern const wchar_t* dsBeta;
 extern const wchar_t* dsGamma;
 
 extern const wchar_t* dsNewUOA;
-
+extern const wchar_t* dsMetaDE;
 
 
 //--------------------------------- do not translate any of the rs-prefixed texts --
