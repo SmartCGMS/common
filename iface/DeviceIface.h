@@ -15,11 +15,6 @@ namespace glucose {
 	const size_t apxNo_Derivation = 0;
 	const size_t apxFirst_Order_Derivation = 1;
 
-	struct TLevel {
-		double date_time;	//time of measuring
-		double level;		//the glucose level/concentration measured
-	};
-
 	/*
 		The time is encoded as the number of days since January 0, 1900 00:00 UTC, see
 		http://en.wikipedia.org/wiki/January_0
@@ -103,13 +98,13 @@ namespace glucose {
 
 	class ISignal : public virtual refcnt::IReferenced {
 	public:
-		virtual HRESULT IfaceCalling Get_Discrete_Levels(const TLevel *dst, const size_t dst_size, size_t *filled) const = 0;
-		//on S_OK, *filled TLevel elements were copied into the dst buffer of dst_size size
+		virtual HRESULT IfaceCalling Get_Discrete_Levels(const double *times, const double *levels, const size_t count, size_t *filled) const = 0;
+			//on S_OK, *filled elements were copied into times and double levels of the count size		
 
 		virtual HRESULT IfaceCalling Get_Discrete_Bounds(TBounds *bounds, size_t *level_count) const = 0 ;
 		//gets bounds and level_count, any of these parameters can be nullptr
 
-		virtual HRESULT IfaceCalling Add_Levels(const TLevel *begin, const TLevel *end) = 0;
+		virtual HRESULT IfaceCalling Add_Levels(const double *times, const double *levels, const size_t count) = 0;
 
 		virtual HRESULT IfaceCalling Get_Continuous_Levels(IModel_Parameter_Vector *params,
 			const double *times, const double *levels, const size_t count, const size_t derivation_order) const = 0;
