@@ -1,4 +1,4 @@
-#include "CLibrary.h"
+#include "Dynamic_Library.h"
 
 #ifdef _WIN32
 const wchar_t* rsShared_Object_Extension = L".dll";
@@ -6,34 +6,34 @@ const wchar_t* rsShared_Object_Extension = L".dll";
 const wchar_t* rsShared_Object_Extension = L".so";
 #endif
 
-CLibrary::CLibrary() : mHandle(nullptr)
+CDynamic_Library::CDynamic_Library() : mHandle(nullptr)
 {
 	//
 }
 
-CLibrary::~CLibrary()
+CDynamic_Library::~CDynamic_Library()
 {
 	if (mHandle)
 		Unload();
 }
 
-void CLibrary::Set_Filename(const std::wstring& path)
+void CDynamic_Library::Set_Filename(const std::wstring& path)
 {
 	mModulePath = path;
 }
 
-bool CLibrary::Load() {
+bool CDynamic_Library::Load() {
 	mHandle = LoadLibraryW(mModulePath.c_str());
 
 	return mHandle != 0;
 }
 
-bool CLibrary::Is_Loaded() const
+bool CDynamic_Library::Is_Loaded() const
 {
 	return (mHandle != nullptr);
 }
 
-void CLibrary::Unload()
+void CDynamic_Library::Unload()
 {
 	if (mHandle)
 	{
@@ -42,7 +42,7 @@ void CLibrary::Unload()
 	}
 }
 
-void* CLibrary::Resolve(const char* symbolName)
+void* CDynamic_Library::Resolve(const char* symbolName)
 {
 	if (!mHandle)
 		return nullptr;
@@ -50,7 +50,7 @@ void* CLibrary::Resolve(const char* symbolName)
 	return GetProcAddress(mHandle, symbolName);
 }
 
-bool CLibrary::Is_Library(const std::wstring& path)
+bool CDynamic_Library::Is_Library(const std::wstring& path)
 {
 	size_t extLen = wcslen(rsShared_Object_Extension);
 

@@ -8,7 +8,7 @@
 /*
  * Dynamic library (shared object) wrapper class
  */
-class CLibrary final
+class CDynamic_Library final
 {
 	private:
 		// stored module handle (nullptr if invalid)
@@ -17,10 +17,10 @@ class CLibrary final
 		std::wstring mModulePath;
 
 	public:
-		CLibrary();
+		CDynamic_Library();
 		// disallow copying - the handle has to be unique
-		CLibrary(const CLibrary&) = delete;
-		virtual ~CLibrary();
+		CDynamic_Library(const CDynamic_Library&) = delete;
+		virtual ~CDynamic_Library();
 
 		// sets library module filename
 		void Set_Filename(const std::wstring& path);

@@ -11,7 +11,12 @@ namespace glucose {
 
 	using SSignal = std::shared_ptr<ISignal>;
 
-	class STime_Segment :public std::shared_ptr<ITime_Segment> {
+	class WTime_Segment : public std::weak_ptr<ITime_Segment> {
+	public:
+		SSignal Get_Signal(const GUID &signal_id);
+	};
+
+	class STime_Segment : public std::shared_ptr<ITime_Segment> {
 	public:
 		SSignal Get_Signal(const GUID &signal_id);
 	};

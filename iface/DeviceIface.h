@@ -107,7 +107,7 @@ namespace glucose {
 		virtual HRESULT IfaceCalling Add_Levels(const double *times, const double *levels, const size_t count) = 0;
 
 		virtual HRESULT IfaceCalling Get_Continuous_Levels(IModel_Parameter_Vector *params,
-			const double *times, const double *levels, const size_t count, const size_t derivation_order) const = 0;
+			const double *times, const double *levels, const size_t count, const size_t derivation_order) = 0;
 			/*
 				this method will be called in parallel by solvers and therefore it has to be const
 
@@ -118,7 +118,7 @@ namespace glucose {
 				levels - the levels, must be already allocated with size of count
 						- level that cannot be calculated must be se to quiet nan				
 			*/		
-		virtual HRESULT IfaceCalling Get_Default_Parameters(IModel_Parameter_Vector *parameters) = 0;
+		virtual HRESULT IfaceCalling Get_Default_Parameters(IModel_Parameter_Vector *parameters) const = 0;
 			//must be implemented
 	};
 
