@@ -61,8 +61,11 @@ namespace glucose {
 							//solvers and calculators can use them
 
 		//-------- simulation related codes ------
-		Time_Segment_Start,
-		Time_Segment_Stop,
+		Suspend_Parameter_Solving,
+		Resume_Parameter_Solving,
+		Solve_Parameters,	//user can either request to recalculate, or we can request to recalculate it at the end of the segment - i.e., prior sending Time_Segment_Stop
+		Time_Segment_Start,		
+		Time_Segment_Stop,		
 
 
 		//-------- codes intended for log parsers ------

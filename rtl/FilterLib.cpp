@@ -35,7 +35,8 @@ namespace glucose {
 			result = false;	//we have to find the filter yet
 			for (auto iter=desc_begin; iter != desc_end; iter++)
 				if (iter->id == id) {
-					desc = *iter;
+					//desc = *iter;							assign const won't work with const members and custom operator= will result into undefined behavior as it has const members (so it does not have to be const itself)
+					memcpy(&desc, iter, sizeof(decltype(desc)));	//=> memcpy https://stackoverflow.com/questions/9218454/struct-with-const-member
 					result = true;
 					break;
 				}

@@ -48,7 +48,7 @@ void CConfig::Load(CFilter_Chain &filter_chain) {
 			const GUID id = WString_To_GUID(std::wstring{ name_str.begin() + prefix.size(), name_str.end() });
 			//and get the filter descriptor to load the parameters
 			
-			glucose::TFilter_Descriptor desc;
+			glucose::TFilter_Descriptor desc{ 0 };
 			CFilter_Configuration filter_config;
 
 			if (glucose::get_filter_descriptors_by_id(id, desc)) {
