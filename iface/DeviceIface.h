@@ -32,6 +32,7 @@ namespace glucose {
 	static constexpr GUID signal_BG = { 0xf666f6c2, 0xd7c0, 0x43e8,{ 0x8e, 0xe1, 0xc8, 0xca, 0xa8, 0xf8, 0x60, 0xe5 } };	// {F666F6C2-D7C0-43E8-8EE1-C8CAA8F860E5}
 	static constexpr GUID signal_IG = { 0x3034568d, 0xf498, 0x455b,{ 0xac, 0x6a, 0xbc, 0xf3, 0x1, 0xf6, 0x9c, 0x9e } };		// {3034568D-F498-455B-AC6A-BCF301F69C9E}
 	static constexpr GUID signal_ISIG =	{ 0x3f62c28a, 0x4d25, 0x4086,{ 0xbd, 0x1a, 0xfc, 0x44, 0x2f, 0xdd, 0xb7, 0xcf } };		// {3F62C28A-4D25-4086-BD1A-FC442FDDB7CF}
+	static constexpr GUID signal_Calibration = { 0xed4cd0f5, 0xf728, 0x44fe,{ 0x95, 0x52, 0x97, 0x33, 0x8b, 0xd7, 0xe8, 0xd5 } };	// {ED4CD0F5-F728-44FE-9552-97338BD7E8D5}
 	static constexpr GUID signal_Insulin = { 0x22d87566, 0xaf1b, 0x4cc7,{ 0x8d, 0x11, 0xc5, 0xe0, 0x4e, 0x1e, 0x9c, 0x8a } }; 	 // {22D87566-AF1B-4CC7-8D11-C5E04E1E9C8A}
 	static constexpr GUID signal_Carb_Intake = { 0x37aa6ac1, 0x6984, 0x4a06,{ 0x92, 0xcc, 0xa6, 0x60, 0x11, 0xd, 0xd, 0xc7 } };	// {37AA6AC1-6984-4A06-92CC-A660110D0DC7}																																		
 	static constexpr GUID signal_Health_Stress = { 0xf4438e9a, 0xdd52, 0x45bd,{ 0x83, 0xce, 0x5e, 0x93, 0x61, 0x5e, 0x62, 0xbd } }; // {F4438E9A-DD52-45BD-83CE-5E93615E62BD}
@@ -107,7 +108,7 @@ namespace glucose {
 		virtual HRESULT IfaceCalling Add_Levels(const double *times, const double *levels, const size_t count) = 0;
 
 		virtual HRESULT IfaceCalling Get_Continuous_Levels(IModel_Parameter_Vector *params,
-			const double *times, const double *levels, const size_t count, const size_t derivation_order) = 0;
+			const double *times, const double *levels, const size_t count, const size_t derivation_order) const = 0;
 			/*
 				this method will be called in parallel by solvers and therefore it has to be const
 
