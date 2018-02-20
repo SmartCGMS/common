@@ -38,14 +38,24 @@ void CConfig::Load(CFilter_Chain &filter_chain) {
 	std::list<CSimpleIniW::Entry> section_names;
 	mIni.GetAllSections(section_names);
 
+	// sort by section names - the name would contain zero-padded number, so it is possible to sort it as strings
+	section_names.sort([](auto& a, auto& b) {
+		return std::wstring(a.pItem).compare(b.pItem) < 0;
+	});
+
 	CFilter_Chain new_chain;
 	for (auto &section_name : section_names) {
 		std::wstring name_str{ section_name.pItem };
-		const std::wstring prefix{ rs_Filter_Section_Prefix };
+		const std::wstring prefix{ rsFilter_Section_Prefix };
 		auto res = std::mismatch(prefix.begin(), prefix.end(), name_str.begin());
 		if (res.first == prefix.end()) {
-			//OK, this is filter section - extract the guid			
-			const GUID id = WString_To_GUID(std::wstring{ name_str.begin() + prefix.size(), name_str.end() });
+
+			auto uspos = name_str.find(rsFilter_Section_Separator, prefix.size() + 1);
+			if (uspos == std::wstring::npos)
+				uspos = prefix.size();
+
+			//OK, this is filter section - extract the guid
+			const GUID id = WString_To_GUID(std::wstring{ name_str.begin() + uspos + 1, name_str.end() });
 			//and get the filter descriptor to load the parameters
 			
 			glucose::TFilter_Descriptor desc{ 0 };
@@ -53,8 +63,6 @@ void CConfig::Load(CFilter_Chain &filter_chain) {
 
 			if (glucose::get_filter_descriptors_by_id(id, desc)) {
 				//so.. now, try to load the filter parameters - aka filter_config
-				
-				
 
 				for (size_t i = 0; i < desc.parameters_count; i++) {
 					glucose::TFilter_Parameter filter_parameter;
@@ -101,7 +109,7 @@ void CConfig::Load(CFilter_Chain &filter_chain) {
 
 				//and finally, add the new link into the filter chain
 				new_chain.push_back({ desc, filter_config });
-			}		
+			}
 		}
 	}
 
@@ -111,12 +119,14 @@ void CConfig::Load(CFilter_Chain &filter_chain) {
 
 void CConfig::Save(const CFilter_Chain &filter_chain) {
 	
+	uint32_t i = 1;
+
 	for (auto &link : filter_chain) {
-		const std::wstring id_str = rs_Filter_Section_Prefix +GUID_To_WString(link.descriptor.id);
+		const std::wstring id_str = std::wstring(rsFilter_Section_Prefix) + rsFilter_Section_Separator + Get_Padded_Number(i++, 3) + rsFilter_Section_Separator + GUID_To_WString(link.descriptor.id);
 		auto section = mIni.GetSection(id_str.c_str());
 		if (!section) 
 			//if the section does not exist yet, create it by writing a comment there - the filter description
-			mIni.SetValue(id_str.c_str(), nullptr, nullptr, std::wstring{ rsIni_Comment_Prefix}.append(link.descriptor.description).c_str());				
+			mIni.SetValue(id_str.c_str(), nullptr, nullptr, std::wstring{ rsIni_Comment_Prefix}.append(link.descriptor.description).c_str());
 
 		//and store the parameters
 		for (const auto &param : link.configuration) {
@@ -146,8 +156,6 @@ void CConfig::Save(const CFilter_Chain &filter_chain) {
 		
 	}
 
-
-
 	std::string content;
 	mIni.Save(content);
 	std::ofstream config_file(mFile_Path);
@@ -155,5 +163,4 @@ void CConfig::Save(const CFilter_Chain &filter_chain) {
 		config_file << content;
 		config_file.close();
 	}
-
 }

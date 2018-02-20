@@ -105,7 +105,8 @@ extern const wchar_t *rsDb_Password;
 extern const wchar_t *rsTime_Segment_ID;
 
 extern const wchar_t *rsConfig_File_Name;
-extern const wchar_t *rs_Filter_Section_Prefix;
+extern const wchar_t *rsFilter_Section_Prefix;
+extern const wchar_t rsFilter_Section_Separator;
 extern const wchar_t *rsIni_Comment_Prefix;
 
 extern const char* rsSelect_Subjects_And_Segments_For_Db_Reader_Filter;

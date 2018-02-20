@@ -99,16 +99,19 @@ namespace glucose {
 
 	class ISignal : public virtual refcnt::IReferenced {
 	public:
-		virtual HRESULT IfaceCalling Get_Discrete_Levels(const double *times, const double *levels, const size_t count, size_t *filled) const = 0;
+		virtual HRESULT IfaceCalling Get_Discrete_Levels(double* const times, double* const levels, const size_t count, size_t *filled) const = 0;
 			//on S_OK, *filled elements were copied into times and double levels of the count size		
+			//for measured signal, it returns the measured values
+			//for calculated signal, it returns the measured values of the referecne signal - to enable solving
 
 		virtual HRESULT IfaceCalling Get_Discrete_Bounds(TBounds *bounds, size_t *level_count) const = 0 ;
-		//gets bounds and level_count, any of these parameters can be nullptr
+			//gets bounds and level_count, any of these parameters can be nullptr
+			//for measured and calculated signals, dtto Get_Discrete_Levels
 
 		virtual HRESULT IfaceCalling Add_Levels(const double *times, const double *levels, const size_t count) = 0;
 
 		virtual HRESULT IfaceCalling Get_Continuous_Levels(IModel_Parameter_Vector *params,
-			const double *times, const double *levels, const size_t count, const size_t derivation_order) const = 0;
+			const double* times, double* const levels, const size_t count, const size_t derivation_order) const = 0;
 			/*
 				this method will be called in parallel by solvers and therefore it has to be const
 

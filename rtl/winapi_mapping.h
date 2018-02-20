@@ -12,8 +12,12 @@
 
 	using HMODULE = void*;
 
+	void localtime_s(struct tm* t, const time_t* tim);
+	void gmtime_s(struct tm* t, const time_t* tim);
+	void _get_timezone(long* tzdst);
+
 	void* LoadLibraryW(const wchar_t *filename);
-	void *GetProcAddress(void *restrict libhandle, const char *restrict symbolname);
+	void* GetProcAddress(void *restrict libhandle, const char *restrict symbolname);
 	void FreeLibrary(void* libhandle);
 
 	#define LoadLibraryA(libname) dlopen(libname, RTLD_LAZY)

@@ -24,3 +24,11 @@ std::wstring GUID_To_WString(const GUID &guid) {
 
 	return std::wstring(guid_cstr);
 }
+
+std::wstring Get_Padded_Number(uint32_t num, size_t places)
+{
+	std::wstring tmp = std::to_wstring(num);
+	while (tmp.length() < places)
+		tmp = L'0' + tmp;
+	return tmp;
+}

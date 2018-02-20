@@ -105,7 +105,10 @@ const wchar_t *rsDb_Password = L"Password";
 const wchar_t *rsTime_Segment_ID = L"TimeSegmentId";
 
 const wchar_t *rsConfig_File_Name = L"config.ini";
-const wchar_t *rs_Filter_Section_Prefix = L"Filter_";
+const wchar_t *rsFilter_Section_Prefix = L"Filter";
+const wchar_t rsFilter_Section_Separator = L'_';
 const wchar_t *rsIni_Comment_Prefix = L"; ";
+
+
 
 const char* rsSelect_Subjects_And_Segments_For_Db_Reader_Filter = "select timesegment.id, subject.name, timesegment.name from subject, timesegment where subject.id = timesegment.subjectid order by subject.name, timesegment.name asc";

@@ -19,11 +19,15 @@ protected:
 		T &result = *(reinterpret_cast<T*>(begin));
 		return result;
 	}
+protected:
+	glucose::SSignal mReference_Signal;
 public:	
+	CCommon_Calculation() {};
+	CCommon_Calculation(glucose::WTime_Segment segment, const GUID &reference_signal);
 	virtual ~CCommon_Calculation() {};
 
 	//glucose::ISignal iface
-	virtual HRESULT IfaceCalling Get_Discrete_Levels(const double *times, const double *levels, const size_t count, size_t *filled) const final;
+	virtual HRESULT IfaceCalling Get_Discrete_Levels(double* const times, double* const levels, const size_t count, size_t *filled) const final;
 	virtual HRESULT IfaceCalling Get_Discrete_Bounds(glucose::TBounds *bounds, size_t *level_count) const final;
 	virtual HRESULT IfaceCalling Add_Levels(const double *times, const double *levels, const size_t count) final;
 	
