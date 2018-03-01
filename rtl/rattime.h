@@ -15,14 +15,14 @@ constexpr double MSecsPerDay = 24.0*60.0*60.0*1000.0;
 constexpr double InvMSecsPerDay = 1.0 / MSecsPerDay;
 
 // gets current time offset from UTC
-int GetUTCOffset();
+int Get_UTC_Offset();
 
 // converts given unix timestamp to rat time
-double UnixTime2RatTime(const time_t qdt);
+double Unix_Time_To_Rat_Time(const time_t qdt);
 // converts given rat time to unix timestamp
-time_t RatTime2UnixTime(const double rt);
+time_t Rat_Time_To_Unix_Time(const double rt);
 
 // fmt is the string formatting used by C++ standard library
-void RatTime2LocalTimeStr(const double rt, const char *fmt, std::string &dst);
+void Rat_Time_To_Local_Time_Str(const double rt, const char *fmt, std::string &dst);
 // fmt is the string formatting used by C++ standard library
-void RatTime2LocalTimeWStr(const double rt, const wchar_t *fmt, std::wstring &dst);
+void Rat_Time_To_Local_Time_WStr(const double rt, const wchar_t *fmt, std::wstring &dst);

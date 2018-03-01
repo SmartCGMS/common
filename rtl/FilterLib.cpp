@@ -33,7 +33,7 @@ namespace glucose {
 		bool result = imported::get_filter_descriptors(&desc_begin, &desc_end) == S_OK;
 		if (result) {
 			result = false;	//we have to find the filter yet
-			for (auto iter=desc_begin; iter != desc_end; iter++)
+			for (auto iter = desc_begin; iter != desc_end; iter++)
 				if (iter->id == id) {
 					//desc = *iter;							assign const won't work with const members and custom operator= will result into undefined behavior as it has const members (so it does not have to be const itself)
 					memcpy(&desc, iter, sizeof(decltype(desc)));	//=> memcpy https://stackoverflow.com/questions/9218454/struct-with-const-member

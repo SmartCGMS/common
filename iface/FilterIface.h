@@ -49,7 +49,7 @@ namespace glucose {
 
 	class IFilter : public virtual refcnt::IReferenced {
 	public:
-		virtual HRESULT configure(const TFilter_Parameter *configuration, const size_t count) = 0;
+		virtual HRESULT Run(const refcnt::IVector_Container<TFilter_Parameter> *configuration, BOOL const *finished) = 0;
 	};
 
 

@@ -6,7 +6,7 @@
 #include <sstream>
 #include <iomanip>
 
-int GetUTCOffset()
+int Get_UTC_Offset()
 {
 	time_t gmt, rawtime = time(nullptr);
 	struct tm ptm;
@@ -19,13 +19,13 @@ int GetUTCOffset()
 	return static_cast<int>(difftime(rawtime, gmt));
 }
 
-double UnixTime2RatTime(const time_t qdt)
+double Unix_Time_To_Rat_Time(const time_t qdt)
 {
 	int64_t diff = qdt*1000 + diffFrom1970To1900;
 	return static_cast<double>(diff) * InvMSecsPerDay;
 }
 
-time_t RatTime2UnixTime(const double rt)
+time_t Rat_Time_To_Unix_Time(const double rt)
 {
 	double diff = rt*MSecsPerDay;
 	time_t msecs = ((time_t)ceil(diff)) - diffFrom1970To1900;
@@ -33,9 +33,9 @@ time_t RatTime2UnixTime(const double rt)
 	return msecs / 1000;
 }
 
-void RatTime2LocalTimeStr(const double rt, const char *fmt, std::string &dst)
+void Rat_Time_To_Local_Time_Str(const double rt, const char *fmt, std::string &dst)
 {
-	time_t ltim = RatTime2UnixTime(rt);
+	time_t ltim = Rat_Time_To_Unix_Time(rt);
 	struct tm ptm;
 	localtime_s(&ptm, &ltim);
 
@@ -45,9 +45,9 @@ void RatTime2LocalTimeStr(const double rt, const char *fmt, std::string &dst)
 	dst = os.str();
 }
 
-void RatTime2LocalTimeWStr(const double rt, const wchar_t *fmt, std::wstring &dst)
+void Rat_Time_To_Local_Time_WStr(const double rt, const wchar_t *fmt, std::wstring &dst)
 {
-	time_t ltim = RatTime2UnixTime(rt);
+	time_t ltim = Rat_Time_To_Unix_Time(rt);
 	struct tm ptm;
 	localtime_s(&ptm, &ltim);
 
