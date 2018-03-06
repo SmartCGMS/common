@@ -3,6 +3,8 @@
 
 #include "DeviceLib.h"
 #include "referencedImpl.h"
+#include "Buffer_Pool.h"
+#include "Eigen_Buffer_Pool.h"
 
 
 #pragma warning( push )
@@ -19,6 +21,8 @@ protected:
 		T &result = *(reinterpret_cast<T*>(begin));
 		return result;
 	}
+protected:
+	mutable CBuffer_Pool<TVector1D> mVector1D_Pool{Eigen_Buffer_Pool_Resize<TVector1D> };
 protected:
 	glucose::SSignal mReference_Signal;
 public:	
