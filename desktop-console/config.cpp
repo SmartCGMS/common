@@ -98,6 +98,13 @@ void CConfig::Load(CFilter_Chain &filter_chain) {
 								filter_parameter.boolean = mIni.GetBoolValue(section_name.pItem, desc.config_parameter_name[i]);
 								break;
 
+							case glucose::NParameter_Type::ptModel_Id:
+							case glucose::NParameter_Type::ptMetric_Id:
+							case glucose::NParameter_Type::ptSignal_Id:
+							case glucose::NParameter_Type::ptSolver_Id:
+								filter_parameter.guid = WString_To_GUID(str_value);
+								break;
+
 							default:
 								valid = false;
 						}
@@ -149,6 +156,13 @@ void CConfig::Save(const CFilter_Chain &filter_chain) {
 
 				case glucose::NParameter_Type::ptBool:
 					mIni.SetBoolValue(id_str.c_str(), WChar_Container_To_WString(param.config_name).c_str(), param.boolean);
+					break;
+
+				case glucose::NParameter_Type::ptModel_Id:
+				case glucose::NParameter_Type::ptMetric_Id:
+				case glucose::NParameter_Type::ptSignal_Id:
+				case glucose::NParameter_Type::ptSolver_Id:
+					mIni.SetValue(id_str.c_str(), WChar_Container_To_WString(param.config_name).c_str(), GUID_To_WString(param.guid).c_str());
 					break;
 			}
 		}
