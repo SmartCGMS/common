@@ -100,9 +100,14 @@ void CConfig::Load(CFilter_Chain &filter_chain) {
 
 							case glucose::NParameter_Type::ptModel_Id:
 							case glucose::NParameter_Type::ptMetric_Id:
+							case glucose::NParameter_Type::ptModel_Signal_Id:
 							case glucose::NParameter_Type::ptSignal_Id:
 							case glucose::NParameter_Type::ptSolver_Id:
 								filter_parameter.guid = WString_To_GUID(str_value);
+								break;
+
+							case glucose::NParameter_Type::ptModel_Bounds:
+								filter_parameter.parameters = WString_To_Model_Parameters(str_value);
 								break;
 
 							default:
@@ -127,6 +132,10 @@ void CConfig::Load(CFilter_Chain &filter_chain) {
 void CConfig::Save(const CFilter_Chain &filter_chain) {
 	
 	uint32_t i = 1;
+
+	// for now, reset the ini file contents; this is to avoid duplicating filter records on delete - i.e. when deleting one filter and the rest just "moves" up by one position,
+	// technically the rest would have different identifiers, so the code would leave them here and potentially duplicate them; TODO: rework to selective deletion
+	//mIni.Reset(); - but resetting would erase info that we might want to keep, e.g., from a higher version of the simulator
 
 	for (auto &link : filter_chain) {
 		const std::wstring id_str = std::wstring(rsFilter_Section_Prefix) + rsFilter_Section_Separator + Get_Padded_Number(i++, 3) + rsFilter_Section_Separator + GUID_To_WString(link.descriptor.id);
@@ -160,9 +169,14 @@ void CConfig::Save(const CFilter_Chain &filter_chain) {
 
 				case glucose::NParameter_Type::ptModel_Id:
 				case glucose::NParameter_Type::ptMetric_Id:
+				case glucose::NParameter_Type::ptModel_Signal_Id:
 				case glucose::NParameter_Type::ptSignal_Id:
 				case glucose::NParameter_Type::ptSolver_Id:
 					mIni.SetValue(id_str.c_str(), WChar_Container_To_WString(param.config_name).c_str(), GUID_To_WString(param.guid).c_str());
+					break;
+
+				case glucose::NParameter_Type::ptModel_Bounds:
+					mIni.SetValue(id_str.c_str(), WChar_Container_To_WString(param.config_name).c_str(), Model_Parameters_To_WString(param.parameters).c_str());
 					break;
 			}
 		}

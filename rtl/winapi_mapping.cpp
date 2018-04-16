@@ -4,27 +4,30 @@
 
 #else
 
+#include <string>
+
 void* LoadLibraryW(const wchar_t *libname) {
-	return (dlopen(libname, RTLD_LAZY));
+	std::string libstr{libname, libname + wcslen(libname)};
+	return (dlopen(libstr.c_str(), RTLD_LAZY));
 }
 
-void *GetProcAddress(void *restrict libhandle, const char *restrict symbolname) {
+void *GetProcAddress(void *libhandle, const char *symbolname) {
 	return dlsym(libhandle, symbolname);
 }
 
 void FreeLibrary(void* libhandle) {
-	return dlclose(libhandle);
+	dlclose(libhandle);
 }
 	
 int closesocket(int fd) {
 	return close(fd);
 }
 
-#include <time.h>
+#include <ctime>
 
 void localtime_s(struct tm* t, const time_t* tim)
 {
-	localtime_r(&tim, t);
+	localtime_r(tim, t);
 }
 
 void gmtime_s(struct tm* t, const time_t* tim)

@@ -1,8 +1,10 @@
 #pragma once
 
-#include "../iface/DeviceIface.h"
+#include "referencedImpl.h"
+#include "guid.h"
 
 #include <memory>
+#include <map>
 #include <vector>
 
 namespace glucose {
@@ -26,5 +28,29 @@ namespace glucose {
 	public:
 		SSignal Get_Signal(const GUID &signal_id);
 	};
+
+#pragma warning( push )
+#pragma warning( disable : 4250 ) // C4250 - 'class1' : inherits 'class2::member' via dominance
+
+	class CTime_Segment final : public virtual ITime_Segment, public virtual refcnt::CReferenced
+	{
+	private:
+		// managed signals; created by calling Get_Signal
+		std::map<GUID, glucose::SSignal> mSignals; 
+
+	public:
+		// default constructor
+		CTime_Segment() = default;
+		// disable copying, allow just cloning
+		CTime_Segment(const CTime_Segment& b) = delete;
+		virtual ~CTime_Segment();
+
+		virtual HRESULT IfaceCalling Get_Signal(const GUID *signal_id, glucose::ISignal **signal) override final;
+
+		// clones this segment into another; calls AddRef (passes ownership to caller)
+		CTime_Segment* Clone();
+	};
+
+#pragma warning( pop )
 
 }

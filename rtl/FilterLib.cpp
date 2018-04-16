@@ -15,6 +15,17 @@ namespace glucose {
 		#endif
 	}
 
+	namespace injected
+	{
+		std::vector<glucose::TGet_Filter_Descriptors> get_filter_descriptors;
+		std::vector<glucose::TCreate_Filter> create_filter;
+	}
+
+	void inject_filter_loader(glucose::TGet_Filter_Descriptors get_descriptors, glucose::TCreate_Filter create_filter)
+	{
+		injected::get_filter_descriptors.push_back(get_descriptors);
+		injected::create_filter.push_back(create_filter);
+	}
 
 	std::vector<TFilter_Descriptor> get_filter_descriptors() {
 		std::vector<TFilter_Descriptor> result;
@@ -22,6 +33,13 @@ namespace glucose {
 
 		if (imported::get_filter_descriptors(&desc_begin, &desc_end) == S_OK) {
 			std::copy(desc_begin, desc_end, std::back_inserter(result));
+		}
+
+		for (auto getter : injected::get_filter_descriptors)
+		{
+			if (getter(&desc_begin, &desc_end) == S_OK) {
+				std::copy(desc_begin, desc_end, std::back_inserter(result));
+			}
 		}
 
 		return result;
@@ -40,6 +58,25 @@ namespace glucose {
 					result = true;
 					break;
 				}
+		}
+
+		if (!result)
+		{
+			for (auto getter : injected::get_filter_descriptors)
+			{
+				if (getter(&desc_begin, &desc_end) == S_OK)
+				{
+					for (auto iter = desc_begin; iter != desc_end; iter++)
+					{
+						if (iter->id == id) {
+							// see note above (memcpy)
+							memcpy(&desc, iter, sizeof(decltype(desc)));
+							result = true;
+							break;
+						}
+					}
+				}
+			}
 		}
 
 		return result;
@@ -61,6 +98,16 @@ namespace glucose {
 
 		if (imported::create_filter(&id, input.get(), output.get(), &filter) == S_OK)
 			result = refcnt::make_shared_reference_ext<SFilter, IFilter>(filter, false);
+		else {
+			for (auto builder : injected::create_filter)
+			{
+				if (builder(&id, input.get(), output.get(), &filter) == S_OK)
+				{
+					result = refcnt::make_shared_reference_ext<SFilter, IFilter>(filter, false);
+					break;
+				}
+			}
+		}
 
 		return result;
 	}
@@ -100,7 +147,44 @@ glucose::time_segment_id_container* WString_To_Select_Time_Segments_Id(const wch
 		obj->set(ids.data(), ids.data()+ ids.size());
 		return obj;
 	}
-	else return
-		nullptr;
+	else
+		return nullptr;
+}
 
+std::wstring Model_Parameters_To_WString(glucose::IModel_Parameter_Vector *container)
+{
+	std::wstring result;
+
+	double *begin, *end;
+	if (container->get(&begin, &end) == S_OK)
+	{
+		for (auto iter = begin; iter != end; iter++)
+		{
+			if (result.size() > 0)
+				result += L" ";
+
+			result += std::to_wstring(*iter);
+		}
+	}
+
+	return result;
+}
+
+glucose::IModel_Parameter_Vector* WString_To_Model_Parameters(const wchar_t *str)
+{
+	glucose::IModel_Parameter_Vector *obj = nullptr;
+	if (Manufacture_Object<refcnt::internal::CVector_Container<double>, glucose::IModel_Parameter_Vector>(&obj) == S_OK)
+	{
+		std::vector<double> params;
+
+		std::wstringstream value_str(str);
+		double value;
+		while (value_str >> value)
+			params.push_back(value);
+
+		obj->set(params.data(), params.data() + params.size());
+		return obj;
+	}
+	else
+		return nullptr;
 }

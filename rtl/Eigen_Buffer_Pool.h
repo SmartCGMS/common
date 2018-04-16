@@ -6,7 +6,8 @@ using TVector1D = Eigen::Array<double, 1, Eigen::Dynamic, Eigen::RowMajor>;
 
 template <typename T>
 void Eigen_Buffer_Pool_Resize(T &vector, const size_t minimum_size) {
-	if (vector.cols() < static_cast<int>(minimum_size)) vector.resize(Eigen::NoChange, static_cast<int>(minimum_size));
+	// TODO: solve buffer pool size mismatch using another approach; for now, we replace "<" with "!=" to ensure correct size
+	if (vector.cols() != static_cast<int>(minimum_size)) vector.resize(Eigen::NoChange, static_cast<int>(minimum_size));
 }
 
 template <typename T>

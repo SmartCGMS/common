@@ -1,5 +1,69 @@
 #include "UILib.h"
 
+namespace glucose
+{
+	namespace imported {
+		#ifdef _WIN32
+			extern "C" __declspec(dllimport)  HRESULT IfaceCalling get_metric_descriptors(glucose::TMetric_Descriptor **begin, glucose::TMetric_Descriptor **end);
+			extern "C" __declspec(dllimport)  HRESULT IfaceCalling get_model_descriptors(glucose::TModel_Descriptor **begin, glucose::TModel_Descriptor **end);
+			extern "C" __declspec(dllimport)  HRESULT IfaceCalling get_solver_descriptors(glucose::TSolver_Descriptor **begin, glucose::TSolver_Descriptor **end);
+		#endif
+	}
+
+	std::vector<TModel_Descriptor> get_model_descriptors()
+	{
+		std::vector<TModel_Descriptor> result;
+		TModel_Descriptor *desc_begin, *desc_end;
+
+		if (imported::get_model_descriptors(&desc_begin, &desc_end) == S_OK) {
+			std::copy(desc_begin, desc_end, std::back_inserter(result));
+		}
+
+		return result;
+	}
+
+	std::vector<TMetric_Descriptor> get_metric_descriptors()
+	{
+		std::vector<TMetric_Descriptor> result;
+		TMetric_Descriptor *desc_begin, *desc_end;
+
+		if (imported::get_metric_descriptors(&desc_begin, &desc_end) == S_OK) {
+			std::copy(desc_begin, desc_end, std::back_inserter(result));
+		}
+
+		return result;
+	}
+
+	std::vector<TSolver_Descriptor> get_solver_descriptors()
+	{
+		std::vector<TSolver_Descriptor> result;
+		TSolver_Descriptor *desc_begin, *desc_end;
+
+		if (imported::get_solver_descriptors(&desc_begin, &desc_end) == S_OK) {
+			std::copy(desc_begin, desc_end, std::back_inserter(result));
+		}
+
+		return result;
+	}
+
+	bool get_model_descriptors_by_id(const GUID &id, TModel_Descriptor &desc) {
+		TModel_Descriptor *desc_begin, *desc_end;
+
+		bool result = imported::get_model_descriptors(&desc_begin, &desc_end) == S_OK;
+		if (result) {
+			result = false;	//we have to find the filter yet
+			for (auto iter = desc_begin; iter != desc_end; iter++)
+				if (iter->id == id) {
+					//desc = *iter;							assign const won't work with const members and custom operator= will result into undefined behavior as it has const members (so it does not have to be const itself)
+					memcpy(&desc, iter, sizeof(decltype(desc)));	//=> memcpy https://stackoverflow.com/questions/9218454/struct-with-const-member
+					result = true;
+					break;
+				}
+		}
+
+		return result;
+	}
+}
 
 GUID WString_To_GUID(const std::wstring& str) {
 	GUID guid;

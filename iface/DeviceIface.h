@@ -37,6 +37,11 @@ namespace glucose {
 	static constexpr GUID signal_Carb_Intake = { 0x37aa6ac1, 0x6984, 0x4a06,{ 0x92, 0xcc, 0xa6, 0x60, 0x11, 0xd, 0xd, 0xc7 } };	// {37AA6AC1-6984-4A06-92CC-A660110D0DC7}																																		
 	static constexpr GUID signal_Health_Stress = { 0xf4438e9a, 0xdd52, 0x45bd,{ 0x83, 0xce, 0x5e, 0x93, 0x61, 0x5e, 0x62, 0xbd } }; // {F4438E9A-DD52-45BD-83CE-5E93615E62BD}
 
+	// signal GUID used as base for virtual signals (i.e. for temporary mapping as "slots")
+	static constexpr GUID signal_Dummy_Base = { 0x80d001a8, 0x125e, 0x8b5c, { 0x14, 0xac, 0x58, 0x96, 0x4e, 0x12, 0x8d, 0x00 } };	// {80D001A8-125E-8B5C-14AC-58964E128D00}
+	// supported number of dummy signals
+	static constexpr size_t Dummy_Signal_Count = 100;
+
 	//known calculated signals to allow optimizations
 	static constexpr GUID signal_Diffusion_v2_Blood = { 0xd96a559b, 0xe247, 0x41e0,{ 0xbd, 0x8e, 0x78, 0x8d, 0x20, 0xdb, 0x9a, 0x70 } }; // {D96A559B-E247-41E0-BD8E-788D20DB9A70}																							
 	static constexpr GUID signal_Diffusion_v2_Ist = { 0x870ddbd6, 0xdaf1, 0x4877,{ 0xa8, 0x9e, 0x5e, 0x7b, 0x2, 0x8d, 0xa6, 0xc7 } };  // {870DDBD6-DAF1-4877-A89E-5E7B028DA6C7}
@@ -60,8 +65,9 @@ namespace glucose {
 		Suspend_Parameter_Solving,
 		Resume_Parameter_Solving,
 		Solve_Parameters,	//user can either request to recalculate, or we can request to recalculate it at the end of the segment - i.e., prior sending Time_Segment_Stop
-		Time_Segment_Start,		
-		Time_Segment_Stop,		
+		Time_Segment_Start,
+		Time_Segment_Stop,
+		Simulation_Step,
 
 
 		//-------- codes intended for log parsers ------
@@ -71,6 +77,8 @@ namespace glucose {
 	};
 
 
+	static constexpr uint64_t Invalid_Segment_Id = std::numeric_limits<uint64_t>::max();
+
 	struct TDevice_Event {		
 		NDevice_Event_Code event_code;
 
@@ -78,7 +86,9 @@ namespace glucose {
 		GUID signal_id;					//blood, ist, isig, model id aka e.g, calculated blood, etc.
 
 		double device_time;				//signal with multiple values are aggregated byt device_time with the same signal_id and device_id
-		int64_t logical_time;			
+		//int64_t logical_time;			// logical time of this event; currently not in use as it is distributed per-filter and thus would require to re-architect the id
+
+		uint64_t segment_id;			// segment identifier or Invalid_Segment_Id
 
 		union {
 			double level;
@@ -128,13 +138,16 @@ namespace glucose {
 
 
 	class ITime_Segment : public virtual refcnt::IReferenced {
-	public:
-		virtual HRESULT IfaceCalling Get_Signal(const GUID *signal_id, ISignal **signal) = 0;
-			//calls AddRef on returned object
+		public:
+			// retrieves or creates signal with given id; calls AddRef on returned object
+			virtual HRESULT IfaceCalling Get_Signal(const GUID *signal_id, ISignal **signal) = 0;
 	};
 
+	// segment provides source levels for the calculation
+	// only ITime_Segment::Get_Signal is supposed to call this function to avoid (although not probihit) creating of over-complex segment-graphs
 	using TCreate_Calculated_Signal = HRESULT(IfaceCalling *)(const GUID *calc_id, ITime_Segment *segment, ISignal **signal);
-		//segment provides source levels for the calculation
-		//only ITime_Segment::Get_Signal is supposed to call this function to avoid (although not probihit) creating of over-complex segment-graphs
-	
+
+	// segment also provides reference signals for the calculation
+	// the same restrictions apply there as to calculated signal version - only ITime_Segment::Get_Signal is supposed to call this function
+	using TCreate_Measured_Signal = HRESULT(IfaceCalling *)(const GUID *calc_id, ITime_Segment *segment, ISignal **signal);
 }
