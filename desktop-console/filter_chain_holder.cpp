@@ -44,9 +44,9 @@ HRESULT CFilter_Chain_Holder::Init_And_Start_Filters()
 
 		// configure filter using loaded configuration and start the filter thread
 		mFilterThreads.push_back(std::make_unique<std::thread>([params, filter, &filt]() {
-			HRESULT hres = filter->Run(params);
-			if (hres != S_OK)
-				std::wcerr << "ERROR: could not configure filter " << filt.descriptor.description << ", error: " << hres << std::endl;
+			HRESULT hres = filter->Run(params.get());
+			//if (hres != S_OK)
+			//	std::wcerr << "ERROR: could not configure filter " << filt.descriptor.description << ", error: " << hres << std::endl;
 		}));
 
 		// add filter to vector

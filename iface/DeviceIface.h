@@ -3,6 +3,8 @@
 #include "../rtl/guid.h"
 #include "referencedIface.h"
 
+#undef max
+
 namespace glucose {
 
 	//constant to convert mg/dl to mmol/l
