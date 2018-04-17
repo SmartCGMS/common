@@ -1,5 +1,6 @@
 #pragma once
 
+#include "..\iface\DeviceIface.h"
 #include "referencedImpl.h"
 #include "guid.h"
 

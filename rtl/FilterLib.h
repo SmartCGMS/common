@@ -10,7 +10,7 @@ namespace glucose {
 	using SFilter_Pipe = std::shared_ptr<IFilter_Pipe>;
 	using SFilter = std::shared_ptr<IFilter>;
 
-	void inject_filter_loader(glucose::TGet_Filter_Descriptors get_descriptors, glucose::TCreate_Filter create_filter);
+	void register_additional_filter(glucose::TGet_Filter_Descriptors get_descriptors, glucose::TCreate_Filter create_filter);
 
 	std::vector<TFilter_Descriptor> get_filter_descriptors();
 	bool get_filter_descriptors_by_id(const GUID &id, TFilter_Descriptor &desc);

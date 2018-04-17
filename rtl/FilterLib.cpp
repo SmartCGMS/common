@@ -21,7 +21,7 @@ namespace glucose {
 		std::vector<glucose::TCreate_Filter> create_filter;
 	}
 
-	void inject_filter_loader(glucose::TGet_Filter_Descriptors get_descriptors, glucose::TCreate_Filter create_filter)
+	void register_additional_filter(glucose::TGet_Filter_Descriptors get_descriptors, glucose::TCreate_Filter create_filter)
 	{
 		injected::get_filter_descriptors.push_back(get_descriptors);
 		injected::create_filter.push_back(create_filter);

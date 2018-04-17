@@ -63,7 +63,7 @@ HRESULT IfaceCalling glucose::CTime_Segment::Get_Signal(const GUID *signal_id, g
 		if (imported::create_measured_signal(signal_id, this, signal) != S_OK)
 			return E_NOTIMPL;
 	}
-	mSignals[*signal_id] =  refcnt::make_shared_reference_ext<glucose::SSignal, glucose::SSignal>(*signal, true);  // true due to creating "clone" of pointer with custom reference counter
+	mSignals[*signal_id] =  refcnt::make_shared_reference_ext<glucose::SSignal, glucose::ISignal>(*signal, true);  // true due to creating "clone" of pointer with custom reference counter
 
 	return S_OK;
 }
