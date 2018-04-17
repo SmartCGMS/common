@@ -337,6 +337,7 @@ const wchar_t *rsCallback_Drawing_Graph = L"CallbackDrawing_Graph";
 const wchar_t *rsCallback_Drawing_Day = L"CallbackDrawing_Day";
 const wchar_t *rsCallback_Drawing_Clark = L"CallbackDrawing_Clark";
 const wchar_t *rsCallback_Drawing_Parkes = L"CallbackDrawing_Parkes";
+const wchar_t *rsCallback_Drawing_Parkes_Type2 = L"CallbackDrawing_Parkes_Type2";
 const wchar_t *rsCallback_Drawing_AGP = L"CallbackDrawing_AGP";
 
 const wchar_t *rsInfo_Redraw_Complete = L"RedrawComplete";
@@ -355,6 +356,7 @@ const char* rsFilter_Get_SVG_Clark = "get_svg_clark";
 const char* rsFilter_Get_SVG_Day = "get_svg_day";
 const char* rsFilter_Get_SVG_Graph = "get_svg_graph";
 const char* rsFilter_Get_SVG_Parkes = "get_svg_parkes";
+const char* rsFilter_Get_SVG_Parkes_Type2 = "get_svg_parkes_type2";
 
 const char* rsFilter_Get_Errors = "get_error_metrics";
 

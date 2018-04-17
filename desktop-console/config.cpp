@@ -14,8 +14,9 @@ CConfig Configuration;
 
 void CConfig::Resolve_And_Load_Config_File() {
 	mFile_Path = Get_Application_Dir();
+	mFile_Name = rsConfig_File_Name;
 
-	Path_Append(mFile_Path, rsConfig_File_Name);
+	Path_Append(mFile_Path, mFile_Name.c_str());
 
 	std::vector<char> buf;
 	std::ifstream configfile;
@@ -32,6 +33,11 @@ void CConfig::Resolve_And_Load_Config_File() {
 	}
 	catch (...) {
 	}
+}
+
+const wchar_t* CConfig::Get_Config_File_Name() const
+{
+	return mFile_Name.c_str();
 }
 
 void CConfig::Load(CFilter_Chain &filter_chain) {
@@ -135,7 +141,7 @@ void CConfig::Save(const CFilter_Chain &filter_chain) {
 
 	// for now, reset the ini file contents; this is to avoid duplicating filter records on delete - i.e. when deleting one filter and the rest just "moves" up by one position,
 	// technically the rest would have different identifiers, so the code would leave them here and potentially duplicate them; TODO: rework to selective deletion
-	//mIni.Reset(); - but resetting would erase info that we might want to keep, e.g., from a higher version of the simulator
+	mIni.Reset();
 
 	for (auto &link : filter_chain) {
 		const std::wstring id_str = std::wstring(rsFilter_Section_Prefix) + rsFilter_Section_Separator + Get_Padded_Number(i++, 3) + rsFilter_Section_Separator + GUID_To_WString(link.descriptor.id);

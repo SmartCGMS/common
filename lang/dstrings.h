@@ -336,6 +336,7 @@ extern const wchar_t *rsCallback_Drawing_Graph;
 extern const wchar_t *rsCallback_Drawing_Day;
 extern const wchar_t *rsCallback_Drawing_Clark;
 extern const wchar_t *rsCallback_Drawing_Parkes;
+extern const wchar_t *rsCallback_Drawing_Parkes_Type2;
 extern const wchar_t *rsCallback_Drawing_AGP;
 
 extern const wchar_t *rsInfo_Redraw_Complete;
@@ -354,6 +355,7 @@ extern const char* rsFilter_Get_SVG_Clark;
 extern const char* rsFilter_Get_SVG_Day;
 extern const char* rsFilter_Get_SVG_Graph;
 extern const char* rsFilter_Get_SVG_Parkes;
+extern const char* rsFilter_Get_SVG_Parkes_Type2;
 
 extern const char* rsFilter_Get_Errors;
 

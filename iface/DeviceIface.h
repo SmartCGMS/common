@@ -79,8 +79,6 @@ namespace glucose {
 	};
 
 
-	static constexpr uint64_t Invalid_Segment_Id = std::numeric_limits<uint64_t>::max();
-
 	struct TDevice_Event {		
 		NDevice_Event_Code event_code;
 
@@ -100,6 +98,8 @@ namespace glucose {
 		};
 	};
 
+
+	static constexpr decltype(TDevice_Event::segment_id) Invalid_Segment_Id = std::numeric_limits<decltype(Invalid_Segment_Id)>::max();
 
 	typedef struct {
 		double Min_Time,
