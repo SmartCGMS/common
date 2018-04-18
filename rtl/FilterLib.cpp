@@ -17,13 +17,16 @@ namespace glucose {
 
 	namespace injected
 	{
-		std::vector<glucose::TGet_Filter_Descriptors> get_filter_descriptors;
+		std::vector<TFilter_Descriptor> addition_filter_descriptors;
 		std::vector<glucose::TCreate_Filter> create_filter;
 	}
 
-	void register_additional_filter(glucose::TGet_Filter_Descriptors get_descriptors, glucose::TCreate_Filter create_filter)
-	{
-		injected::get_filter_descriptors.push_back(get_descriptors);
+	void register_additional_filter(glucose::TGet_Filter_Descriptors get_descriptors, glucose::TCreate_Filter create_filter) {
+		TFilter_Descriptor *desc_begin, *desc_end;
+		if (get_descriptors(&desc_begin, &desc_end) == S_OK) {
+			std::copy(desc_begin, desc_end, std::back_inserter(injected::addition_filter_descriptors));
+		}
+		
 		injected::create_filter.push_back(create_filter);
 	}
 
@@ -35,12 +38,7 @@ namespace glucose {
 			std::copy(desc_begin, desc_end, std::back_inserter(result));
 		}
 
-		for (auto getter : injected::get_filter_descriptors)
-		{
-			if (getter(&desc_begin, &desc_end) == S_OK) {
-				std::copy(desc_begin, desc_end, std::back_inserter(result));
-			}
-		}
+		std::copy(injected::addition_filter_descriptors.begin(), injected::addition_filter_descriptors.end(), std::back_inserter(result));
 
 		return result;
 	}
@@ -60,21 +58,12 @@ namespace glucose {
 				}
 		}
 
-		if (!result)
-		{
-			for (auto getter : injected::get_filter_descriptors)
-			{
-				if (getter(&desc_begin, &desc_end) == S_OK)
-				{
-					for (auto iter = desc_begin; iter != desc_end; iter++)
-					{
-						if (iter->id == id) {
-							// see note above (memcpy)
-							memcpy(&desc, iter, sizeof(decltype(desc)));
-							result = true;
-							break;
-						}
-					}
+		if (!result) {			
+			for (const auto & iter : injected::addition_filter_descriptors) {
+				if (iter.id == id) {
+					memcpy(&desc, &iter, sizeof(decltype(desc)));
+					result = true;
+					break;
 				}
 			}
 		}

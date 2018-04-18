@@ -8,7 +8,6 @@
 
 #include "..\rtl\winapi_mapping.h"
 
-
 namespace glucose {
 
 	class IFilter_Pipe : public virtual refcnt::IReferenced {

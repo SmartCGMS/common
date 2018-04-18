@@ -4,7 +4,6 @@
 #include <thread>
 #include <chrono>
 
-
 CFilter_Chain_Holder::CFilter_Chain_Holder()
 {
 	//
@@ -51,7 +50,7 @@ HRESULT CFilter_Chain_Holder::Init_And_Start_Filters()
 
 		// add filter to vector
 		mFilters.push_back(filter);
-//		std::wcerr << "#" << i << ": " << filt.descriptor.description << std::endl;
+		//std::wcerr << "#" << i << ": " << filt.descriptor.description << std::endl;
 
 		i++;
 	}

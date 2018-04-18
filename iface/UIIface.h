@@ -80,6 +80,23 @@ namespace glucose {
 		const wchar_t** config_parameter_name;
 	};
 
+	enum class Error_Misc_Type : size_t
+	{
+		Average = 0,
+		StdDev,
+		AIC
+	};
+
+	enum class Error_Quantile_Type : size_t
+	{
+		Minimum = 0,
+		Q1,
+		Median,
+		Q3,
+		Q95,
+		Q99,
+		Maximum
+	};
 
 	constexpr size_t Error_Type_Count = 2;
 	constexpr size_t Error_Quantile_Count = 7;

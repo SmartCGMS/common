@@ -188,11 +188,12 @@ const wchar_t *dsSignal_Measured_Calibration = L"blood glucose calibration";
 const wchar_t *dsSignal_Measured_Insulin = L"insulin amount";
 const wchar_t *dsSignal_Measured_Carb_Intake = L"carbohydrates intake";
 const wchar_t *dsSignal_Measured_Health_Stress = L"health stress";
-const wchar_t *dsSignal_Virtual_Base = L"dummy";
+//const wchar_t *dsSignal_Virtual_Base = L"dummy";
 const wchar_t *dsSignal_Suffix_Measured = L"measured";
 const wchar_t *dsSignal_Suffix_Calculated = L"calculated";
-const wchar_t *dsSignal_Suffix_Virtual = L"virtual";
+//const wchar_t *dsSignal_Suffix_Virtual = L"virtual";
 const wchar_t *dsSignal_Unknown = L"Unknown";
+const wchar_t *dsSignal_Prefix_Virtual = L"virtual";
 
 const wchar_t *dsSolver_Progress_Box_Title = L"Solver progress";
 const wchar_t *dsError_Absolute = L"absolute";
