@@ -72,6 +72,17 @@ namespace refcnt {
 		return refcnt::make_shared_reference_ext <std::shared_ptr<IVector_Container<T>>, IVector_Container<T>>(obj, false);
 	}
 
+	template <typename T>
+	std::shared_ptr<IVector_Container<T>> Copy_Container(std::shared_ptr<IVector_Container<T>> src) {
+		std::shared_ptr<IVector_Container<T>> result;
+		// copy parameter hint to internal vector
+		T *begin, *end;
+		if (src->get(&begin, &end) == S_OK)
+			result = Create_Container_shared<T>(begin, end);
+
+		return result;
+	}	
+
 
 	template <typename T, typename C = std::vector<T>>
 	C Container_To_Vector(IVector_Container<T> *container) {

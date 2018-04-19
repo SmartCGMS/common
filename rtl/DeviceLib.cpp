@@ -5,10 +5,10 @@
 #include "../iface/referencedIface.h"
 
 namespace imported {
-#ifdef _WIN32
-	extern "C" __declspec(dllimport)  HRESULT IfaceCalling create_calculated_signal(const GUID *calc_id, glucose::ITime_Segment *segment, glucose::ISignal **signal);
-	extern "C" __declspec(dllimport)  HRESULT IfaceCalling create_measured_signal(const GUID *calc_id, glucose::ITime_Segment *segment, glucose::ISignal **signal);
-#endif
+	#ifdef _WIN32
+		extern "C" __declspec(dllimport)  HRESULT IfaceCalling create_calculated_signal(const GUID *calc_id, glucose::ITime_Segment *segment, glucose::ISignal **signal);
+		extern "C" __declspec(dllimport)  HRESULT IfaceCalling create_measured_signal(const GUID *calc_id, glucose::ITime_Segment *segment, glucose::ISignal **signal);
+	#endif
 }
 
 glucose::WTime_Segment::WTime_Segment(ITime_Segment *segment) : mSegment(segment) {

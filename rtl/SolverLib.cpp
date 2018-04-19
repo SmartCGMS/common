@@ -6,6 +6,13 @@ namespace imported {
 	#endif
 }
 
+glucose::SMetric(const TMetric_Parameters &params) : std::shared_ptr<IMetric>() {
+	glucose::IMetric metric;
+	if (create_metric(&params, &metric) == S_OK) {
+		reset(metric);
+	}
+}
+
 glucose::SMetric glucose::SMetric::Clone() {
 	glucose::SMetric result;
 	auto self = get();
