@@ -46,7 +46,7 @@ namespace glucose
 		return result;
 	}
 
-	bool get_model_descriptors_by_id(const GUID &id, TModel_Descriptor &desc) {
+	bool get_model_descriptor_by_id(const GUID &id, TModel_Descriptor &desc) {
 		TModel_Descriptor *desc_begin, *desc_end;
 
 		bool result = imported::get_model_descriptors(&desc_begin, &desc_end) == S_OK;
@@ -59,6 +59,29 @@ namespace glucose
 					result = true;
 					break;
 				}
+		}
+
+		return result;
+	}
+
+	bool get_model_descriptor_by_signal_id(const GUID &signal_id, TModel_Descriptor &desc) {
+		TModel_Descriptor *desc_begin, *desc_end;
+
+		bool result = imported::get_model_descriptors(&desc_begin, &desc_end) == S_OK;
+		if (result) {
+			result = false;	//we have to find the filter yet
+			for (auto iter = desc_begin; iter != desc_end; iter++)
+			{
+				for (size_t i = 0; i < iter->number_of_calculated_signals; i++)
+				{
+					if (iter->calculated_signal_ids[i] == signal_id) {
+						//desc = *iter;							assign const won't work with const members and custom operator= will result into undefined behavior as it has const members (so it does not have to be const itself)
+						memcpy(&desc, iter, sizeof(decltype(desc)));	//=> memcpy https://stackoverflow.com/questions/9218454/struct-with-const-member
+						result = true;
+						break;
+					}
+				}
+			}
 		}
 
 		return result;

@@ -102,6 +102,21 @@ namespace glucose {
 	}
 
 	
+	void Release_Event(TDevice_Event &event) {
+		// release references on container objects
+		switch (event.event_code) {
+			case glucose::NDevice_Event_Code::Information:
+			case glucose::NDevice_Event_Code::Warning:
+			case glucose::NDevice_Event_Code::Error:			event.info->Release();
+																break;
+
+			case glucose::NDevice_Event_Code::Parameters:
+			case glucose::NDevice_Event_Code::Parameters_Hint:	event.parameters->Release();
+																break;
+
+			default:											break;
+		}
+	}
 
 
 }

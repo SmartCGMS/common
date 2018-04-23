@@ -49,7 +49,7 @@ namespace glucose {
 		virtual HRESULT IfaceCalling Get_Signal(const GUID *signal_id, glucose::ISignal **signal) override final;
 
 		// clones this segment into another; calls AddRef (passes ownership to caller)
-		CTime_Segment* Clone();
+		STime_Segment Clone();
 	};
 
 #pragma warning( pop )

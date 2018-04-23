@@ -115,8 +115,8 @@ const wchar_t *dsGUI_Filter = L"Visualization";
 const wchar_t *dsUser_Input_Filter = L"User input";
 
 const wchar_t *dsCalculate_Past_New_Params = L"Calculate past with first parameter set";
-const wchar_t *dsRecalculate_With_Every_Params = L"Recalculate with every parameter set";
-const wchar_t *dsUse_Just_Opened_Segments = L"Use currently opened segments";
+const wchar_t *dsRecalculate_With_Every_Params = L"New parameters recalculate entire segment";
+const wchar_t *dsUse_Just_Opened_Segments = L"Determine parameters using all known segments";
 
 const char *dsConfiguration = "Configuration";
 const char *dsSelect_Just_One_Item = "Select just one item.";

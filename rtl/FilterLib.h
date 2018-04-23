@@ -18,6 +18,8 @@ namespace glucose {
 	SFilter create_filter(const GUID &id, SFilter_Pipe &input, SFilter_Pipe &output);
 	//instantiate a filter and connects it to its input and output
 
+	void Release_Event(TDevice_Event &event);
+		//calls release on any nested reference-counted I-objects inside the event
 }
 
 

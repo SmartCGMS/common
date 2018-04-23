@@ -3,6 +3,7 @@
 #include "../rtl/guid.h"
 #include "referencedIface.h"
 
+#include <limits>
 #include <array>
 
 #undef max

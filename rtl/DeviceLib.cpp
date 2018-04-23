@@ -23,7 +23,6 @@ glucose::SSignal glucose::WTime_Segment::Get_Signal(const GUID &signal_id) {
 		if (mSegment->Get_Signal(&signal_id, &obj) == S_OK)
 			result = refcnt::make_shared_reference_ext<glucose::SSignal, glucose::ISignal>(obj, false);
 
-
 	return result;
 }
 
@@ -36,15 +35,12 @@ glucose::SSignal glucose::STime_Segment::Get_Signal(const GUID &signal_id) {
 		if (segment->Get_Signal(&signal_id, &obj) == S_OK)
 			result = refcnt::make_shared_reference_ext<glucose::SSignal, glucose::ISignal>(obj, false);
 
-
-		return result;
+	return result;
 }
 
 glucose::CTime_Segment::~CTime_Segment()
 {
-	// release signal references on delete
-	for (auto const& signal : mSignals)
-		signal.second->Release();
+	//
 }
 
 HRESULT IfaceCalling glucose::CTime_Segment::Get_Signal(const GUID *signal_id, glucose::ISignal **signal)
@@ -68,12 +64,12 @@ HRESULT IfaceCalling glucose::CTime_Segment::Get_Signal(const GUID *signal_id, g
 	return S_OK;
 }
 
-glucose::CTime_Segment* glucose::CTime_Segment::Clone()
+glucose::STime_Segment glucose::CTime_Segment::Clone()
 {
 	// manufacture new segment
 	glucose::CTime_Segment* cloned;
 	if (Manufacture_Object<glucose::CTime_Segment>(&cloned) != S_OK)
-		return nullptr;
+		return {};
 
 	size_t count;
 	glucose::ISignal* target;
@@ -108,5 +104,5 @@ glucose::CTime_Segment* glucose::CTime_Segment::Clone()
 		target->Add_Levels(tmpTimes.data(), tmpLevels.data(), filled);
 	}
 
-	return cloned;
+	return refcnt::make_shared_reference_ext<glucose::STime_Segment, glucose::ITime_Segment>(cloned, true);
 }
