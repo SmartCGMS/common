@@ -55,11 +55,11 @@ namespace refcnt {
 		*/
 	}
 
-	template <typename S>
-	void Query_Interface(IReferenced *obj, const GUID &id, S &target) {
-		void **iface;
-		if (obj->QueryInterface(id, &iface) == S_OK)
-			target.reset(iface, [](IReferenced* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });
+	template <typename I, typename Q>
+	void Query_Interface(I *obj, const GUID &id, std::shared_ptr<I> &target) {
+		Q **queried;
+		if (obj->QueryInterface(id, &queried) == S_OK)
+			target.reset(queried, [](Q* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });
 	}
 
 	template <typename T>

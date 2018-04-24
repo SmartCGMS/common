@@ -120,11 +120,11 @@ namespace glucose {
 
 
 	SError_Filter_Inspection::SError_Filter_Inspection(SFilter &error_filter) {
-		Query_Interface<SError>(error_filter.get(), Error_Filter_Inspection, *this);		
+		refcnt::Query_Interface<glucose::IFilter, glucose::IError_Filter_Inspection>(error_filter.get(), Error_Filter_Inspection, *this);		
 	}
 
-	SError_Filter_Inspection::SDrawing_Filter_Inspection(SFilter &drawing_filter); {
-		Query_Interface<SError>(error_filter.get(), Drawing_Filter_Inspection, *this);
+	SDrawing_Filter_Inspection::SDrawing_Filter_Inspection(SFilter &drawing_filter) {
+		refcnt::Query_Interface<glucose::IFilter, glucose::IDrawing_Filter_Inspection>(drawing_filter.get(), Drawing_Filter_Inspection, *this);
 	}
 }
 
