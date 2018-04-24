@@ -53,8 +53,94 @@ namespace glucose {
 	class IFilter : public virtual refcnt::IReferenced {
 	public:
 		// This method is already started within a thread - no need to create another one inside filter
-		virtual HRESULT Run(const refcnt::IVector_Container<TFilter_Parameter> *configuration) = 0;
+		virtual HRESULT IfaceCalling Run(const refcnt::IVector_Container<TFilter_Parameter> *configuration) = 0;
 	};
 
 	using TCreate_Filter = HRESULT(IfaceCalling *)(const GUID *id, IFilter_Pipe *input, IFilter_Pipe *output, glucose::IFilter **filter);
+
+
+	//The following GUIDs advertise known filters 
+	constexpr GUID Drawing_Filter = { 0x850a122c, 0x8943, 0xa211,{ 0xc5, 0x14, 0x25, 0xba, 0xa9, 0x14, 0x35, 0x74 } };
+	constexpr GUID Log_Filter = { 0xc0e942b9, 0x3928, 0x4b81,{ 0x9b, 0x43, 0xa3, 0x47, 0x66, 0x82, 0x0, 0xBA } };
+	constexpr GUID Error_Filter = { 0x4a125499, 0x5dc8, 0x128e,{ 0xa5, 0x5c, 0x14, 0x22, 0xbc, 0xac, 0x10, 0x74 } };
+
+	//The following interfaces can be access via refcnt::IUnknown::QueryInterface 
+
+	enum class NError_Marker : size_t {
+		Average = 0,
+		StdDev,
+		AIC,
+		count
+	};
+
+	enum class NError_Percentile : size_t {
+		Minimum = 0,
+		P25,
+		Median,
+		P75,
+		P95,
+		P99,
+		Maximum,
+		count
+	};
+
+	// Structure for containing error metric values
+	struct TError_Markers {
+		union
+		{
+			double markers[static_cast<size_t>(NError_Marker::count)];
+			struct
+			{
+				double avg;						// average value
+				double stddev;					// standard deviation with Bessel's correction
+				double aic;						// Akaike's information criterion
+			};
+		};
+		union
+		{
+			double percentile[static_cast<size_t>(NError_Percentile::count)]; // min, q1, median, q3, q95, q99, max
+			struct
+			{
+				double minval;					// minimum value (0. percentile)
+				double p25;						// 1. quartile (25. percentile)
+				double median;					// median (50. percentile)
+				double p75;						// 3. quartile (75. percentile)
+				double p95;						// 95. percentile
+				double p99;						// 99. percentile
+				double maxval;					// maximum value ("100." percentile)
+			};
+		};
+	};
+
+	// error types
+	enum class NError_Type : size_t
+	{
+		Absolute = 0,
+		Relative,
+		count
+	};
+
+	constexpr GUID Error_Filter_Inspection = { 0x13ebd008, 0x5284, 0x4520,{ 0xbc, 0x2a, 0xa9, 0x18, 0x25, 0x7e, 0x66, 0x8 } };
+	class IError_Filter_Inspection : public virtual refcnt::IReferenced {
+	public:
+		// retrieves error markers for a given signal and error type
+		virtual HRESULT IfaceCalling Get_Errors(const GUID *signal_id, const glucose::NError_Type type, glucose::TError_Markers *markers) = 0;
+	};
+
+
+	constexpr GUID Drawing_Filter_Inspection = { 0xd0c81596, 0xdea0, 0x4edf,{ 0x8b, 0x97, 0xe1, 0xd3, 0x78, 0xda, 0xfe, 0x3d } };
+	class IDrawing_Filter_Inspection : public virtual refcnt::IReferenced {
+	public:
+		// retrieves generated AGP SVG
+		virtual HRESULT IfaceCalling Draw_APG(refcnt::IVector_Container<char> *svg) const = 0;
+		// retrieves generated Clark SVG
+		virtual HRESULT IfaceCalling Draw_Clarke(refcnt::IVector_Container<char> *svg) const = 0;
+		// retrieves generated day SVG
+		virtual HRESULT IfaceCalling Draw_Day(refcnt::IVector_Container<char> *svg) const = 0;
+		// retrieves generated graph SVG
+		virtual HRESULT IfaceCalling Draw_Graph(refcnt::IVector_Container<char> *svg) const = 0;
+		// retrieves generated Parkes SVG
+		virtual HRESULT IfaceCalling Draw_Parkes(refcnt::IVector_Container<char> *svg, bool type1) const = 0;
+	};
+
 }

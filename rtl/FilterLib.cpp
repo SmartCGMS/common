@@ -119,6 +119,13 @@ namespace glucose {
 	}
 
 
+	SError_Filter_Inspection::SError_Filter_Inspection(SFilter &error_filter) {
+		Query_Interface<SError>(error_filter.get(), Error_Filter_Inspection, *this);		
+	}
+
+	SError_Filter_Inspection::SDrawing_Filter_Inspection(SFilter &drawing_filter); {
+		Query_Interface<SError>(error_filter.get(), Drawing_Filter_Inspection, *this);
+	}
 }
 
 

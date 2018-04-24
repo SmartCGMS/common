@@ -9,6 +9,7 @@
 #include <memory>
 
 #include "../rtl/hresult.h"
+#include "../rtl/guid.h"
 /*
   Note that we have to split this class into interface and its implementation,
   as we can use several different compilers. This is to guarantee that the method
@@ -16,7 +17,6 @@
   compiled with the same compiler.
 
 */
-
 namespace refcnt {
 
 	class IReferenced {
@@ -26,7 +26,7 @@ namespace refcnt {
 		*/
 
 	public:
-		virtual HRESULT IfaceCalling QueryInterface(/*REFIID */ void*  riid, void ** ppvObj) = 0;
+		virtual HRESULT IfaceCalling QueryInterface(const GUID*  riid, void ** ppvObj) = 0;
 		virtual ULONG IfaceCalling AddRef() = 0;
 		virtual ULONG IfaceCalling Release() = 0;
 	};
@@ -55,6 +55,12 @@ namespace refcnt {
 		*/
 	}
 
+	template <typename S>
+	void Query_Interface(IReferenced *obj, const GUID &id, S &target) {
+		void **iface;
+		if (obj->QueryInterface(id, &iface) == S_OK)
+			target.reset(iface, [](IReferenced* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });
+	}
 
 	template <typename T>
 	bool Shared_Valid_All(const T& a) {

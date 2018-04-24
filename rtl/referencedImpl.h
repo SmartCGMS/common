@@ -16,7 +16,7 @@ namespace refcnt {
 		CReferenced() : mCounter(0) {};
 		virtual ~CReferenced() {};
 
-		virtual HRESULT IfaceCalling QueryInterface(/*REFIID */ void*  riid, void ** ppvObj);
+		virtual HRESULT IfaceCalling QueryInterface(const GUID*  riid, void ** ppvObj);
 		virtual ULONG IfaceCalling AddRef();
 		virtual ULONG IfaceCalling Release();
 	};

@@ -20,6 +20,16 @@ namespace glucose {
 
 	void Release_Event(TDevice_Event &event);
 		//calls release on any nested reference-counted I-objects inside the event
+
+	class SError_Filter_Inspection : public std::shared_ptr<IError_Filter_Inspection> {
+	public:
+		SError_Filter_Inspection(SFilter &error_filter);
+	};
+
+	class SDrawing_Filter_Inspection : public std::shared_ptr<IDrawing_Filter_Inspection> {
+	public:
+		SDrawing_Filter_Inspection(SFilter &drawing_filter);
+	};
 }
 
 
