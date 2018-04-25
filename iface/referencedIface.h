@@ -56,9 +56,9 @@ namespace refcnt {
 	}
 
 	template <typename I, typename Q>
-	void Query_Interface(I *obj, const GUID &id, std::shared_ptr<I> &target) {
-		Q **queried;
-		if (obj->QueryInterface(id, &queried) == S_OK)
+	void Query_Interface(I *obj, const GUID &id, std::shared_ptr<Q> &target) {
+		Q* queried;
+		if (obj->QueryInterface(&id, reinterpret_cast<void**>(&queried)) == S_OK)
 			target.reset(queried, [](Q* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });
 	}
 
