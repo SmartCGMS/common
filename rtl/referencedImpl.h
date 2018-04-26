@@ -12,6 +12,16 @@ namespace refcnt {
 	class CReferenced : public virtual IReferenced {
 	protected:
 		std::atomic<ULONG> mCounter;
+		template <typename I>
+		bool Internal_Query_Interface(const GUID &I_id, const GUID &riid, void **ppvObj) {
+			const bool result = I_id == riid;
+			if (result) {
+				*ppvObj = dynamic_cast<I*>(this);
+				reinterpret_cast<refcnt::IReferenced*>(*ppvObj)->AddRef();
+			}
+
+			return result;
+		}
 	public:
 		CReferenced() : mCounter(0) {};
 		virtual ~CReferenced() {};
