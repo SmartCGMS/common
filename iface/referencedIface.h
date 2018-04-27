@@ -82,6 +82,7 @@ namespace refcnt {
 		virtual HRESULT get(T **begin, T **end) const = 0;
 	};
 
+	using str_container = IVector_Container<char>;
 	using wstr_container = IVector_Container<wchar_t>;
 	using double_container = IVector_Container<double>;
 }

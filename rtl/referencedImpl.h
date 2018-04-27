@@ -104,6 +104,8 @@ namespace refcnt {
 			return C{};
 	}
 
+	std::string Char_Container_To_String(str_container *container);
+
 	std::wstring WChar_Container_To_WString(wstr_container *container);
 	wstr_container* WString_To_WChar_Container(const wchar_t* str);
 	bool WChar_Container_Equals_WString(wstr_container *container, const wchar_t* str, size_t offset = 0, size_t maxCount = (size_t)-1);

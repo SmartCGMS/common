@@ -37,6 +37,9 @@ namespace refcnt {
 		return std::numeric_limits<ULONG>::max();
 	}
 
+	std::string Char_Container_To_String(str_container *container) {
+		return Container_To_Vector<char, std::string>(container);
+	}
 
 
 	std::wstring WChar_Container_To_WString(refcnt::wstr_container *container) {

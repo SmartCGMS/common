@@ -132,15 +132,15 @@ namespace glucose {
 	class IDrawing_Filter_Inspection : public virtual refcnt::IReferenced {
 	public:
 		// retrieves generated AGP SVG
-		virtual HRESULT IfaceCalling Draw_APG(refcnt::IVector_Container<char> *svg) const = 0;
+		virtual HRESULT IfaceCalling Draw_APG(refcnt::str_container *svg) const = 0;
 		// retrieves generated Clark SVG
-		virtual HRESULT IfaceCalling Draw_Clarke(refcnt::IVector_Container<char> *svg) const = 0;
+		virtual HRESULT IfaceCalling Draw_Clarke(refcnt::str_container *svg) const = 0;
 		// retrieves generated day SVG
-		virtual HRESULT IfaceCalling Draw_Day(refcnt::IVector_Container<char> *svg) const = 0;
+		virtual HRESULT IfaceCalling Draw_Day(refcnt::str_container *svg) const = 0;
 		// retrieves generated graph SVG
-		virtual HRESULT IfaceCalling Draw_Graph(refcnt::IVector_Container<char> *svg) const = 0;
+		virtual HRESULT IfaceCalling Draw_Graph(refcnt::str_container *svg) const = 0;
 		// retrieves generated Parkes SVG
-		virtual HRESULT IfaceCalling Draw_Parkes(refcnt::IVector_Container<char> *svg, bool type1) const = 0;
+		virtual HRESULT IfaceCalling Draw_Parkes(refcnt::str_container *svg, bool type1) const = 0;
 	};
 
 }
