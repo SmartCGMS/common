@@ -31,12 +31,12 @@ namespace refcnt {
 		virtual ULONG IfaceCalling Release() = 0;
 	};
 
-	template <typename I, typename Y>
+	template <typename S, typename I>
 	//this one is designed for extending std::shared_ptr via inheritance
-	I make_shared_reference_ext(Y *obj, bool add_reference) {
+	S make_shared_reference_ext(I *obj, bool add_reference) {
 		if ((add_reference) && (obj != nullptr)) obj->AddRef();
-		I result;
-		result.reset(obj, [](Y* obj_to_release) {if (obj_to_release != nullptr) obj_to_release->Release(); });
+		S result;
+		result.reset(obj, [](I* obj_to_release) {if (obj_to_release != nullptr) obj_to_release->Release(); });
 		//shared_ptr will overtake the assignment operations and maintain its own counter
 		//when shared_ptr's counter will come to zero, referenced's relase will take action
 		return result;

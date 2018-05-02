@@ -120,6 +120,29 @@ namespace glucose {
 		count
 	};
 
+	// supported types of drawing outputs
+	enum class TDrawing_Image_Type : size_t
+	{
+		Graph = 0,
+		Day,
+		Parkes,
+		Clark,
+		Agp,
+
+		count
+	};
+
+	// supported diagnosis
+	enum class TDiagnosis : size_t
+	{
+		Type1 = 0,
+		Type2,
+		Gestational,
+
+		count,
+		NotSpecified = Type1
+	};
+
 	constexpr GUID Error_Filter_Inspection = { 0x13ebd008, 0x5284, 0x4520,{ 0xbc, 0x2a, 0xa9, 0x18, 0x25, 0x7e, 0x66, 0x8 } };
 	class IError_Filter_Inspection : public virtual refcnt::IReferenced {
 	public:
@@ -131,16 +154,8 @@ namespace glucose {
 	constexpr GUID Drawing_Filter_Inspection = { 0xd0c81596, 0xdea0, 0x4edf,{ 0x8b, 0x97, 0xe1, 0xd3, 0x78, 0xda, 0xfe, 0x3d } };
 	class IDrawing_Filter_Inspection : public virtual refcnt::IReferenced {
 	public:
-		// retrieves generated AGP SVG
-		virtual HRESULT IfaceCalling Draw_APG(refcnt::str_container *svg) const = 0;
-		// retrieves generated Clark SVG
-		virtual HRESULT IfaceCalling Draw_Clarke(refcnt::str_container *svg) const = 0;
-		// retrieves generated day SVG
-		virtual HRESULT IfaceCalling Draw_Day(refcnt::str_container *svg) const = 0;
-		// retrieves generated graph SVG
-		virtual HRESULT IfaceCalling Draw_Graph(refcnt::str_container *svg) const = 0;
-		// retrieves generated Parkes SVG
-		virtual HRESULT IfaceCalling Draw_Parkes(refcnt::str_container *svg, bool type1) const = 0;
+		// retrieves generated SVG for given drawing type and diagnosis
+		virtual HRESULT IfaceCalling Draw(TDrawing_Image_Type type, TDiagnosis diagnosis, refcnt::str_container *svg) const = 0;
 	};
 
 }
