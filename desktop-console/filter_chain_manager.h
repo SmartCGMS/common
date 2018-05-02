@@ -11,7 +11,7 @@
 /*
  * Filter chain holder class - holds filter chain and manages chain running
  */
-class CFilter_Chain_Holder : public virtual refcnt::CReferenced
+class CFilter_Chain_Manager : public virtual refcnt::CReferenced
 {
 	private:
 		// filter chain (to be loaded using configurator)
@@ -25,8 +25,8 @@ class CFilter_Chain_Holder : public virtual refcnt::CReferenced
 		std::vector<glucose::SFilter_Pipe> mFilterPipes;
 
 	public:
-		CFilter_Chain_Holder();
-		CFilter_Chain_Holder(CFilter_Chain& sourceChain);
+		CFilter_Chain_Manager();
+		CFilter_Chain_Manager(CFilter_Chain& sourceChain);
 
 		// retrieves filter chain (i.e. to be filled by configurator)
 		CFilter_Chain& Get_Filter_Chain();

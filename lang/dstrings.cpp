@@ -282,7 +282,7 @@ const wchar_t* rsH_Column = L"h";
 
 const wchar_t* rsTau_Column = L"t";
 const wchar_t* rsAlpha_Column = L"alpha";
-const wchar_t* rsBeta_Column = L"b";
+const wchar_t* rsBeta_Column = L"beta";
 const wchar_t* rsGamma_Column = L"gamma";
 
 const wchar_t *rsNet_Host = L"Host";

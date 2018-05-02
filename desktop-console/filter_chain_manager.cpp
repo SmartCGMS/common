@@ -1,26 +1,29 @@
-#include "filter_chain_holder.h"
+#include "filter_chain_manager.h"
 
 #include <iostream>
 #include <thread>
 #include <chrono>
 
-CFilter_Chain_Holder::CFilter_Chain_Holder()
+#include "../rtl/DbLib.h"
+#include "qdb_connector.h"
+
+CFilter_Chain_Manager::CFilter_Chain_Manager()
 {
 	//
 }
 
-CFilter_Chain_Holder::CFilter_Chain_Holder(CFilter_Chain& sourceChain)
+CFilter_Chain_Manager::CFilter_Chain_Manager(CFilter_Chain& sourceChain)
 	: mFilterChain(sourceChain)
 {
 	//
 }
 
-CFilter_Chain& CFilter_Chain_Holder::Get_Filter_Chain()
+CFilter_Chain& CFilter_Chain_Manager::Get_Filter_Chain()
 {
 	return mFilterChain;
 }
 
-HRESULT CFilter_Chain_Holder::Init_And_Start_Filters()
+HRESULT CFilter_Chain_Manager::Init_And_Start_Filters()
 {
 	// create pipes
 	size_t i;
@@ -35,8 +38,14 @@ HRESULT CFilter_Chain_Holder::Init_And_Start_Filters()
 		auto filter = glucose::create_filter(filt.descriptor.id, mFilterPipes[i - 1], mFilterPipes[i]);
 		if (!filter)
 		{
-			std::wcerr << "ERROR: could not create filter " << filt.descriptor.description << std::endl;
+			//std::wcerr << "ERROR: could not create filter " << filt.descriptor.description << std::endl;
 			return ENODEV;
+		}
+
+		{
+			db::SDb_Sink db_sink;
+			refcnt::Query_Interface<glucose::IFilter, db::IDb_Sink>(filter.get(), db::Db_Sink_Filter, db_sink);
+			if (db_sink) db_sink->Set_Connector(static_cast<db::IDb_Connector*>(&db_connector));
 		}
 
 		auto params = refcnt::Create_Container_shared<glucose::TFilter_Parameter>(filt.configuration.data(), filt.configuration.data() + filt.configuration.size());
@@ -58,7 +67,7 @@ HRESULT CFilter_Chain_Holder::Init_And_Start_Filters()
 	return S_OK;
 }
 
-HRESULT CFilter_Chain_Holder::Terminate_Filters()
+HRESULT CFilter_Chain_Manager::Terminate_Filters()
 {
 	size_t i;
 
@@ -80,7 +89,7 @@ HRESULT CFilter_Chain_Holder::Terminate_Filters()
 	return S_OK;
 }
 
-glucose::SFilter CFilter_Chain_Holder::Get_Filter(size_t index)
+glucose::SFilter CFilter_Chain_Manager::Get_Filter(size_t index)
 {
 	if (mFilters.size() <= index)
 		return {};
@@ -88,7 +97,7 @@ glucose::SFilter CFilter_Chain_Holder::Get_Filter(size_t index)
 	return mFilters[index];
 }
 
-GUID CFilter_Chain_Holder::Get_Filter_Id(size_t index) const
+GUID CFilter_Chain_Manager::Get_Filter_Id(size_t index) const
 {
 	if (mFilters.size() <= index)
 		return {0};
