@@ -2,6 +2,8 @@
 
 #include "../iface/DbIface.h"
 
+#include <string>
+
 namespace db
 {
 	using SDb_Connection = std::shared_ptr<db::IDb_Connection>;
