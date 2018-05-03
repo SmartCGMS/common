@@ -5,10 +5,15 @@
 
 namespace db {
 
+	class IDb_Query : public virtual refcnt::IReferenced {
+	public:
+		virtual HRESULT IfaceCalling Get_Raw(void **qsqlquery) = 0;
+		//for now, it returns *QSqlQuery
+	};
+
 	class IDb_Connection : public virtual refcnt::IReferenced {
 	public:
-		virtual HRESULT IfaceCalling Get_Raw(void **qdb) = 0;
-			//for now, it returns *QSqlDatabase
+		virtual HRESULT IfaceCalling Query(const wchar_t *statement, IDb_Query **query) = 0;			
 	};
 
 	class IDb_Connector : public virtual refcnt::IReferenced {

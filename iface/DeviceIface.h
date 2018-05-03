@@ -54,6 +54,7 @@ namespace glucose {
 
 	enum class NDevice_Event_Code : uint8_t {
 		Nothing = 0,		//internal event of the object
+		Shut_Down,
 
 		Level,				//level contains newly measured or calculated level of a given signal
 		Masked_Level,		//level not advertised for solving, i.e., tranining, but for testing set

@@ -23,8 +23,21 @@ CFilter_Chain& CFilter_Chain_Manager::Get_Filter_Chain()
 	return mFilterChain;
 }
 
-HRESULT CFilter_Chain_Manager::Init_And_Start_Filters()
-{
+HRESULT CFilter_Chain_Manager::Init_And_Start_Filters() {
+
+	//verify, that the chain ends with /dev/null filter
+	bool add_dev_null = true;
+	if (!mFilterChain.empty()) {
+		add_dev_null = mFilterChain[mFilterChain.size() - 1].descriptor.id != glucose::Dev_NULL_Filter;
+	}
+	if (add_dev_null) {
+		glucose::TFilter_Descriptor dev_null_desc{ 0 };
+		if (glucose::get_filter_descriptors_by_id(glucose::Dev_NULL_Filter, dev_null_desc)) {
+			mFilterChain.push_back(TFilter_Chain_Link{ dev_null_desc , CFilter_Configuration{} });
+		}
+		
+	}
+
 	// create pipes
 	size_t i;
 	for (i = 0; i < mFilterChain.size() + 1; i++)
@@ -67,24 +80,26 @@ HRESULT CFilter_Chain_Manager::Init_And_Start_Filters()
 	return S_OK;
 }
 
-HRESULT CFilter_Chain_Manager::Terminate_Filters()
-{
-	size_t i;
+HRESULT CFilter_Chain_Manager::Terminate_Filters() {
+	if (!mFilterPipes.empty()) {
+		// at first, call abort on pipes - this causes threads blocked on pop/push to unblock and return
+		const glucose::TDevice_Event shut_down_event{ glucose::NDevice_Event_Code::Shut_Down };
+		mFilterPipes[0]->send(&shut_down_event);
 
-	// at first, call abort on pipes - this causes threads blocked on pop/push to unblock and return
-	for (i = 0; i < mFilterPipes.size(); i++)
-		mFilterPipes[i]->abort();
 
-	// join filter threads; they should exit very soon after the pipe is aborted
-	for (i = 0; i < mFilterThreads.size(); i++)
-	{
-		if (mFilterThreads[i]->joinable())
-			mFilterThreads[i]->join();
+		//for (auto &pipe : mFilterPipes)
+	//		pipe->abort();
+
+		// join filter threads; they should exit very soon after the pipe is aborted
+		for (auto &filter_thread : mFilterThreads) {
+			if (filter_thread->joinable())
+				filter_thread->join();
+		}
+
+		mFilters.clear();
+		mFilterPipes.clear();
+		mFilterThreads.clear();
 	}
-
-	mFilters.clear();
-	mFilterPipes.clear();
-	mFilterThreads.clear();
 
 	return S_OK;
 }

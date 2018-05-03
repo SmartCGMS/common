@@ -3,10 +3,17 @@
 #include "../iface/DbIface.h"
 
 #include <string>
+#include <QtSql\QSqlQuery>
 
-namespace db
-{
-	using SDb_Connection = std::shared_ptr<IDb_Connection>;
+
+namespace db {
+
+	using SDb_Query = std::shared_ptr<IDb_Query>;
+
+	class SDb_Connection : public std::shared_ptr<IDb_Connection> {
+	public:
+		SDb_Query Query(const std::wstring &statement);
+	};
 
 	class SDb_Connector : public std::shared_ptr<IDb_Connector> {
 	public:
