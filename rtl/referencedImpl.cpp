@@ -9,9 +9,6 @@
 
 namespace refcnt {
 
-	#ifdef __INTEL_COMPILER
-	[[maybe_unused]] 
-	#endif
 	HRESULT CReferenced::QueryInterface(const GUID*  riid, void ** ppvObj) {
 		return E_NOTIMPL;
 	}

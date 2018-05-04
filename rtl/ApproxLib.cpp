@@ -19,11 +19,18 @@ std::vector<glucose::TApprox_Descriptor> glucose::get_approx_descriptors() {
 	return result;
 }
 
+
+
 glucose::SApproximator glucose::Create_Approximator(const GUID &id, glucose::SSignal signal, glucose::SApprox_Parameters_Vector configuration) {
+	return Create_Approximator(id, signal.get(), configuration);
+}
+
+glucose::SApproximator glucose::Create_Approximator(const GUID &id, glucose::ISignal* signal, glucose::SApprox_Parameters_Vector configuration) {
+
 	glucose::SApproximator result;
 	glucose::IApproximator *approximator;
 
-	if (imported::create_approximator(&id,  signal.get(), configuration.get(), &approximator) == S_OK)
+	if (imported::create_approximator(&id,  signal, configuration.get(), &approximator) == S_OK)
 		result = refcnt::make_shared_reference_ext<glucose::SApproximator, glucose::IApproximator>(approximator, false);
 
 	return result;

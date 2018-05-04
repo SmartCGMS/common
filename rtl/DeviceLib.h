@@ -14,6 +14,16 @@ namespace glucose {
 
 	using SSignal = std::shared_ptr<ISignal>;
 
+	class WSignal {
+	protected:
+		ISignal *mSignal;
+	public:
+		WSignal(ISignal *signal);
+
+		HRESULT Get_Discrete_Levels(double* const times, double* const levels, const size_t count, size_t *filled) const;
+		HRESULT Get_Discrete_Bounds(TBounds *bounds, size_t *level_count) const;
+	};
+
 	class WTime_Segment { //: public std::weak_ptr<ITime_Segment> { --cannot inherit because shared-weak relationshop cannot live across COM interface
 						  //Perhaps, we should make STime_Segment export friendly function to WTimeSegment that will take WTime_Segment's
 						  //as callback of STime_Segment. STime_Segment will call the WTime_Segment's callback from STime_Segment's dctor.

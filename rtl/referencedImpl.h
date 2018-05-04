@@ -50,17 +50,26 @@ namespace refcnt {
 		public:
 			virtual ~CVector_Container() {};
 
-			virtual HRESULT set(const T *begin, const T *end) final {
+			virtual HRESULT set(const T *begin, const T *end) override final {
 				std::vector<T>::clear();
 				if (begin != nullptr)
 					std::copy(begin, end, std::back_inserter(*this));
 				return S_OK;
 			}
 
-			virtual HRESULT get(T **begin, T **end) const final {
-				*begin = const_cast<T*>(std::vector<T>::data());
-				*end = const_cast<T*>(std::vector<T>::data()) + std::vector<T>::size();
-				return S_OK;
+			virtual HRESULT get(T **begin, T **end) const override final {
+				if (!std::vector<T>::empty()) {
+					*begin = const_cast<T*>(std::vector<T>::data());
+					*end = const_cast<T*>(std::vector<T>::data()) + std::vector<T>::size();
+					return S_OK;
+				} else {
+					*begin = *end = nullptr;
+					return S_FALSE;
+				}				
+			}
+
+			virtual HRESULT empty() const override final {
+				return std::vector<T>::empty() ? S_OK : S_FALSE;
 			}
 		};
 

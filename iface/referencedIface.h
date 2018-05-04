@@ -80,6 +80,7 @@ namespace refcnt {
 	public:
 		virtual HRESULT set(const T *begin, const T *end) = 0;
 		virtual HRESULT get(T **begin, T **end) const = 0;
+		virtual HRESULT empty() const = 0;
 	};
 
 	using str_container = IVector_Container<char>;

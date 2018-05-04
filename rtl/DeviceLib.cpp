@@ -11,6 +11,18 @@ namespace imported {
 	#endif
 }
 
+
+glucose::WSignal::WSignal(ISignal *signal) : mSignal(signal) {};
+
+HRESULT glucose::WSignal::Get_Discrete_Levels(double* const times, double* const levels, const size_t count, size_t *filled) const {
+	return mSignal ? mSignal->Get_Discrete_Levels(times, levels, count, filled) : E_FAIL;
+}
+
+HRESULT glucose::WSignal::Get_Discrete_Bounds(glucose::TBounds *bounds, size_t *level_count) const {
+	return mSignal ? mSignal->Get_Discrete_Bounds(bounds, level_count) : E_FAIL;
+}
+
+
 glucose::WTime_Segment::WTime_Segment(ITime_Segment *segment) : mSegment(segment) {
 
 }

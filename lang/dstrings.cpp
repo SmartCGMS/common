@@ -200,7 +200,7 @@ const wchar_t *dsError_Absolute = L"absolute";
 const wchar_t *dsError_Relative = L"relative";
 
 const wchar_t *dsError_Column_Average = L"Average";
-const wchar_t *dsError_Column_StdDev = L"Sample Std. Deviation";
+const wchar_t *dsError_Column_StdDev = L"Std.Dev (Bessel)";
 const wchar_t *dsError_Column_AIC = L"AIC";
 const wchar_t *dsError_Column_Minimum = L"Minimum";
 const wchar_t *dsError_Column_First_Quantile = L"1. Quartile";
