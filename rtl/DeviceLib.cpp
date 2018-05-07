@@ -5,9 +5,22 @@
 #include "../iface/referencedIface.h"
 
 namespace imported {
-	#ifdef _WIN32
-		extern "C" __declspec(dllimport)  HRESULT IfaceCalling create_calculated_signal(const GUID *calc_id, glucose::ITime_Segment *segment, glucose::ISignal **signal);
-		extern "C" __declspec(dllimport)  HRESULT IfaceCalling create_measured_signal(const GUID *calc_id, glucose::ITime_Segment *segment, glucose::ISignal **signal);
+	
+	#define DIMPORT_TEST_FAIL E_NOTIMPL
+
+	#ifdef DIMPORT_TEST_FAIL
+		HRESULT IfaceCalling create_calculated_signal(const GUID *calc_id, glucose::ITime_Segment *segment, glucose::ISignal **signal) {
+			return DIMPORT_TEST_FAIL;
+		}
+
+		HRESULT IfaceCalling create_measured_signal(const GUID *calc_id, glucose::ITime_Segment *segment, glucose::ISignal **signal) {
+			return DIMPORT_TEST_FAIL;
+		}
+	#else
+		#ifdef _WIN32
+			extern "C" __declspec(dllimport)  HRESULT IfaceCalling create_calculated_signal(const GUID *calc_id, glucose::ITime_Segment *segment, glucose::ISignal **signal);
+			extern "C" __declspec(dllimport)  HRESULT IfaceCalling create_measured_signal(const GUID *calc_id, glucose::ITime_Segment *segment, glucose::ISignal **signal);
+		#endif
 	#endif
 }
 

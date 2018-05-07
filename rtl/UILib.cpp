@@ -3,10 +3,29 @@
 namespace glucose
 {
 	namespace imported {
-		#ifdef _WIN32
-			extern "C" __declspec(dllimport)  HRESULT IfaceCalling get_metric_descriptors(glucose::TMetric_Descriptor **begin, glucose::TMetric_Descriptor **end);
-			extern "C" __declspec(dllimport)  HRESULT IfaceCalling get_model_descriptors(glucose::TModel_Descriptor **begin, glucose::TModel_Descriptor **end);
-			extern "C" __declspec(dllimport)  HRESULT IfaceCalling get_solver_descriptors(glucose::TSolver_Descriptor **begin, glucose::TSolver_Descriptor **end);
+		#define DIMPORT_TEST_FAIL E_NOTIMPL
+
+		#ifdef DIMPORT_TEST_FAIL
+
+			HRESULT IfaceCalling get_metric_descriptors(glucose::TMetric_Descriptor **begin, glucose::TMetric_Descriptor **end) {
+				return DIMPORT_TEST_FAIL;
+			}
+
+			HRESULT IfaceCalling get_model_descriptors(glucose::TModel_Descriptor **begin, glucose::TModel_Descriptor **end) {
+				return DIMPORT_TEST_FAIL;
+			}
+
+			HRESULT IfaceCalling get_solver_descriptors(glucose::TSolver_Descriptor **begin, glucose::TSolver_Descriptor **end) {
+				return DIMPORT_TEST_FAIL;
+			}
+
+		#else
+
+			#ifdef _WIN32
+				extern "C" __declspec(dllimport)  HRESULT IfaceCalling get_metric_descriptors(glucose::TMetric_Descriptor **begin, glucose::TMetric_Descriptor **end);
+				extern "C" __declspec(dllimport)  HRESULT IfaceCalling get_model_descriptors(glucose::TModel_Descriptor **begin, glucose::TModel_Descriptor **end);
+				extern "C" __declspec(dllimport)  HRESULT IfaceCalling get_solver_descriptors(glucose::TSolver_Descriptor **begin, glucose::TSolver_Descriptor **end);
+			#endif
 		#endif
 	}
 

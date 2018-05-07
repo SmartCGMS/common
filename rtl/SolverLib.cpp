@@ -1,8 +1,16 @@
 #include "SolverLib.h"
 
 namespace imported {
-	#ifdef _WIN32
-		extern "C" __declspec(dllimport)  HRESULT IfaceCalling create_metric(const glucose::TMetric_Parameters *parameters, glucose::IMetric **metric);
+	#define DIMPORT_TEST_FAIL E_NOTIMPL
+
+	#ifdef DIMPORT_TEST_FAIL
+		HRESULT IfaceCalling create_metric(const glucose::TMetric_Parameters *parameters, glucose::IMetric **metric) {
+			return DIMPORT_TEST_FAIL;
+		}
+	#else
+		#ifdef _WIN32
+			extern "C" __declspec(dllimport) HRESULT IfaceCalling create_metric(const glucose::TMetric_Parameters *parameters, glucose::IMetric **metric);
+		#endif
 	#endif
 }
 

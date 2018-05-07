@@ -8,10 +8,28 @@ namespace glucose {
 
 	namespace imported {
 
-		#ifdef _WIN32
-			extern "C" __declspec(dllimport)  HRESULT IfaceCalling get_filter_descriptors(TFilter_Descriptor **begin, TFilter_Descriptor **end);
-			extern "C" __declspec(dllimport)  HRESULT IfaceCalling create_filter_pipe(IFilter_Pipe **pipe);
-			extern "C" __declspec(dllimport)  HRESULT IfaceCalling create_filter(const GUID *id, IFilter_Pipe *input, IFilter_Pipe *output, IFilter **filter);
+		#define DIMPORT_TEST_FAIL E_NOTIMPL
+
+		#ifdef DIMPORT_TEST_FAIL
+			HRESULT IfaceCalling get_filter_descriptors(TFilter_Descriptor **begin, TFilter_Descriptor **end) {
+				return DIMPORT_TEST_FAIL;
+			}
+
+			HRESULT IfaceCalling create_filter_pipe(IFilter_Pipe **pipe) {
+				return DIMPORT_TEST_FAIL;
+			}
+
+			HRESULT IfaceCalling create_filter(const GUID *id, IFilter_Pipe *input, IFilter_Pipe *output, IFilter **filter) {
+				return DIMPORT_TEST_FAIL;
+			}
+
+		#else
+
+			#ifdef _WIN32
+				extern "C" __declspec(dllimport)  HRESULT IfaceCalling get_filter_descriptors(TFilter_Descriptor **begin, TFilter_Descriptor **end);
+				extern "C" __declspec(dllimport)  HRESULT IfaceCalling create_filter_pipe(IFilter_Pipe **pipe);
+				extern "C" __declspec(dllimport)  HRESULT IfaceCalling create_filter(const GUID *id, IFilter_Pipe *input, IFilter_Pipe *output, IFilter **filter);
+			#endif
 		#endif
 	}
 

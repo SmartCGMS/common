@@ -1,9 +1,9 @@
 #include "Dynamic_Library.h"
 
 #ifdef _WIN32
-const wchar_t* rsShared_Object_Extension = L".dll";
+	const wchar_t* rsShared_Object_Extension = L".dll";
 #else
-const wchar_t* rsShared_Object_Extension = L".so";
+	const wchar_t* rsShared_Object_Extension = L".so";
 #endif
 
 CDynamic_Library::CDynamic_Library() : mHandle(nullptr) {	

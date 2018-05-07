@@ -24,6 +24,7 @@ CFilter_Chain& CFilter_Chain_Manager::Get_Filter_Chain()
 }
 
 HRESULT CFilter_Chain_Manager::Init_And_Start_Filters() {
+	if (mFilterChain.empty()) return S_FALSE;
 
 	//verify, that the chain ends with /dev/null filter
 	bool add_dev_null = true;
