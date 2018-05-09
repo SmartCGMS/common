@@ -1,7 +1,7 @@
 #include "filter_chain.h"
 
 
-CFilter_Configuration::CFilter_Configuration() : std::vector<glucose::TFilter_Parameter>() {
+CFilter_Configuration::CFilter_Configuration() noexcept : std::vector<glucose::TFilter_Parameter>() {
 }
 
 CFilter_Configuration::CFilter_Configuration(const CFilter_Configuration &other) : std::vector<glucose::TFilter_Parameter>(other) {
@@ -21,6 +21,9 @@ void CFilter_Configuration::Traverse_Configuration(std::function<void(refcnt::IR
 			case glucose::NParameter_Type::ptWChar_Container: func(param.wstr);
 				break;
 			case glucose::NParameter_Type::ptSelect_Time_Segment_ID: func(param.select_time_segment_id);
+				break;
+        
+      case glucose::NParameter_Type::ptModel_Bounds: func(param.parameters);
 				break;
 		}
 	}

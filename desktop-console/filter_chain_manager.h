@@ -25,7 +25,7 @@ class CFilter_Chain_Manager : public virtual refcnt::CReferenced
 		std::vector<glucose::SFilter_Pipe> mFilterPipes;
 
 	public:
-		CFilter_Chain_Manager();
+		CFilter_Chain_Manager() noexcept;
 		CFilter_Chain_Manager(CFilter_Chain& sourceChain);
 
 		// retrieves filter chain (i.e. to be filled by configurator)

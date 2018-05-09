@@ -6,7 +6,7 @@
 	const wchar_t* rsShared_Object_Extension = L".so";
 #endif
 
-CDynamic_Library::CDynamic_Library() : mHandle(nullptr) {	
+CDynamic_Library::CDynamic_Library() noexcept : mHandle(nullptr) {	
 }
 
 CDynamic_Library::~CDynamic_Library() {
@@ -14,12 +14,9 @@ CDynamic_Library::~CDynamic_Library() {
 		Unload();
 }
 
-void CDynamic_Library::Set_Filename(const std::wstring& path) {
-	mModulePath = path;
-}
 
-bool CDynamic_Library::Load() {
-	mHandle = LoadLibraryW(mModulePath.c_str());
+bool CDynamic_Library::Load(const wchar_t *file_path) {
+	mHandle = LoadLibraryW(file_path);
 
 	return mHandle != 0;
 }

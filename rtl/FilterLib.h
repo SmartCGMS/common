@@ -30,13 +30,13 @@ namespace glucose {
 
 	class SError_Filter_Inspection : public std::shared_ptr<IError_Filter_Inspection> {
 	public:
-		SError_Filter_Inspection() {};
+		SError_Filter_Inspection() noexcept {};
 		SError_Filter_Inspection(SFilter &error_filter);
 	};
 
 	class SDrawing_Filter_Inspection : public std::shared_ptr<IDrawing_Filter_Inspection> {
 	public:
-		SDrawing_Filter_Inspection() {};
+		SDrawing_Filter_Inspection() noexcept {};
 		SDrawing_Filter_Inspection(SFilter &drawing_filter);
 	};
 }

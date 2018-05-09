@@ -8,24 +8,18 @@
 /*
  * Dynamic library (shared object) wrapper class
  */
-class CDynamic_Library final
-{
+class CDynamic_Library final {
 	private:
 		// stored module handle (nullptr if invalid)
 		HMODULE mHandle;
-		// original module path
-		std::wstring mModulePath;
-
 	public:
-		CDynamic_Library();
+		CDynamic_Library() noexcept;
 		// disallow copying - the handle has to be unique
 		CDynamic_Library(const CDynamic_Library&) = delete;
 		virtual ~CDynamic_Library();
 
-		// sets library module filename
-		void Set_Filename(const std::wstring& path);
 		// loads module and returns result
-		bool Load();
+		bool Load(const wchar_t *file_path);
 		// unloads module if loaded
 		void Unload();
 		// resolves symbol from loaded module; returns nullptr if no such symbol found or no module loaded

@@ -23,7 +23,7 @@ namespace refcnt {
 			return result;
 		}
 	public:
-		CReferenced() : mCounter(0) {};
+		CReferenced() noexcept : mCounter(0) {};
 		virtual ~CReferenced() {};
 
 		virtual HRESULT IfaceCalling QueryInterface(const GUID*  riid, void ** ppvObj);
