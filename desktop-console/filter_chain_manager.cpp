@@ -64,7 +64,7 @@ HRESULT CFilter_Chain_Manager::Init_And_Start_Filters() {
 
 	//finally, add terminating consumer filter so that the queue does not qet stuck 
 	glucose::IFilter *consumer_filter;
-	Manufacture_Object<CConsumer_Filter, glucose::IFilter>(&consumer_filter, mFilterPipes[mFilterPipes.size()-1]);
+	if (Manufacture_Object<CConsumer_Filter, glucose::IFilter>(&consumer_filter, mFilterPipes[mFilterPipes.size()-1]) != S_OK) return E_FAIL;
 	mFilters.push_back(refcnt::make_shared_reference_ext<glucose::SFilter, glucose::IFilter>(consumer_filter, false));
 
 	mFilterThreads.push_back(std::make_unique<std::thread>([consumer_filter]() {
