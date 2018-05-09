@@ -30,11 +30,13 @@ HRESULT CFilter_Chain_Manager::Init_And_Start_Filters() {
 	if (!mFilterChain.empty()) {
 		add_dev_null = mFilterChain[mFilterChain.size() - 1].descriptor.id != glucose::Dev_NULL_Filter;
 	}
-	if (add_dev_null) {
+	if (add_dev_null) {		
 		glucose::TFilter_Descriptor dev_null_desc{ 0 };
-		if (glucose::get_filter_descriptors_by_id(glucose::Dev_NULL_Filter, dev_null_desc)) {
+		if (glucose::get_filter_descriptors_by_id(glucose::Dev_NULL_Filter, dev_null_desc)) {			
 			mFilterChain.push_back(TFilter_Chain_Link{ dev_null_desc , CFilter_Configuration{} });
 		}
+		else
+			return S_FALSE;	//queue won't work without a final consumer!
 		
 	}
 

@@ -72,8 +72,7 @@ void CConfig::Load(CFilter_Chain &filter_chain) {
 
 				for (size_t i = 0; i < desc.parameters_count; i++) {
 					glucose::TFilter_Parameter filter_parameter;
-					filter_parameter.type = desc.parameter_type[i];
-					filter_parameter.config_name = refcnt::WString_To_WChar_Container(desc.config_parameter_name[i]);
+					filter_parameter.type = desc.parameter_type[i];					
 
 					//does the value exists?
 					const wchar_t* str_value = mIni.GetValue(section_name.pItem, desc.config_parameter_name[i]);
@@ -120,8 +119,11 @@ void CConfig::Load(CFilter_Chain &filter_chain) {
 								valid = false;
 						}
 
-						if (valid)
+						if (valid) {
+							//creat the parameter name container, only if it is really neded - it is reference counted!
+							filter_parameter.config_name = refcnt::WString_To_WChar_Container(desc.config_parameter_name[i]);
 							filter_config.push_back(filter_parameter);
+						}
 					}
 				}
 
