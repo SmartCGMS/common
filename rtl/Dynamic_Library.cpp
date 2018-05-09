@@ -18,7 +18,7 @@ CDynamic_Library::~CDynamic_Library() {
 bool CDynamic_Library::Load(const wchar_t *file_path) {
 	mHandle = LoadLibraryW(file_path);
 
-	return mHandle != 0;
+	return mHandle != nullptr;
 }
 
 bool CDynamic_Library::Is_Loaded() const {
