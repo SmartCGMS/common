@@ -106,8 +106,6 @@ const wchar_t *dsDevice_Interop_Filter = L"Real device interface";
 
 const wchar_t *dsInterop_Export_Filter = L"Interop export filter";
 
-const wchar_t *dsConsume_Filter = L"/dev/null";
-
 const wchar_t *dsLog_Filter = L"Log";
 const wchar_t *dsLog_Output_File = L"Output file";
 

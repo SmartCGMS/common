@@ -111,8 +111,6 @@ extern const wchar_t *dsDevice_Interop_Filter;
 
 extern const wchar_t *dsInterop_Export_Filter;
 
-extern const wchar_t *dsConsume_Filter;
-
 extern const wchar_t *dsLog_Filter;
 extern const wchar_t *dsLog_Output_File;
 
