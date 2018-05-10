@@ -15,4 +15,6 @@ namespace glucose {
 		SMetric Clone();
 	};
 
+	HRESULT Solve_Model_Parameters(const TSolver_Setup &setup);
+
 }

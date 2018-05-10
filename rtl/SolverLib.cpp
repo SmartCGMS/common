@@ -7,8 +7,14 @@ namespace imported {
 		HRESULT IfaceCalling create_metric(const glucose::TMetric_Parameters *parameters, glucose::IMetric **metric) {
 			return DIMPORT_TEST_FAIL;
 		}
+
+		HRESULT IfaceCalling solve_model_parameters(const glucose::TSolver_Setup *setup) {
+			return DIMPORT_TEST_FAIL;
+		}
+
 	#else
 		#ifdef _WIN32
+			extern "C" __declspec(dllimport) HRESULT IfaceCalling solve_model_parameters(const glucose::TSolver_Setup *setup);
 			extern "C" __declspec(dllimport) HRESULT IfaceCalling create_metric(const glucose::TMetric_Parameters *parameters, glucose::IMetric **metric);
 		#endif
 	#endif
@@ -45,4 +51,9 @@ glucose::SMetric glucose::SMetric::Clone()
 	}
 
 	return result;
+}
+
+
+HRESULT glucose::Solve_Model_Parameters(const TSolver_Setup &setup) {
+	return imported::solve_model_parameters(&setup);
 }

@@ -36,10 +36,10 @@ namespace glucose {
 	namespace injected
 	{
 		std::vector<TFilter_Descriptor> addition_filter_descriptors;
-		std::vector<glucose::TCreate_Filter> create_filter;
+		std::vector<TCreate_Filter> create_filter;
 	}
 
-	void register_additional_filter(glucose::TGet_Filter_Descriptors get_descriptors, glucose::TCreate_Filter create_filter) {
+	void register_additional_filter(glucose::TGet_Filter_Descriptors get_descriptors, glucose::TCreate_Filter create_filter) {		
 		TFilter_Descriptor *desc_begin, *desc_end;
 		if (get_descriptors(&desc_begin, &desc_end) == S_OK) {
 			std::copy(desc_begin, desc_end, std::back_inserter(injected::addition_filter_descriptors));
