@@ -28,12 +28,17 @@ class CFilter_Chain_Manager : public virtual refcnt::CReferenced
 		CFilter_Chain_Manager() noexcept;
 		CFilter_Chain_Manager(CFilter_Chain& sourceChain);
 
-		// retrieves filter chain (i.e. to be filled by configurator)
-		CFilter_Chain& Get_Filter_Chain();
 		// initializes and starts the filter chain
 		HRESULT Init_And_Start_Filters();
 		// terminates filters
 		HRESULT Terminate_Filters();
+		//inject a specific message into the very first pipe
+		HRESULT send(const glucose::TDevice_Event &event);
+
+		// retrieves filter chain (i.e. to be filled by configurator)
+		CFilter_Chain& Get_Filter_Chain();
+		
+		
 		// retrieves filter by its position
 		glucose::SFilter Get_Filter(size_t index);
 		// retrieves filter GUID by its position

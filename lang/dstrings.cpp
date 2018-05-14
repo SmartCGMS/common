@@ -110,7 +110,6 @@ const wchar_t *dsLog_Filter = L"Log";
 const wchar_t *dsLog_Output_File = L"Output file";
 
 const wchar_t *dsGUI_Filter = L"Visualization";
-const wchar_t *dsUser_Input_Filter = L"User input";
 
 const wchar_t *dsCalculate_Past_New_Params = L"Calculate past with first parameter set";
 const wchar_t *dsRecalculate_With_Every_Params = L"New parameters recalculate entire segment";

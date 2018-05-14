@@ -2,7 +2,7 @@
 
 #include "hresult.h"
 
-template <typename T, typename A = std::allocator>
+template <typename T, typename A = std::allocator<T>>
 HRESULT do_get_descriptors(const std::vector<T, A> &descriptors, T **begin, T **end) {
 	if (!descriptors.empty()) {
 		*begin = const_cast<T*>(descriptors.data());

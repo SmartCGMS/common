@@ -115,7 +115,6 @@ extern const wchar_t *dsLog_Filter;
 extern const wchar_t *dsLog_Output_File;
 
 extern const wchar_t *dsGUI_Filter;
-extern const wchar_t *dsUser_Input_Filter;
 
 extern const wchar_t *dsCalculate_Past_New_Params;
 extern const wchar_t *dsRecalculate_With_Every_Params;

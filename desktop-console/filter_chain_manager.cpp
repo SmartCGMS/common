@@ -96,6 +96,11 @@ HRESULT CFilter_Chain_Manager::Terminate_Filters() {
 	return S_OK;
 }
 
+HRESULT CFilter_Chain_Manager::send(const glucose::TDevice_Event &event) {
+	if (mFilterPipes.empty()) return S_FALSE;
+	return mFilterPipes[0]->send(&event);
+}
+
 glucose::SFilter CFilter_Chain_Manager::Get_Filter(size_t index)
 {
 	if (mFilters.size() <= index)
