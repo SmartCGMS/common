@@ -33,7 +33,8 @@ HRESULT CFilter_Chain_Manager::Init_And_Start_Filters() {
 	size_t i;
 	for (i = 0; i < mFilterChain.size() + 1; i++) {
 		auto pipe = glucose::create_filter_pipe();
-		if (!pipe) return E_FAIL;
+		if (!pipe) 
+			return E_FAIL;
 		mFilterPipes.push_back(pipe);
 	}
 
@@ -42,7 +43,8 @@ HRESULT CFilter_Chain_Manager::Init_And_Start_Filters() {
 	for (auto& filt : mFilterChain)	{
 		// attempt to create filter; supply proper pipes
 		auto filter = glucose::create_filter(filt.descriptor.id, mFilterPipes[i - 1], mFilterPipes[i]);
-		if (!filter) return ENODEV;
+		if (!filter) 
+			return ENODEV;
 
 		{
 			db::SDb_Sink db_sink;

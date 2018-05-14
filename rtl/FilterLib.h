@@ -10,7 +10,7 @@ namespace glucose {
 	using SFilter_Pipe = std::shared_ptr<IFilter_Pipe>;
 	using SFilter = std::shared_ptr<IFilter>;
 
-	void register_additional_filter(glucose::TGet_Filter_Descriptors get_descriptors, glucose::TCreate_Filter create_filter);
+	bool add_filters(const std::vector<glucose::TFilter_Descriptor> &descriptors, glucose::TCreate_Filter create_filter);
 
 	std::vector<TFilter_Descriptor> get_filter_descriptors();
 	bool get_filter_descriptors_by_id(const GUID &id, TFilter_Descriptor &desc);
@@ -27,6 +27,8 @@ namespace glucose {
 
 	//calls release on any nested reference-counted I-objects inside the event
 	void Release_Event(TDevice_Event &event);
+
+	void Release_Filter_Parameter(TFilter_Parameter &parameter);
 
 	class SError_Filter_Inspection : public std::shared_ptr<IError_Filter_Inspection> {
 	public:

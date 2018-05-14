@@ -23,29 +23,25 @@ namespace glucose {
 				return DIMPORT_TEST_FAIL;
 			}
 
+			HRESULT IfaceCalling add_filters(const glucose::TFilter_Descriptor *begin, const glucose::TFilter_Descriptor *end, const glucose::TCreate_Filter create_filter) {
+				return DIMPORT_TEST_FAIL;
+			}
+
 		#else
 
 			#ifdef _WIN32
 				extern "C" __declspec(dllimport)  HRESULT IfaceCalling get_filter_descriptors(TFilter_Descriptor **begin, TFilter_Descriptor **end);
 				extern "C" __declspec(dllimport)  HRESULT IfaceCalling create_filter_pipe(IFilter_Pipe **pipe);
 				extern "C" __declspec(dllimport)  HRESULT IfaceCalling create_filter(const GUID *id, IFilter_Pipe *input, IFilter_Pipe *output, IFilter **filter);
+				extern "C" __declspec(dllimport)  HRESULT IfaceCalling add_filters(const glucose::TFilter_Descriptor *begin, const glucose::TFilter_Descriptor *end, const glucose::TCreate_Filter create_filter);
 			#endif
 		#endif
 	}
 
-	namespace injected
-	{
-		std::vector<TFilter_Descriptor> addition_filter_descriptors;
-		std::vector<TCreate_Filter> create_filter;
-	}
 
-	void register_additional_filter(glucose::TGet_Filter_Descriptors get_descriptors, glucose::TCreate_Filter create_filter) {		
-		TFilter_Descriptor *desc_begin, *desc_end;
-		if (get_descriptors(&desc_begin, &desc_end) == S_OK) {
-			std::copy(desc_begin, desc_end, std::back_inserter(injected::addition_filter_descriptors));
-		}
-		
-		injected::create_filter.push_back(create_filter);
+	bool add_filters(const std::vector<glucose::TFilter_Descriptor> &descriptors, glucose::TCreate_Filter create_filter) {
+
+		return imported::add_filters(descriptors.data(), descriptors.data() + descriptors.size(), create_filter) == S_OK;
 	}
 
 	std::vector<TFilter_Descriptor> get_filter_descriptors() {
@@ -55,8 +51,6 @@ namespace glucose {
 		if (imported::get_filter_descriptors(&desc_begin, &desc_end) == S_OK) {
 			std::copy(desc_begin, desc_end, std::back_inserter(result));
 		}
-
-		std::copy(injected::addition_filter_descriptors.begin(), injected::addition_filter_descriptors.end(), std::back_inserter(result));
 
 		return result;
 	}
@@ -74,16 +68,6 @@ namespace glucose {
 					result = true;
 					break;
 				}
-		}
-
-		if (!result) {			
-			for (const auto & iter : injected::addition_filter_descriptors) {
-				if (iter.id == id) {
-					memcpy(&desc, &iter, sizeof(decltype(desc)));
-					result = true;
-					break;
-				}
-			}
 		}
 
 		return result;
@@ -105,17 +89,7 @@ namespace glucose {
 
 		if (imported::create_filter(&id, input.get(), output.get(), &filter) == S_OK)
 			result = refcnt::make_shared_reference_ext<SFilter, IFilter>(filter, false);
-		else {
-			for (auto builder : injected::create_filter)
-			{
-				if (builder(&id, input.get(), output.get(), &filter) == S_OK)
-				{
-					result = refcnt::make_shared_reference_ext<SFilter, IFilter>(filter, false);
-					break;
-				}
-			}
-		}
-
+	
 		return result;
 	}
 
@@ -153,6 +127,20 @@ namespace glucose {
 																break;
 
 			default:											break;
+		}
+	}
+
+	void Release_Filter_Parameter(TFilter_Parameter &parameter) {
+		if (parameter.config_name) parameter.config_name->Release();
+
+		switch (parameter.type) {
+		case glucose::NParameter_Type::ptWChar_Container: parameter.wstr->Release();
+			break;
+		case glucose::NParameter_Type::ptSelect_Time_Segment_ID: parameter.select_time_segment_id->Release();
+			break;
+
+		case glucose::NParameter_Type::ptModel_Bounds: parameter.parameters->Release();
+			break;
 		}
 	}
 

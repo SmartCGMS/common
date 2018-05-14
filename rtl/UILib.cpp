@@ -3,7 +3,7 @@
 namespace glucose
 {
 	namespace imported {
-		#define DIMPORT_TEST_FAIL E_NOTIMPL
+		//#define DIMPORT_TEST_FAIL E_NOTIMPL
 
 		#ifdef DIMPORT_TEST_FAIL
 

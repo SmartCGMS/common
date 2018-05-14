@@ -2,7 +2,7 @@
 
 
 namespace imported {
-	#define DIMPORT_TEST_FAIL E_NOTIMPL
+	//#define DIMPORT_TEST_FAIL E_NOTIMPL
 
 	#ifdef DIMPORT_TEST_FAIL
 		HRESULT IfaceCalling create_approximator(const GUID *approx_id, glucose::ISignal *signal, glucose::IApprox_Parameters_Vector* configuration, glucose::IApproximator **approx) {
