@@ -1,8 +1,9 @@
 #pragma once
 
-#include "DeviceLib.h"
-
 #include "../iface/referencedIface.h"
+
+#include "DeviceLib.h"
+#include "rattime.h"
 
 namespace imported {
 	
@@ -130,4 +131,68 @@ glucose::STime_Segment glucose::CTime_Segment::Clone()
 	}
 
 	return refcnt::make_shared_reference_ext<glucose::STime_Segment, glucose::ITime_Segment>(cloned, true);
+}
+
+
+glucose::SDevice_Event::SDevice_Event(NDevice_Event_Code code) : event_code(code) {	
+	device_id = Invalid_GUID;
+	signal_id = Invalid_GUID;
+	device_time = Unix_Time_To_Rat_Time(time(nullptr));
+	segment_id = Invalid_Segment_Id;
+	level = std::numeric_limits<double>::quiet_NaN();
+	parameters.reset();
+	info.reset();
+}
+
+glucose::SDevice_Event::SDevice_Event(glucose::TDevice_Event &event) {
+	event_code = event.event_code;
+	device_id = event.device_id;
+	signal_id = event.signal_id;
+	device_time = event.device_time;
+	segment_id = Invalid_Segment_Id;
+
+	parameters.reset();
+	info.reset();
+	level = std::numeric_limits<double>::quiet_NaN();
+
+	switch (event.event_code) {
+		case glucose::NDevice_Event_Code::Information:
+		case glucose::NDevice_Event_Code::Warning:
+		case glucose::NDevice_Event_Code::Error:			info = refcnt::make_shared_reference_ext<std::shared_ptr<refcnt::wstr_container>, refcnt::wstr_container>(event.info, true);
+			break;
+
+		case glucose::NDevice_Event_Code::Parameters:
+		case glucose::NDevice_Event_Code::Parameters_Hint:	parameters = refcnt::make_shared_reference_ext<SModel_Parameter_Vector, IModel_Parameter_Vector>(event.parameters, true);
+			break;
+
+		default: level = event.level;
+			break;
+	}
+}
+
+glucose::TDevice_Event glucose::SDevice_Event::Raw_Event() {
+	glucose::TDevice_Event event;
+	event.event_code = event_code;
+	event.device_id = device_id;
+	event.signal_id = signal_id;
+	event.device_time = device_time;
+	event.segment_id = segment_id;
+
+	switch (event.event_code) {
+		case glucose::NDevice_Event_Code::Information:
+		case glucose::NDevice_Event_Code::Warning:
+		case glucose::NDevice_Event_Code::Error:			event.info = info.get();
+															event.info->AddRef();
+															break;	
+
+		case glucose::NDevice_Event_Code::Parameters:
+		case glucose::NDevice_Event_Code::Parameters_Hint:	event.parameters = parameters.get();
+															event.parameters->AddRef();
+															break;
+
+		default: event.level = level;
+			break;
+	}
+
+	return event;
 }

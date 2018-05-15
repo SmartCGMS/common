@@ -40,6 +40,26 @@ namespace glucose {
 		SSignal Get_Signal(const GUID &signal_id);
 	};
 
+	struct SDevice_Event {
+	public:
+		SDevice_Event(NDevice_Event_Code code = NDevice_Event_Code::Nothing);
+		SDevice_Event(TDevice_Event &event);
+
+		TDevice_Event Raw_Event();
+	public:
+		NDevice_Event_Code event_code;
+		
+		GUID device_id;					
+		GUID signal_id;					
+		double device_time;												
+		uint64_t segment_id;			
+
+		double level;
+		SModel_Parameter_Vector parameters;
+		std::shared_ptr<refcnt::wstr_container> info;
+
+	};
+
 #pragma warning( push )
 #pragma warning( disable : 4250 ) // C4250 - 'class1' : inherits 'class2::member' via dominance
 

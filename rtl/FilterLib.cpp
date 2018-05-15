@@ -55,7 +55,7 @@ namespace glucose {
 		return result;
 	}
 
-	bool get_filter_descriptors_by_id(const GUID &id, TFilter_Descriptor &desc) {
+	bool get_filter_descriptor_by_id(const GUID &id, TFilter_Descriptor &desc) {
 		TFilter_Descriptor *desc_begin, *desc_end;
 
 		bool result = imported::get_filter_descriptors(&desc_begin, &desc_end) == S_OK;
@@ -73,14 +73,77 @@ namespace glucose {
 		return result;
 	}
 
+	/*
+	// increases reference counter on contents due to passing container through pipes;
+	// this actually adds the whole filter chain as additional "owner", but since we can't use shared_ptrs in the whole chain,
+	// we need to manually add reference and release it later
+	// this is needed for shared_ptrs (made from IReferenced) stored locally in filter which created them, because when filter
+	// releases this local reference, the reference counter may drop to 0 earlier than expected, and may lead to crash
+	void AddRef_Event(TDevice_Event &event) {
+		// add references on container objects
+		switch (event.event_code) {
+		case glucose::NDevice_Event_Code::Information:
+		case glucose::NDevice_Event_Code::Warning:
+		case glucose::NDevice_Event_Code::Error:			event.info->AddRef();
+			break;
 
-	SFilter_Pipe create_filter_pipe() {
-		SFilter_Pipe result;
+		case glucose::NDevice_Event_Code::Parameters:
+		case glucose::NDevice_Event_Code::Parameters_Hint:	event.parameters->AddRef();
+			break;
+
+		default:											break;
+		}
+	}
+	*/
+
+	
+
+
+	bool SFilter_Pipe::Send(SDevice_Event &event) {
+		auto Release_Event = [](TDevice_Event &event) {
+			// release references on container objects
+			switch (event.event_code) {
+			case glucose::NDevice_Event_Code::Information:
+			case glucose::NDevice_Event_Code::Warning:
+			case glucose::NDevice_Event_Code::Error:			if (event.info) event.info->Release();
+				event.info = nullptr;
+				break;
+
+			case glucose::NDevice_Event_Code::Parameters:
+			case glucose::NDevice_Event_Code::Parameters_Hint:	if (event.parameters) event.parameters->Release();
+				event.parameters = nullptr;
+				break;
+			}
+		};
+
+
+		if (!operator bool()) return false;
+
+		TDevice_Event raw_event = event.Raw_Event();
+		if (get()->send(&raw_event) != S_OK) {
+			Release_Event(raw_event);
+			return false;
+		}
+
+		return true;
+	}
+
+	bool SFilter_Pipe::Receive(SDevice_Event &event) {
+		if (!operator bool()) return false;
+
+		TDevice_Event raw_event;
+		if (get()->receive(&raw_event) != S_OK) return false;
+
+		event = SDevice_Event(raw_event);
+		return true;
+	}
+
+
+	SFilter_Pipe::SFilter_Pipe() {
+		
 		IFilter_Pipe *pipe;
 		if (imported::create_filter_pipe(&pipe) == S_OK)
-			result = refcnt::make_shared_reference_ext<SFilter_Pipe, IFilter_Pipe>(pipe, false);
-
-		return result;
+			reset(pipe, [](glucose::IFilter_Pipe* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });				
 	}
 
 	SFilter create_filter(const GUID &id, SFilter_Pipe &input, SFilter_Pipe &output) {
@@ -93,42 +156,7 @@ namespace glucose {
 		return result;
 	}
 
-	// increases reference counter on contents due to passing container through pipes;
-	// this actually adds the whole filter chain as additional "owner", but since we can't use shared_ptrs in the whole chain,
-	// we need to manually add reference and release it later
-	// this is needed for shared_ptrs (made from IReferenced) stored locally in filter which created them, because when filter
-	// releases this local reference, the reference counter may drop to 0 earlier than expected, and may lead to crash
-	void AddRef_Event(TDevice_Event &event) {
-		// add references on container objects
-		switch (event.event_code) {
-			case glucose::NDevice_Event_Code::Information:
-			case glucose::NDevice_Event_Code::Warning:
-			case glucose::NDevice_Event_Code::Error:			event.info->AddRef();
-																break;
-
-			case glucose::NDevice_Event_Code::Parameters:
-			case glucose::NDevice_Event_Code::Parameters_Hint:	event.parameters->AddRef();
-																break;
-
-			default:											break;
-		}
-	}
-
-	void Release_Event(TDevice_Event &event) {
-		// release references on container objects
-		switch (event.event_code) {
-			case glucose::NDevice_Event_Code::Information:
-			case glucose::NDevice_Event_Code::Warning:
-			case glucose::NDevice_Event_Code::Error:			if (event.info) event.info->Release();
-																event.info = nullptr;
-																break;
-
-			case glucose::NDevice_Event_Code::Parameters:
-			case glucose::NDevice_Event_Code::Parameters_Hint:	if (event.parameters) event.parameters->Release();
-																event.parameters = nullptr;
-																break;
-		}
-	}
+	
 
 	void Release_Filter_Parameter(TFilter_Parameter &parameter) {
 		if (parameter.config_name) parameter.config_name->Release();

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "DeviceLib.h"
 #include "../iface/UIIface.h"
 
 #include "referencedImpl.h"
@@ -7,17 +8,26 @@
 
 namespace glucose {
 
-	using SFilter_Pipe = std::shared_ptr<IFilter_Pipe>;
+	
+	class SFilter_Pipe : public std::shared_ptr<IFilter_Pipe> {
+	public:
+		SFilter_Pipe();
+		bool Send(SDevice_Event &event);
+		bool Receive(SDevice_Event &event);
+	};
+
+
 	using SFilter = std::shared_ptr<IFilter>;
 
 	bool add_filters(const std::vector<glucose::TFilter_Descriptor> &descriptors, glucose::TCreate_Filter create_filter);
 
 	std::vector<TFilter_Descriptor> get_filter_descriptors();
-	bool get_filter_descriptors_by_id(const GUID &id, TFilter_Descriptor &desc);
-	SFilter_Pipe create_filter_pipe();
-	//instantiate a filter and connects it to its input and output
+	bool get_filter_descriptor_by_id(const GUID &id, TFilter_Descriptor &desc);
+	
 	SFilter create_filter(const GUID &id, SFilter_Pipe &input, SFilter_Pipe &output);
 
+
+	/* TODO delete, once entire project compiles with SFilter_Pipe and SDevice_Event only
 	// increases reference counter on nested reference-counter I-objects due to passing container through pipes;
 	// this actually adds the whole filter chain as additional "owner", but since we can't use shared_ptrs in the whole chain,
 	// we need to manually add reference and release it later
@@ -27,8 +37,10 @@ namespace glucose {
 
 	//calls release on any nested reference-counted I-objects inside the event
 	void Release_Event(TDevice_Event &event);
+	*/
 
 	void Release_Filter_Parameter(TFilter_Parameter &parameter);
+
 
 	class SError_Filter_Inspection : public std::shared_ptr<IError_Filter_Inspection> {
 	public:

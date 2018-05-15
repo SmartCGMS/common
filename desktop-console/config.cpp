@@ -67,7 +67,7 @@ void CConfig::Load(CFilter_Chain &filter_chain) {
 			glucose::TFilter_Descriptor desc{ 0 };
 			CFilter_Configuration filter_config;
 
-			if (glucose::get_filter_descriptors_by_id(id, desc)) {
+			if (glucose::get_filter_descriptor_by_id(id, desc)) {
 				//so.. now, try to load the filter parameters - aka filter_config
 
 				for (size_t i = 0; i < desc.parameters_count; i++) {
