@@ -119,14 +119,14 @@ namespace glucose {
 		switch (event.event_code) {
 			case glucose::NDevice_Event_Code::Information:
 			case glucose::NDevice_Event_Code::Warning:
-			case glucose::NDevice_Event_Code::Error:			event.info->Release();
+			case glucose::NDevice_Event_Code::Error:			if (event.info) event.info->Release();
+																event.info = nullptr;
 																break;
 
 			case glucose::NDevice_Event_Code::Parameters:
-			case glucose::NDevice_Event_Code::Parameters_Hint:	event.parameters->Release();
+			case glucose::NDevice_Event_Code::Parameters_Hint:	if (event.parameters) event.parameters->Release();
+																event.parameters = nullptr;
 																break;
-
-			default:											break;
 		}
 	}
 
@@ -135,11 +135,14 @@ namespace glucose {
 
 		switch (parameter.type) {
 		case glucose::NParameter_Type::ptWChar_Container: parameter.wstr->Release();
+			parameter.wstr = nullptr;
 			break;
 		case glucose::NParameter_Type::ptSelect_Time_Segment_ID: parameter.select_time_segment_id->Release();
+			parameter.select_time_segment_id = nullptr;
 			break;
 
 		case glucose::NParameter_Type::ptModel_Bounds: parameter.parameters->Release();
+			parameter.parameters = nullptr;
 			break;
 		}
 	}

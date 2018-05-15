@@ -6,7 +6,6 @@
 
 #include "../rtl/DbLib.h"
 #include "qdb_connector.h"
-#include "consumer_filter.h"
 
 CFilter_Chain_Manager::CFilter_Chain_Manager() noexcept {
 	
@@ -64,13 +63,21 @@ HRESULT CFilter_Chain_Manager::Init_And_Start_Filters() {
 		i++;
 	}
 
-	//finally, add terminating consumer filter so that the queue does not qet stuck 
-	glucose::IFilter *consumer_filter;
-	if (Manufacture_Object<CConsumer_Filter, glucose::IFilter>(&consumer_filter, mFilterPipes[mFilterPipes.size()-1]) != S_OK) return E_FAIL;
-	mFilters.push_back(refcnt::make_shared_reference_ext<glucose::SFilter, glucose::IFilter>(consumer_filter, false));
+	//finally, add terminating thread so that the queue does not qet stuck 
+	mFilterThreads.push_back(std::make_unique<std::thread>([this]() {
+		glucose::TDevice_Event evt;
+		auto &input = mFilterPipes[mFilterPipes.size() - 1];
 
-	mFilterThreads.push_back(std::make_unique<std::thread>([consumer_filter]() {
-		consumer_filter->Run(nullptr);
+		while (input->receive(&evt) == S_OK) {
+			// just read and do nothing - this effectively consumes any incoming event through pipe
+			glucose::Release_Event(evt);
+			
+			//and if it was a shutdown event, try to repost it into the first filter
+			//in the case, that some filter in the middle had produced the event
+			//then, we need to make sure that all preceding filters terminate as well
+			if (evt.event_code == glucose::NDevice_Event_Code::Shut_Down) mFilterPipes[0]->send(&evt);	//no need to test success
+
+		}
 	}));
 
 	return S_OK;
