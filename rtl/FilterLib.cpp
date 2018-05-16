@@ -139,6 +139,11 @@ namespace glucose {
 	}
 
 
+	SFilter_Pipe::SFilter_Pipe(glucose::IFilter_Pipe *pipe) {
+		if (pipe) pipe->AddRef();
+		reset(pipe, [](glucose::IFilter_Pipe* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });
+	}
+
 	SFilter_Pipe::SFilter_Pipe() {
 		
 		IFilter_Pipe *pipe;

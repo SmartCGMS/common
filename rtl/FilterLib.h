@@ -11,6 +11,7 @@ namespace glucose {
 	
 	class SFilter_Pipe : public std::shared_ptr<IFilter_Pipe> {
 	public:
+		SFilter_Pipe(glucose::IFilter_Pipe *pipe);
 		SFilter_Pipe();
 		bool Send(SDevice_Event &event);
 		bool Receive(SDevice_Event &event);
