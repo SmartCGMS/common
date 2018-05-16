@@ -43,8 +43,14 @@ namespace refcnt {
 		return Container_To_Vector<wchar_t, std::wstring>(container);
 	}
 
+	std::shared_ptr<wstr_container> WString_To_WChar_Container_shared(const wchar_t* str) {
+		const size_t len = str != nullptr ? wcslen(str) : 0;
+		return Create_Container_shared<wchar_t>(str, str + len);
+	}
+
 	wstr_container* WString_To_WChar_Container(const wchar_t* str) {
-		return Create_Container<wchar_t>(str, str + wcslen(str));
+		const size_t len = str != nullptr ? wcslen(str) : 0;
+		return Create_Container<wchar_t>(str, str + len);
 	}
 
 	bool WChar_Container_Equals_WString(wstr_container *container, const wchar_t* str, size_t offset, size_t maxCount) {
