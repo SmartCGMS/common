@@ -13,8 +13,8 @@ namespace glucose {
 	public:
 		SFilter_Pipe(glucose::IFilter_Pipe *pipe);
 		SFilter_Pipe();
-		bool Send(SDevice_Event &event);
-		bool Receive(SDevice_Event &event);
+		bool Send(UDevice_Event &event);
+		bool Receive(UDevice_Event &event);
 	};
 
 

@@ -87,7 +87,7 @@ namespace glucose {
 		GUID signal_id;					//blood, ist, isig, model id aka e.g, calculated blood, etc.
 
 		double device_time;				//signal with multiple values are aggregated byt device_time with the same signal_id and device_id
-		//int64_t logical_time;			// logical time of this event; currently not in use as it is distributed per-filter and thus would require to re-architect the id
+		int64_t logical_time;			
 
 		uint64_t segment_id;			// segment identifier or Invalid_Segment_Id
 
@@ -98,7 +98,15 @@ namespace glucose {
 			refcnt::wstr_container* info;				//information, warning, error 
 		};
 	};
-
+	
+	//To make TDevice_Event handling more efficient, particulalry when passing through the pipe,
+	//IDevice_Event exposes TDevice_Event container iface so that the pipe can accept and pass throught only a pointer, not the entire structure.
+	//This way, we avoid the overhead of copying size_of(TDevice_Event) so many times.
+	class IDevice_Event {
+	public:
+		virtual ULONG IfaceCalling Release() = 0;					//releases allocated memory using the right allocator, returns 0
+		virtual HRESULT IfaceCalling Raw(TDevice_Event **raw) = 0;	//provides pointer to the contained TDevice_Event (free to modify as needed)
+	};
 
 	static constexpr decltype(TDevice_Event::segment_id) Invalid_Segment_Id = std::numeric_limits<decltype(Invalid_Segment_Id)>::max();
 

@@ -85,5 +85,5 @@ namespace refcnt {
 
 	using str_container = IVector_Container<char>;
 	using wstr_container = IVector_Container<wchar_t>;
-	using double_container = IVector_Container<double>;
+	using double_container = IVector_Container<double>;	
 }

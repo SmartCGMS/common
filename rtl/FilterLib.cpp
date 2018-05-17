@@ -99,42 +99,24 @@ namespace glucose {
 	
 
 
-	bool SFilter_Pipe::Send(SDevice_Event &event) {
-		auto Release_Event = [](TDevice_Event &event) {
-			// release references on container objects
-			switch (event.event_code) {
-			case glucose::NDevice_Event_Code::Information:
-			case glucose::NDevice_Event_Code::Warning:
-			case glucose::NDevice_Event_Code::Error:			if (event.info) event.info->Release();
-				event.info = nullptr;
-				break;
-
-			case glucose::NDevice_Event_Code::Parameters:
-			case glucose::NDevice_Event_Code::Parameters_Hint:	if (event.parameters) event.parameters->Release();
-				event.parameters = nullptr;
-				break;
-			}
-		};
-
-
+	bool SFilter_Pipe::Send(UDevice_Event &event) {
 		if (!operator bool()) return false;
-
-		TDevice_Event raw_event = event.Raw_Event();
-		if (get()->send(&raw_event) != S_OK) {
-			Release_Event(raw_event);
-			return false;
-		}
-
+		if (!event) return false;
+		
+		if (get()->send(event.get()) != S_OK) return false;
+			
+		event.release(); 	//release the resource from the sender
+		
 		return true;
 	}
 
-	bool SFilter_Pipe::Receive(SDevice_Event &event) {
+	bool SFilter_Pipe::Receive(UDevice_Event &event) {
 		if (!operator bool()) return false;
 
-		TDevice_Event raw_event;
+		IDevice_Event *raw_event;
 		if (get()->receive(&raw_event) != S_OK) return false;
 
-		event = SDevice_Event(raw_event);
+		event.reset(raw_event);
 		return true;
 	}
 

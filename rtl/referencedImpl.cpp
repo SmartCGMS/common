@@ -69,4 +69,19 @@ namespace refcnt {
 	}
 
 
+	void Swstr_container::set(const wchar_t *str) {
+		if (operator bool()) {
+			if (str != nullptr) get()->set(str, str + wcslen(str));
+			else get()->set(nullptr, nullptr);
+		}		
+	}
+
+
+	bool Swstr_container::operator==(const wchar_t *other) const {
+		if (!operator bool()) return false;
+
+		return WChar_Container_Equals_WString(get(), other, 0, other ? wcslen(other) : 0);
+	}
+
 }
+

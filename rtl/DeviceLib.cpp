@@ -7,7 +7,7 @@
 
 namespace imported {
 	
-	#define DIMPORT_TEST_FAIL E_NOTIMPL
+	//#define DIMPORT_TEST_FAIL E_NOTIMPL
 
 	#ifdef DIMPORT_TEST_FAIL
 		HRESULT IfaceCalling create_calculated_signal(const GUID *calc_id, glucose::ITime_Segment *segment, glucose::ISignal **signal) {
@@ -17,10 +17,16 @@ namespace imported {
 		HRESULT IfaceCalling create_measured_signal(const GUID *calc_id, glucose::ITime_Segment *segment, glucose::ISignal **signal) {
 			return DIMPORT_TEST_FAIL;
 		}
+
+		HRESULT IfaceCalling create_device_event(glucose::IDevice_Event **event, glucose::NDevice_Event_Code code) {
+			return DIMPORT_TEST_FAIL;
+		}
+		
 	#else
 		#ifdef _WIN32
 			extern "C" __declspec(dllimport)  HRESULT IfaceCalling create_calculated_signal(const GUID *calc_id, glucose::ITime_Segment *segment, glucose::ISignal **signal);
 			extern "C" __declspec(dllimport)  HRESULT IfaceCalling create_measured_signal(const GUID *calc_id, glucose::ITime_Segment *segment, glucose::ISignal **signal);
+			extern "C" __declspec(dllimport)  HRESULT IfaceCalling create_device_event(glucose::NDevice_Event_Code code, glucose::IDevice_Event **event);
 		#endif
 	#endif
 }
@@ -134,65 +140,48 @@ glucose::STime_Segment glucose::CTime_Segment::Clone()
 }
 
 
-glucose::SDevice_Event::SDevice_Event(NDevice_Event_Code code) : event_code(code) {	
-	device_id = Invalid_GUID;
-	signal_id = Invalid_GUID;
-	device_time = Unix_Time_To_Rat_Time(time(nullptr));
-	segment_id = Invalid_Segment_Id;
-	level = std::numeric_limits<double>::quiet_NaN();
-	parameters.reset();
-	info.reset();
-}
-
-glucose::SDevice_Event::SDevice_Event(glucose::TDevice_Event &event) {
-	event_code = event.event_code;
-	device_id = event.device_id;
-	signal_id = event.signal_id;
-	device_time = event.device_time;
-	segment_id = Invalid_Segment_Id;
-
-	parameters.reset();
-	info.reset();
-	level = std::numeric_limits<double>::quiet_NaN();
-
-	switch (event.event_code) {
-		case glucose::NDevice_Event_Code::Information:
-		case glucose::NDevice_Event_Code::Warning:
-		case glucose::NDevice_Event_Code::Error:			info = refcnt::make_shared_reference_ext<std::shared_ptr<refcnt::wstr_container>, refcnt::wstr_container>(event.info, true);
-			break;
-
-		case glucose::NDevice_Event_Code::Parameters:
-		case glucose::NDevice_Event_Code::Parameters_Hint:	parameters = refcnt::make_shared_reference_ext<SModel_Parameter_Vector, IModel_Parameter_Vector>(event.parameters, true);
-			break;
-
-		default: level = event.level;
-			break;
+glucose::UDevice_Event::UDevice_Event(const glucose::NDevice_Event_Code code) {
+	mRaw = nullptr;
+	glucose::IDevice_Event *event;
+	if (imported::create_device_event(code, &event) == S_OK) {
+		 reset(event);		
 	}
 }
 
-glucose::TDevice_Event glucose::SDevice_Event::Raw_Event() {
-	glucose::TDevice_Event event;
-	event.event_code = event_code;
-	event.device_id = device_id;
-	event.signal_id = signal_id;
-	event.device_time = device_time;
-	event.segment_id = segment_id;
+glucose::UDevice_Event::UDevice_Event(IDevice_Event *event) {
+	mRaw = nullptr;
+	reset(event);
+}
 
-	switch (event.event_code) {
-		case glucose::NDevice_Event_Code::Information:
-		case glucose::NDevice_Event_Code::Warning:
-		case glucose::NDevice_Event_Code::Error:			event.info = info.get();
-															event.info->AddRef();
-															break;	
+void glucose::UDevice_Event::reset(IDevice_Event *event) {
 
-		case glucose::NDevice_Event_Code::Parameters:
-		case glucose::NDevice_Event_Code::Parameters_Hint:	event.parameters = parameters.get();
-															event.parameters->AddRef();
-															break;
+	if (mRaw)
+		switch (mRaw->event_code) {
+			case glucose::NDevice_Event_Code::Information:
+			case glucose::NDevice_Event_Code::Warning:
+			case glucose::NDevice_Event_Code::Error:			info = decltype(info) {};
+				break;
 
-		default: event.level = level;
-			break;
+			case glucose::NDevice_Event_Code::Parameters:
+			case glucose::NDevice_Event_Code::Parameters_Hint:	parameters = decltype(parameters) {};
+				break;
+		}
+
+	if (event->Raw(&mRaw) == S_OK) {
+		std::unique_ptr<IDevice_Event, UDevice_Event_Deleter>::reset(event);
+		
+		cached_event_code = &mRaw->event_code;
+
+		switch (mRaw->event_code) {
+			case glucose::NDevice_Event_Code::Information:
+			case glucose::NDevice_Event_Code::Warning:
+			case glucose::NDevice_Event_Code::Error:			if (mRaw->info) info = refcnt::make_shared_reference_ext<refcnt::Swstr_container, refcnt::wstr_container>(mRaw->info, true);
+				break;
+
+			case glucose::NDevice_Event_Code::Parameters:
+			case glucose::NDevice_Event_Code::Parameters_Hint:	if (mRaw->parameters) parameters = refcnt::make_shared_reference_ext<glucose::SModel_Parameter_Vector, glucose::IModel_Parameter_Vector>(mRaw->parameters, true);
+				break;
+		}		
+		
 	}
-
-	return event;
 }

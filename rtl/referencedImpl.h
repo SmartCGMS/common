@@ -132,5 +132,11 @@ namespace refcnt {
 		return result;
 	}
 
+
+	class Swstr_container : public std::shared_ptr<refcnt::wstr_container> {
+	public:
+		void set(const wchar_t *str);
+		bool operator==(const wchar_t *other) const;
+	};
 	
 }

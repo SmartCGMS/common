@@ -33,7 +33,7 @@ class CFilter_Chain_Manager : public virtual refcnt::CReferenced
 		// terminates filters
 		HRESULT Terminate_Filters();
 		//inject a specific message into the very first pipe
-		HRESULT Send(glucose::SDevice_Event &event);
+		HRESULT Send(glucose::UDevice_Event &event);
 
 		// retrieves filter chain (i.e. to be filled by configurator)
 		CFilter_Chain& Get_Filter_Chain();

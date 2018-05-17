@@ -12,9 +12,10 @@ namespace glucose {
 
 	class IFilter_Pipe : public virtual refcnt::IReferenced {
 	public:
-		virtual HRESULT send(const TDevice_Event *event) = 0;
+		virtual HRESULT send(IDevice_Event *event) = 0;
 				//Pipe TAKES ownership of any nested reference-counted I-object so that send-caller is forbidden to call to release the nested objects				
-		virtual HRESULT receive(TDevice_Event *event) = 0;
+		virtual HRESULT receive(IDevice_Event **event) = 0;
+				//caller TAKES ownership of the received event and is responsible for freeing it
 		virtual HRESULT abort() = 0;
 	};
 

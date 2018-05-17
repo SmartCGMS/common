@@ -65,7 +65,7 @@ HRESULT CFilter_Chain_Manager::Init_And_Start_Filters() {
 
 	//finally, add terminating thread so that the queue does not qet stuck 
 	mFilterThreads.push_back(std::make_unique<std::thread>([this]() {
-		glucose::SDevice_Event evt;
+		glucose::UDevice_Event evt;
 		auto input = mFilterPipes[mFilterPipes.size() - 1];
 
 		while (input.Receive(evt)) {
@@ -86,7 +86,7 @@ HRESULT CFilter_Chain_Manager::Init_And_Start_Filters() {
 HRESULT CFilter_Chain_Manager::Terminate_Filters() {
 	if (!mFilterPipes.empty()) {
 		// at first, call abort on pipes - this causes threads blocked on pop/push to unblock and return
-		glucose::SDevice_Event shut_down_event{ glucose::NDevice_Event_Code::Shut_Down };
+		glucose::UDevice_Event shut_down_event{ glucose::NDevice_Event_Code::Shut_Down };
 		mFilterPipes[0].Send(shut_down_event);
 
 		// join filter threads; they should exit very soon after the pipe is aborted
@@ -103,7 +103,7 @@ HRESULT CFilter_Chain_Manager::Terminate_Filters() {
 	return S_OK;
 }
 
-HRESULT CFilter_Chain_Manager::Send(glucose::SDevice_Event &event) {
+HRESULT CFilter_Chain_Manager::Send(glucose::UDevice_Event &event) {
 	if (mFilterPipes.empty()) return S_FALSE;
 	return mFilterPipes[0].Send(event) ? S_OK : E_FAIL;
 }

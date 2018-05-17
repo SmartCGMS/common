@@ -40,26 +40,44 @@ namespace glucose {
 		SSignal Get_Signal(const GUID &signal_id);
 	};
 
-	struct SDevice_Event {
-	public:
-		SDevice_Event(NDevice_Event_Code code = NDevice_Event_Code::Nothing);
-		SDevice_Event(TDevice_Event &event);
 
-		TDevice_Event Raw_Event();
-	public:
-		NDevice_Event_Code event_code;
-		
-		GUID device_id;					
-		GUID signal_id;					
-		double device_time;												
-		uint64_t segment_id;			
-
-		double level;
-		SModel_Parameter_Vector parameters;
-		std::shared_ptr<refcnt::wstr_container> info;
-
+	//because unique_ptr::reset does not let us to specify deleter lambda, let's do it this way
+	struct UDevice_Event_Deleter {
+		void operator()(IDevice_Event *obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); };
 	};
 
+	class UDevice_Event : public std::unique_ptr<IDevice_Event, UDevice_Event_Deleter> {
+	protected:
+		TDevice_Event *mRaw;		
+		GUID tmpGUID = Invalid_GUID;
+	public:		
+		explicit UDevice_Event(const NDevice_Event_Code code = NDevice_Event_Code::Nothing);
+		UDevice_Event(IDevice_Event *event);
+		void reset(IDevice_Event *event);		
+
+
+		//TODO references do not work here
+		//pointers seems to be ugly
+		//getters and setters seems to produce complex code
+		//=>lambdas which return reference by resolving current mRaw value
+		po dokonceni odstranit komentare a inlinovane metody presunout do .cpp
+		NDevice_Event_Code event_code() { return mRaw ? mRaw->event_code : NDevice_Event_Code::Nothing; };
+																	//this must be const, because level, parameters and info shared the same data space!!!
+																	//it is 100% fool proof, but programmer should still easily discover the error when overwriting e.g., info with level and then reading info
+		int64_t logical_time() { return mRaw ? mRaw->logical_time : std::numeric_limits<int64_t>::max(); };
+		
+		GUID& device_id() { return mRaw ? mRaw->device_id : tmpGUID; };
+		GUID& signal_id() { return mRaw ? mRaw->signal_id : tmpGUID; };
+		double& device_time = mRaw->device_time;
+		uint64_t& segment_id = mRaw->segment_id;
+		double& level = mRaw->level;
+		//TODO references
+
+		SModel_Parameter_Vector parameters;
+		refcnt::Swstr_container info;		
+	};
+
+	
 #pragma warning( push )
 #pragma warning( disable : 4250 ) // C4250 - 'class1' : inherits 'class2::member' via dominance
 
