@@ -14,7 +14,7 @@ namespace glucose {
 		SFilter_Pipe(glucose::IFilter_Pipe *pipe);
 		SFilter_Pipe();
 		bool Send(UDevice_Event &event);
-		bool Receive(UDevice_Event &event);
+		UDevice_Event Receive();
 	};
 
 

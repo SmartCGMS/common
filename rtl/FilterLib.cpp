@@ -110,14 +110,13 @@ namespace glucose {
 		return true;
 	}
 
-	bool SFilter_Pipe::Receive(UDevice_Event &event) {
+	UDevice_Event SFilter_Pipe::Receive() {
 		if (!operator bool()) return false;
 
 		IDevice_Event *raw_event;
-		if (get()->receive(&raw_event) != S_OK) return false;
-
-		event.reset(raw_event);
-		return true;
+		if (get()->receive(&raw_event) != S_OK) return nullptr;
+		
+		return UDevice_Event{ raw_event };
 	}
 
 
