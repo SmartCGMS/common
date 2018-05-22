@@ -68,7 +68,7 @@ HRESULT CFilter_Chain_Manager::Init_And_Start_Filters() {
 		glucose::UDevice_Event evt;
 		auto input = mFilterPipes[mFilterPipes.size() - 1];
 
-		for (; glucose::UDevice_Event evt = input.Receive();evt) {
+		for (; glucose::UDevice_Event evt = input.Receive(); evt) {
 			// just read and do nothing - this effectively consumes any incoming event through pipe
 					
 			//and if it was a shutdown event, try to repost it into the first filter
