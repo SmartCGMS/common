@@ -142,7 +142,7 @@ glucose::STime_Segment glucose::CTime_Segment::Clone()
 
 glucose::TDevice_Event* Get_Raw_Event(glucose::IDevice_Event *event) {
 	glucose::TDevice_Event* result;
-	if (event->Raw(&result) != S_OK) result = nullptr;
+	if ((event == nullptr) || (event->Raw(&result) != S_OK)) result = nullptr;
 
 	return result;
 }
@@ -157,14 +157,15 @@ glucose::UDevice_Event::UDevice_Event(const glucose::NDevice_Event_Code code) : 
 }
 
 glucose::UDevice_Event::UDevice_Event(IDevice_Event *event) : mRaw(Get_Raw_Event(event)), std::unique_ptr<IDevice_Event, UDevice_Event_Deleter>(event) {
-	switch (mRaw->event_code) {
-		case glucose::NDevice_Event_Code::Information:
-		case glucose::NDevice_Event_Code::Warning:
-		case glucose::NDevice_Event_Code::Error:			if (mRaw->info) info = refcnt::make_shared_reference_ext<refcnt::Swstr_container, refcnt::wstr_container>(mRaw->info, true);
-			break;
+	if (mRaw != nullptr)
+		switch (mRaw->event_code) {
+			case glucose::NDevice_Event_Code::Information:
+			case glucose::NDevice_Event_Code::Warning:
+			case glucose::NDevice_Event_Code::Error:			if (mRaw->info) info = refcnt::make_shared_reference_ext<refcnt::Swstr_container, refcnt::wstr_container>(mRaw->info, true);
+				break;
 
-		case glucose::NDevice_Event_Code::Parameters:
-		case glucose::NDevice_Event_Code::Parameters_Hint:	if (mRaw->parameters) parameters = refcnt::make_shared_reference_ext<glucose::SModel_Parameter_Vector, glucose::IModel_Parameter_Vector>(mRaw->parameters, true);
-			break;
-	}
+			case glucose::NDevice_Event_Code::Parameters:
+			case glucose::NDevice_Event_Code::Parameters_Hint:	if (mRaw->parameters) parameters = refcnt::make_shared_reference_ext<glucose::SModel_Parameter_Vector, glucose::IModel_Parameter_Vector>(mRaw->parameters, true);
+				break;
+		}
 }

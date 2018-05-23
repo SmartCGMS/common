@@ -95,9 +95,9 @@ HRESULT CFilter_Chain_Manager::Terminate_Filters() {
 				filter_thread->join();
 		}
 
+		mFilterThreads.clear();
 		mFilters.clear();
 		mFilterPipes.clear();
-		mFilterThreads.clear();
 	}
 
 	return S_OK;
