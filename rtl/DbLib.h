@@ -2,13 +2,27 @@
 
 #include "../iface/DbIface.h"
 
-#include <string>
-#include <QtSql\QSqlQuery>
+#include <vector>
+#include <array>
+#include <variant>
+#include <string_view>
 
 
 namespace db {
 
-	using SDb_Query = std::shared_ptr<IDb_Query>;
+	using TParameter = std::variant<int64_t, double, std::wstring_view, bool>;
+	struct TIndexed_Parameter {
+		size_t index;		
+		TParameter parameter;
+	};
+
+	class SDb_Query : public std::shared_ptr<IDb_Query>{
+	public:
+		bool Bind_Parameters(std::vector<TParameter> query_parameters, std::vector<TIndexed_Parameter> result);
+			//set the result.parameter value first to indicate desired parameter type
+			//the idea of overtaking the Get_Next parameters is to improve performance by preparing IDb_Query::Get_Next's structures just once
+		bool Get_Next();		
+	};
 
 	class SDb_Connection : public std::shared_ptr<IDb_Connection> {
 	public:

@@ -1,6 +1,6 @@
 #include "DbLib.h"
-namespace db
-{
+
+namespace db {
 
 	SDb_Query SDb_Connection::Query(const std::wstring &statement) {
 		IDb_Query *query;
