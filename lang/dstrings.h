@@ -357,11 +357,11 @@ extern const char* rsFilter_Get_SVG_Parkes_Type2;
 
 extern const char* rsFilter_Get_Errors;
 
-extern const char* rsSelect_Subjects_And_Segments_For_Db_Reader_Filter;
-extern const char* rsSelect_Timesegment_Values_Filter;
-extern const char* rsSelect_Params_Base;
-extern const char* rsSelect_Params_From;
-extern const char* rsSelect_Params_Condition;
+extern const wchar_t* rsSelect_Subjects_And_Segments_For_Db_Reader_Filter;
+extern const wchar_t* rsSelect_Timesegment_Values_Filter;
+extern const wchar_t* rsSelect_Params_Base;
+extern const wchar_t* rsSelect_Params_From;
+extern const wchar_t* rsSelect_Params_Condition;
 
 // ---- drawing-related constants
 

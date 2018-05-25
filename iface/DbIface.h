@@ -6,31 +6,37 @@
 namespace db {
 
 	enum class NParameter_Type : size_t {		
+		ptNull,
 		ptInt64,
 		ptDouble,
 		ptWChar,
 		ptBool
 	};
 
+	struct TParameter {
+		NParameter_Type type;
+		union {			
+			int64_t integer;
+			double dbl;
+			wchar_t *str;
+			bool bl;
+		};
+	};
+
 	class IDb_Query : public virtual refcnt::IReferenced {
 	public:
-		virtual HRESULT IfaceCalling Bind_Parameters(const NParameter_Type *types, const void **values, const size_t count) = 0;
+		virtual HRESULT IfaceCalling Bind_Parameters(const TParameter *values, const size_t count) = 0;
 			//binds count arguments, for which the following rules aplies
-			//1. types[i] hold type for value[i]
-			//2.   ptInt64, ptDouble - value[i] is a pointer to int or double (due to portability and possibly different pointer size from int or double size)
-			//	   ptWChar - pointer to wchar_t null-terminated string
-			//	   ptBool - nullptr for false, else for true
 
-		virtual HRESULT IfaceCalling Get_Next(const size_t *indexes, const NParameter_Type *types, const void **values, const size_t count) = 0;
-			//reads a result row, particularly reads values at given indexes of given types and sets pointers(values) according to the Bind_Parameters rules
-			//null values are indicated with nullptr (and thus null bool values are interpreted as false)
+		virtual HRESULT IfaceCalling Get_Next(TParameter* const values, const size_t count) = 0;
+			//reads a result row, particularly reads values at given indexes of given types and sets pointers/values 
+			//null values are indicated with the type member
 			//pointers are valid only until the next call of Get_Next/Cancel or dctor
 			//returns S_OK if a row of a result has been succesfully fetched (internally calls exec on before fetching the very first row)
 
 			
 		virtual HRESULT IfaceCalling Cancel() = 0;
-			//cancels the current query so it can be restarted with the (optionally) Bind_Arguments and Get_Next sequence
-			//(likely calls QSqlQuery::finish internally)
+			//cancels the current query so it can be restarted with the (optionally) Bind_Arguments and Get_Next sequence			
 	};
 
 	class IDb_Connection : public virtual refcnt::IReferenced {

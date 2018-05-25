@@ -3,20 +3,24 @@
 #include "../iface/DbIface.h"
 #include "../rtl/referencedImpl.h"
 
+#include <vector>
 #include <QtSql/QSqlDatabase>
 #include <QtSql/QSqlQuery>
 
 #pragma warning( push )
 #pragma warning( disable : 4250 ) // C4250 - 'class1' : inherits 'class2::member' via dominance
 
-
 class CDb_Query : public virtual db::IDb_Query, public virtual refcnt::CReferenced {
 protected:
 	QSqlQuery mQuery;
+	bool mExecuted = false;
+	std::vector<std::wstring> mResult_String_Row;
 public:
-	CDb_Query(QSqlDatabase &db);
+	CDb_Query(QSqlDatabase &db, const wchar_t *statement);
 	virtual ~CDb_Query() {};
-	virtual HRESULT IfaceCalling Get_Raw(void **qsqlquery) override final;
+	virtual HRESULT IfaceCalling Bind_Parameters(const db::TParameter *values, const size_t count) override final;
+	virtual HRESULT IfaceCalling Get_Next(db::TParameter* const values, const size_t count) override final;
+	virtual HRESULT IfaceCalling Cancel() override final;
 };
 
 class CDb_Connection : public virtual db::IDb_Connection, public virtual refcnt::CReferenced {

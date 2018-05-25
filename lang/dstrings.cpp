@@ -358,11 +358,11 @@ const char* rsFilter_Get_SVG_Parkes_Type2 = "get_svg_parkes_type2";
 
 const char* rsFilter_Get_Errors = "get_error_metrics";
 
-const char* rsSelect_Subjects_And_Segments_For_Db_Reader_Filter = "select timesegment.id, subject.name, timesegment.name, count(measuredvalue.id) from subject, timesegment, measuredvalue where subject.id = timesegment.subjectid and timesegment.id = measuredvalue.segmentid group by timesegment.id, subject.name order by subject.name, timesegment.name asc";
-const char* rsSelect_Timesegment_Values_Filter = "select measuredat, blood, ist, isig, insulin, carbohydrates, calibration from measuredvalue where segmentid = ? order by measuredat asc";
-const char* rsSelect_Params_Base = "select ";
-const char* rsSelect_Params_From = " from ";
-const char* rsSelect_Params_Condition = " where segmentid = ?";
+const wchar_t* rsSelect_Subjects_And_Segments_For_Db_Reader_Filter = L"select timesegment.id, subject.name, timesegment.name, count(measuredvalue.id) from subject, timesegment, measuredvalue where subject.id = timesegment.subjectid and timesegment.id = measuredvalue.segmentid group by timesegment.id, subject.name order by subject.name, timesegment.name asc";
+const wchar_t* rsSelect_Timesegment_Values_Filter = L"select measuredat, blood, ist, isig, insulin, carbohydrates, calibration from measuredvalue where segmentid = ? order by measuredat asc";
+const wchar_t* rsSelect_Params_Base = L"select ";
+const wchar_t* rsSelect_Params_From = L" from ";
+const wchar_t* rsSelect_Params_Condition = L" where segmentid = ?";
 
 // ---- drawing-related constants
 
