@@ -33,7 +33,7 @@ HRESULT IfaceCalling CDb_Query::Bind_Parameters(const db::TParameter *values, co
 			case db::NParameter_Type::ptWChar:		mQuery.addBindValue( QString::fromWCharArray(values[i].str));
 													break;
 
-			case db::NParameter_Type::ptBool:mQuery.addBindValue(values[i].bl);
+			case db::NParameter_Type::ptBool:mQuery.addBindValue(values[i].boolean);
 													break;
 		}
 		
@@ -76,7 +76,7 @@ HRESULT IfaceCalling CDb_Query::Get_Next(db::TParameter* const values, const siz
 																values[i].type = db::NParameter_Type::ptNull;
 															break;
 
-					case db::NParameter_Type::ptBool:		values[i].bl = db_value.toBool();
+					case db::NParameter_Type::ptBool:		values[i].boolean = db_value.toBool();
 															break;
 				}
 			}
