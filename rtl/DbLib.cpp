@@ -2,12 +2,31 @@
 
 namespace db {
 
-	bool SDb_Query::Get_Next(std::vector<TParameter> &result) {
+	bool SDb_Query::Get_Next() {
 		if (!operator bool()) return false;
+		if (get()->Get_Next(mRow_Storage.data(), mRow_Storage.size()) == S_OK) {
+			for (size_t i = 0; i < mRow_Storage.size(); i++) {
+				switch (mRow_Bindings[i].type) {
+					case db::NParameter_Type::ptInt64:		
+						*(reinterpret_cast<int64_t*>(mRow_Bindings[i].str)) = mRow_Storage[i].type != db::NParameter_Type::ptNull ? mRow_Storage[i].integer : 0;
+						break;
 
-		return get()->Get_Next(result.data(), result.size()) == S_OK;
+					case db::NParameter_Type::ptDouble:		
+						*(reinterpret_cast<double*>(mRow_Bindings[i].str)) = mRow_Storage[i].type != db::NParameter_Type::ptNull ? mRow_Storage[i].dbl : std::numeric_limits<double>::quiet_NaN();
+						break;
+
+					case db::NParameter_Type::ptWChar:		
+						*(reinterpret_cast<wchar_t**>(mRow_Bindings[i].str)) = mRow_Storage[i].type != db::NParameter_Type::ptNull ? mRow_Storage[i].str : nullptr;
+						break;
+
+					case db::NParameter_Type::ptBool:
+						*(reinterpret_cast<bool*>(mRow_Bindings[i].str)) = mRow_Storage[i].type != db::NParameter_Type::ptNull ? mRow_Storage[i].boolean : false;
+						break;
+
+				}
+			}
+		}
 	}
-	
 
 	SDb_Query SDb_Connection::Query(const std::wstring &statement) {
 		IDb_Query *query;

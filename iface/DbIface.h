@@ -19,7 +19,7 @@ namespace db {
 			int64_t integer;
 			double dbl;
 			wchar_t *str;
-			bool bl;
+			bool boolean;
 		};
 	};
 
@@ -36,7 +36,7 @@ namespace db {
 
 			
 		virtual HRESULT IfaceCalling Cancel() = 0;
-			//cancels the current query so it can be restarted with the (optionally) Bind_Arguments and Get_Next sequence			
+			//cancels the current query so it can be restarted with the Get_Next sequence			
 	};
 
 	class IDb_Connection : public virtual refcnt::IReferenced {
