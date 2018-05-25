@@ -2,12 +2,6 @@
 
 namespace db {
 
-	bool SDb_Query::Bind_Parameters(const std::vector<TParameter> &query_parameters) {
-		if (!operator bool()) return false;
-
-		return get()->Bind_Parameters(const_cast<db::TParameter*>(query_parameters.data()), query_parameters.size()) == S_OK;
-	}
-
 	bool SDb_Query::Get_Next(std::vector<TParameter> &result) {
 		if (!operator bool()) return false;
 
