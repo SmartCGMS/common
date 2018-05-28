@@ -1,4 +1,6 @@
 #include "UILib.h"
+#include "winapi_mapping.h"
+#include <wchar.h>
 
 namespace glucose
 {
@@ -20,11 +22,14 @@ namespace glucose
 			}
 
 		#else
-
 			#ifdef _WIN32
 				extern "C" __declspec(dllimport)  HRESULT IfaceCalling get_metric_descriptors(glucose::TMetric_Descriptor **begin, glucose::TMetric_Descriptor **end);
 				extern "C" __declspec(dllimport)  HRESULT IfaceCalling get_model_descriptors(glucose::TModel_Descriptor **begin, glucose::TModel_Descriptor **end);
 				extern "C" __declspec(dllimport)  HRESULT IfaceCalling get_solver_descriptors(glucose::TSolver_Descriptor **begin, glucose::TSolver_Descriptor **end);
+			#else
+				extern "C" HRESULT IfaceCalling get_metric_descriptors(glucose::TMetric_Descriptor **begin, glucose::TMetric_Descriptor **end);
+				extern "C" HRESULT IfaceCalling get_model_descriptors(glucose::TModel_Descriptor **begin, glucose::TModel_Descriptor **end);
+				extern "C" HRESULT IfaceCalling get_solver_descriptors(glucose::TSolver_Descriptor **begin, glucose::TSolver_Descriptor **end);
 			#endif
 		#endif
 	}

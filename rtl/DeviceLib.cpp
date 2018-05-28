@@ -6,7 +6,6 @@
 #include "rattime.h"
 
 namespace imported {
-	
 	//#define DIMPORT_TEST_FAIL E_NOTIMPL
 
 	#ifdef DIMPORT_TEST_FAIL
@@ -27,6 +26,10 @@ namespace imported {
 			extern "C" __declspec(dllimport)  HRESULT IfaceCalling create_calculated_signal(const GUID *calc_id, glucose::ITime_Segment *segment, glucose::ISignal **signal);
 			extern "C" __declspec(dllimport)  HRESULT IfaceCalling create_measured_signal(const GUID *calc_id, glucose::ITime_Segment *segment, glucose::ISignal **signal);
 			extern "C" __declspec(dllimport)  HRESULT IfaceCalling create_device_event(glucose::NDevice_Event_Code code, glucose::IDevice_Event **event);
+		#else
+			extern "C" HRESULT IfaceCalling create_calculated_signal(const GUID *calc_id, glucose::ITime_Segment *segment, glucose::ISignal **signal);
+			extern "C" HRESULT IfaceCalling create_measured_signal(const GUID *calc_id, glucose::ITime_Segment *segment, glucose::ISignal **signal);
+			extern "C" HRESULT IfaceCalling create_device_event(glucose::NDevice_Event_Code code, glucose::IDevice_Event **event);
 		#endif
 	#endif
 }
@@ -138,7 +141,6 @@ glucose::STime_Segment glucose::CTime_Segment::Clone()
 
 	return refcnt::make_shared_reference_ext<glucose::STime_Segment, glucose::ITime_Segment>(cloned, true);
 }
-
 
 glucose::TDevice_Event* Get_Raw_Event(glucose::IDevice_Event *event) {
 	glucose::TDevice_Event* result;

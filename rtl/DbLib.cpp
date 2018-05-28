@@ -3,19 +3,28 @@
 namespace db {
 
 	bool SDb_Query::Get_Next() {
-		if (!operator bool()) return false;
+
+		if (!operator bool())
+			return false;
+
+		//as the row storage data type could have been altered due to null values, we must reinitialize it
+		mRow_Storage.resize(mRow_Bindings.size());
+		for (size_t i = 0; i < mRow_Bindings.size(); i++)
+			mRow_Storage[i].type = mRow_Bindings[i].type;
+
+
 		if (get()->Get_Next(mRow_Storage.data(), mRow_Storage.size()) == S_OK) {
 			for (size_t i = 0; i < mRow_Storage.size(); i++) {
 				switch (mRow_Bindings[i].type) {
-					case db::NParameter_Type::ptInt64:		
+					case db::NParameter_Type::ptInt64:
 						*(reinterpret_cast<int64_t*>(mRow_Bindings[i].str)) = mRow_Storage[i].type != db::NParameter_Type::ptNull ? mRow_Storage[i].integer : 0;
 						break;
 
-					case db::NParameter_Type::ptDouble:		
+					case db::NParameter_Type::ptDouble:
 						*(reinterpret_cast<double*>(mRow_Bindings[i].str)) = mRow_Storage[i].type != db::NParameter_Type::ptNull ? mRow_Storage[i].dbl : std::numeric_limits<double>::quiet_NaN();
 						break;
 
-					case db::NParameter_Type::ptWChar:		
+					case db::NParameter_Type::ptWChar:
 						*(reinterpret_cast<wchar_t**>(mRow_Bindings[i].str)) = mRow_Storage[i].type != db::NParameter_Type::ptNull ? mRow_Storage[i].str : nullptr;
 						break;
 
@@ -26,6 +35,10 @@ namespace db {
 				}
 			}
 		}
+		else
+			return false;
+
+		return true;
 	}
 
 	SDb_Query SDb_Connection::Query(const std::wstring &statement) {

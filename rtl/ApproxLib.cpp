@@ -1,6 +1,5 @@
 #include "ApproxLib.h"
 
-
 namespace imported {
 	//#define DIMPORT_TEST_FAIL E_NOTIMPL
 
@@ -16,6 +15,9 @@ namespace imported {
 		#ifdef _WIN32
 			extern "C" __declspec(dllimport)  HRESULT IfaceCalling create_approximator(const GUID *approx_id, glucose::ISignal *signal, glucose::IApprox_Parameters_Vector* configuration, glucose::IApproximator **approx);
 			extern "C" __declspec(dllimport)  HRESULT IfaceCalling get_approx_descriptors(glucose::TApprox_Descriptor **begin, glucose::TApprox_Descriptor **end);
+		#else
+			extern "C" HRESULT IfaceCalling create_approximator(const GUID *approx_id, glucose::ISignal *signal, glucose::IApprox_Parameters_Vector* configuration, glucose::IApproximator **approx);
+			extern "C" HRESULT IfaceCalling get_approx_descriptors(glucose::TApprox_Descriptor **begin, glucose::TApprox_Descriptor **end);
 		#endif
 	#endif
 }

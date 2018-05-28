@@ -101,6 +101,7 @@ const wchar_t *dsDrawing_Filter_Filename_Day = L"Daily plot file path";
 const wchar_t *dsDrawing_Filter_Filename_AGP = L"AGP file path";
 const wchar_t *dsDrawing_Filter_Filename_Parkes = L"Parkes grid file path";
 const wchar_t *dsDrawing_Filter_Filename_Clark = L"Clark grid file path";
+const wchar_t *dsDrawing_Filter_Filename_ECDF = L"ECDF file path";
 
 const wchar_t *dsDevice_Interop_Filter = L"Real device interface";
 
@@ -171,6 +172,7 @@ const char *dsDrawing_Tab_Day = "Daily plot";
 const char *dsDrawing_Tab_Clark = "Clarke's Grid";
 const char *dsDrawing_Tab_Parkes = "Parkes' Grid";
 const char *dsDrawing_Tab_AGP = "AGP";
+const char *dsDrawing_Tab_ECDF = "ECDF";
 
 const char *dsLower_Bounds = "Lower bounds";
 const char *dsDefault_Parameters = "Default parameters";
@@ -213,6 +215,7 @@ const wchar_t* dsDrawingLocaleTitle = L"Calculated Blood Glucose Level";
 const wchar_t* dsDrawingLocaleTitleAgp = L"Ambulatory Glucose Profile";
 const wchar_t* dsDrawingLocaleTitleClark = L"Clarke's error grid";
 const wchar_t* dsDrawingLocaleTitleParkes = L"Parkes' error grid";
+const wchar_t* dsDrawingLocaleTitleECDF = L"ECDF";
 const wchar_t* dsDrawingLocaleTitleDay = L"Day";
 const wchar_t* dsDrawingLocaleSubtitle = L"Blood glucose level that was calculated from CMGS-measured subcutanoues tissue glucose levels and sporadically measured blood glucose levels";
 const wchar_t* dsDrawingLocaleDiabetes1 = L"Diabetes 1";
@@ -248,6 +251,8 @@ const wchar_t* dsDrawingLocaleSvgCarbohydratesTitle = L"Carbohydrates";
 const wchar_t* dsDrawingLocaleSvgISIGTitle = L"ISIG";
 const wchar_t* dsDrawingLocaleSvgDiff2Title = L"Diffusion 2";
 const wchar_t* dsDrawingLocaleSvgDiff3Title = L"Diffusion 3";
+const wchar_t* dsDrawingLocaleRelativeError = L"Relative error [%]";
+const wchar_t* dsDrawingLocaleCummulativeProbability = L"Cummulative probability [%]";
 
 //--------------------------------- do not translate any of the rs-prefixed texts --
 
@@ -329,6 +334,7 @@ const wchar_t *rsDrawing_Filter_Filename_Day = L"DayFilePath";
 const wchar_t *rsDrawing_Filter_Filename_AGP = L"AgpFilePath";
 const wchar_t *rsDrawing_Filter_Filename_Parkes = L"ParkesFilePath";
 const wchar_t *rsDrawing_Filter_Filename_Clark = L"ClarkFilePath";
+const wchar_t *rsDrawing_Filter_Filename_ECDF = L"ECDFFilePath";
 
 const wchar_t *rsCallback_Log_Message = L"CallbackLog_Message";
 const wchar_t *rsCallback_Drawing_Graph = L"CallbackDrawing_Graph";
@@ -340,7 +346,9 @@ const wchar_t *rsCallback_Drawing_AGP = L"CallbackDrawing_AGP";
 
 const wchar_t *rsInfo_Redraw_Complete = L"RedrawComplete";
 const wchar_t *rsInfo_Solver_Progress = L"SolverProgress";
+const wchar_t *rsInfo_Solver_Failed = L"SolverFailed";
 const wchar_t *rsInfo_Error_Metrics_Ready = L"ErrorMetricsReady";
+const wchar_t *rsInfo_Marker = L"Marker";
 
 const wchar_t *rsConfig_File_Name = L"config.ini";
 const wchar_t *rsFilter_Section_Prefix = L"Filter";
@@ -402,3 +410,5 @@ const wchar_t* rsDrawingLocaleSvgCarbohydratesTitle = L"title_carbohydrates";
 const wchar_t* rsDrawingLocaleSvgISIGTitle = L"title_isig";
 const wchar_t* rsDrawingLocaleSvgDiff2Title = L"title_diff2";
 const wchar_t* rsDrawingLocaleSvgDiff3Title = L"title_diff3";
+const wchar_t* rsDrawingLocaleRelativeError = L"rel_error";
+const wchar_t* rsDrawingLocaleCummulativeProbability = L"cummulative_probability";

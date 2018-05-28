@@ -16,12 +16,15 @@ namespace imported {
 		#ifdef _WIN32
 			extern "C" __declspec(dllimport) HRESULT IfaceCalling solve_model_parameters(const glucose::TSolver_Setup *setup);
 			extern "C" __declspec(dllimport) HRESULT IfaceCalling create_metric(const glucose::TMetric_Parameters *parameters, glucose::IMetric **metric);
+		#else
+			extern "C" HRESULT IfaceCalling solve_model_parameters(const glucose::TSolver_Setup *setup);
+			extern "C" HRESULT IfaceCalling create_metric(const glucose::TMetric_Parameters *parameters, glucose::IMetric **metric);
 		#endif
 	#endif
 }
 
 glucose::SMetric::SMetric() : std::shared_ptr<glucose::IMetric>() {
-	glucose::TMetric_Parameters params{ 0 };
+	glucose::TMetric_Parameters params{ {0} };
 	Init(params);
 }
 
@@ -41,7 +44,7 @@ glucose::SMetric glucose::SMetric::Clone()
 {
 	glucose::SMetric result;
 	auto self = get();
-	glucose::TMetric_Parameters params{0};
+	glucose::TMetric_Parameters params{ {0} };
 
 	if (self && self->Get_Parameters(&params) == S_OK)
 	{

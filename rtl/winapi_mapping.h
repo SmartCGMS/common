@@ -11,6 +11,7 @@
 	#include <dlfcn.h>
 
 	using BOOL = int;
+	constexpr int TRUE = 1;
 
 	using HMODULE = void*;
 
@@ -28,4 +29,6 @@
 	#define InetPtonA inet_pton
 	#define InetNtopA inet_ntop
 	#define WSAGetLastError() errno
+
+	#define swscanf_s swscanf
 #endif

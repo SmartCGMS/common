@@ -1,6 +1,5 @@
 #pragma once
 
-
 //UI strings used by the entire application
 
 extern const char* dsFile;
@@ -106,6 +105,7 @@ extern const wchar_t *dsDrawing_Filter_Filename_Day;
 extern const wchar_t *dsDrawing_Filter_Filename_AGP;
 extern const wchar_t *dsDrawing_Filter_Filename_Parkes;
 extern const wchar_t *dsDrawing_Filter_Filename_Clark;
+extern const wchar_t *dsDrawing_Filter_Filename_ECDF;
 
 extern const wchar_t *dsDevice_Interop_Filter;
 
@@ -175,6 +175,7 @@ extern const char *dsDrawing_Tab_Day;
 extern const char *dsDrawing_Tab_Clark;
 extern const char *dsDrawing_Tab_Parkes;
 extern const char *dsDrawing_Tab_AGP;
+extern const char *dsDrawing_Tab_ECDF;
 
 extern const char *dsLower_Bounds;
 extern const char *dsDefault_Parameters;
@@ -217,6 +218,7 @@ extern const wchar_t* dsDrawingLocaleTitle;
 extern const wchar_t* dsDrawingLocaleTitleAgp;
 extern const wchar_t* dsDrawingLocaleTitleClark;
 extern const wchar_t* dsDrawingLocaleTitleParkes;
+extern const wchar_t* dsDrawingLocaleTitleECDF;
 extern const wchar_t* dsDrawingLocaleTitleDay;
 extern const wchar_t* dsDrawingLocaleSubtitle;
 extern const wchar_t* dsDrawingLocaleDiabetes1;
@@ -252,6 +254,8 @@ extern const wchar_t* dsDrawingLocaleSvgCarbohydratesTitle;
 extern const wchar_t* dsDrawingLocaleSvgISIGTitle;
 extern const wchar_t* dsDrawingLocaleSvgDiff2Title;
 extern const wchar_t* dsDrawingLocaleSvgDiff3Title;
+extern const wchar_t* dsDrawingLocaleRelativeError;
+extern const wchar_t* dsDrawingLocaleCummulativeProbability;
 
 //--------------------------------- do not translate any of the rs-prefixed texts --
 
@@ -328,6 +332,7 @@ extern const wchar_t *rsDrawing_Filter_Filename_Day;
 extern const wchar_t *rsDrawing_Filter_Filename_AGP;
 extern const wchar_t *rsDrawing_Filter_Filename_Parkes;
 extern const wchar_t *rsDrawing_Filter_Filename_Clark;
+extern const wchar_t *rsDrawing_Filter_Filename_ECDF;
 
 extern const wchar_t *rsCallback_Log_Message;
 extern const wchar_t *rsCallback_Drawing_Graph;
@@ -339,7 +344,9 @@ extern const wchar_t *rsCallback_Drawing_AGP;
 
 extern const wchar_t *rsInfo_Redraw_Complete;
 extern const wchar_t *rsInfo_Solver_Progress;
+extern const wchar_t *rsInfo_Solver_Failed;
 extern const wchar_t *rsInfo_Error_Metrics_Ready;
+extern const wchar_t *rsInfo_Marker;
 
 extern const wchar_t *rsConfig_File_Name;
 extern const wchar_t *rsFilter_Section_Prefix;
@@ -401,3 +408,5 @@ extern const wchar_t* rsDrawingLocaleSvgCarbohydratesTitle;
 extern const wchar_t* rsDrawingLocaleSvgISIGTitle;
 extern const wchar_t* rsDrawingLocaleSvgDiff2Title;
 extern const wchar_t* rsDrawingLocaleSvgDiff3Title;
+extern const wchar_t* rsDrawingLocaleRelativeError;
+extern const wchar_t* rsDrawingLocaleCummulativeProbability;

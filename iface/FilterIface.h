@@ -128,7 +128,8 @@ namespace glucose {
 		Day,
 		Parkes,
 		Clark,
-		Agp,
+		AGP,
+		ECDF,
 
 		count
 	};

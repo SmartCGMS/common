@@ -5,6 +5,8 @@
 #include <iostream>
 #include <sstream>
 #include <iomanip>
+#include <cmath>
+#include <ctime>
 
 int Get_UTC_Offset()
 {
@@ -21,16 +23,16 @@ int Get_UTC_Offset()
 
 double Unix_Time_To_Rat_Time(const time_t qdt)
 {
-	int64_t diff = qdt*1000 + diffFrom1970To1900;
+	int64_t diff = static_cast<int64_t>(qdt)*1000 + diffFrom1970To1900;
 	return static_cast<double>(diff) * InvMSecsPerDay;
 }
 
 time_t Rat_Time_To_Unix_Time(const double rt)
 {
-	double diff = rt*MSecsPerDay;
-	time_t msecs = ((time_t)ceil(diff)) - diffFrom1970To1900;
+	double diff = rt * MSecsPerDay;
+	int64_t msecs = (static_cast<int64_t>(ceil(diff))) - diffFrom1970To1900;
 
-	return msecs / 1000;
+	return static_cast<time_t>(msecs / 1000);
 }
 
 void Rat_Time_To_Local_Time_Str(const double rt, const char *fmt, std::string &dst)
