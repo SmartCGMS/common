@@ -15,7 +15,7 @@ class CCommon_Calculation : public virtual glucose::ISignal, public virtual refc
 protected:
 	template <typename T>
 	T& Convert_Parameters(glucose::IModel_Parameter_Vector *params, const double *default_parameters) const {
-		double *begin{ const_cast<double*>(default_parameters) };	//{default_params} to keep compiler happy that we don't have potentially uninitialized variable as compile (and us in-fact) have no guarantee that ->get will set it right
+		double *begin{ const_cast<double*>(default_parameters) };	//just in case that no parameters are set at all -> than we have to use the default ones
 		if (params) {
 			double *tmp_begin, *end;
 			if (params->get(&tmp_begin, &end) == S_OK) {		
