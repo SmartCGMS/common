@@ -137,6 +137,22 @@ namespace glucose {
 	}
 
 
+	std::wstring SFilter_Parameters::Read_String(const wchar_t* name) {
+		if (!operator bool()) return std::wstring{};
+
+		std::wstring result{};
+
+		glucose::TFilter_Parameter *cbegin, *cend;
+		if (get()->get(&cbegin, &cend) == S_OK) 
+			for (glucose::TFilter_Parameter* cur = cbegin; cur < cend; cur++) 				
+				if (WChar_Container_Equals_WString(cur->config_name, name)) {
+					result = WChar_Container_To_WString(cur->wstr);
+					break;
+				}
+		
+		return result;
+	}
+
 	SError_Filter_Inspection::SError_Filter_Inspection(SFilter &error_filter) {
 		refcnt::Query_Interface<glucose::IFilter, glucose::IError_Filter_Inspection>(error_filter.get(), Error_Filter_Inspection, *this);		
 	}

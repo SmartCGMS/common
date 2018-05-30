@@ -212,6 +212,8 @@ extern const wchar_t *dsError_Column_95_Quantile;
 extern const wchar_t *dsError_Column_99_Quantile;
 extern const wchar_t *dsError_Column_Maximum;
 
+extern const wchar_t *dsLog_Header;
+
 // ---- drawing-related constants
 
 extern const wchar_t* dsDrawingLocaleTitle;

@@ -209,6 +209,8 @@ const wchar_t *dsError_Column_95_Quantile = L"95% Quantile";
 const wchar_t *dsError_Column_99_Quantile = L"99% Quantile";
 const wchar_t *dsError_Column_Maximum = L"Maximum";
 
+const wchar_t *dsLog_Header = L"Logical Clock; Device Time; Event Code; Signal; Level; Info; Params; Segment Id; Event Code Id; Device Id; Signal Id;";
+
 // ---- drawing-related constants
 
 const wchar_t* dsDrawingLocaleTitle = L"Calculated Blood Glucose Level";

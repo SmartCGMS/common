@@ -27,6 +27,11 @@ namespace glucose {
 	
 	SFilter create_filter(const GUID &id, SFilter_Pipe &input, SFilter_Pipe &output);
 
+	class SFilter_Parameters : public std::shared_ptr<refcnt::IVector_Container<glucose::TFilter_Parameter>> {
+	public:
+		std::wstring Read_String(const wchar_t* name);
+	};
+
 
 	/* TODO delete, once entire project compiles with SFilter_Pipe and SDevice_Event only
 	// increases reference counter on nested reference-counter I-objects due to passing container through pipes;
