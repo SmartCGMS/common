@@ -11,7 +11,8 @@ namespace glucose
 	bool get_model_descriptor_by_id(const GUID &id, TModel_Descriptor &desc);
 	bool get_model_descriptor_by_signal_id(const GUID &signal_id, TModel_Descriptor &desc);
 
-
+	extern const std::array<const wchar_t*, static_cast<size_t>(glucose::NDevice_Event_Code::count)> event_code_text;
+	std::wstring Signal_Id_To_WStr(const GUID &signal_id);
 }
 
 GUID WString_To_GUID(const std::wstring& str);

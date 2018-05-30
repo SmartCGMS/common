@@ -413,3 +413,6 @@ const wchar_t* rsDrawingLocaleSvgDiff2Title = L"title_diff2";
 const wchar_t* rsDrawingLocaleSvgDiff3Title = L"title_diff3";
 const wchar_t* rsDrawingLocaleRelativeError = L"rel_error";
 const wchar_t* rsDrawingLocaleCummulativeProbability = L"cummulative_probability";
+
+const wchar_t* rsCannot_Get_Parameters = L"Cannot get parameters!";
+const wchar_t* rsLog_Date_Time_Format = L"%Y-%m-%d %H:%M:%S";

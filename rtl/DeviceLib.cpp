@@ -159,15 +159,43 @@ glucose::UDevice_Event::UDevice_Event(const glucose::NDevice_Event_Code code) : 
 }
 
 glucose::UDevice_Event::UDevice_Event(IDevice_Event *event) : mRaw(Get_Raw_Event(event)), std::unique_ptr<IDevice_Event, UDevice_Event_Deleter>(event) {
-	if (mRaw != nullptr)
-		switch (mRaw->event_code) {
-			case glucose::NDevice_Event_Code::Information:
-			case glucose::NDevice_Event_Code::Warning:
-			case glucose::NDevice_Event_Code::Error:			if (mRaw->info) info = refcnt::make_shared_reference_ext<refcnt::Swstr_container, refcnt::wstr_container>(mRaw->info, true);
-				break;
+	switch (major_type()) {
+		case glucose::UDevice_Event_internal::NDevice_Event_Major_Type::info:
+			if (mRaw->info) info = refcnt::make_shared_reference_ext<refcnt::Swstr_container, refcnt::wstr_container>(mRaw->info, true);
+			break;
 
-			case glucose::NDevice_Event_Code::Parameters:
-			case glucose::NDevice_Event_Code::Parameters_Hint:	if (mRaw->parameters) parameters = refcnt::make_shared_reference_ext<glucose::SModel_Parameter_Vector, glucose::IModel_Parameter_Vector>(mRaw->parameters, true);
-				break;
+		case glucose::UDevice_Event_internal::NDevice_Event_Major_Type::parameters:
+			if (mRaw->parameters) parameters = refcnt::make_shared_reference_ext<glucose::SModel_Parameter_Vector, glucose::IModel_Parameter_Vector>(mRaw->parameters, true);
+			break;
+	}
+}
+
+
+glucose::UDevice_Event_internal::NDevice_Event_Major_Type glucose::UDevice_Event::major_type() const {
+	if (mRaw == nullptr) return glucose::UDevice_Event_internal::NDevice_Event_Major_Type::null;
+	
+	switch (mRaw->event_code) {
+		case glucose::NDevice_Event_Code::Information:
+		case glucose::NDevice_Event_Code::Warning:
+		case glucose::NDevice_Event_Code::Error:			return glucose::UDevice_Event_internal::NDevice_Event_Major_Type::info;
+			break;
+
+		case glucose::NDevice_Event_Code::Parameters:
+		case glucose::NDevice_Event_Code::Parameters_Hint:	return glucose::UDevice_Event_internal::NDevice_Event_Major_Type::parameters;
+			break;
 		}
+
+	return glucose::UDevice_Event_internal::NDevice_Event_Major_Type::level;
+}
+
+bool glucose::UDevice_Event::is_level_event() const {
+	return major_type() == glucose::UDevice_Event_internal::NDevice_Event_Major_Type::level;
+}
+
+bool glucose::UDevice_Event::is_parameters_event() const {
+	return major_type() == glucose::UDevice_Event_internal::NDevice_Event_Major_Type::parameters;
+}
+
+bool glucose::UDevice_Event::is_info_event() const {
+	return major_type() == glucose::UDevice_Event_internal::NDevice_Event_Major_Type::info;
 }

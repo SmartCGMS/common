@@ -412,3 +412,6 @@ extern const wchar_t* rsDrawingLocaleSvgDiff2Title;
 extern const wchar_t* rsDrawingLocaleSvgDiff3Title;
 extern const wchar_t* rsDrawingLocaleRelativeError;
 extern const wchar_t* rsDrawingLocaleCummulativeProbability;
+
+extern const wchar_t* rsCannot_Get_Parameters;
+extern const wchar_t* rsLog_Date_Time_Format;

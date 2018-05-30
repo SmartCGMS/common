@@ -23,6 +23,6 @@ double Unix_Time_To_Rat_Time(const time_t qdt);
 time_t Rat_Time_To_Unix_Time(const double rt);
 
 // fmt is the string formatting used by C++ standard library
-void Rat_Time_To_Local_Time_Str(const double rt, const char *fmt, std::string &dst);
+std::string Rat_Time_To_Local_Time_Str(const double rt, const char *fmt);
 // fmt is the string formatting used by C++ standard library
-void Rat_Time_To_Local_Time_WStr(const double rt, const wchar_t *fmt, std::wstring &dst);
+std::wstring Rat_Time_To_Local_Time_WStr(const double rt, const wchar_t *fmt);

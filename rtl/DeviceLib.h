@@ -46,11 +46,21 @@ namespace glucose {
 		void operator()(IDevice_Event *obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); };
 	};
 
+	namespace UDevice_Event_internal {
+		enum class NDevice_Event_Major_Type {
+			null,
+			level,
+			info,
+			parameters
+		};
+	}
+
 	class UDevice_Event : public std::unique_ptr<IDevice_Event, UDevice_Event_Deleter> {
 	protected:
 		TDevice_Event *mRaw;		//mRaw must be initialized in the constructor exactly once
 									//therefore, the implementation defines two helper functions,
 									//which returns pointers only
+		UDevice_Event_internal::NDevice_Event_Major_Type major_type() const;
 	public:		
 		explicit UDevice_Event(const NDevice_Event_Code code = NDevice_Event_Code::Nothing);
 		UDevice_Event(IDevice_Event *event);
@@ -70,12 +80,13 @@ namespace glucose {
 
 		SModel_Parameter_Vector parameters;
 		refcnt::Swstr_container info;		
+
+		bool is_level_event() const;
+		bool is_parameters_event() const;
+		bool is_info_event() const;
 	};
 
-
-
-
-	
+		
 #pragma warning( push )
 #pragma warning( disable : 4250 ) // C4250 - 'class1' : inherits 'class2::member' via dominance
 

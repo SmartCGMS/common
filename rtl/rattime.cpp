@@ -35,8 +35,7 @@ time_t Rat_Time_To_Unix_Time(const double rt)
 	return static_cast<time_t>(msecs / 1000);
 }
 
-void Rat_Time_To_Local_Time_Str(const double rt, const char *fmt, std::string &dst)
-{
+std::string Rat_Time_To_Local_Time_Str(const double rt, const char *fmt) {
 	time_t ltim = Rat_Time_To_Unix_Time(rt);
 	struct tm ptm;
 	localtime_s(&ptm, &ltim);
@@ -44,11 +43,10 @@ void Rat_Time_To_Local_Time_Str(const double rt, const char *fmt, std::string &d
 	std::ostringstream os;
 	os << std::put_time(&ptm, fmt);
 	
-	dst = os.str();
+	return os.str();
 }
 
-void Rat_Time_To_Local_Time_WStr(const double rt, const wchar_t *fmt, std::wstring &dst)
-{
+std::wstring Rat_Time_To_Local_Time_WStr(const double rt, const wchar_t *fmt) {
 	time_t ltim = Rat_Time_To_Unix_Time(rt);
 	struct tm ptm;
 	localtime_s(&ptm, &ltim);
@@ -56,5 +54,5 @@ void Rat_Time_To_Local_Time_WStr(const double rt, const wchar_t *fmt, std::wstri
 	std::wostringstream os;
 	os << std::put_time(&ptm, fmt);
 
-	dst = os.str();
+	return os.str();
 }
