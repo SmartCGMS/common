@@ -11,7 +11,7 @@ protected:
 	std::wstring mFile_Name;
 	CSimpleIniW mIni;
 public:
-	void Resolve_And_Load_Config_File();
+	void Resolve_And_Load_Config_File(const std::wstring &alternative_path);
 
 	void Load(CFilter_Chain &filter_chain);
 	void Save(const CFilter_Chain &filter_chain);

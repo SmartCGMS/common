@@ -267,9 +267,9 @@ const wchar_t *rsDb_Host = L"Host";
 const wchar_t *rsDb_Port = L"Port";
 const wchar_t *rsDb_Provider = L"Provider";
 const wchar_t *rsDb_Name = L"Name";
-const wchar_t *rsDb_User_Name = L"UserName";
+const wchar_t *rsDb_User_Name = L"User_Name";
 const wchar_t *rsDb_Password = L"Password";
-const wchar_t *rsTime_Segment_ID = L"TimeSegmentId";
+const wchar_t *rsTime_Segment_ID = L"Time_Segment_Id";
 
 const wchar_t *rsDiffusion_v2_Table = L"difuse2params";
 const wchar_t *rsDiffusion_v3_Table = L"difuse3params";
@@ -289,52 +289,52 @@ const wchar_t* rsGamma_Column = L"gamma";
 
 const wchar_t *rsNet_Host = L"Host";
 const wchar_t *rsNet_Port = L"Port";
-const wchar_t *rsNet_RecvSide = L"IsRecv";
+const wchar_t *rsNet_RecvSide = L"Is_Recv";
 
-const wchar_t *rsInput_Values_File = L"InputFile";
-const wchar_t *rsInput_Segment_Spacing = L"SegmentSpacing";
+const wchar_t *rsInput_Values_File = L"Input_File";
+const wchar_t *rsInput_Segment_Spacing = L"Segment_Spacing";
 
-const wchar_t *rsHold_Values_Delay = L"HoldDelay";
+const wchar_t *rsHold_Values_Delay = L"Hold_Delay";
 
-const wchar_t *rsSignal_Source_Id = L"SignalSrcId";
-const wchar_t *rsSignal_Destination_Id = L"SignalDstId";
+const wchar_t *rsSignal_Source_Id = L"Signal_Src_Id";
+const wchar_t *rsSignal_Destination_Id = L"Signal_Dst_Id";
 
-const wchar_t *rsCalculate_Past_New_Params = L"CalcPastFirstParamSet";
-const wchar_t *rsRecalculate_With_Every_Params = L"RecalcEveryParamSet";
-const wchar_t *rsUse_Just_Opened_Segments = L"UseJustOpenedSegments";
+const wchar_t *rsCalculate_Past_New_Params = L"Calc_Past_First_Params";
+const wchar_t *rsRecalculate_With_Every_Params = L"Recalc_Every_Params";
+const wchar_t *rsUse_Just_Opened_Segments = L"Use_Just_Opened_Segments";
 
-const wchar_t *rsParameters_Reset = L"ModelSignalParamsReset";
-const wchar_t *rsParameters_Reset_Request = L"ModelSignalParamsResetRequest";
-const wchar_t *rsSegment_Recalculate_Complete = L"SegmentRecalculateComplete";
+const wchar_t *rsParameters_Reset = L"Model_Signal_Params_Reset";
+const wchar_t *rsParameters_Reset_Request = L"Model_Signal_Params_Reset_Request";
+const wchar_t *rsSegment_Recalculate_Complete = L"Segment_Recalculate_Complete";
 
 const wchar_t *rsSelected_Model = L"Model";
 const wchar_t *rsSelected_Metric = L"Metric";
 const wchar_t *rsSelected_Solver = L"Solver";
 const wchar_t *rsSelected_Signal = L"Signal";
-const wchar_t *rsSelected_Model_Bounds = L"ModelBounds";
-const wchar_t *rsUse_Relative_Error = L"RelativeError";
-const wchar_t *rsUse_Squared_Diff = L"SquaredDiff";
-const wchar_t *rsUse_Prefer_More_Levels = L"PreferMoreLevels";
-const wchar_t *rsMetric_Threshold = L"MetricThreshold";
-const wchar_t *rsMetric_Levels_Required = L"LevelsRequired";
-const wchar_t *rsUse_Measured_Levels = L"MeasuredLevels";
+const wchar_t *rsSelected_Model_Bounds = L"Model_Bounds";
+const wchar_t *rsUse_Relative_Error = L"Relative_Error";
+const wchar_t *rsUse_Squared_Diff = L"Squared_Diff";
+const wchar_t *rsUse_Prefer_More_Levels = L"Prefer_More_Levels";
+const wchar_t *rsMetric_Threshold = L"Metric_Threshold";
+const wchar_t *rsMetric_Levels_Required = L"Levels_Required";
+const wchar_t *rsUse_Measured_Levels = L"Measured_Levels";
 
-const wchar_t *rsRecalculate_On_Levels_Count = L"RecalculateLevelsCount";
-const wchar_t *rsRecalculate_On_Segment_End = L"RecalculateAtSegmentEnd";
-const wchar_t *rsRecalculate_On_Calibration = L"RecalculateOnCalibration";
+const wchar_t *rsRecalculate_On_Levels_Count = L"Recalculate_Levels_Count";
+const wchar_t *rsRecalculate_On_Segment_End = L"Recalculate_A_tSegment_End";
+const wchar_t *rsRecalculate_On_Calibration = L"Recalculate_On_Calibration";
 
-const wchar_t *rsLog_Output_File = L"OutputFile";
+const wchar_t *rsLog_Output_File = L"Output_File";
 
-const wchar_t *rsDrawing_Filter_Period = L"RedrawPeriod";
-const wchar_t *rsDiagnosis_Is_Type2 = L"DiabetesType2";
-const wchar_t *rsDrawing_Filter_Canvas_Width = L"CanvasWidth";
-const wchar_t *rsDrawing_Filter_Canvas_Height = L"CanvasHeight";
-const wchar_t *rsDrawing_Filter_Filename_Graph = L"GraphFilePath";
-const wchar_t *rsDrawing_Filter_Filename_Day = L"DayFilePath";
-const wchar_t *rsDrawing_Filter_Filename_AGP = L"AgpFilePath";
-const wchar_t *rsDrawing_Filter_Filename_Parkes = L"ParkesFilePath";
-const wchar_t *rsDrawing_Filter_Filename_Clark = L"ClarkFilePath";
-const wchar_t *rsDrawing_Filter_Filename_ECDF = L"ECDFFilePath";
+const wchar_t *rsDrawing_Filter_Period = L"Redraw_Period";
+const wchar_t *rsDiagnosis_Is_Type2 = L"Diabetes_Type_2";
+const wchar_t *rsDrawing_Filter_Canvas_Width = L"Canvas_Width";
+const wchar_t *rsDrawing_Filter_Canvas_Height = L"Canvas_Height";
+const wchar_t *rsDrawing_Filter_Filename_Graph = L"Graph_File_Path";
+const wchar_t *rsDrawing_Filter_Filename_Day = L"Day_File_Path";
+const wchar_t *rsDrawing_Filter_Filename_AGP = L"AGP_File_Path";
+const wchar_t *rsDrawing_Filter_Filename_Parkes = L"Parkes_File_Path";
+const wchar_t *rsDrawing_Filter_Filename_Clark = L"Clark_File_Path";
+const wchar_t *rsDrawing_Filter_Filename_ECDF = L"ECDF_File_Path";
 
 const wchar_t *rsCallback_Log_Message = L"CallbackLog_Message";
 const wchar_t *rsCallback_Drawing_Graph = L"CallbackDrawing_Graph";
@@ -382,8 +382,8 @@ const wchar_t* rsDrawingLocaleDiabetes2 = L"diabetes_type_2";
 const wchar_t* rsDrawingLocaleTime = L"time";
 const wchar_t* rsDrawingLocaleTimeDay = L"timeDay";
 const wchar_t* rsDrawingLocaleConcentration = L"concentration";
-const wchar_t* rsDrawingLocaleHypoglycemy = L"hypoglycemy";
-const wchar_t* rsDrawingLocaleHyperglycemy = L"hyperglycemy";
+const wchar_t* rsDrawingLocaleHypoglycemy = L"hypoglycemia";
+const wchar_t* rsDrawingLocaleHyperglycemy = L"hyperglycemia";
 const wchar_t* rsDrawingLocaleBlood = L"blood";
 const wchar_t* rsDrawingLocaleIst = L"ist";
 const wchar_t* rsDrawingLocaleResults = L"results";

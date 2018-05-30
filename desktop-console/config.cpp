@@ -12,11 +12,16 @@
 
 CConfig Configuration;
 
-void CConfig::Resolve_And_Load_Config_File() {
-	mFile_Path = Get_Application_Dir();
-	mFile_Name = rsConfig_File_Name;
-
-	Path_Append(mFile_Path, mFile_Name.c_str());
+void CConfig::Resolve_And_Load_Config_File(const std::wstring &alternative_path) {
+	if (alternative_path.empty()) {
+		mFile_Path = Get_Application_Dir();
+		mFile_Name = rsConfig_File_Name;
+		Path_Append(mFile_Path, mFile_Name.c_str());
+	}
+	else {
+		mFile_Path = alternative_path;
+		mFile_Name = alternative_path;
+	}
 
 	std::vector<char> buf;
 	std::ifstream configfile;
@@ -35,8 +40,7 @@ void CConfig::Resolve_And_Load_Config_File() {
 	}
 }
 
-const wchar_t* CConfig::Get_Config_File_Name() const
-{
+const wchar_t* CConfig::Get_Config_File_Name() const {
 	return mFile_Name.c_str();
 }
 

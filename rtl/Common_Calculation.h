@@ -37,9 +37,9 @@ public:
 	virtual ~CCommon_Calculation() {};
 
 	//glucose::ISignal iface
-	virtual HRESULT IfaceCalling Get_Discrete_Levels(double* const times, double* const levels, const size_t count, size_t *filled) const final;
-	virtual HRESULT IfaceCalling Get_Discrete_Bounds(glucose::TBounds *bounds, size_t *level_count) const final;
-	virtual HRESULT IfaceCalling Add_Levels(const double *times, const double *levels, const size_t count) final;
+	virtual HRESULT IfaceCalling Get_Discrete_Levels(double* const times, double* const levels, const size_t count, size_t *filled) const override;
+	virtual HRESULT IfaceCalling Get_Discrete_Bounds(glucose::TBounds *bounds, size_t *level_count) const override;
+	virtual HRESULT IfaceCalling Add_Levels(const double *times, const double *levels, const size_t count) override;
 	
 };
 
