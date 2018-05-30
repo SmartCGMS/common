@@ -107,8 +107,9 @@ const wchar_t *dsDevice_Interop_Filter = L"Real device interface";
 
 const wchar_t *dsInterop_Export_Filter = L"Interop export filter";
 
-const wchar_t *dsLog_Filter = L"Log";
+const wchar_t *dsLog_Filter = L"CSV File Log";
 const wchar_t *dsLog_Output_File = L"Output file";
+const wchar_t *dsLog_Header = L"Logical Clock; Device Time; Event Code; Signal; Level; Info; Params; Segment Id; Event Code Id; Device Id; Signal Id;";
 
 const wchar_t *dsGUI_Filter = L"Visualization";
 
@@ -208,8 +209,6 @@ const wchar_t *dsError_Column_Third_Quantile = L"3. Quartile";
 const wchar_t *dsError_Column_95_Quantile = L"95% Quantile";
 const wchar_t *dsError_Column_99_Quantile = L"99% Quantile";
 const wchar_t *dsError_Column_Maximum = L"Maximum";
-
-const wchar_t *dsLog_Header = L"Logical Clock; Device Time; Event Code; Signal; Level; Info; Params; Segment Id; Event Code Id; Device Id; Signal Id;";
 
 // ---- drawing-related constants
 

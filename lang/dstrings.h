@@ -113,6 +113,7 @@ extern const wchar_t *dsInterop_Export_Filter;
 
 extern const wchar_t *dsLog_Filter;
 extern const wchar_t *dsLog_Output_File;
+extern const wchar_t *dsLog_Header;
 
 extern const wchar_t *dsGUI_Filter;
 
@@ -212,7 +213,6 @@ extern const wchar_t *dsError_Column_95_Quantile;
 extern const wchar_t *dsError_Column_99_Quantile;
 extern const wchar_t *dsError_Column_Maximum;
 
-extern const wchar_t *dsLog_Header;
 
 // ---- drawing-related constants
 
