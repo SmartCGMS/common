@@ -35,6 +35,13 @@ namespace imported {
 }
 
 
+bool glucose::SModel_Parameter_Vector::set(const std::vector<double> &params) {
+	if (!operator bool()) return false;
+	return get()->set(params.data(), params.data() + params.size()) == S_OK;
+}
+
+
+
 glucose::WSignal::WSignal(ISignal *signal) : mSignal(signal) {};
 
 HRESULT glucose::WSignal::Get_Discrete_Levels(double* const times, double* const levels, const size_t count, size_t *filled) const {
@@ -175,17 +182,19 @@ glucose::UDevice_Event_internal::NDevice_Event_Major_Type glucose::UDevice_Event
 	if (mRaw == nullptr) return glucose::UDevice_Event_internal::NDevice_Event_Major_Type::null;
 	
 	switch (mRaw->event_code) {
-		case glucose::NDevice_Event_Code::Information:
-		case glucose::NDevice_Event_Code::Warning:
-		case glucose::NDevice_Event_Code::Error:			return glucose::UDevice_Event_internal::NDevice_Event_Major_Type::info;
-			break;
+		case glucose::NDevice_Event_Code::Level:
+		case glucose::NDevice_Event_Code::Masked_Level:
+		case glucose::NDevice_Event_Code::Calibrated:		return glucose::UDevice_Event_internal::NDevice_Event_Major_Type::level;
 
 		case glucose::NDevice_Event_Code::Parameters:
 		case glucose::NDevice_Event_Code::Parameters_Hint:	return glucose::UDevice_Event_internal::NDevice_Event_Major_Type::parameters;
-			break;
-		}
 
-	return glucose::UDevice_Event_internal::NDevice_Event_Major_Type::level;
+		case glucose::NDevice_Event_Code::Information:
+		case glucose::NDevice_Event_Code::Warning:
+		case glucose::NDevice_Event_Code::Error:			return glucose::UDevice_Event_internal::NDevice_Event_Major_Type::info;		
+	}
+
+	return glucose::UDevice_Event_internal::NDevice_Event_Major_Type::null;
 }
 
 bool glucose::UDevice_Event::is_level_event() const {

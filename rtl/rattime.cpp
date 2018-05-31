@@ -47,7 +47,10 @@ std::string Rat_Time_To_Local_Time_Str(const double rt, const char *fmt) {
 }
 
 std::wstring Rat_Time_To_Local_Time_WStr(const double rt, const wchar_t *fmt) {
+	if (rt == 0.0) return std::wstring{};
+
 	time_t ltim = Rat_Time_To_Unix_Time(rt);
+
 	struct tm ptm;
 	localtime_s(&ptm, &ltim);
 

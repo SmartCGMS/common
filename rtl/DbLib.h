@@ -31,7 +31,7 @@ namespace db {
 			if (!operator bool()) return false;
 
 			TParameter desc;
-			if (std::is_same<TParam1, int64_t>::value) {
+			if (std::is_integral<TParam1>::value) {
 				desc.type = db::NParameter_Type::ptInt64;
 				desc.integer = static_cast<decltype(desc.integer)>(param1);
 				

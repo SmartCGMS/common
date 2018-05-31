@@ -109,7 +109,7 @@ const wchar_t *dsInterop_Export_Filter = L"Interop export filter";
 
 const wchar_t *dsLog_Filter = L"CSV File Log";
 const wchar_t *dsLog_Output_File = L"Output file";
-const wchar_t *dsLog_Header = L"Logical Clock; Device Time; Event Code; Signal; Level; Info; Params; Segment Id; Event Code Id; Device Id; Signal Id;";
+const wchar_t *dsLog_Header = L"Logical Clock; Device Time; Event Code; Signal; Info; Segment Id; Event Code Id; Device Id; Signal Id;";
 
 const wchar_t *dsGUI_Filter = L"Visualization";
 

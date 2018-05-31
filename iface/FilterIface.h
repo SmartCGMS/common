@@ -51,10 +51,12 @@ namespace glucose {
 		};
 	};
 
+	using IFilter_Configuration = refcnt::IVector_Container<glucose::TFilter_Parameter>;
+
 	class IFilter : public virtual refcnt::IReferenced {
 	public:
 		// This method is already started within a thread - no need to create another one inside filter
-		virtual HRESULT IfaceCalling Run(refcnt::IVector_Container<TFilter_Parameter> *configuration) = 0;
+		virtual HRESULT IfaceCalling Run(IFilter_Configuration* configuration) = 0;
 	};
 
 	using TCreate_Filter = HRESULT(IfaceCalling *)(const GUID *id, IFilter_Pipe *input, IFilter_Pipe *output, glucose::IFilter **filter);

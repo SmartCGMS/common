@@ -85,19 +85,19 @@ namespace refcnt {
 	}
 
 
-	template <typename T>
-	std::shared_ptr<IVector_Container<T>> Create_Container_shared(const T *begin, const T *end) {
+	template <typename T, typename S = std::shared_ptr<IVector_Container<T>>>
+	S Create_Container_shared(const T *begin, const T *end) {
 		IVector_Container<T> *obj = Create_Container<T>(begin, end);
-		return refcnt::make_shared_reference_ext <std::shared_ptr<IVector_Container<T>>, IVector_Container<T>>(obj, false);
+		return refcnt::make_shared_reference_ext <S, IVector_Container<T>>(obj, false);
 	}
 
-	template <typename T>
-	std::shared_ptr<IVector_Container<T>> Copy_Container(std::shared_ptr<IVector_Container<T>> src) {
-		std::shared_ptr<IVector_Container<T>> result;
+	template <typename T, typename S = std::shared_ptr<IVector_Container<T>>>
+	S Copy_Container(std::shared_ptr<IVector_Container<T>> src) {
+		S result;
 		// copy parameter hint to internal vector
 		T *begin, *end;
 		if (src->get(&begin, &end) == S_OK)
-			result = Create_Container_shared<T>(begin, end);
+			result = Create_Container_shared<T, S>(begin, end);
 
 		return result;
 	}	

@@ -27,9 +27,13 @@ namespace glucose {
 	
 	SFilter create_filter(const GUID &id, SFilter_Pipe &input, SFilter_Pipe &output);
 
-	class SFilter_Parameters : public std::shared_ptr<refcnt::IVector_Container<glucose::TFilter_Parameter>> {
+	class SFilter_Parameters : public std::shared_ptr<glucose::IFilter_Configuration> {
+	protected:
+		TFilter_Parameter* Resolve_Parameter(const wchar_t* name);
 	public:
 		std::wstring Read_String(const wchar_t* name);
+		int64_t Read_Int(const wchar_t* name);
+		std::vector<int64_t> Read_Int_Array(const wchar_t* name);
 	};
 
 

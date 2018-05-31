@@ -136,20 +136,39 @@ namespace glucose {
 		}
 	}
 
+	TFilter_Parameter* SFilter_Parameters::Resolve_Parameter(const wchar_t* name) {
+		if (!operator bool()) return nullptr;
 
-	std::wstring SFilter_Parameters::Read_String(const wchar_t* name) {
-		if (!operator bool()) return std::wstring{};
-
-		std::wstring result{};
-
+		TFilter_Parameter* result = nullptr;
 		glucose::TFilter_Parameter *cbegin, *cend;
-		if (get()->get(&cbegin, &cend) == S_OK) 
-			for (glucose::TFilter_Parameter* cur = cbegin; cur < cend; cur++) 				
+		if (get()->get(&cbegin, &cend) == S_OK)
+			for (glucose::TFilter_Parameter* cur = cbegin; cur < cend; cur++)
 				if (WChar_Container_Equals_WString(cur->config_name, name)) {
-					result = WChar_Container_To_WString(cur->wstr);
+					result = cur;
 					break;
 				}
-		
+		return result;
+	}
+
+	std::wstring SFilter_Parameters::Read_String(const wchar_t* name) {
+		const auto parameter = Resolve_Parameter(name);
+		return parameter != nullptr ? WChar_Container_To_WString(parameter->wstr) : std::wstring{};
+	}
+
+
+	int64_t SFilter_Parameters::Read_Int(const wchar_t* name) {
+		const auto parameter = Resolve_Parameter(name);
+		return parameter != nullptr ? parameter->int64 : std::numeric_limits<int64_t>::max();
+	}
+
+	std::vector<int64_t> SFilter_Parameters::Read_Int_Array(const wchar_t* name) {
+		const auto parameter = Resolve_Parameter(name);
+
+		std::vector<int64_t> result;
+
+		if (parameter)
+			result = refcnt::Container_To_Vector<int64_t>(parameter->select_time_segment_id);		
+
 		return result;
 	}
 

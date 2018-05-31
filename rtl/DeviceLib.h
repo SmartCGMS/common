@@ -10,7 +10,10 @@
 
 namespace glucose {
 
-	using SModel_Parameter_Vector = std::shared_ptr<IModel_Parameter_Vector>;
+	class SModel_Parameter_Vector : public std::shared_ptr<IModel_Parameter_Vector> {
+	public:
+		bool set(const std::vector<double> &params);
+	};
 
 	using SSignal = std::shared_ptr<ISignal>;
 
@@ -103,7 +106,7 @@ namespace glucose {
 		CTime_Segment(const CTime_Segment& b) = delete;
 		virtual ~CTime_Segment();
 
-		virtual HRESULT IfaceCalling Get_Signal(const GUID *signal_id, glucose::ISignal **signal) override final;
+		virtual HRESULT IfaceCalling Get_Signal(const GUID *signal_id, glucose::ISignal **signal) override;
 
 		// clones this segment into another; calls AddRef (passes ownership to caller)
 		STime_Segment Clone();
