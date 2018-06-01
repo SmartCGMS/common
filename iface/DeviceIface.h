@@ -36,7 +36,7 @@ namespace glucose {
 
 	static constexpr GUID signal_BG = { 0xf666f6c2, 0xd7c0, 0x43e8,{ 0x8e, 0xe1, 0xc8, 0xca, 0xa8, 0xf8, 0x60, 0xe5 } };	// {F666F6C2-D7C0-43E8-8EE1-C8CAA8F860E5}
 	static constexpr GUID signal_IG = { 0x3034568d, 0xf498, 0x455b,{ 0xac, 0x6a, 0xbc, 0xf3, 0x1, 0xf6, 0x9c, 0x9e } };		// {3034568D-F498-455B-AC6A-BCF301F69C9E}
-	static constexpr GUID signal_ISIG =	{ 0x3f62c28a, 0x4d25, 0x4086,{ 0xbd, 0x1a, 0xfc, 0x44, 0x2f, 0xdd, 0xb7, 0xcf } };		// {3F62C28A-4D25-4086-BD1A-FC442FDDB7CF}
+	static constexpr GUID signal_ISIG = { 0x3f62c28a, 0x4d25, 0x4086,{ 0xbd, 0x1a, 0xfc, 0x44, 0x2f, 0xdd, 0xb7, 0xcf } };		// {3F62C28A-4D25-4086-BD1A-FC442FDDB7CF}
 	static constexpr GUID signal_Calibration = { 0xed4cd0f5, 0xf728, 0x44fe,{ 0x95, 0x52, 0x97, 0x33, 0x8b, 0xd7, 0xe8, 0xd5 } };	// {ED4CD0F5-F728-44FE-9552-97338BD7E8D5}
 	static constexpr GUID signal_Insulin = { 0x22d87566, 0xaf1b, 0x4cc7,{ 0x8d, 0x11, 0xc5, 0xe0, 0x4e, 0x1e, 0x9c, 0x8a } }; 	 // {22D87566-AF1B-4CC7-8D11-C5E04E1E9C8A}
 	static constexpr GUID signal_Carb_Intake = { 0x37aa6ac1, 0x6984, 0x4a06,{ 0x92, 0xcc, 0xa6, 0x60, 0x11, 0xd, 0xd, 0xc7 } };	// {37AA6AC1-6984-4A06-92CC-A660110D0DC7}
@@ -77,19 +77,19 @@ namespace glucose {
 		Information,
 		Warning,
 		Error,
-		
+
 		count
 	};
 
 
-	struct TDevice_Event {		
+	struct TDevice_Event {
 		NDevice_Event_Code event_code;
 
 		GUID device_id;					//supporting parallel measurements
 		GUID signal_id;					//blood, ist, isig, model id aka e.g, calculated blood, etc.
 
 		double device_time;				//signal with multiple values are aggregated byt device_time with the same signal_id and device_id
-		int64_t logical_time;			
+		int64_t logical_time;
 
 		uint64_t segment_id;			// segment identifier or Invalid_Segment_Id
 
@@ -100,7 +100,7 @@ namespace glucose {
 			refcnt::wstr_container* info;				//information, warning, error 
 		};
 	};
-	
+
 	//To make TDevice_Event handling more efficient, particulalry when passing through the pipe,
 	//IDevice_Event exposes TDevice_Event container iface so that the pipe can accept and pass throught only a pointer, not the entire structure.
 	//This way, we avoid the overhead of copying size_of(TDevice_Event) so many times.
@@ -123,44 +123,40 @@ namespace glucose {
 	class ISignal : public virtual refcnt::IReferenced {
 	public:
 		virtual HRESULT IfaceCalling Get_Discrete_Levels(double* const times, double* const levels, const size_t count, size_t *filled) const = 0;
-			//on S_OK, *filled elements were copied into times and double levels of the count size		
-			//for measured signal, it returns the measured values
-			//for calculated signal, it returns the measured values of the referecne signal - to enable solving
+		//on S_OK, *filled elements were copied into times and double levels of the count size		
+		//for measured signal, it returns the measured values
+		//for calculated signal, it returns the measured values of the referecne signal - to enable solving
 
-		virtual HRESULT IfaceCalling Get_Discrete_Bounds(TBounds *bounds, size_t *level_count) const = 0 ;
-			//gets bounds and level_count, any of these parameters can be nullptr
-			//for measured and calculated signals, dtto Get_Discrete_Levels
+		virtual HRESULT IfaceCalling Get_Discrete_Bounds(TBounds *bounds, size_t *level_count) const = 0;
+		//gets bounds and level_count, any of these parameters can be nullptr
+		//for measured and calculated signals, dtto Get_Discrete_Levels
 
 		virtual HRESULT IfaceCalling Add_Levels(const double *times, const double *levels, const size_t count) = 0;
 
 		virtual HRESULT IfaceCalling Get_Continuous_Levels(IModel_Parameter_Vector *params,
 			const double* times, double* const levels, const size_t count, const size_t derivation_order) const = 0;
-			/*
-				this method will be called in parallel by solvers and therefore it has to be const
+		/*
+			this method will be called in parallel by solvers and therefore it has to be const
 
-				params - params from which to calculate the signal
-							can be nullptr to indicate use of default parameters
-				times - times at which to get the levels, i.e., y values for x values
-				count - the total number of times for which to get the levels
-				levels - the levels, must be already allocated with size of count
-						- level that cannot be calculated must be se to quiet nan				
-			*/		
+			params - params from which to calculate the signal
+						can be nullptr to indicate use of default parameters
+			times - times at which to get the levels, i.e., y values for x values
+			count - the total number of times for which to get the levels
+			levels - the levels, must be already allocated with size of count
+					- level that cannot be calculated must be se to quiet nan
+		*/
 		virtual HRESULT IfaceCalling Get_Default_Parameters(IModel_Parameter_Vector *parameters) const = 0;
-			//must be implemented
+		//must be implemented
 	};
 
 
 	class ITime_Segment : public virtual refcnt::IReferenced {
-		public:
-			// retrieves or creates signal with given id; calls AddRef on returned object
-			virtual HRESULT IfaceCalling Get_Signal(const GUID *signal_id, ISignal **signal) = 0;
+	public:
+		// retrieves or creates signal with given id; calls AddRef on returned object
+		virtual HRESULT IfaceCalling Get_Signal(const GUID *signal_id, ISignal **signal) = 0;
 	};
 
 	// segment provides source levels for the calculation
 	// only ITime_Segment::Get_Signal is supposed to call this function to avoid (although not probihit) creating of over-complex segment-graphs
-	using TCreate_Calculated_Signal = HRESULT(IfaceCalling *)(const GUID *calc_id, ITime_Segment *segment, ISignal **signal);
-
-	// segment also provides reference signals for the calculation
-	// the same restrictions apply there as to calculated signal version - only ITime_Segment::Get_Signal is supposed to call this function
-	using TCreate_Measured_Signal = HRESULT(IfaceCalling *)(const GUID *calc_id, ITime_Segment *segment, ISignal **signal);
+	using TCreate_Signal = HRESULT(IfaceCalling *)(const GUID *calc_id, ITime_Segment *segment, ISignal **signal);
 }
