@@ -172,6 +172,16 @@ namespace glucose {
 		return result;
 	}
 
+	GUID SFilter_Parameters::Read_GUID(const wchar_t* name) {
+		const auto parameter = Resolve_Parameter(name);
+		return parameter != nullptr ? parameter->guid : Invalid_GUID;
+	}
+
+	bool SFilter_Parameters::Read_Bool(const wchar_t* name) {
+		const auto parameter = Resolve_Parameter(name);
+		return parameter != nullptr ? parameter->boolean : false;
+	}
+
 	SError_Filter_Inspection::SError_Filter_Inspection(SFilter &error_filter) {
 		refcnt::Query_Interface<glucose::IFilter, glucose::IError_Filter_Inspection>(error_filter.get(), Error_Filter_Inspection, *this);		
 	}

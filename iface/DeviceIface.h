@@ -70,6 +70,8 @@ namespace glucose {
 		Solve_Parameters,	//user can either request to recalculate, or we can request to recalculate it at the end of the segment - i.e., prior sending Time_Segment_Stop
 		Time_Segment_Start,
 		Time_Segment_Stop,
+		Recalculate_Segment,	//event.signal id is either a specific signal or InvalidGUID to recalculate all
+								//dtto for segmentid
 		Simulation_Step,
 
 

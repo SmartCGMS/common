@@ -113,8 +113,11 @@ const wchar_t *dsLog_Header = L"Logical Clock; Device Time; Event Code; Signal; 
 
 const wchar_t *dsGUI_Filter = L"Visualization";
 
-const wchar_t *dsCalculate_Past_New_Params = L"Calculate past with first parameter set";
-const wchar_t *dsRecalculate_With_Every_Params = L"New parameters recalculate entire segment";
+//const wchar_t *dsCalculate_Past_New_Params = L"Calculate past with first parameter set";
+//const wchar_t *dsRecalculate_With_Every_Params = L"New parameters recalculate entire segment";
+const wchar_t* dsRecalculate_Past_On_Params = L"Recalculate entire segment with new parameters";
+const wchar_t* dsRecalculate_Past_On_Segment_Stop = L"Recalculate entire segment on its end";
+
 const wchar_t *dsUse_Just_Opened_Segments = L"Determine parameters using all known segments";
 
 const char *dsConfiguration = "Configuration";
@@ -300,9 +303,12 @@ const wchar_t *rsHold_Values_Delay = L"Hold_Delay";
 const wchar_t *rsSignal_Source_Id = L"Signal_Src_Id";
 const wchar_t *rsSignal_Destination_Id = L"Signal_Dst_Id";
 
-const wchar_t *rsCalculate_Past_New_Params = L"Calc_Past_First_Params";
-const wchar_t *rsRecalculate_With_Every_Params = L"Recalc_Every_Params";
-const wchar_t *rsUse_Just_Opened_Segments = L"Use_Just_Opened_Segments";
+//const wchar_t *rsCalculate_Past_New_Params = L"Calc_Past_First_Params";
+//const wchar_t *rsRecalculate_With_Every_Params = L"Recalc_Every_Params";
+//const wchar_t *rsUse_Just_Opened_Segments = L"Use_Just_Opened_Segments";
+
+const wchar_t *rsRecalculate_Past_On_Params = L"Recalculate_Past_On_Params";
+const wchar_t *rsRecalculate_Past_On_Segment_Stop = L"Recalculate_Past_On_Segment_Stop";
 
 const wchar_t *rsParameters_Reset = L"Model_Signal_Params_Reset";
 const wchar_t *rsParameters_Reset_Request = L"Model_Signal_Params_Reset_Request";

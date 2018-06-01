@@ -15,7 +15,13 @@ namespace glucose {
 		bool set(const std::vector<double> &params);
 	};
 
-	using SSignal = std::shared_ptr<ISignal>;
+	class STime_Segment;
+
+	class SSignal : public std::shared_ptr<ISignal> {
+	public:
+		SSignal() {};	//just an empty object
+		SSignal(STime_Segment segment, const GUID &signal_id);
+	};
 
 	class WSignal {
 	protected:

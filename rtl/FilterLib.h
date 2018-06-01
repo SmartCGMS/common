@@ -34,6 +34,8 @@ namespace glucose {
 		std::wstring Read_String(const wchar_t* name);
 		int64_t Read_Int(const wchar_t* name);
 		std::vector<int64_t> Read_Int_Array(const wchar_t* name);
+		GUID Read_GUID(const wchar_t* name);
+		bool Read_Bool(const wchar_t* name);
 	};
 
 

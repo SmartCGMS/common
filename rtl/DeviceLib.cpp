@@ -9,7 +9,7 @@ namespace imported {
 	//#define DIMPORT_TEST_FAIL E_NOTIMPL
 
 	#ifdef DIMPORT_TEST_FAIL
-		HRESULT IfaceCalling create_signal(const GUID *calc_id, glucose::ITime_Segment *segment, glucose::ISignal **signal) {
+		HRESULT IfaceCalling create_signal(const GUID *signal_id, glucose::ITime_Segment *segment, glucose::ISignal **signal) {
 			return DIMPORT_TEST_FAIL;
 		}
 		
@@ -19,10 +19,10 @@ namespace imported {
 		
 	#else
 		#ifdef _WIN32
-			extern "C" __declspec(dllimport)  HRESULT IfaceCalling create_signal(const GUID *calc_id, glucose::ITime_Segment *segment, glucose::ISignal **signal);
+			extern "C" __declspec(dllimport)  HRESULT IfaceCalling create_signal(const GUID *signal_id, glucose::ITime_Segment *segment, glucose::ISignal **signal);
 			extern "C" __declspec(dllimport)  HRESULT IfaceCalling create_device_event(glucose::NDevice_Event_Code code, glucose::IDevice_Event **event);
 		#else
-			extern "C" HRESULT IfaceCalling create_signal(const GUID *calc_id, glucose::ITime_Segment *segment, glucose::ISignal **signal);
+			extern "C" HRESULT IfaceCalling create_signal(const GUID *signal_id, glucose::ITime_Segment *segment, glucose::ISignal **signal);
 			extern "C" HRESULT IfaceCalling create_device_event(glucose::NDevice_Event_Code code, glucose::IDevice_Event **event);
 		#endif
 	#endif
@@ -35,6 +35,12 @@ bool glucose::SModel_Parameter_Vector::set(const std::vector<double> &params) {
 }
 
 
+glucose::SSignal::SSignal(glucose::STime_Segment segment, const GUID &signal_id) {
+	glucose::ISignal *signal;
+	if (imported::create_signal(&signal_id, segment.get(), &signal) == S_OK) {
+		reset(signal, [](glucose::ISignal* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });
+	}
+}
 
 glucose::WSignal::WSignal(ISignal *signal) : mSignal(signal) {};
 
