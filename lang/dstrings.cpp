@@ -110,8 +110,20 @@ const wchar_t *dsInterop_Export_Filter = L"Interop export filter";
 const wchar_t *dsLog_Filter = L"CSV File Log";
 const wchar_t *dsLog_Output_File = L"Output file";
 const wchar_t *dsLog_Header = L"Logical Clock; Device Time; Event Code; Signal; Info; Segment Id; Event Code Id; Device Id; Signal Id;";
+const wchar_t *dsLog_Filter_Replay = L"CSV File Log Replay";
 
 const wchar_t *dsGUI_Filter = L"Visualization";
+
+const char* dsSave_Image_To_File = "Save to file";
+const char* dsSave_Image_Ext_Spec = "SVG Image (*.svg)";
+
+const char* dsSave_Image_Default_Filename_Graph = "graph.svg";
+const char* dsSave_Image_Default_Filename_Day = "day.svg";
+const char* dsSave_Image_Default_Filename_Parkes = "parkes.svg";
+const char* dsSave_Image_Default_Filename_Clark = "clark.svg";
+const char* dsSave_Image_Default_Filename_AGP = "agp.svg";
+const char* dsSave_Image_Default_Filename_ECDF = "ecdf.svg";
+
 
 //const wchar_t *dsCalculate_Past_New_Params = L"Calculate past with first parameter set";
 //const wchar_t *dsRecalculate_With_Every_Params = L"New parameters recalculate entire segment";
@@ -257,6 +269,7 @@ const wchar_t* dsDrawingLocaleSvgDiff2Title = L"Diffusion 2";
 const wchar_t* dsDrawingLocaleSvgDiff3Title = L"Diffusion 3";
 const wchar_t* dsDrawingLocaleRelativeError = L"Relative error [%]";
 const wchar_t* dsDrawingLocaleCummulativeProbability = L"Cummulative probability [%]";
+const wchar_t* dsDrawingLocaleElevatedGlucose = L"Elevated glucose";
 
 //--------------------------------- do not translate any of the rs-prefixed texts --
 
@@ -419,6 +432,10 @@ const wchar_t* rsDrawingLocaleSvgDiff2Title = L"title_diff2";
 const wchar_t* rsDrawingLocaleSvgDiff3Title = L"title_diff3";
 const wchar_t* rsDrawingLocaleRelativeError = L"rel_error";
 const wchar_t* rsDrawingLocaleCummulativeProbability = L"cummulative_probability";
+const wchar_t* rsDrawingLocaleElevatedGlucose = L"elevatedglucose";
 
 const wchar_t* rsCannot_Get_Parameters = L"Cannot get parameters!";
 const wchar_t* rsLog_Date_Time_Format = L"%Y-%m-%d %H:%M:%S";
+
+const wchar_t* rsLog_CSV_Separator = L"; ";
+

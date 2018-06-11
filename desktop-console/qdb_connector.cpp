@@ -18,25 +18,25 @@ CDb_Query::CDb_Query(QSqlDatabase &db, const wchar_t *statement) : mQuery(QSqlQu
 
 HRESULT IfaceCalling CDb_Query::Bind_Parameters(const db::TParameter *values, const size_t count) {
 
-	for (size_t i = 0; i < count; i++) {		
+	for (size_t i = 0; i < count; i++) {
 
-		switch (values[i].type) {		
+		switch (values[i].type) {
+			default:
 			case db::NParameter_Type::ptNull:		mQuery.addBindValue(QVariant{});
 													break;
 
-			case db::NParameter_Type::ptInt64:		mQuery.addBindValue(values[i].integer);				
+			case db::NParameter_Type::ptInt64:		mQuery.addBindValue(values[i].integer);
 													break;
 
 			case db::NParameter_Type::ptDouble:		mQuery.addBindValue(values[i].dbl);
 													break;
-			
+
 			case db::NParameter_Type::ptWChar:		mQuery.addBindValue( QString::fromWCharArray(values[i].str));
 													break;
 
-			case db::NParameter_Type::ptBool:mQuery.addBindValue(values[i].boolean);
+			case db::NParameter_Type::ptBool:		mQuery.addBindValue(values[i].boolean);
 													break;
 		}
-		
 	}
 
 	return S_OK;
@@ -57,7 +57,6 @@ HRESULT IfaceCalling CDb_Query::Get_Next(db::TParameter* const values, const siz
 
 				bool ok_test;
 				QString tmp_str;
-				
 
 				switch (values[i].type) {
 					case db::NParameter_Type::ptInt64:		values[i].integer = static_cast<int64_t>(db_value.toLongLong(&ok_test));

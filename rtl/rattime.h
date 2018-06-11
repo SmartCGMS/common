@@ -26,3 +26,6 @@ time_t Rat_Time_To_Unix_Time(const double rt);
 std::string Rat_Time_To_Local_Time_Str(const double rt, const char *fmt);
 // fmt is the string formatting used by C++ standard library
 std::wstring Rat_Time_To_Local_Time_WStr(const double rt, const wchar_t *fmt);
+
+// converts string representation of local time (str) to rat time; fmt is the string formatting used by C++ standard library
+double Local_Time_WStr_To_Rat_Time(const std::wstring& str, const wchar_t* fmt);

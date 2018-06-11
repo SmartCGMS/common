@@ -114,8 +114,19 @@ extern const wchar_t *dsInterop_Export_Filter;
 extern const wchar_t *dsLog_Filter;
 extern const wchar_t *dsLog_Output_File;
 extern const wchar_t *dsLog_Header;
+extern const wchar_t *dsLog_Filter_Replay;
 
 extern const wchar_t *dsGUI_Filter;
+
+extern const char* dsSave_Image_To_File;
+extern const char* dsSave_Image_Ext_Spec;
+
+extern const char* dsSave_Image_Default_Filename_Graph;
+extern const char* dsSave_Image_Default_Filename_Day;
+extern const char* dsSave_Image_Default_Filename_Parkes;
+extern const char* dsSave_Image_Default_Filename_Clark;
+extern const char* dsSave_Image_Default_Filename_AGP;
+extern const char* dsSave_Image_Default_Filename_ECDF;
 
 //extern const wchar_t *dsCalculate_Past_New_Params;
 //extern const wchar_t *dsRecalculate_With_Every_Params;
@@ -260,6 +271,7 @@ extern const wchar_t* dsDrawingLocaleSvgDiff2Title;
 extern const wchar_t* dsDrawingLocaleSvgDiff3Title;
 extern const wchar_t* dsDrawingLocaleRelativeError;
 extern const wchar_t* dsDrawingLocaleCummulativeProbability;
+extern const wchar_t* dsDrawingLocaleElevatedGlucose;
 
 //--------------------------------- do not translate any of the rs-prefixed texts --
 
@@ -417,6 +429,9 @@ extern const wchar_t* rsDrawingLocaleSvgDiff2Title;
 extern const wchar_t* rsDrawingLocaleSvgDiff3Title;
 extern const wchar_t* rsDrawingLocaleRelativeError;
 extern const wchar_t* rsDrawingLocaleCummulativeProbability;
+extern const wchar_t* rsDrawingLocaleElevatedGlucose;
 
 extern const wchar_t* rsCannot_Get_Parameters;
 extern const wchar_t* rsLog_Date_Time_Format;
+
+extern const wchar_t* rsLog_CSV_Separator;

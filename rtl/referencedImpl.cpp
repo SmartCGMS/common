@@ -56,16 +56,16 @@ namespace refcnt {
 	bool WChar_Container_Equals_WString(wstr_container *container, const wchar_t* str, size_t offset, size_t maxCount) {
 		wchar_t *cont_begin, *cont_end;
 
-		if (container->get(&cont_begin, &cont_end) != S_OK) return false;	//cannot compare
+		if (container->get(&cont_begin, &cont_end) != S_OK || !str) return false;	//cannot compare
 
 		cont_begin += offset;
 		if (cont_begin >= cont_end)
 			return false;
 
-		size_t cont_len = std::min(static_cast<size_t>(cont_end - cont_begin), maxCount);
-		if (cont_len != wcslen(str)) return false;	//different size, thus not equal
+		const size_t cont_len = static_cast<size_t>(cont_end - cont_begin);
+		if (maxCount == (size_t)-1 && cont_len != wcslen(str)) return false;	//different size, thus not equal
 
-		return wmemcmp(cont_begin, str, cont_len) == 0;
+		return wmemcmp(cont_begin, str, std::min(cont_len, maxCount > 0 ? maxCount : wcslen(str))) == 0;
 	}
 
 
@@ -80,7 +80,7 @@ namespace refcnt {
 	bool Swstr_container::operator==(const wchar_t *other) const {
 		if (!operator bool()) return false;
 
-		return WChar_Container_Equals_WString(get(), other, 0, other ? wcslen(other) : 0);
+		return WChar_Container_Equals_WString(get(), other);
 	}
 
 }
