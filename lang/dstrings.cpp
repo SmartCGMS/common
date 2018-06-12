@@ -271,6 +271,14 @@ const wchar_t* dsDrawingLocaleRelativeError = L"Relative error [%]";
 const wchar_t* dsDrawingLocaleCummulativeProbability = L"Cummulative probability [%]";
 const wchar_t* dsDrawingLocaleElevatedGlucose = L"Elevated glucose";
 
+//xxxx
+
+const wchar_t *dsCalculate_Past_New_Params = L"Calculate past with first parameter set";
+const wchar_t *dsRecalculate_With_Every_Params = L"New parameters recalculate entire segment";
+const wchar_t *dsHold_During_Solve = L"Hold during solve";
+
+const wchar_t *dsHold_During_Solve_Tooltip = L"Hold all incoming messages while solver is in progress";
+
 //--------------------------------- do not translate any of the rs-prefixed texts --
 
 const char* rsAbout_Text =	"<b>Glucose Predictor</b>, Version 3.0 Alpha<br>&nbsp;<br>"\
@@ -315,10 +323,6 @@ const wchar_t *rsHold_Values_Delay = L"Hold_Delay";
 
 const wchar_t *rsSignal_Source_Id = L"Signal_Src_Id";
 const wchar_t *rsSignal_Destination_Id = L"Signal_Dst_Id";
-
-//const wchar_t *rsCalculate_Past_New_Params = L"Calc_Past_First_Params";
-//const wchar_t *rsRecalculate_With_Every_Params = L"Recalc_Every_Params";
-//const wchar_t *rsUse_Just_Opened_Segments = L"Use_Just_Opened_Segments";
 
 const wchar_t *rsRecalculate_Past_On_Params = L"Recalculate_Past_On_Params";
 const wchar_t *rsRecalculate_Past_On_Segment_Stop = L"Recalculate_Past_On_Segment_Stop";
@@ -439,3 +443,8 @@ const wchar_t* rsLog_Date_Time_Format = L"%Y-%m-%d %H:%M:%S";
 
 const wchar_t* rsLog_CSV_Separator = L"; ";
 
+//**************
+const wchar_t *rsCalculate_Past_New_Params = L"Calc_Past_First_Params";
+const wchar_t *rsRecalculate_With_Every_Params = L"Recalc_Every_Params";
+const wchar_t *rsUse_Just_Opened_Segments = L"Use_Just_Opened_Segments";
+const wchar_t *rsHold_During_Solve = L"Hold_During_Solve";

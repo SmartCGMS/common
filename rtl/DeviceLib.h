@@ -13,6 +13,7 @@ namespace glucose {
 	class SModel_Parameter_Vector : public std::shared_ptr<IModel_Parameter_Vector> {
 	public:
 		bool set(const std::vector<double> &params);
+		bool set(const SModel_Parameter_Vector &params);
 	};
 
 	class STime_Segment;

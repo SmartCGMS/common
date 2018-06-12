@@ -273,6 +273,14 @@ extern const wchar_t* dsDrawingLocaleRelativeError;
 extern const wchar_t* dsDrawingLocaleCummulativeProbability;
 extern const wchar_t* dsDrawingLocaleElevatedGlucose;
 
+//xxxxxxxxxxxxxxxx
+
+extern const wchar_t *dsRecalculate_With_Every_Params;
+extern const wchar_t *dsUse_Just_Opened_Segments;
+extern const wchar_t *dsHold_During_Solve;
+extern const wchar_t *dsHold_During_Solve_Tooltip;
+
+
 //--------------------------------- do not translate any of the rs-prefixed texts --
 
 extern const char* rsAbout_Text;
@@ -313,10 +321,6 @@ extern const wchar_t *rsHold_Values_Delay;
 
 extern const wchar_t *rsSignal_Source_Id;
 extern const wchar_t *rsSignal_Destination_Id;
-
-//extern const wchar_t *rsCalculate_Past_New_Params;
-//extern const wchar_t *rsRecalculate_With_Every_Params;
-//extern const wchar_t *rsUse_Just_Opened_Segments;
 
 extern const wchar_t *rsRecalculate_Past_On_Params;
 extern const wchar_t *rsRecalculate_Past_On_Segment_Stop;
@@ -435,3 +439,9 @@ extern const wchar_t* rsCannot_Get_Parameters;
 extern const wchar_t* rsLog_Date_Time_Format;
 
 extern const wchar_t* rsLog_CSV_Separator;
+
+//*******
+extern const wchar_t *rsCalculate_Past_New_Params;
+extern const wchar_t *rsRecalculate_With_Every_Params;
+extern const wchar_t *rsUse_Just_Opened_Segments;
+extern const wchar_t *rsHold_During_Solve;
