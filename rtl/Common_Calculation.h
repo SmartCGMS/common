@@ -30,7 +30,7 @@ protected:
 protected:
 	mutable CBuffer_Pool<TVector1D> mVector1D_Pool{Eigen_Buffer_Pool_Resize<TVector1D> };
 protected:
-	glucose::SSignal mSource_Signal;
+	glucose::SSignal mSource_Signal; //TODO: remove as CTimeSegment treats any incoming level as measured signal
 public:	
 	CCommon_Calculation() {};
 	CCommon_Calculation(glucose::WTime_Segment segment, const GUID &source_signal);

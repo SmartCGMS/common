@@ -105,13 +105,16 @@ class CTime_Segment final : public virtual ITime_Segment, public virtual refcnt:
 	private:
 		// managed signals; created by calling Get_Signal
 		std::map<GUID, glucose::SSignal> mSignals;
-
+		GUID mCalculated_Signal_Id;	//the only calculated signal that we allow
+									//so that discrete levels will work correctly
+									//when composing multiple signals (which requires
+									//that we treat any incoming level as the measured one).
 	public:
 		// default constructor
-		CTime_Segment() = default;
+		explicit CTime_Segment(const GUID &calculated_signal_id);
 		// disable copying, allow just cloning
 		CTime_Segment(const CTime_Segment& b) = delete;
-		virtual ~CTime_Segment();
+		virtual ~CTime_Segment() {};
 
 		virtual HRESULT IfaceCalling Get_Signal(const GUID *signal_id, glucose::ISignal **signal) override;
 

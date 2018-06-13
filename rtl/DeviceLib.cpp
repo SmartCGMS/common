@@ -154,10 +154,9 @@ bool glucose::UDevice_Event::is_info_event() const {
 
 //xxxxxxxxxxxxxxxx
 
-glucose::CTime_Segment::~CTime_Segment()
-{
-	//
-}
+glucose::CTime_Segment::CTime_Segment(const GUID &calculated_signal_id) : mCalculated_Signal_Id(calculated_signal_id) {
+};
+
 
 HRESULT IfaceCalling glucose::CTime_Segment::Get_Signal(const GUID *signal_id, glucose::ISignal **signal)
 {
@@ -168,12 +167,12 @@ HRESULT IfaceCalling glucose::CTime_Segment::Get_Signal(const GUID *signal_id, g
 		(*signal)->AddRef();
 		return S_OK;
 	}
+	
 
-	// prefer calculated signal, fall back to measured signal
-	if (imported::create_signal(signal_id, this, signal) != S_OK)
-	{
+	// do we creat the only calculated signal or a generic-measured one?
+	if (imported::create_signal(*signal_id == mCalculated_Signal_Id ? &mCalculated_Signal_Id : &glucose::signal_BG, this, signal) != S_OK)
 		return E_NOTIMPL;
-	}
+	
 	mSignals[*signal_id] = refcnt::make_shared_reference_ext<glucose::SSignal, glucose::ISignal>(*signal, true);  // true due to creating "clone" of pointer with custom reference counter
 
 	return S_OK;
@@ -183,7 +182,7 @@ glucose::STime_Segment glucose::CTime_Segment::Clone()
 {
 	// manufacture new segment
 	glucose::CTime_Segment* cloned;
-	if (Manufacture_Object<glucose::CTime_Segment>(&cloned) != S_OK)
+	if (Manufacture_Object<glucose::CTime_Segment>(&cloned, mCalculated_Signal_Id) != S_OK)
 		return {};
 
 	size_t count;
