@@ -24,8 +24,9 @@ namespace glucose {
 	enum class NParameter_Type : size_t {
 		ptNull = 0,
 		ptWChar_Container,	//IParameter_Container<wchar_t>
-		ptSelect_Time_Segment_ID,	//alias for IParameter_Container<int64_t> that selects time segments id
+		ptSelect_Time_Segment_ID,	//alias for IParameter_Container<int64_t> that selects time segments id		
 		ptDouble,	
+		ptRatTime,					//double interperted as the rattime
 		ptInt64,
 		ptBool,
 		ptModel_Id,

@@ -133,6 +133,7 @@ extern const char* dsSave_Image_Default_Filename_ECDF;
 extern const wchar_t* dsRecalculate_Past_On_Params;
 extern const wchar_t* dsRecalculate_Past_On_Segment_Stop;
 extern const wchar_t *dsUse_Just_Opened_Segments;
+extern const wchar_t* dsPrediction_Window;
 
 extern const char *dsConfiguration;
 extern const char *dsSelect_Just_One_Item;
@@ -183,6 +184,7 @@ extern const wchar_t* dsNewUOA;
 extern const wchar_t* dsMetaDE;
 
 extern const wchar_t *dsLine_Approx;
+extern const wchar_t *dsAkima;
 
 extern const char *dsDrawing_Tab_Graph;
 extern const char *dsDrawing_Tab_Day;
@@ -440,8 +442,12 @@ extern const wchar_t* rsLog_Date_Time_Format;
 
 extern const wchar_t* rsLog_CSV_Separator;
 
+extern const char* rsRattime_Edit_Mask;
+
 //*******
 extern const wchar_t *rsCalculate_Past_New_Params;
 extern const wchar_t *rsRecalculate_With_Every_Params;
 extern const wchar_t *rsUse_Just_Opened_Segments;
 extern const wchar_t *rsHold_During_Solve;
+extern const wchar_t* rsPrediction_Window;
+

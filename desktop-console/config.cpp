@@ -95,6 +95,7 @@ void CConfig::Load(CFilter_Chain &filter_chain) {
 								filter_parameter.select_time_segment_id = WString_To_Select_Time_Segments_Id(str_value);
 								break;
 
+							case glucose::NParameter_Type::ptRatTime:
 							case glucose::NParameter_Type::ptDouble:
 								filter_parameter.dbl = mIni.GetDoubleValue(section_name.pItem, desc.config_parameter_name[i]);
 								break;
@@ -167,6 +168,7 @@ void CConfig::Save(const CFilter_Chain &filter_chain) {
 					mIni.SetValue(id_str.c_str(), WChar_Container_To_WString(param.config_name).c_str(), Select_Time_Segments_Id_To_WString(param.select_time_segment_id).c_str());
 					break;
 
+				case glucose::NParameter_Type::ptRatTime:
 				case glucose::NParameter_Type::ptDouble:
 					mIni.SetDoubleValue(id_str.c_str(), WChar_Container_To_WString(param.config_name).c_str(), param.dbl);
 					break;

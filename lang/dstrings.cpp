@@ -129,6 +129,7 @@ const char* dsSave_Image_Default_Filename_ECDF = "ecdf.svg";
 //const wchar_t *dsRecalculate_With_Every_Params = L"New parameters recalculate entire segment";
 const wchar_t* dsRecalculate_Past_On_Params = L"Recalculate entire segment with new parameters";
 const wchar_t* dsRecalculate_Past_On_Segment_Stop = L"Recalculate entire segment on its end";
+const wchar_t* dsPrediction_Window = L"Prediction window";
 
 const wchar_t *dsUse_Just_Opened_Segments = L"Determine parameters using all known segments";
 
@@ -182,6 +183,7 @@ const wchar_t* dsNewUOA = L"NewUOA";
 const wchar_t* dsMetaDE = L"MetaDE";
 
 const wchar_t *dsLine_Approx = L"Line";
+const wchar_t *dsAkima = L"Akima";
 
 const char *dsDrawing_Tab_Graph = "Single plot";
 const char *dsDrawing_Tab_Day = "Daily plot";
@@ -442,9 +444,11 @@ const wchar_t* rsCannot_Get_Parameters = L"Cannot get parameters!";
 const wchar_t* rsLog_Date_Time_Format = L"%Y-%m-%d %H:%M:%S";
 
 const wchar_t* rsLog_CSV_Separator = L"; ";
+const char* rsRattime_Edit_Mask = "h:mm:ss.zzz";
 
 //**************
 const wchar_t *rsCalculate_Past_New_Params = L"Calc_Past_First_Params";
 const wchar_t *rsRecalculate_With_Every_Params = L"Recalc_Every_Params";
 const wchar_t *rsUse_Just_Opened_Segments = L"Use_Just_Opened_Segments";
 const wchar_t *rsHold_During_Solve = L"Hold_During_Solve";
+const wchar_t* rsPrediction_Window = L"Prediction_Window";
