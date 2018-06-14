@@ -2,6 +2,7 @@
 
 #include "../iface/referencedIface.h"
 #include "manufactory.h"
+#include "AlignmentAllocator.h"
 
 #include <atomic>
 #include <string>
@@ -46,21 +47,27 @@ namespace refcnt {
 		#pragma warning( disable : 4250 ) // C4250 - 'class1' : inherits 'class2::member' via dominance
 
 		template <typename T>
-		class CVector_Container : public virtual IVector_Container<T>, public virtual CReferenced, public std::vector<T> {
+		class TAligned_Vector : public std::vector<T, AlignmentAllocator<T>>, public CAligned<> {
+		};
+
+		template <typename T>		
+		class CVector_Container : public virtual IVector_Container<T>, public virtual CReferenced, public TAligned_Vector<T> {
+		private:
+			
 		public:
 			virtual ~CVector_Container() {};
 
 			virtual HRESULT set(const T *begin, const T *end) override final {
-				std::vector<T>::clear();
+				TAligned_Vector<T>::clear();
 				if (begin != nullptr)
 					std::copy(begin, end, std::back_inserter(*this));
 				return S_OK;
 			}
 
 			virtual HRESULT get(T **begin, T **end) const override final {
-				if (!std::vector<T>::empty()) {
-					*begin = const_cast<T*>(std::vector<T>::data());
-					*end = const_cast<T*>(std::vector<T>::data()) + std::vector<T>::size();
+				if (!TAligned_Vector<T>::empty()) {
+					*begin = const_cast<T*>(TAligned_Vector<T>::data());
+					*end = const_cast<T*>(TAligned_Vector<T>::data()) + TAligned_Vector<T>::size();
 					return S_OK;
 				} else {
 					*begin = *end = nullptr;
@@ -69,7 +76,7 @@ namespace refcnt {
 			}
 
 			virtual HRESULT empty() const override final {
-				return std::vector<T>::empty() ? S_OK : S_FALSE;
+				return TAligned_Vector<T>::empty() ? S_OK : S_FALSE;
 			}
 		};
 

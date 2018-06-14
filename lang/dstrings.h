@@ -182,6 +182,7 @@ extern const wchar_t* dsGamma;
 
 extern const wchar_t* dsNewUOA;
 extern const wchar_t* dsMetaDE;
+extern const wchar_t* dsBOBYQA;
 
 extern const wchar_t *dsLine_Approx;
 extern const wchar_t *dsAkima;

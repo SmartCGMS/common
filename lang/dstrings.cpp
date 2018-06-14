@@ -181,6 +181,7 @@ const wchar_t* dsGamma = L"gamma";
 
 const wchar_t* dsNewUOA = L"NewUOA";
 const wchar_t* dsMetaDE = L"MetaDE";
+const wchar_t* dsBOBYQA = L"BOBYQA";
 
 const wchar_t *dsLine_Approx = L"Line";
 const wchar_t *dsAkima = L"Akima";
