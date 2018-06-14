@@ -26,7 +26,7 @@ namespace glucose {
 
 	class WSignal {
 	protected:
-		ISignal *mSignal;
+		ISignal * mSignal;
 	public:
 		WSignal(ISignal *signal);
 
@@ -67,17 +67,17 @@ namespace glucose {
 
 	class UDevice_Event : public std::unique_ptr<IDevice_Event, UDevice_Event_Deleter> {
 	protected:
-		TDevice_Event *mRaw;		//mRaw must be initialized in the constructor exactly once
+		TDevice_Event * mRaw;		//mRaw must be initialized in the constructor exactly once
 									//therefore, the implementation defines two helper functions,
 									//which returns pointers only
 		UDevice_Event_internal::NDevice_Event_Major_Type major_type() const;
-	public:		
+	public:
 		explicit UDevice_Event(const NDevice_Event_Code code = NDevice_Event_Code::Nothing);
 		UDevice_Event(IDevice_Event *event);
 		void reset(IDevice_Event *event) = delete;		//reset would break references tight to mRaw, therefore it is disallowed
 
-		//this must be const, because level, parameters and info shared the same data space!!!
-		//it is 100% fool proof, but programmer should still easily discover the error when overwriting e.g., info with level and then reading info
+														//this must be const, because level, parameters and info shared the same data space!!!
+														//it is 100% fool proof, but programmer should still easily discover the error when overwriting e.g., info with level and then reading info
 		const NDevice_Event_Code &event_code = mRaw->event_code;
 		const int64_t &logical_time = mRaw->logical_time;
 
@@ -89,7 +89,7 @@ namespace glucose {
 
 
 		SModel_Parameter_Vector parameters;
-		refcnt::Swstr_container info;		
+		refcnt::Swstr_container info;
 
 		bool is_level_event() const;
 		bool is_parameters_event() const;
@@ -100,21 +100,18 @@ namespace glucose {
 #pragma warning(push)
 #pragma warning( disable : 4250 ) // C4250 - 'class1' : inherits 'class2::member' via dominance
 
-class CTime_Segment final : public virtual ITime_Segment, public virtual refcnt::CReferenced
+	class CTime_Segment final : public virtual ITime_Segment, public virtual refcnt::CReferenced
 	{
 	private:
 		// managed signals; created by calling Get_Signal
 		std::map<GUID, glucose::SSignal> mSignals;
-		GUID mCalculated_Signal_Id;	//the only calculated signal that we allow
-									//so that discrete levels will work correctly
-									//when composing multiple signals (which requires
-									//that we treat any incoming level as the measured one).
+
 	public:
 		// default constructor
-		explicit CTime_Segment(const GUID &calculated_signal_id);
+		CTime_Segment() = default;
 		// disable copying, allow just cloning
 		CTime_Segment(const CTime_Segment& b) = delete;
-		virtual ~CTime_Segment() {};
+		virtual ~CTime_Segment();
 
 		virtual HRESULT IfaceCalling Get_Signal(const GUID *signal_id, glucose::ISignal **signal) override;
 
