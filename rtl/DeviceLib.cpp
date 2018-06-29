@@ -123,8 +123,7 @@ glucose::UDevice_Event_internal::NDevice_Event_Major_Type glucose::UDevice_Event
 
 	switch (mRaw->event_code) {
 	case glucose::NDevice_Event_Code::Level:
-	case glucose::NDevice_Event_Code::Masked_Level:
-	case glucose::NDevice_Event_Code::Calibrated:		return glucose::UDevice_Event_internal::NDevice_Event_Major_Type::level;
+	case glucose::NDevice_Event_Code::Masked_Level:		return glucose::UDevice_Event_internal::NDevice_Event_Major_Type::level;	
 
 	case glucose::NDevice_Event_Code::Parameters:
 	case glucose::NDevice_Event_Code::Parameters_Hint:	return glucose::UDevice_Event_internal::NDevice_Event_Major_Type::parameters;

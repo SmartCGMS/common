@@ -182,6 +182,12 @@ namespace glucose {
 		return parameter != nullptr ? parameter->boolean : false;
 	}
 
+	double SFilter_Parameters::Read_Double(const wchar_t* name) {
+		const auto parameter = Resolve_Parameter(name);
+		return parameter != nullptr ? parameter->dbl : std::numeric_limits<double>::quiet_NaN();
+	}
+
+	
 	SError_Filter_Inspection::SError_Filter_Inspection(SFilter &error_filter) {
 		refcnt::Query_Interface<glucose::IFilter, glucose::IError_Filter_Inspection>(error_filter.get(), Error_Filter_Inspection, *this);		
 	}

@@ -127,8 +127,8 @@ const char* dsSave_Image_Default_Filename_ECDF = "ecdf.svg";
 
 //const wchar_t *dsCalculate_Past_New_Params = L"Calculate past with first parameter set";
 //const wchar_t *dsRecalculate_With_Every_Params = L"New parameters recalculate entire segment";
-const wchar_t* dsRecalculate_Past_On_Params = L"Recalculate entire segment with new parameters";
-const wchar_t* dsRecalculate_Past_On_Segment_Stop = L"Recalculate entire segment on its end";
+//const wchar_t* dsRecalculate_Past_On_Params = L"Recalculate entire segment with new parameters";
+//const wchar_t* dsRecalculate_Past_On_Segment_Stop = L"Recalculate entire segment on its end";
 const wchar_t* dsPrediction_Window = L"Prediction window";
 
 const wchar_t *dsUse_Just_Opened_Segments = L"Determine parameters using all known segments";
@@ -328,7 +328,7 @@ const wchar_t *rsSignal_Source_Id = L"Signal_Src_Id";
 const wchar_t *rsSignal_Destination_Id = L"Signal_Dst_Id";
 
 const wchar_t *rsRecalculate_Past_On_Params = L"Recalculate_Past_On_Params";
-const wchar_t *rsRecalculate_Past_On_Segment_Stop = L"Recalculate_Past_On_Segment_Stop";
+//const wchar_t *rsRecalculate_Past_On_Segment_Stop = L"Recalculate_Past_On_Segment_Stop";
 
 const wchar_t *rsParameters_Reset = L"Model_Signal_Params_Reset";
 const wchar_t *rsParameters_Reset_Request = L"Model_Signal_Params_Reset_Request";

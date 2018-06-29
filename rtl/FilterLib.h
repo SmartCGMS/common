@@ -36,6 +36,7 @@ namespace glucose {
 		std::vector<int64_t> Read_Int_Array(const wchar_t* name);
 		GUID Read_GUID(const wchar_t* name);
 		bool Read_Bool(const wchar_t* name);
+		double Read_Double(const wchar_t* name);
 	};
 
 

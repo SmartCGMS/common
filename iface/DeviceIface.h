@@ -58,7 +58,7 @@ namespace glucose {
 
 		Level,				//level contains newly measured or calculated level of a given signal
 		Masked_Level,		//level not advertised for solving, i.e., tranining, but for testing set
-		Calibrated,			//given device was calibrated using level
+		//Calibrated,			//given device was calibrated using level		-- no longer need as we have the calibration signal
 		Parameters,			//new parameters are available for a given signal
 		Parameters_Hint,	//some solver requires e.g., initial estimate of the model parameters so that
 							//params stored in non-volatile memory should be broadcasted so that
@@ -70,8 +70,7 @@ namespace glucose {
 		Solve_Parameters,	//user can either request to recalculate, or we can request to recalculate it at the end of the segment - i.e., prior sending Time_Segment_Stop
 		Time_Segment_Start,
 		Time_Segment_Stop,
-		Recalculate_Segment,	//event.signal id is either a specific signal or InvalidGUID to recalculate all
-								//dtto for segmentid
+		Warm_Reset,			//all incoming levels (and associated errors) are thrown away, calculated parameters are kept and DB/File input filters replays the data from begining, while CGMS input filter just ignores this message
 		Simulation_Step,
 
 

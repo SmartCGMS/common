@@ -131,7 +131,7 @@ extern const char* dsSave_Image_Default_Filename_ECDF;
 //extern const wchar_t *dsCalculate_Past_New_Params;
 //extern const wchar_t *dsRecalculate_With_Every_Params;
 extern const wchar_t* dsRecalculate_Past_On_Params;
-extern const wchar_t* dsRecalculate_Past_On_Segment_Stop;
+//extern const wchar_t* dsRecalculate_Past_On_Segment_Stop;
 extern const wchar_t *dsUse_Just_Opened_Segments;
 extern const wchar_t* dsPrediction_Window;
 
@@ -325,8 +325,8 @@ extern const wchar_t *rsHold_Values_Delay;
 extern const wchar_t *rsSignal_Source_Id;
 extern const wchar_t *rsSignal_Destination_Id;
 
-extern const wchar_t *rsRecalculate_Past_On_Params;
-extern const wchar_t *rsRecalculate_Past_On_Segment_Stop;
+//extern const wchar_t *rsRecalculate_Past_On_Params;
+//extern const wchar_t *rsRecalculate_Past_On_Segment_Stop;
 
 extern const wchar_t *rsParameters_Reset;
 extern const wchar_t *rsParameters_Reset_Request;
