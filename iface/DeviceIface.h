@@ -58,7 +58,6 @@ namespace glucose {
 
 		Level,				//level contains newly measured or calculated level of a given signal
 		Masked_Level,		//level not advertised for solving, i.e., tranining, but for testing set
-		//Calibrated,			//given device was calibrated using level		-- no longer need as we have the calibration signal
 		Parameters,			//new parameters are available for a given signal
 		Parameters_Hint,	//some solver requires e.g., initial estimate of the model parameters so that
 							//params stored in non-volatile memory should be broadcasted so that
