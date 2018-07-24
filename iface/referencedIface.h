@@ -19,6 +19,11 @@
 */
 namespace refcnt {
 
+	class IUnique_Reference {
+	public:
+		virtual ULONG IfaceCalling Release() = 0;					//releases allocated memory using the right allocator, returns 0
+	};
+
 	class IReferenced {
 		/* Actually, this is IUnknown of the WinAPI's COM
 		   HRESULT and ULONG are used to allow possible and easy interoperability

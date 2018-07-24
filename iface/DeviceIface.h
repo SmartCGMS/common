@@ -104,9 +104,8 @@ namespace glucose {
 	//To make TDevice_Event handling more efficient, particulalry when passing through the pipe,
 	//IDevice_Event exposes TDevice_Event container iface so that the pipe can accept and pass throught only a pointer, not the entire structure.
 	//This way, we avoid the overhead of copying size_of(TDevice_Event) so many times.
-	class IDevice_Event {
+	class IDevice_Event : public virtual refcnt::IUnique_Reference {
 	public:
-		virtual ULONG IfaceCalling Release() = 0;					//releases allocated memory using the right allocator, returns 0
 		virtual HRESULT IfaceCalling Raw(TDevice_Event **raw) = 0;	//provides pointer to the contained TDevice_Event (free to modify as needed)
 	};
 

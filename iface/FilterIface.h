@@ -167,7 +167,7 @@ namespace glucose {
 	constexpr GUID Log_Filter_Inspection = { 0xa6054c8d, 0x5c01, 0x9e1d,{ 0x14, 0x39, 0x50, 0xda, 0xd1, 0x08, 0xc9, 0x48 } };
 	class ILog_Filter_Inspection : public virtual refcnt::IReferenced {
 	public:				
-		virtual HRESULT IfaceCalling Pop(refcnt::IVector_Container<refcnt::wstr_container*>* str) = 0;
+		virtual HRESULT IfaceCalling Pop(refcnt::IVector_Container<refcnt::wstr_container*> **str) = 0;
 			//retrives newly available log records
 			//returns S_OK if there was at least one log record, S_FALSE if none, E_FAIL otherwise
 	};

@@ -66,6 +66,12 @@ namespace glucose {
 		SDrawing_Filter_Inspection() noexcept {};
 		SDrawing_Filter_Inspection(SFilter &drawing_filter);
 	};
+
+	class SLog_Filter_Inspection : public std::shared_ptr<ILog_Filter_Inspection> {
+	public:
+		SLog_Filter_Inspection() noexcept {};
+		SLog_Filter_Inspection(SFilter &log_filter);
+	};
 }
 
 
