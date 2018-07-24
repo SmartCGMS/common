@@ -53,6 +53,18 @@ namespace refcnt {
 		template <typename T>
 		class CVector_Container : public virtual IVector_Container<T>, public virtual CReferenced, public TAligned_Vector<T> {
 		private:			
+			void Add_Content(T *begin, T *end) {
+				std::copy(begin, end, std::back_inserter(*this));
+			};
+
+			template <typename = typename std::enable_if<std::is_base_of<refcnt::IReferenced, typename std::remove_pointer<T>::type>::value || std::is_base_of<refcnt::IUnique_Reference, typename std::remove_pointer<T>::type>::value, bool>>
+			void Add_Content(T *begin, T *end) {
+				for (T iter = begin; iter != end; iter++) {
+					push_back(iter);
+					iter->Add_Ref();
+				}
+			}
+
 			void Release_Content() {};
 			template <typename = typename std::enable_if<std::is_base_of<refcnt::IReferenced, typename std::remove_pointer<T>::type>::value || std::is_base_of<refcnt::IUnique_Reference, typename std::remove_pointer<T>::type>::value, bool>>
 			void Release_Content() {
@@ -62,10 +74,14 @@ namespace refcnt {
 		public:
 			virtual ~CVector_Container() { Release_Content();  };
 
-			virtual HRESULT set(const T *begin, const T *end) override final {
+			virtual HRESULT set(T *begin, T *end) override final {
 				TAligned_Vector<T>::clear();
+				return add(begin, end);				
+			}
+
+			virtual HRESULT add(T *begin, T *end) override final {
 				if (begin != nullptr)
-					std::copy(begin, end, std::back_inserter(*this));
+					Add_Content(begin, end);
 				return S_OK;
 			}
 
@@ -79,7 +95,7 @@ namespace refcnt {
 					return S_FALSE;
 				}				
 			}
-
+		
 			virtual HRESULT empty() const override final {
 				return TAligned_Vector<T>::empty() ? S_OK : S_FALSE;
 			}
