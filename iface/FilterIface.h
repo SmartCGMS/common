@@ -168,7 +168,7 @@ namespace glucose {
 	class ILog_Filter_Inspection : public virtual refcnt::IReferenced {
 	public:				
 		virtual HRESULT IfaceCalling Pop(refcnt::wstr_list **str) = 0;
-			//retrives newly available log records
+			//retrives newly available log records - caller TAKES ownership of the records
 			//returns S_OK if there was at least one log record, S_FALSE if none, E_FAIL otherwise
 	};
 
