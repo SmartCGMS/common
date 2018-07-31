@@ -91,6 +91,6 @@ namespace refcnt {
 
 	using str_container = IVector_Container<char>;
 	using wstr_container = IVector_Container<wchar_t>;
-	using wstr_list = refcnt::IVector_Container<refcnt::wstr_container>;
+	using wstr_list = IVector_Container<wstr_container*>;
 	using double_container = IVector_Container<double>;	
 }
