@@ -1,25 +1,10 @@
 #include "ApproxLib.h"
 
+#include "FactoryLib.h"
+
 namespace imported {
-	//#define DIMPORT_TEST_FAIL E_NOTIMPL
-
-	#ifdef DIMPORT_TEST_FAIL
-		HRESULT IfaceCalling create_approximator(const GUID *approx_id, glucose::ISignal *signal, glucose::IApprox_Parameters_Vector* configuration, glucose::IApproximator **approx) {
-			return DIMPORT_TEST_FAIL;
-		}
-
-		HRESULT IfaceCalling get_approx_descriptors(glucose::TApprox_Descriptor **begin, glucose::TApprox_Descriptor **end) {
-			return DIMPORT_TEST_FAIL;
-		}
-	#else
-		#ifdef _WIN32
-			extern "C" __declspec(dllimport)  HRESULT IfaceCalling create_approximator(const GUID *approx_id, glucose::ISignal *signal, glucose::IApprox_Parameters_Vector* configuration, glucose::IApproximator **approx);
-			extern "C" __declspec(dllimport)  HRESULT IfaceCalling get_approx_descriptors(glucose::TApprox_Descriptor **begin, glucose::TApprox_Descriptor **end);
-		#else
-			extern "C" HRESULT IfaceCalling create_approximator(const GUID *approx_id, glucose::ISignal *signal, glucose::IApprox_Parameters_Vector* configuration, glucose::IApproximator **approx);
-			extern "C" HRESULT IfaceCalling get_approx_descriptors(glucose::TApprox_Descriptor **begin, glucose::TApprox_Descriptor **end);
-		#endif
-	#endif
+	glucose::TCreate_Approximator create_approximator = factory::resolve_symbol<glucose::TCreate_Approximator>("create_approximator");
+	glucose::TGet_Approx_Descriptors get_approx_descriptors = factory::resolve_symbol<glucose::TGet_Approx_Descriptors>("get_approx_descriptors");
 }
 
 std::vector<glucose::TApprox_Descriptor> glucose::get_approx_descriptors() {

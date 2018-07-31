@@ -40,6 +40,7 @@ extern const char* dsSolve;
 extern const char* dsSolve_Reset;
 extern const char* dsSuspend;
 extern const char* dsResume;
+extern const char* dsStepUnit;
 extern const char* dsStep;
 
 extern const char* dsFilters_Window;
@@ -48,6 +49,7 @@ extern const char* dsAvailable_Filters;
 extern const char* dsSimulation_Window;
 
 extern const wchar_t *dsDb_Reader;
+extern const wchar_t *dsDb_Writer;
 
 extern const wchar_t *dsDb_Host;
 extern const wchar_t *dsDb_Port;
@@ -56,6 +58,11 @@ extern const wchar_t *dsDb_Name;
 extern const wchar_t *dsDb_User_Name;
 extern const wchar_t *dsDb_Password;
 extern const wchar_t *dsTime_Segment_ID;
+extern const wchar_t *dsShutdown_After_Last;
+
+extern const wchar_t *dsGenerate_Primary_Keys;
+extern const wchar_t *dsStore_Data;
+extern const wchar_t *dsStore_Parameters;
 
 extern const wchar_t *dsNet_Comm;
 extern const wchar_t *dsNet_Host;
@@ -90,10 +97,14 @@ extern const wchar_t *dsHold_Values_Delay;
 extern const wchar_t *dsSignal_Source_Id;
 extern const wchar_t *dsSignal_Destination_Id;
 
+extern const wchar_t *dsSignal_Masked_Id;
+extern const wchar_t *dsSignal_Value_Bitmask;
+
 extern const wchar_t *dsHold_Filter;
 extern const wchar_t *dsErrors_Filter;
 extern const wchar_t *dsDrawing_Filter;
 extern const wchar_t *dsMapping_Filter;
+extern const wchar_t *dsMasking_Filter;
 extern const wchar_t *dsCalculate_Filter;
 
 extern const wchar_t *dsDrawing_Filter_Period;
@@ -229,6 +240,11 @@ extern const wchar_t *dsError_Column_95_Quantile;
 extern const wchar_t *dsError_Column_99_Quantile;
 extern const wchar_t *dsError_Column_Maximum;
 
+extern const wchar_t* rsInsert_New_Measured_Value;
+
+extern const wchar_t* rsInsert_Params_Base;
+extern const wchar_t* rsInsert_Params_Segmentid_Column;
+extern const wchar_t* rsInsert_Params_Values_Stmt;
 
 // ---- drawing-related constants
 
@@ -324,6 +340,9 @@ extern const wchar_t *rsHold_Values_Delay;
 
 extern const wchar_t *rsSignal_Source_Id;
 extern const wchar_t *rsSignal_Destination_Id;
+
+extern const wchar_t *rsSignal_Masked_Id;
+extern const wchar_t *rsSignal_Value_Bitmask;
 
 //extern const wchar_t *rsRecalculate_Past_On_Params;
 //extern const wchar_t *rsRecalculate_Past_On_Segment_Stop;
@@ -444,6 +463,11 @@ extern const wchar_t* rsLog_Date_Time_Format;
 extern const wchar_t* rsLog_CSV_Separator;
 
 extern const char* rsRattime_Edit_Mask;
+extern const wchar_t *rsShutdown_After_Last;
+
+extern const wchar_t *rsGenerate_Primary_Keys;
+extern const wchar_t *rsStore_Data;
+extern const wchar_t *rsStore_Parameters;
 
 //*******
 extern const wchar_t *rsCalculate_Past_New_Params;

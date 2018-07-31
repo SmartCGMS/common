@@ -54,7 +54,7 @@ HRESULT CFilter_Chain_Manager::Init_And_Start_Filters() {
 		auto params = refcnt::Create_Container_shared<glucose::TFilter_Parameter>(filt.configuration.data(), filt.configuration.data() + filt.configuration.size());
 
 		// configure filter using loaded configuration and start the filter thread
-		mFilterThreads.push_back(std::make_unique<std::thread>([params, filter, &filt]() {
+		mFilterThreads.push_back(std::make_unique<std::thread>([params, filter]() {
 			filter->Run(params.get());
 		}));
 
@@ -68,7 +68,7 @@ HRESULT CFilter_Chain_Manager::Init_And_Start_Filters() {
 		glucose::UDevice_Event evt;
 		auto input = mFilterPipes[mFilterPipes.size() - 1];
 
-		for (; glucose::UDevice_Event evt = input.Receive(); evt) {
+		for (; glucose::UDevice_Event evt = input.Receive(); ) {
 			// just read and do nothing - this effectively consumes any incoming event through pipe
 					
 			//and if it was a shutdown event, try to repost it into the first filter
@@ -90,10 +90,7 @@ HRESULT CFilter_Chain_Manager::Terminate_Filters() {
 		mFilterPipes[0].Send(shut_down_event);
 
 		// join filter threads; they should exit very soon after the pipe is aborted
-		for (auto &filter_thread : mFilterThreads) {
-			if (filter_thread->joinable())
-				filter_thread->join();
-		}
+		Join_Filters();
 
 		mFilterThreads.clear();
 		mFilters.clear();
@@ -103,23 +100,16 @@ HRESULT CFilter_Chain_Manager::Terminate_Filters() {
 	return S_OK;
 }
 
+HRESULT CFilter_Chain_Manager::Join_Filters() {
+	for (auto &filter_thread : mFilterThreads) {
+		if (filter_thread->joinable())
+			filter_thread->join();
+	}
+
+	return S_OK;
+}
+
 HRESULT CFilter_Chain_Manager::Send(glucose::UDevice_Event &event) {
 	if (mFilterPipes.empty()) return S_FALSE;
 	return mFilterPipes[0].Send(event) ? S_OK : E_FAIL;
-}
-
-glucose::SFilter CFilter_Chain_Manager::Get_Filter(size_t index)
-{
-	if (mFilters.size() <= index)
-		return {};
-
-	return mFilters[index];
-}
-
-GUID CFilter_Chain_Manager::Get_Filter_Id(size_t index) const
-{
-	if (mFilters.size() <= index)
-		return {0};
-
-	return mFilterChain[index].descriptor.id;
 }

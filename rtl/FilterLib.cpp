@@ -1,5 +1,7 @@
 #include "FilterLib.h"
 
+#include "FactoryLib.h"
+
 #include <sstream>
 #include "manufactory.h"
 
@@ -7,40 +9,10 @@ namespace glucose {
 
 
 	namespace imported {
-
-		//#define DIMPORT_TEST_FAIL E_NOTIMPL
-
-		#ifdef DIMPORT_TEST_FAIL
-			HRESULT IfaceCalling get_filter_descriptors(TFilter_Descriptor **begin, TFilter_Descriptor **end) {
-				return DIMPORT_TEST_FAIL;
-			}
-
-			HRESULT IfaceCalling create_filter_pipe(IFilter_Pipe **pipe) {
-				return DIMPORT_TEST_FAIL;
-			}
-
-			HRESULT IfaceCalling create_filter(const GUID *id, IFilter_Pipe *input, IFilter_Pipe *output, IFilter **filter) {
-				return DIMPORT_TEST_FAIL;
-			}
-
-			HRESULT IfaceCalling add_filters(const glucose::TFilter_Descriptor *begin, const glucose::TFilter_Descriptor *end, const glucose::TCreate_Filter create_filter) {
-				return DIMPORT_TEST_FAIL;
-			}
-
-		#else
-
-			#ifdef _WIN32
-				extern "C" __declspec(dllimport)  HRESULT IfaceCalling get_filter_descriptors(TFilter_Descriptor **begin, TFilter_Descriptor **end);
-				extern "C" __declspec(dllimport)  HRESULT IfaceCalling create_filter_pipe(IFilter_Pipe **pipe);
-				extern "C" __declspec(dllimport)  HRESULT IfaceCalling create_filter(const GUID *id, IFilter_Pipe *input, IFilter_Pipe *output, IFilter **filter);
-				extern "C" __declspec(dllimport)  HRESULT IfaceCalling add_filters(const glucose::TFilter_Descriptor *begin, const glucose::TFilter_Descriptor *end, const glucose::TCreate_Filter create_filter);
-			#else
-				extern "C" HRESULT IfaceCalling get_filter_descriptors(TFilter_Descriptor **begin, TFilter_Descriptor **end);
-				extern "C" HRESULT IfaceCalling create_filter_pipe(IFilter_Pipe **pipe);
-				extern "C" HRESULT IfaceCalling create_filter(const GUID *id, IFilter_Pipe *input, IFilter_Pipe *output, IFilter **filter);
-				extern "C" HRESULT IfaceCalling add_filters(const glucose::TFilter_Descriptor *begin, const glucose::TFilter_Descriptor *end, const glucose::TCreate_Filter create_filter);
-			#endif
-		#endif
+		glucose::TGet_Filter_Descriptors get_filter_descriptors = factory::resolve_symbol<glucose::TGet_Filter_Descriptors>("get_filter_descriptors");
+		glucose::TCreate_Filter_Pipe create_filter_pipe = factory::resolve_symbol<glucose::TCreate_Filter_Pipe>("create_filter_pipe");
+		glucose::TCreate_Filter create_filter = factory::resolve_symbol<glucose::TCreate_Filter>("create_filter");
+		glucose::TAdd_Filters add_filters = factory::resolve_symbol<glucose::TAdd_Filters>("add_filters");
 	}
 
 
@@ -206,6 +178,19 @@ namespace glucose {
 	SLog_Filter_Inspection::SLog_Filter_Inspection(SFilter &log_filter) {
 		if (log_filter)
 			refcnt::Query_Interface<glucose::IFilter, glucose::ILog_Filter_Inspection>(log_filter.get(), Log_Filter_Inspection, *this);
+	}
+
+	std::shared_ptr<refcnt::wstr_list> SLog_Filter_Inspection::pop() {
+		std::shared_ptr<refcnt::wstr_list> result;
+		auto ptr_get = get();
+		if (ptr_get) {
+			refcnt::wstr_list *raw_list;
+			if (ptr_get->Pop(&raw_list) == S_OK) {
+				result = refcnt::make_shared_reference<refcnt::wstr_list>(raw_list, false);
+			}
+		}
+
+		return result;
 	}
 }
 

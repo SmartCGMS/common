@@ -1,8 +1,14 @@
 #pragma once
 
-#include <filesystem>
-
+// feature check for C++17/TS support state - filesystem is supported on both MSVS2017 and GCC8, but
+// on MSVS it's still in experimental namespace, contrary to GCC8, where it's considered stable
+#if __has_include(<experimental/filesystem>)
+#include <experimental/filesystem>
 namespace filesystem = std::experimental::filesystem;
+#elif __has_include(<filesystem>)
+#include <filesystem>
+namespace filesystem = std::filesystem;
+#endif
 
 #include <string>
 #include <list>

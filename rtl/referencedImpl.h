@@ -105,7 +105,7 @@ namespace refcnt {
 	}
 
 	template <typename T>
-	IVector_Container<T>* Create_Container(const T *begin, const T *end) {
+	IVector_Container<T>* Create_Container(T *begin, T *end) {
 		IVector_Container<T> *obj = nullptr;
 		if (Manufacture_Object<internal::CVector_Container<T>, IVector_Container<T>>(&obj) == S_OK)
 			obj->set(begin, end);
@@ -114,7 +114,7 @@ namespace refcnt {
 
 
 	template <typename T, typename S = std::shared_ptr<IVector_Container<T>>>
-	S Create_Container_shared(const T *begin, const T *end) {
+	S Create_Container_shared(T *begin, T *end) {
 		IVector_Container<T> *obj = Create_Container<T>(begin, end);
 		return refcnt::make_shared_reference_ext <S, IVector_Container<T>>(obj, false);
 	}
@@ -161,7 +161,7 @@ namespace refcnt {
 	}
 
 
-	class Swstr_container : public std::shared_ptr<refcnt::wstr_container> {
+	class Swstr_container : public virtual std::shared_ptr<refcnt::wstr_container> {
 	public:
 		void set(const wchar_t *str);
 		bool operator==(const wchar_t *other) const;

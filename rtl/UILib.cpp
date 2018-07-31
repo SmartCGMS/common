@@ -1,38 +1,16 @@
 #include "UILib.h"
 #include "winapi_mapping.h"
+#include "FactoryLib.h"
+
 #include <wchar.h>
 #include <map>
 
 namespace glucose
 {
 	namespace imported {
-		//#define DIMPORT_TEST_FAIL E_NOTIMPL
-
-		#ifdef DIMPORT_TEST_FAIL
-
-			HRESULT IfaceCalling get_metric_descriptors(glucose::TMetric_Descriptor **begin, glucose::TMetric_Descriptor **end) {
-				return DIMPORT_TEST_FAIL;
-			}
-
-			HRESULT IfaceCalling get_model_descriptors(glucose::TModel_Descriptor **begin, glucose::TModel_Descriptor **end) {
-				return DIMPORT_TEST_FAIL;
-			}
-
-			HRESULT IfaceCalling get_solver_descriptors(glucose::TSolver_Descriptor **begin, glucose::TSolver_Descriptor **end) {
-				return DIMPORT_TEST_FAIL;
-			}
-
-		#else
-			#ifdef _WIN32
-				extern "C" __declspec(dllimport)  HRESULT IfaceCalling get_metric_descriptors(glucose::TMetric_Descriptor **begin, glucose::TMetric_Descriptor **end);
-				extern "C" __declspec(dllimport)  HRESULT IfaceCalling get_model_descriptors(glucose::TModel_Descriptor **begin, glucose::TModel_Descriptor **end);
-				extern "C" __declspec(dllimport)  HRESULT IfaceCalling get_solver_descriptors(glucose::TSolver_Descriptor **begin, glucose::TSolver_Descriptor **end);
-			#else
-				extern "C" HRESULT IfaceCalling get_metric_descriptors(glucose::TMetric_Descriptor **begin, glucose::TMetric_Descriptor **end);
-				extern "C" HRESULT IfaceCalling get_model_descriptors(glucose::TModel_Descriptor **begin, glucose::TModel_Descriptor **end);
-				extern "C" HRESULT IfaceCalling get_solver_descriptors(glucose::TSolver_Descriptor **begin, glucose::TSolver_Descriptor **end);
-			#endif
-		#endif
+		glucose::TGet_Metric_Descriptors get_metric_descriptors = factory::resolve_symbol<glucose::TGet_Metric_Descriptors>("get_metric_descriptors");
+		glucose::TGet_Model_Descriptors get_model_descriptors = factory::resolve_symbol<glucose::TGet_Model_Descriptors>("get_model_descriptors");
+		glucose::TGet_Solver_Descriptors get_solver_descriptors = factory::resolve_symbol<glucose::TGet_Solver_Descriptors>("get_solver_descriptors");		
 	}
 
 	std::vector<TModel_Descriptor> get_model_descriptors()

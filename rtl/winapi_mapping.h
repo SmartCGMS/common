@@ -9,6 +9,7 @@
 #else
 	#include <unistd.h>
 	#include <dlfcn.h>
+	#include <ctime>
 
 	using BOOL = int;
 	constexpr int TRUE = 1;
@@ -31,4 +32,9 @@
 	#define WSAGetLastError() errno
 
 	#define swscanf_s swscanf
+
+	void* _aligned_malloc(size_t n, size_t alignment);
+	void _aligned_free(void* _Block);
+
+	int wcstombs_s(size_t* converted, char* dst, size_t dstSizeBytes, const wchar_t* src, size_t maxSizeBytes);
 #endif

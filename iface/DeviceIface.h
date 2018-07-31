@@ -158,4 +158,6 @@ namespace glucose {
 	// segment provides source levels for the calculation
 	// only ITime_Segment::Get_Signal is supposed to call this function to avoid (although not probihit) creating of over-complex segment-graphs
 	using TCreate_Signal = HRESULT(IfaceCalling *)(const GUID *calc_id, ITime_Segment *segment, ISignal **signal);
+
+	using TCreate_Device_Event = HRESULT(IfaceCalling *)(glucose::NDevice_Event_Code code, glucose::IDevice_Event **event);
 }

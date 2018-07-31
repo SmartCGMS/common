@@ -38,6 +38,7 @@ const char* dsSolve = "Solve";
 const char* dsSolve_Reset = "Reset and solve";
 const char* dsSuspend = "Suspend solvers";
 const char* dsResume = "Resume solvers";
+const char* dsStepUnit = "levels";
 const char* dsStep = "Step";
 
 const char* dsFilters_Window = "Filters window";
@@ -46,6 +47,7 @@ const char* dsAvailable_Filters = "Available filters";
 const char* dsSimulation_Window = "Simulation window";
 
 const wchar_t *dsDb_Reader = L"Db Reader";
+const wchar_t *dsDb_Writer = L"Db Writer";
 
 const wchar_t *dsDb_Host = L"Host";
 const wchar_t *dsDb_Port = L"Port";
@@ -54,6 +56,11 @@ const wchar_t *dsDb_Name = L"Name";
 const wchar_t *dsDb_User_Name = L"User name";
 const wchar_t *dsDb_Password = L"Password";
 const wchar_t *dsTime_Segment_ID = L"Time Segment Id";
+const wchar_t *dsShutdown_After_Last = L"Shutdown after last value";
+
+const wchar_t *dsGenerate_Primary_Keys = L"Generate new primary keys";
+const wchar_t *dsStore_Data = L"Store data";
+const wchar_t *dsStore_Parameters = L"Store parameters";
 
 const wchar_t *dsNet_Comm = L"Network";
 const wchar_t *dsNet_Host = L"Host/Bind address";
@@ -86,10 +93,17 @@ const wchar_t *dsHold_Values_Delay = L"Hold delay [ms] (0 for real-time)";
 const wchar_t *dsSignal_Source_Id = L"Source ID";
 const wchar_t *dsSignal_Destination_Id = L"Map to ID";
 
+const wchar_t *rsSignal_Masked_Id = L"Signal_Masked_Id";
+const wchar_t *rsSignal_Value_Bitmask = L"Signal_Value_Bitmask";
+
+const wchar_t *dsSignal_Masked_Id = L"Signal ID";
+const wchar_t *dsSignal_Value_Bitmask = L"Value bitmask (64 bit)";
+
 const wchar_t *dsHold_Filter = L"Hold";
 const wchar_t *dsErrors_Filter = L"Error metrics";
 const wchar_t *dsDrawing_Filter = L"Drawing";
 const wchar_t *dsMapping_Filter = L"Signal mapping";
+const wchar_t *dsMasking_Filter = L"Signal value masking";
 const wchar_t *dsCalculate_Filter = L"Calculate";
 
 const wchar_t *dsDrawing_Filter_Period = L"Redraw period [ms]";
@@ -227,6 +241,13 @@ const wchar_t *dsError_Column_Third_Quantile = L"3. Quartile";
 const wchar_t *dsError_Column_95_Quantile = L"95% Quantile";
 const wchar_t *dsError_Column_99_Quantile = L"99% Quantile";
 const wchar_t *dsError_Column_Maximum = L"Maximum";
+
+const wchar_t* rsInsert_New_Measured_Value = L"INSERT INTO measuredvalue (measuredat, blood, ist, isig, insulin, carbohydrates, calibration, segmentid) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
+const wchar_t* rsInsert_Params_Base = L"INSERT INTO ";
+const wchar_t* rsInsert_Params_Segmentid_Column = L"segmentid";
+const wchar_t* rsInsert_Params_Values_Stmt = L"VALUES";
+
 
 // ---- drawing-related constants
 
@@ -446,6 +467,11 @@ const wchar_t* rsLog_Date_Time_Format = L"%Y-%m-%d %H:%M:%S";
 
 const wchar_t* rsLog_CSV_Separator = L"; ";
 const char* rsRattime_Edit_Mask = "h:mm:ss.zzz";
+const wchar_t *rsShutdown_After_Last = L"Shutdown_After_Last";
+
+const wchar_t *rsGenerate_Primary_Keys = L"Generate_Primary_Keys";
+const wchar_t *rsStore_Data = L"Store_Data";
+const wchar_t *rsStore_Parameters = L"Store_Parameters";
 
 //**************
 const wchar_t *rsCalculate_Past_New_Params = L"Calc_Past_First_Params";

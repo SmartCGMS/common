@@ -1,8 +1,8 @@
 #include "qdb_connector.h"
 
 #include "../rtl/manufactory.h"
-#include <QtCore\QUUID>
-#include <QtCore\QVariant>
+#include <QtCore/QUUID>
+#include <QtCore/QVariant>
 
 #undef max
 
@@ -25,7 +25,7 @@ HRESULT IfaceCalling CDb_Query::Bind_Parameters(const db::TParameter *values, co
 			case db::NParameter_Type::ptNull:		mQuery.addBindValue(QVariant{});
 													break;
 
-			case db::NParameter_Type::ptInt64:		mQuery.addBindValue(values[i].integer);
+			case db::NParameter_Type::ptInt64:		mQuery.addBindValue(static_cast<qlonglong>(values[i].integer));
 													break;
 
 			case db::NParameter_Type::ptDouble:		mQuery.addBindValue(values[i].dbl);

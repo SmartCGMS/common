@@ -45,12 +45,14 @@ namespace refcnt {
 
 	std::shared_ptr<wstr_container> WString_To_WChar_Container_shared(const wchar_t* str) {
 		const size_t len = str != nullptr ? wcslen(str) : 0;
-		return Create_Container_shared<wchar_t>(str, str + len);
+		wchar_t *str_ptr = const_cast<wchar_t*>(str);
+		return Create_Container_shared<wchar_t>(str_ptr, str_ptr + len);
 	}
 
 	wstr_container* WString_To_WChar_Container(const wchar_t* str) {
 		const size_t len = str != nullptr ? wcslen(str) : 0;
-		return Create_Container<wchar_t>(str, str + len);
+		wchar_t *str_ptr = const_cast<wchar_t*>(str);
+		return Create_Container<wchar_t>(str_ptr, str_ptr + len);
 	}
 
 	bool WChar_Container_Equals_WString(wstr_container *container, const wchar_t* str, size_t offset, size_t maxCount) {
@@ -71,7 +73,8 @@ namespace refcnt {
 
 	void Swstr_container::set(const wchar_t *str) {
 		if (operator bool()) {
-			if (str != nullptr) get()->set(str, str + wcslen(str));
+			wchar_t *str_ptr = const_cast<wchar_t*>(str);
+			if (str != nullptr) get()->set(str_ptr, str_ptr + wcslen(str));
 			else get()->set(nullptr, nullptr);
 		}		
 	}

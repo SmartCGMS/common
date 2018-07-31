@@ -35,4 +35,22 @@ void gmtime_s(struct tm* t, const time_t* tim)
 	gmtime_r(tim, t);
 }
 
+void* _aligned_malloc(size_t n, size_t alignment)
+{
+	void* mem;
+	posix_memalign(&mem, alignment, n);
+
+	return mem;
+}
+
+void _aligned_free(void* _Block)
+{
+	free(_Block);
+}
+
+int wcstombs_s(size_t* converted, char* dst, size_t dstSizeBytes, const wchar_t* src, size_t maxSizeBytes)
+{
+	return wcstombs(dst, src, maxSizeBytes);
+}
+
 #endif

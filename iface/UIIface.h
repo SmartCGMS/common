@@ -22,7 +22,8 @@ namespace glucose {
 		const wchar_t** config_parameter_name;
 		const wchar_t** ui_parameter_tooltip; // always the same size as other parameter fields, nullptr where no tooltip needed
 	};
-
+	
+	constexpr TFilter_Descriptor Null_Filter_Descriptor = { Invalid_GUID, nullptr, 0, nullptr, nullptr, nullptr, nullptr };
 
 	struct TMetric_Descriptor {		
 		const GUID id;
@@ -61,6 +62,7 @@ namespace glucose {
 		const GUID* reference_signal_ids;
 	};
 
+	constexpr TModel_Descriptor Null_Model_Descriptor = { Invalid_GUID, nullptr, nullptr, 0, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, 0, nullptr, nullptr, nullptr };
 
 	struct TSolver_Descriptor {
 		const GUID id;
@@ -85,7 +87,8 @@ namespace glucose {
 	using TGet_Metric_Descriptors = HRESULT(IfaceCalling*)(TMetric_Descriptor **begin, TMetric_Descriptor **end);
 	using TGet_Model_Descriptors = HRESULT(IfaceCalling*)(TModel_Descriptor **begin, TModel_Descriptor **end);
 	using TGet_Solver_Descriptors = HRESULT(IfaceCalling*)(TSolver_Descriptor **begin, TSolver_Descriptor **end);
-	using TGet_Approx_Descriptors = HRESULT(IfaceCalling*)(TApprox_Descriptor **begin, TApprox_Descriptor **end);
+	using TGet_Approx_Descriptors = HRESULT(IfaceCalling*)(TApprox_Descriptor **begin, TApprox_Descriptor **end);	
 
+	using TAdd_Filters = HRESULT(IfaceCalling *)(const glucose::TFilter_Descriptor *begin, const glucose::TFilter_Descriptor *end, const glucose::TCreate_Filter create_filter);
 }
 

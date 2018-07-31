@@ -1,26 +1,10 @@
 #include "SolverLib.h"
 
+#include "FactoryLib.h"
+
 namespace imported {
-	//#define DIMPORT_TEST_FAIL E_NOTIMPL
-
-	#ifdef DIMPORT_TEST_FAIL
-		HRESULT IfaceCalling create_metric(const glucose::TMetric_Parameters *parameters, glucose::IMetric **metric) {
-			return DIMPORT_TEST_FAIL;
-		}
-
-		HRESULT IfaceCalling solve_model_parameters(const glucose::TSolver_Setup *setup) {
-			return DIMPORT_TEST_FAIL;
-		}
-
-	#else
-		#ifdef _WIN32
-			extern "C" __declspec(dllimport) HRESULT IfaceCalling solve_model_parameters(const glucose::TSolver_Setup *setup);
-			extern "C" __declspec(dllimport) HRESULT IfaceCalling create_metric(const glucose::TMetric_Parameters *parameters, glucose::IMetric **metric);
-		#else
-			extern "C" HRESULT IfaceCalling solve_model_parameters(const glucose::TSolver_Setup *setup);
-			extern "C" HRESULT IfaceCalling create_metric(const glucose::TMetric_Parameters *parameters, glucose::IMetric **metric);
-		#endif
-	#endif
+	glucose::TSolve_Model_Parameters solve_model_parameters = factory::resolve_symbol<glucose::TSolve_Model_Parameters>("solve_model_parameters");
+	glucose::TCreate_Metric create_metric = factory::resolve_symbol<glucose::TCreate_Metric>("create_metric");
 }
 
 glucose::SMetric::SMetric() : std::shared_ptr<glucose::IMetric>() {

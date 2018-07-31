@@ -19,5 +19,5 @@ namespace glucose
 			virtual HRESULT IfaceCalling GetLevels(const double* times, double* const levels, const size_t count, const size_t derivation_order) = 0;
 	};
 
-	using TCreate_Approximator = HRESULT(IfaceCalling *)(const GUID *approx_id, ISignal *signal, IApproximator **approx, IApprox_Parameters_Vector* configuration);
+	using TCreate_Approximator = HRESULT(IfaceCalling *)(const GUID *approx_id, ISignal *signal, IApprox_Parameters_Vector* configuration, IApproximator **approx);
 }

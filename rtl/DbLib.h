@@ -30,31 +30,47 @@ namespace db {
 		bool Bind_Parameters(TParam1 param1) {
 			if (!operator bool()) return false;
 
-			TParameter desc;
-			if (std::is_integral<TParam1>::value) {
-				desc.type = db::NParameter_Type::ptInt64;
-				desc.integer = static_cast<decltype(desc.integer)>(param1);
-				
-			} else if (std::is_same<TParam1, double>::value) {
-				desc.type = db::NParameter_Type::ptDouble;
-				desc.dbl = static_cast<decltype(desc.dbl)>(param1);
-			}
-			else if (std::is_same<TParam1, bool>::value) {
-				desc.type = db::NParameter_Type::ptBool;
-				desc.boolean = static_cast<decltype(desc.boolean)>(param1);
-			}
-			else if (std::is_same<TParam1, wchar_t*>::value) {
-				desc.type = db::NParameter_Type::ptWChar;
-				desc.str = reinterpret_cast<decltype(desc.str)>(param1);
-			}
-			else if (std::is_same<TParam1, std::nullptr_t>::value) {
-				desc.type = db::NParameter_Type::ptNull;
-			}
-			else
+			TParameter desc{};
+			if (!Bind_Parameter(param1, desc))
 				return false;
 
 			return get()->Bind_Parameters(&desc, 1) == S_OK;
 		}
+
+		template <typename TParam1, typename std::enable_if_t<std::is_integral_v<TParam1> && !std::is_same_v<std::remove_const_t<TParam1>, bool>, TParam1>* = nullptr>
+		bool Bind_Parameter(TParam1 param1, TParameter &desc) {
+			desc.type = db::NParameter_Type::ptInt64;
+			desc.integer = static_cast<decltype(desc.integer)>(param1);
+			return true;
+		}
+
+		template <typename TParam1, typename std::enable_if_t<std::is_same_v<std::remove_const_t<TParam1>, double>, TParam1>* = nullptr>
+		bool Bind_Parameter(TParam1 param1, TParameter &desc) {
+			desc.type = db::NParameter_Type::ptDouble;
+			desc.dbl = static_cast<decltype(desc.dbl)>(param1);
+			return true;
+		}
+
+		template <typename TParam1, typename std::enable_if_t<std::is_same_v<std::remove_const_t<TParam1>, bool>, TParam1>* = nullptr>
+		bool Bind_Parameter(TParam1 param1, TParameter &desc) {
+			desc.type = db::NParameter_Type::ptBool;
+			desc.boolean = static_cast<decltype(desc.boolean)>(param1);
+			return true;
+		}
+
+		template <typename TParam1, typename std::enable_if_t<std::is_same_v<std::remove_const_t<TParam1>, wchar_t*> || std::is_same_v<std::remove_const_t<TParam1>, const wchar_t*>, TParam1>* = nullptr>
+		bool Bind_Parameter(TParam1 param1, TParameter &desc) {
+			desc.type = db::NParameter_Type::ptWChar;
+			desc.str = reinterpret_cast<decltype(desc.str)>(const_cast<decltype(desc.str)>(param1));
+			return true;
+		}
+
+		template <typename TParam1 = std::nullptr_t, typename std::enable_if_t<std::is_null_pointer_v<TParam1>, TParam1>* = nullptr>
+		bool Bind_Parameter(TParam1 param1, TParameter &desc) {
+			desc.type = db::NParameter_Type::ptNull;
+			return true;
+		}
+
 
 
 		template <typename TParam1, typename ...Args>
@@ -114,6 +130,11 @@ namespace db {
 		}
 
 		bool Get_Next();
+
+		bool Execute() {		//just a shortcut with a name that indicates the intention to execute query that returns no result set
+			mRow_Bindings.clear();
+			return Get_Next();			
+		}
 	};
 
 	class SDb_Connection : public std::shared_ptr<IDb_Connection> {

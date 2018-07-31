@@ -4,34 +4,18 @@
 
 #include "DeviceLib.h"
 #include "rattime.h"
+#include "FactoryLib.h"
 
 namespace imported {
-	//#define DIMPORT_TEST_FAIL E_NOTIMPL
-
-#ifdef DIMPORT_TEST_FAIL
-	HRESULT IfaceCalling create_signal(const GUID *signal_id, glucose::ITime_Segment *segment, glucose::ISignal **signal) {
-		return DIMPORT_TEST_FAIL;
-	}
-
-	HRESULT IfaceCalling create_device_event(glucose::IDevice_Event **event, glucose::NDevice_Event_Code code) {
-		return DIMPORT_TEST_FAIL;
-	}
-
-#else
-#ifdef _WIN32
-	extern "C" __declspec(dllimport)  HRESULT IfaceCalling create_signal(const GUID *signal_id, glucose::ITime_Segment *segment, glucose::ISignal **signal);
-	extern "C" __declspec(dllimport)  HRESULT IfaceCalling create_device_event(glucose::NDevice_Event_Code code, glucose::IDevice_Event **event);
-#else
-	extern "C" HRESULT IfaceCalling create_signal(const GUID *signal_id, glucose::ITime_Segment *segment, glucose::ISignal **signal);
-	extern "C" HRESULT IfaceCalling create_device_event(glucose::NDevice_Event_Code code, glucose::IDevice_Event **event);
-#endif
-#endif
+	glucose::TCreate_Signal create_signal = factory::resolve_symbol<glucose::TCreate_Signal>("create_signal");
+	glucose::TCreate_Device_Event create_device_event = factory::resolve_symbol<glucose::TCreate_Device_Event>("create_device_event");
 }
 
 
 bool glucose::SModel_Parameter_Vector::set(const std::vector<double> &params) {
 	if (!operator bool()) return false;
-	return get()->set(params.data(), params.data() + params.size()) == S_OK;
+	double *data_ptr = const_cast<double*>(params.data());
+	return get()->set(data_ptr, data_ptr + params.size()) == S_OK;
 }
 
 

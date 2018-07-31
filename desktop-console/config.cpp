@@ -31,6 +31,9 @@ void CConfig::Resolve_And_Load_Config_File(const std::wstring &alternative_path)
 
 		if (configfile.is_open()) {
 			buf.assign(std::istreambuf_iterator<char>(configfile), std::istreambuf_iterator<char>());
+			// fix valgrind's "Conditional jump or move depends on uninitialised value(s)"
+			// although we are sending proper length, SimpleIni probably reaches one byte further and reads uninitialized memory
+			buf.push_back(0);
 			mIni.LoadData(buf.data(), buf.size());
 		}
 
@@ -68,7 +71,7 @@ void CConfig::Load(CFilter_Chain &filter_chain) {
 			const GUID id = WString_To_GUID(std::wstring{ name_str.begin() + uspos + 1, name_str.end() });
 			//and get the filter descriptor to load the parameters
 			
-			glucose::TFilter_Descriptor desc{ 0 };
+			glucose::TFilter_Descriptor desc = glucose::Null_Filter_Descriptor;
 			CFilter_Configuration filter_config;
 
 			if (glucose::get_filter_descriptor_by_id(id, desc)) {

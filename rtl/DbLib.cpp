@@ -13,7 +13,8 @@ namespace db {
 			mRow_Storage[i].type = mRow_Bindings[i].type;
 
 
-		if (get()->Get_Next(mRow_Storage.data(), mRow_Storage.size()) == S_OK) {
+		HRESULT query_rc = get()->Get_Next(mRow_Storage.data(), mRow_Storage.size());
+		if (query_rc == S_OK) {
 			for (size_t i = 0; i < mRow_Storage.size(); i++) {
 				switch (mRow_Bindings[i].type) {
 					case db::NParameter_Type::ptInt64:
@@ -36,7 +37,7 @@ namespace db {
 			}
 		}
 		else
-			return false;
+			return query_rc == S_FALSE;	//SQL statement, e.g., insert does not need to return anything, yet it succeeds with S_FALSE code
 
 		return true;
 	}
