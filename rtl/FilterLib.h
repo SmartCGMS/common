@@ -72,7 +72,7 @@ namespace glucose {
 		SLog_Filter_Inspection() noexcept {};
 		SLog_Filter_Inspection(SFilter &log_filter);
 
-		std::shared_ptr<refcnt::wstr_list> pop();
+		bool pop(std::shared_ptr<refcnt::wstr_list> &list);
 	};
 }
 

@@ -473,9 +473,15 @@ const wchar_t *rsGenerate_Primary_Keys = L"Generate_Primary_Keys";
 const wchar_t *rsStore_Data = L"Store_Data";
 const wchar_t *rsStore_Parameters = L"Store_Parameters";
 
+const wchar_t* rsReserved_Segment_Name = L"RESERVED_SEGMENT_NAME";
+const wchar_t* rsFound_New_Segment = L"insert into timesegment (name) values (?)";
+const wchar_t* rsSelect_Founded_Segment = L"select id from timesegment where name = ?";
+const wchar_t* rsUpdate_Founded_Segment = L"update timesegment set name = ?, comment = ?, deleted=?, subjectid=?, parallel_id=? where id=?";
+
 //**************
 const wchar_t *rsCalculate_Past_New_Params = L"Calc_Past_First_Params";
 const wchar_t *rsRecalculate_With_Every_Params = L"Recalc_Every_Params";
 const wchar_t *rsUse_Just_Opened_Segments = L"Use_Just_Opened_Segments";
 const wchar_t *rsHold_During_Solve = L"Hold_During_Solve";
 const wchar_t* rsPrediction_Window = L"Prediction_Window";
+

@@ -36,8 +36,8 @@ namespace db {
 				}
 			}
 		}
-		else
-			return query_rc == S_FALSE;	//SQL statement, e.g., insert does not need to return anything, yet it succeeds with S_FALSE code
+		else 
+			return mRow_Bindings.empty() ?  query_rc == S_FALSE : false;	//SQL statement, e.g., insert does not need to return anything, yet it succeeds with S_FALSE code
 
 		return true;
 	}

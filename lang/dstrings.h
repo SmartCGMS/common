@@ -469,10 +469,14 @@ extern const wchar_t *rsGenerate_Primary_Keys;
 extern const wchar_t *rsStore_Data;
 extern const wchar_t *rsStore_Parameters;
 
+extern const wchar_t* rsReserved_Segment_Name;
+extern const wchar_t* rsFound_New_Segment;
+extern const wchar_t* rsSelect_Founded_Segment;
+extern const wchar_t* rsUpdate_Founded_Segment;
+
 //*******
 extern const wchar_t *rsCalculate_Past_New_Params;
 extern const wchar_t *rsRecalculate_With_Every_Params;
 extern const wchar_t *rsUse_Just_Opened_Segments;
 extern const wchar_t *rsHold_During_Solve;
 extern const wchar_t* rsPrediction_Window;
-

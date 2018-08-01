@@ -180,13 +180,14 @@ namespace glucose {
 			refcnt::Query_Interface<glucose::IFilter, glucose::ILog_Filter_Inspection>(log_filter.get(), Log_Filter_Inspection, *this);
 	}
 
-	std::shared_ptr<refcnt::wstr_list> SLog_Filter_Inspection::pop() {
-		std::shared_ptr<refcnt::wstr_list> result;
+	bool SLog_Filter_Inspection::pop(std::shared_ptr<refcnt::wstr_list> &list) {
+		bool result = false;
 		auto ptr_get = get();
 		if (ptr_get) {
 			refcnt::wstr_list *raw_list;
 			if (ptr_get->Pop(&raw_list) == S_OK) {
-				result = refcnt::make_shared_reference<refcnt::wstr_list>(raw_list, false);
+				list = refcnt::make_shared_reference<refcnt::wstr_list>(raw_list, false);
+				result = list.operator bool();
 			}
 		}
 

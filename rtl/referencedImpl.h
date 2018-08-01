@@ -53,21 +53,29 @@ namespace refcnt {
 		template <typename T>
 		class CVector_Container : public virtual IVector_Container<T>, public virtual CReferenced, public TAligned_Vector<T> {
 		private:			
-			void Add_Content(T *begin, T *end) {
-				std::copy(begin, end, std::back_inserter(*this));
+			template <typename D = typename std::remove_pointer<T>::type>
+			typename std::enable_if<!std::is_base_of<refcnt::IReferenced, D>::value && !std::is_base_of<refcnt::IUnique_Reference, D>::value, void>::type
+			Add_Content(T *begin, T *end) {
+				std::copy(begin, end, std::back_inserter(*this));				
 			};
 
-			template <typename = typename std::enable_if<std::is_base_of<refcnt::IReferenced, typename std::remove_pointer<T>::type>::value || std::is_base_of<refcnt::IUnique_Reference, typename std::remove_pointer<T>::type>::value, bool>>
-			void Add_Content(T *begin, T *end) {
-				for (T iter = begin; iter != end; iter++) {
-					push_back(iter);
-					iter->Add_Ref();
-				}
+			template <typename D = typename std::remove_pointer<T>::type>
+			typename std::enable_if<std::is_base_of<refcnt::IReferenced, D>::value || std::is_base_of<refcnt::IUnique_Reference, D>::value, void>::type
+			Add_Content(T *begin, T *end) {
+				for (T* iter = begin; iter != end; iter++) {
+					T real_ptr = *iter;
+					TAligned_Vector<T>::push_back(real_ptr);
+					real_ptr->AddRef();
+				}				
 			}
+		
+			template <typename D = typename std::remove_pointer<T>::type>
+			typename std::enable_if<!std::is_base_of<refcnt::IReferenced, D>::value && !std::is_base_of<refcnt::IUnique_Reference, D>::value, void>::type
+			Release_Content() {};
 
-			void Release_Content() {};
-			template <typename = typename std::enable_if<std::is_base_of<refcnt::IReferenced, typename std::remove_pointer<T>::type>::value || std::is_base_of<refcnt::IUnique_Reference, typename std::remove_pointer<T>::type>::value, bool>>
-			void Release_Content() {
+			template <typename D = typename std::remove_pointer<T>::type>
+			typename std::enable_if<std::is_base_of<refcnt::IReferenced, D>::value || std::is_base_of<refcnt::IUnique_Reference, D>::value, void>::type
+			Release_Content() {
 				for (T &item : *this)
 					item->Release();
 			}

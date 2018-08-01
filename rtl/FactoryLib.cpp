@@ -22,20 +22,18 @@ namespace factory {
 				return name;
 			}
 
-		static std::unique_ptr<CDynamic_Library> gFactory_Library;
+		CDynamic_Library gFactory_Library{};
 
 		void* resolve_factory_symbol(const char* symbol_name) {
-			if (!gFactory_Library) {
+			if (!gFactory_Library.Is_Loaded()) {
 				std::wstring path = Get_Platform_Library_Name(factory_dynamic_lib_name);
-
-				gFactory_Library = std::make_unique<CDynamic_Library>();
-				if (!gFactory_Library->Load(path.c_str())) {
-					gFactory_Library.reset();
+		
+				if (!gFactory_Library.Load(path.c_str())) {
 					return nullptr;
 				}
 			}
 
-			return gFactory_Library->Resolve(symbol_name);
+			return gFactory_Library.Resolve(symbol_name);
 		}
 
 		//stub for:

@@ -3,7 +3,6 @@
 #include "FactoryLib.h"
 
 #include <wchar.h>
-#include <map>
 
 namespace glucose
 {
@@ -109,26 +108,7 @@ namespace glucose
 		L"Warning",
 		L"Error"
 	};
-
-
-	std::wstring Signal_Id_To_WStr(const GUID &signal_id) {
-		const static std::map<GUID, const wchar_t*> signal_names = {
-			{ signal_BG, L"BG" },
-			{ signal_IG, L"IG" },
-			{ signal_ISIG, L"ISIG" },
-			{ signal_Calibration, L"Calibration" },
-			{ signal_Insulin, L"Insulin" },
-			{ signal_Carb_Intake, L"Carb" },
-			{ signal_Health_Stress, L"Stress" },
-			{ signal_Diffusion_v2_Blood, L"Diff2 BG" },
-			{ signal_Diffusion_v2_Ist, L"Diff2 IG" },
-			{ signal_Steil_Rebrin_Blood, L"SR BG" }
-		};
-
-		const auto resolved_name = signal_names.find(signal_id);
-		if (resolved_name != signal_names.end()) return resolved_name->second;
-			else return GUID_To_WString(signal_id);
-	}
+	
 }
 
 GUID WString_To_GUID(const std::wstring& str) {
