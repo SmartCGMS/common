@@ -143,7 +143,15 @@ const char* dsSave_Image_Default_Filename_ECDF = "ecdf.svg";
 //const wchar_t *dsRecalculate_With_Every_Params = L"New parameters recalculate entire segment";
 //const wchar_t* dsRecalculate_Past_On_Params = L"Recalculate entire segment with new parameters";
 //const wchar_t* dsRecalculate_Past_On_Segment_Stop = L"Recalculate entire segment on its end";
+const wchar_t *dsCalculation = L"Calculation";
 const wchar_t* dsPrediction_Window = L"Prediction window";
+const wchar_t* dsSolving_Parameters_Separator = L"Solving";
+const wchar_t* dsSolve_Parameters = L"Solve parameters";
+const wchar_t* dsSolve_Using_All_Segments = L"Solve using all segments";
+const wchar_t* dsMetric_Separator = L"Metric";
+const wchar_t* dsMetric_Levels_Required_Hint = L"Enter negative number as complement to current number of all reference levels";
+const wchar_t* dsSolve_On_Level_Count = L"Solve on level count";
+const wchar_t* dsSolve_On_Calibration = L"Solve on calibration";
 
 const wchar_t *dsUse_Just_Opened_Segments = L"Determine parameters using all known segments";
 
@@ -368,7 +376,7 @@ const wchar_t *rsMetric_Levels_Required = L"Levels_Required";
 const wchar_t *rsUse_Measured_Levels = L"Measured_Levels";
 
 const wchar_t *rsRecalculate_On_Levels_Count = L"Recalculate_Levels_Count";
-const wchar_t *rsRecalculate_On_Segment_End = L"Recalculate_A_tSegment_End";
+const wchar_t *rsRecalculate_On_Segment_End = L"Recalculate_At_Segment_End";
 const wchar_t *rsRecalculate_On_Calibration = L"Recalculate_On_Calibration";
 
 const wchar_t *rsLog_Output_File = L"Output_File";
@@ -478,10 +486,15 @@ const wchar_t* rsFound_New_Segment = L"insert into timesegment (name) values (?)
 const wchar_t* rsSelect_Founded_Segment = L"select id from timesegment where name = ?";
 const wchar_t* rsUpdate_Founded_Segment = L"update timesegment set name = ?, comment = ?, deleted=?, subjectid=?, parallel_id=? where id=?";
 
+const wchar_t* rsPrediction_Window = L"Prediction_Window";
+const wchar_t* rsSolve_Parameters = L"Solve_Parameters";
+const wchar_t* rsSolve_Using_All_Segments = L"Solve_Using_All_Segments";
+const wchar_t* rsSolve_On_Level_Count = L"Solve_On_Level_Count (0=off)";
+const wchar_t* rsSolve_On_Calibration = L"Solve_On_Calibration";
+
 //**************
 const wchar_t *rsCalculate_Past_New_Params = L"Calc_Past_First_Params";
 const wchar_t *rsRecalculate_With_Every_Params = L"Recalc_Every_Params";
 const wchar_t *rsUse_Just_Opened_Segments = L"Use_Just_Opened_Segments";
 const wchar_t *rsHold_During_Solve = L"Hold_During_Solve";
-const wchar_t* rsPrediction_Window = L"Prediction_Window";
 

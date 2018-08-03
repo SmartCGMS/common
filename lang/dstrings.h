@@ -144,7 +144,16 @@ extern const char* dsSave_Image_Default_Filename_ECDF;
 extern const wchar_t* dsRecalculate_Past_On_Params;
 //extern const wchar_t* dsRecalculate_Past_On_Segment_Stop;
 extern const wchar_t *dsUse_Just_Opened_Segments;
+
+extern const wchar_t *dsCalculation;
 extern const wchar_t* dsPrediction_Window;
+extern const wchar_t* dsSolving_Parameters_Separator;
+extern const wchar_t* dsSolve_Parameters;
+extern const wchar_t* dsSolve_Using_All_Segments;
+extern const wchar_t* dsMetric_Separator;
+extern const wchar_t* dsMetric_Levels_Required_Hint;
+extern const wchar_t* dsSolve_On_Level_Count;
+extern const wchar_t* dsSolve_On_Calibration;
 
 extern const char *dsConfiguration;
 extern const char *dsSelect_Just_One_Item;
@@ -474,9 +483,14 @@ extern const wchar_t* rsFound_New_Segment;
 extern const wchar_t* rsSelect_Founded_Segment;
 extern const wchar_t* rsUpdate_Founded_Segment;
 
+extern const wchar_t* rsPrediction_Window;
+extern const wchar_t* rsSolve_Parameters;
+extern const wchar_t* rsSolve_Using_All_Segments;
+extern const wchar_t* rsSolve_On_Level_Count;
+extern const wchar_t* rsSolve_On_Calibration;
+
 //*******
 extern const wchar_t *rsCalculate_Past_New_Params;
 extern const wchar_t *rsRecalculate_With_Every_Params;
 extern const wchar_t *rsUse_Just_Opened_Segments;
 extern const wchar_t *rsHold_During_Solve;
-extern const wchar_t* rsPrediction_Window;
