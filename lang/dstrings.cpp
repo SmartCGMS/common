@@ -28,7 +28,7 @@ const char* dsGlucose_Prediction = "Glucose Prediction - %1";
 const char* dsAdd = "Add";
 const char* dsDelete = "Delete";
 const char* dsRemove = "Remove";
-const char* dsConfigure= "Configure";
+const char* dsConfigure = "Configure";
 const char* dsMove_Up = "Move up";
 const char* dsMove_Down = "Move down";
 
@@ -61,6 +61,7 @@ const wchar_t *dsShutdown_After_Last = L"Shutdown after last value";
 const wchar_t *dsGenerate_Primary_Keys = L"Generate new primary keys";
 const wchar_t *dsStore_Data = L"Store data";
 const wchar_t *dsStore_Parameters = L"Store parameters";
+const wchar_t *dsSubject_Id = L"Subject";
 
 const wchar_t *dsNet_Comm = L"Network";
 const wchar_t *dsNet_Host = L"Host/Bind address";
@@ -130,6 +131,14 @@ const wchar_t *dsGUI_Filter = L"Visualization";
 
 const char* dsSave_Image_To_File = "Save to file";
 const char* dsSave_Image_Ext_Spec = "SVG Image (*.svg)";
+const char* dsSave_Viewport_To_File = "Save viewport to file";
+const char* dsSave_Viewport_Ext_Spec = "Portable Network Graphics (*.png)";
+const char* dsDefault_Viewport_File_Name = "image.png";
+const char* dsReset_Zoom = "Reset zoom";
+
+const char* dsDiagnosis_T1D = "Type 1";
+const char* dsDiagnosis_T2D = "Type 2";
+const char* dsDiagnosis_Gestational = "Gestational";
 
 const char* dsSave_Image_Default_Filename_Graph = "graph.svg";
 const char* dsSave_Image_Default_Filename_Day = "day.svg";
@@ -221,6 +230,9 @@ const char *dsUpper_Bounds = "Upper bounds";
 
 const char *dsReset_Bounds = "Reset";
 
+const char *dsLog_Table_View = "Table";
+const char *dsLog_Raw_View = "Raw";
+
 const wchar_t *dsSignal_Measured_BG = L"blood glucose";
 const wchar_t *dsSignal_Measured_IG = L"interstitial fluid glucose";
 const wchar_t *dsSignal_Measured_ISIG = L"ISIG";
@@ -256,6 +268,12 @@ const wchar_t* rsInsert_Params_Base = L"INSERT INTO ";
 const wchar_t* rsInsert_Params_Segmentid_Column = L"segmentid";
 const wchar_t* rsInsert_Params_Values_Stmt = L"VALUES";
 
+const wchar_t* rsCreated_Segment_Identifier_Base = L"New_Segment_Marker_";
+const wchar_t* rsInsert_New_Time_Segment = L"INSERT INTO timesegment (name, comment, deleted, subjectid, parallel_id) VALUES (?, ?, ?, ?, ?)";
+const wchar_t* rsSelect_Time_Segment_Id_By_Name = L"SELECT id FROM timesegment WHERE name = ?";
+const wchar_t* rsRename_Time_Segment = L"UPDATE timesegment SET name = ? WHERE id = ?";
+const wchar_t* rsDelete_Parameters_Of_Segment_Base = L"DELETE FROM ";
+const wchar_t* rsDelete_Parameters_Of_Segment_Stmt = L" WHERE segmentid = ?";
 
 // ---- drawing-related constants
 
@@ -274,6 +292,7 @@ const wchar_t* dsDrawingLocaleConcentration = L"Glucose Level";
 const wchar_t* dsDrawingLocaleHypoglycemy = L"Hypoglycemia";
 const wchar_t* dsDrawingLocaleHyperglycemy = L"Hyperglycemia";
 const wchar_t* dsDrawingLocaleBlood = L"Measured Blood Glucose Level";
+const wchar_t* dsDrawingLocaleBloodCalibration = L"Calibration";
 const wchar_t* dsDrawingLocaleIst = L"Subc. Tissue Glucose Level";
 const wchar_t* dsDrawingLocaleResults = L"Calculated Blood Glucose Level";
 const wchar_t* dsDrawingLocaleDiff2 = L"Diffusion 2 method";
@@ -311,14 +330,77 @@ const wchar_t *dsHold_During_Solve = L"Hold during solve";
 
 const wchar_t *dsHold_During_Solve_Tooltip = L"Hold all incoming messages while solver is in progress";
 
+const char *dsTime_Segments_Panel_Title = "Time segments";
+const char *dsSignals_Panel_Title = "Signals";
+const char *dsRedraw_Button_Title = "Redraw selected";
+const char *dsTime_Segments_Panel_Segment_Name = "Segment %1";
+
+const char *dsAnonymous_Subject = "Anonymous subject";
+const char *dsCreate_New_Subject = "Create new subject";
+const char *dsExisting_Subject = "Select existing subject:";
+
+// filter configuration tooltips
+
+// data filter group
+const wchar_t *dsDb_Host_Tooltip = L"Database host (hostname or IP address)";
+const wchar_t *dsDb_Port_Tooltip = L"Database port (0-65535)";
+const wchar_t *dsDb_Provider_Tooltip = L"Database driver provider; for Qt drivers, use QPSQL, QMYSQL, QSQLITE, etc.";
+const wchar_t *dsDb_Name_Tooltip = L"Database or schema name relevant to chosen database driver";
+const wchar_t *dsDb_Username_Tooltip = L"Username to be used when connecting to database";
+const wchar_t *dsDb_Password_Tooltip = L"Password to be used when connecting to database";
+const wchar_t *dsShutdown_After_Last_Tooltip = L"Should the filter chain terminate after last value? This is typically used for headless simulations";
+const wchar_t *dsGenerate_Primary_Keys_Tooltip = L"Generate new time segment when storing data?";
+const wchar_t *dsStore_Data_Tooltip = L"Should all incoming data (measured values) be stored to database?";
+const wchar_t *dsStore_Parameters_Tooltip = L"Should all incoming parameters (of all known models) be stored to database? Existing set of parameters would be overwritten";
+const wchar_t *dsInput_Values_File_Tooltip = L"File to be extracted and its contents to be sent to simulation";
+const wchar_t *dsInput_Segment_Spacing_Tooltip = L"Minimal spacing between values (in seconds) to end currently running segment and start a new one";
+const wchar_t *dsHold_Values_Delay_Tooltip = L"Input values will be held for this amount of milliseconds. For slowing down simulation to real-time, use 0";
+
+// drawing filter group
+const wchar_t *dsCanvas_Width_Tooltip = L"Desired canvas width for output images. Also reflects GUI widget width";
+const wchar_t *dsCanvas_Height_Tooltip = L"Desired canvas height for output images. Also reflects GUI widget height";
+const wchar_t *dsFilename_Graph_Tooltip = L"Where to store 'Single plot' drawing at the end of simulation";
+const wchar_t *dsFilename_Day_Tooltip = L"Where to store 'Daily plot' drawing at the end of simulation";
+const wchar_t *dsFilename_AGP_Tooltip = L"Where to store 'AGP' drawing at the end of simulation";
+const wchar_t *dsFilename_Parkes_Tooltip = L"Where to store 'Parkes grid' drawing at the end of simulation";
+const wchar_t *dsFilename_Clark_Tooltip = L"Where to store 'Clarke grid' drawing at the end of simulation";
+const wchar_t *dsFilename_ECDF_Tooltip = L"Where to store 'ECDF' drawing at the end of simulation";
+
+// log filter group
+const wchar_t *dsLog_File_Output_Tooltip = L"Log file output. Any existing file with such name will be overwritten";
+const wchar_t *dsLog_File_Input_Tooltip = L"Log file to be parsed and its contents to be sent to simulation";
+
+// signals filter group
+const wchar_t *dsSelected_Model_Tooltip = L"Model to be used. Make sure you also select valid signal from signal box below";
+const wchar_t *dsSelected_Signal_Tooltip = L"Model signal to be used";
+const wchar_t *dsPrediction_Window_Tooltip = L"Size of prediction window to be requested from signal calculator regardless of accuracy";
+const wchar_t *dsMapping_Source_Signal_Tooltip = L"Incoming signal to be mapped";
+const wchar_t *dsMapping_Destination_Signal_Tooltip = L"The incoming signal will be mapped to this signal identifier";
+const wchar_t *dsMasked_Signal_Tooltip = L"Signal to be masked";
+const wchar_t *dsSignal_Values_Mask_Tooltip = L"Recurring pattern (bitmask) to be applied when masking given signal, up to 64 bits are supported, use 1 to mask value, 0 to leave as-is, insert spaces as you wish";
+
+// solver filter group
+const wchar_t *dsSelected_Metric_Tooltip = L"Metric to be used for solution evaluation";
+const wchar_t *dsSelected_Solver_Tooltip = L"Solver implementation to be used";
+const wchar_t *dsUse_Relative_Error_Tooltip = L"Use relative errors when calculating metric values";
+const wchar_t *dsUse_Squared_Diff_Tooltip = L"Use squared differences when calculating metric values";
+const wchar_t *dsUse_Prefer_More_Levels_Tooltip = L"Prefer solutions with more levels?";
+const wchar_t *dsMetric_Threshold_Tooltip = L"Metric value threshold";
+const wchar_t *dsUse_Measured_Levels_Tooltip = L"Use measured signal instead of its approximation?";
+const wchar_t *dsRecalculate_On_Levels_Count_Tooltip = L"Run solver after given amount of reference levels";
+const wchar_t *dsRecalculate_On_Segment_End_Tooltip = L"Run solver after each segment end marker";
+const wchar_t *dsRecalculate_On_Calibration_Tooltip = L"Run solver on every calibration (blood-glucose calibration signal)";
+const wchar_t *dsRecalculate_On_Parameters_Tooltip = L"Request signal recalculation on every parameter set";
+const wchar_t *dsUse_Opened_Segments_Only_Tooltip = L"Use currently opened segments only";
+
 //--------------------------------- do not translate any of the rs-prefixed texts --
 
-const char* rsAbout_Text =	"<b>Glucose Predictor</b>, Version 3.0 Alpha<br>&nbsp;<br>"\
-							"Tom\xc3\xa1\xc5\xa1 Koutn\xc3\xbd, Ph.D.<br><i>txkoutny@kiv.zcu.cz</i><br>&nbsp;<br>"\
-							"Department of Computer Science and Engineering<br>"\
-							"University of West Bohemia<br>"\
-							"Plze\xc5\x88 306 14, Czech Republic<br>"\
-							"&nbsp;<hr>diabetes.zcu.cz";
+const char* rsAbout_Text = "<b>Glucose Predictor</b>, Version 3.0 Alpha<br>&nbsp;<br>"\
+"Tom\xc3\xa1\xc5\xa1 Koutn\xc3\xbd, Ph.D.<br><i>txkoutny@kiv.zcu.cz</i><br>&nbsp;<br>"\
+"Department of Computer Science and Engineering<br>"\
+"University of West Bohemia<br>"\
+"Plze\xc5\x88 306 14, Czech Republic<br>"\
+"&nbsp;<hr>diabetes.zcu.cz";
 
 const wchar_t *rsDb_Host = L"Host";
 const wchar_t *rsDb_Port = L"Port";
@@ -423,6 +505,7 @@ const char* rsFilter_Get_SVG_Parkes_Type2 = "get_svg_parkes_type2";
 const char* rsFilter_Get_Errors = "get_error_metrics";
 
 const wchar_t* rsSelect_Subjects_And_Segments_For_Db_Reader_Filter = L"select timesegment.id, subject.name, timesegment.name, count(measuredvalue.id) from subject, timesegment, measuredvalue where subject.id = timesegment.subjectid and timesegment.id = measuredvalue.segmentid group by timesegment.id, subject.name order by subject.name, timesegment.name asc";
+const wchar_t* rsSelect_Subjects = L"select id, name from subject";
 const wchar_t* rsSelect_Timesegment_Values_Filter = L"select measuredat, blood, ist, isig, insulin, carbohydrates, calibration from measuredvalue where segmentid = ? order by measuredat asc";
 const wchar_t* rsSelect_Params_Base = L"select ";
 const wchar_t* rsSelect_Params_From = L" from ";
@@ -441,6 +524,7 @@ const wchar_t* rsDrawingLocaleConcentration = L"concentration";
 const wchar_t* rsDrawingLocaleHypoglycemy = L"hypoglycemia";
 const wchar_t* rsDrawingLocaleHyperglycemy = L"hyperglycemia";
 const wchar_t* rsDrawingLocaleBlood = L"blood";
+const wchar_t* rsDrawingLocaleBloodCalibration = L"bloodCalibration";
 const wchar_t* rsDrawingLocaleIst = L"ist";
 const wchar_t* rsDrawingLocaleResults = L"results";
 const wchar_t* rsDrawingLocaleDiff2 = L"diff2";
@@ -480,11 +564,17 @@ const wchar_t *rsShutdown_After_Last = L"Shutdown_After_Last";
 const wchar_t *rsGenerate_Primary_Keys = L"Generate_Primary_Keys";
 const wchar_t *rsStore_Data = L"Store_Data";
 const wchar_t *rsStore_Parameters = L"Store_Parameters";
+const wchar_t *rsSubject_Id = L"Subject_Id";
 
 const wchar_t* rsReserved_Segment_Name = L"RESERVED_SEGMENT_NAME";
 const wchar_t* rsFound_New_Segment = L"insert into timesegment (name) values (?)";
 const wchar_t* rsSelect_Founded_Segment = L"select id from timesegment where name = ?";
 const wchar_t* rsUpdate_Founded_Segment = L"update timesegment set name = ?, comment = ?, deleted=?, subjectid=?, parallel_id=? where id=?";
+
+const wchar_t* rsReserved_Subject_Name = L"RESERVED_SUBJECT_NAME";
+const wchar_t* rsFound_New_Subject = L"insert into subject (name) values (?)";
+const wchar_t* rsSelect_Founded_Subject = L"select id from subject where name = ?";
+const wchar_t* rsUpdate_Founded_Subject = L"update subject set name = ?, comments = ?, sex = ?, weight = ? where id=?";
 
 const wchar_t* rsPrediction_Window = L"Prediction_Window";
 const wchar_t* rsSolve_Parameters = L"Solve_Parameters";

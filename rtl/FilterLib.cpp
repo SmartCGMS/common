@@ -63,7 +63,7 @@ namespace glucose {
 	}
 
 	UDevice_Event SFilter_Pipe::Receive() {
-		if (!operator bool()) return false;
+		if (!operator bool()) return UDevice_Event{};
 
 		IDevice_Event *raw_event;
 		if (get()->receive(&raw_event) != S_OK) return nullptr;
@@ -164,7 +164,17 @@ namespace glucose {
 		return parameter != nullptr ? parameter->dbl : std::numeric_limits<double>::quiet_NaN();
 	}
 
-	
+	std::vector<double> SFilter_Parameters::Read_Double_Array(const wchar_t* name) {
+		const auto parameter = Resolve_Parameter(name);
+
+		std::vector<double> result;
+
+		if (parameter)
+			result = refcnt::Container_To_Vector<double>(parameter->parameters);
+
+		return result;
+	}
+
 	SError_Filter_Inspection::SError_Filter_Inspection(SFilter &error_filter) {
 		if (error_filter)
 			refcnt::Query_Interface<glucose::IFilter, glucose::IError_Filter_Inspection>(error_filter.get(), Error_Filter_Inspection, *this);		

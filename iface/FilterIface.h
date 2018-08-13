@@ -6,7 +6,7 @@
 
 #include "DeviceIface.h"
 
-#include "..\rtl\winapi_mapping.h"
+#include "../rtl/winapi_mapping.h"
 
 namespace glucose {
 
@@ -35,6 +35,7 @@ namespace glucose {
 		ptModel_Signal_Id,	// signal dependend on model selection
 		ptSignal_Id,		// any signal available (measured, calculated)
 		ptModel_Bounds,		// three parameter sets in one container - lower bound, default values, higher bound
+		ptSubject_Id,		// int64_t, but with additional functionality in GUI
 	};
 
 	struct TFilter_Parameter {
@@ -155,14 +156,12 @@ namespace glucose {
 		virtual HRESULT IfaceCalling Get_Errors(const GUID *signal_id, const glucose::NError_Type type, glucose::TError_Markers *markers) = 0;
 	};
 
-
 	constexpr GUID Drawing_Filter_Inspection = { 0xd0c81596, 0xdea0, 0x4edf,{ 0x8b, 0x97, 0xe1, 0xd3, 0x78, 0xda, 0xfe, 0x3d } };
 	class IDrawing_Filter_Inspection : public virtual refcnt::IReferenced {
 	public:
 		// retrieves generated SVG for given drawing type and diagnosis
-		virtual HRESULT IfaceCalling Draw(TDrawing_Image_Type type, TDiagnosis diagnosis, refcnt::str_container *svg) = 0; //should be const
+		virtual HRESULT IfaceCalling Draw(TDrawing_Image_Type type, TDiagnosis diagnosis, refcnt::str_container *svg, refcnt::IVector_Container<uint64_t> *segmentIds, refcnt::IVector_Container<GUID> *signalIds) = 0; //should be const
 	};
-
 
 	constexpr GUID Log_Filter_Inspection = { 0xa6054c8d, 0x5c01, 0x9e1d,{ 0x14, 0x39, 0x50, 0xda, 0xd1, 0x08, 0xc9, 0x48 } };
 	class ILog_Filter_Inspection : public virtual refcnt::IReferenced {

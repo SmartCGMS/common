@@ -12,7 +12,6 @@ namespace db {
 		for (size_t i = 0; i < mRow_Bindings.size(); i++)
 			mRow_Storage[i].type = mRow_Bindings[i].type;
 
-
 		HRESULT query_rc = get()->Get_Next(mRow_Storage.data(), mRow_Storage.size());
 		if (query_rc == S_OK) {
 			for (size_t i = 0; i < mRow_Storage.size(); i++) {
@@ -33,6 +32,8 @@ namespace db {
 						*(reinterpret_cast<bool*>(mRow_Bindings[i].str)) = mRow_Storage[i].type != db::NParameter_Type::ptNull ? mRow_Storage[i].boolean : false;
 						break;
 
+					default:
+						break;
 				}
 			}
 		}

@@ -16,6 +16,8 @@ namespace glucose {
 		const double threshold;					//particular meaning depends on used metric and the caller is responsible for providing correct value
 	};
 
+	const TMetric_Parameters Null_Metric_Parameters = { Invalid_GUID, 0, 0, 0, 0.0 };
+
 	class IMetric: public virtual refcnt::IReferenced {
 	public:
 		virtual HRESULT IfaceCalling Accumulate(const double *times, const double *reference, const double *calculated, const size_t count) = 0;

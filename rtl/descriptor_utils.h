@@ -2,8 +2,8 @@
 
 #include "hresult.h"
 
-template <typename T, typename A = std::allocator<T>>
-HRESULT do_get_descriptors(const std::vector<T, A> &descriptors, T **begin, T **end) {
+template <typename T, typename A = std::allocator<T>, typename V = std::vector<T, A>>
+HRESULT do_get_descriptors(const V &descriptors, T **begin, T **end) {
 	if (!descriptors.empty()) {
 		*begin = const_cast<T*>(descriptors.data());
 		*end = *begin + descriptors.size();

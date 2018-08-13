@@ -23,6 +23,9 @@ namespace db {
 		};
 	};
 
+	static constexpr int64_t Anonymous_Subject_Identifier = -2;
+	static constexpr int64_t New_Subject_Identifier = -1;
+
 	class IDb_Query : public virtual refcnt::IReferenced {
 	public:
 		virtual HRESULT IfaceCalling Bind_Parameters(const TParameter *values, const size_t count) = 0;

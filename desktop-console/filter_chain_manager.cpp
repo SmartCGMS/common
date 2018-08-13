@@ -12,7 +12,7 @@ CFilter_Chain_Manager::CFilter_Chain_Manager() noexcept {
 }
 
 CFilter_Chain_Manager::CFilter_Chain_Manager(CFilter_Chain& sourceChain)
-	: mFilterChain(sourceChain)
+	: mFilterChain(sourceChain), mConsume_Outputs(false)
 {
 	//
 }
@@ -22,17 +22,17 @@ CFilter_Chain& CFilter_Chain_Manager::Get_Filter_Chain()
 	return mFilterChain;
 }
 
-HRESULT CFilter_Chain_Manager::Init_And_Start_Filters() {
+HRESULT CFilter_Chain_Manager::Init_And_Start_Filters(bool consumeOutputs) {
 	if (mFilterChain.empty()) return S_FALSE;
 
-	
 	Terminate_Filters();
+	mConsume_Outputs = consumeOutputs;
 
 	// create pipes
 	size_t i;
 	for (i = 0; i < mFilterChain.size() + 1; i++) {
 		glucose::SFilter_Pipe pipe{};
-		if (!pipe) 
+		if (!pipe)
 			return E_FAIL;
 		mFilterPipes.push_back(std::move(pipe));
 	}
@@ -63,33 +63,39 @@ HRESULT CFilter_Chain_Manager::Init_And_Start_Filters() {
 		i++;
 	}
 
-	//finally, add terminating thread so that the queue does not qet stuck 
-	mFilterThreads.push_back(std::make_unique<std::thread>([this]() {
-		glucose::UDevice_Event evt;
-		auto input = mFilterPipes[mFilterPipes.size() - 1];
+	// the default behaviour is to consume outputs of the last pipe, so the chain does not get stuck
+	// when the queue reaches its limit; we may, however, not want to consume outputs and call Receive by ourselves
+	// - this is typically used in any kind of subchains
+	if (mConsume_Outputs)
+	{
+		// the consume thread is considered a filter thread; it terminates with Shut_Down message
+		mFilterThreads.push_back(std::make_unique<std::thread>([this]() {
+			glucose::UDevice_Event evt;
+			auto input = mFilterPipes[mFilterPipes.size() - 1];
 
-		for (; glucose::UDevice_Event evt = input.Receive(); ) {
-			// just read and do nothing - this effectively consumes any incoming event through pipe
-					
-			//and if it was a shutdown event, try to repost it into the first filter
-			//in the case, that some filter in the middle had produced the event
-			//then, we need to make sure that all preceding filters terminate as well
-			if (evt.event_code == glucose::NDevice_Event_Code::Shut_Down) 
-					mFilterPipes[0].Send(evt);	//no need to test success
+			for (; glucose::UDevice_Event evt = input.Receive(); ) {
+				// just read and do nothing - this effectively consumes any incoming event through pipe
 
-		}
-	}));
+				//and if it was a shutdown event, try to repost it into the first filter
+				//in the case, that some filter in the middle had produced the event
+				//then, we need to make sure that all preceding filters terminate as well
+				if (evt.event_code == glucose::NDevice_Event_Code::Shut_Down)
+					mFilterPipes[0].Send(evt);	// no need to test success
+
+			}
+		}));
+	}
 
 	return S_OK;
 }
 
 HRESULT CFilter_Chain_Manager::Terminate_Filters() {
 	if (!mFilterPipes.empty()) {
-		// at first, call abort on pipes - this causes threads blocked on pop/push to unblock and return
+		// send Shut_Down event through the chain - pipes inside the chain will abort, causing filters to shut down on next Send or Receive call
 		glucose::UDevice_Event shut_down_event{ glucose::NDevice_Event_Code::Shut_Down };
 		mFilterPipes[0].Send(shut_down_event);
 
-		// join filter threads; they should exit very soon after the pipe is aborted
+		// join filter threads; they should shut down very soon after the pipe is aborted
 		Join_Filters();
 
 		mFilterThreads.clear();
@@ -112,4 +118,16 @@ HRESULT CFilter_Chain_Manager::Join_Filters() {
 HRESULT CFilter_Chain_Manager::Send(glucose::UDevice_Event &event) {
 	if (mFilterPipes.empty()) return S_FALSE;
 	return mFilterPipes[0].Send(event) ? S_OK : E_FAIL;
+}
+
+glucose::UDevice_Event CFilter_Chain_Manager::Receive() {
+	if (mConsume_Outputs || mFilterPipes.empty()) return glucose::UDevice_Event{};
+	return mFilterPipes[mFilterPipes.size() - 1].Receive();
+}
+
+void CFilter_Chain_Manager::Traverse_Filters(std::function<bool(glucose::SFilter)> fnc) {
+	for (auto& filter : mFilters) {
+		if (!fnc(filter))
+			break;
+	}
 }

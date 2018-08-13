@@ -1,4 +1,5 @@
 #include "SolverLib.h"
+#include "DeviceLib.h"
 
 #include "FactoryLib.h"
 
@@ -8,7 +9,7 @@ namespace imported {
 }
 
 glucose::SMetric::SMetric() : std::shared_ptr<glucose::IMetric>() {
-	glucose::TMetric_Parameters params{ {0} };
+	glucose::TMetric_Parameters params = glucose::Null_Metric_Parameters;
 	Init(params);
 }
 
@@ -28,7 +29,7 @@ glucose::SMetric glucose::SMetric::Clone()
 {
 	glucose::SMetric result;
 	auto self = get();
-	glucose::TMetric_Parameters params{ {0} };
+	glucose::TMetric_Parameters params = glucose::Null_Metric_Parameters;
 
 	if (self && self->Get_Parameters(&params) == S_OK)
 	{

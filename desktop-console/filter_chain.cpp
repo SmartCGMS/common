@@ -22,8 +22,9 @@ void CFilter_Configuration::Traverse_Configuration(std::function<void(refcnt::IR
 				break;
 			case glucose::NParameter_Type::ptSelect_Time_Segment_ID: func(param.select_time_segment_id);
 				break;
-        
-      case glucose::NParameter_Type::ptModel_Bounds: func(param.parameters);
+			case glucose::NParameter_Type::ptModel_Bounds: func(param.parameters);
+				break;
+			default:
 				break;
 		}
 	}

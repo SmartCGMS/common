@@ -5,6 +5,7 @@
 
 #include "referencedImpl.h"
 #include <vector>
+#include <string>
 
 namespace glucose {
 
@@ -37,6 +38,7 @@ namespace glucose {
 		GUID Read_GUID(const wchar_t* name);
 		bool Read_Bool(const wchar_t* name);
 		double Read_Double(const wchar_t* name);
+		std::vector<double> Read_Double_Array(const wchar_t* name);
 	};
 
 
@@ -54,7 +56,6 @@ namespace glucose {
 
 	void Release_Filter_Parameter(TFilter_Parameter &parameter);
 
-
 	class SError_Filter_Inspection : public std::shared_ptr<IError_Filter_Inspection> {
 	public:
 		SError_Filter_Inspection() noexcept {};
@@ -71,7 +72,6 @@ namespace glucose {
 	public:
 		SLog_Filter_Inspection() noexcept {};
 		SLog_Filter_Inspection(SFilter &log_filter);
-
 		bool pop(std::shared_ptr<refcnt::wstr_list> &list);
 	};
 }
@@ -81,3 +81,4 @@ std::wstring Select_Time_Segments_Id_To_WString(glucose::time_segment_id_contain
 glucose::time_segment_id_container* WString_To_Select_Time_Segments_Id(const wchar_t *str);
 std::wstring Model_Parameters_To_WString(glucose::IModel_Parameter_Vector *container);
 glucose::IModel_Parameter_Vector* WString_To_Model_Parameters(const wchar_t *str);
+

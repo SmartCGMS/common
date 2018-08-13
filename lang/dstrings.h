@@ -63,6 +63,7 @@ extern const wchar_t *dsShutdown_After_Last;
 extern const wchar_t *dsGenerate_Primary_Keys;
 extern const wchar_t *dsStore_Data;
 extern const wchar_t *dsStore_Parameters;
+extern const wchar_t *dsSubject_Id;
 
 extern const wchar_t *dsNet_Comm;
 extern const wchar_t *dsNet_Host;
@@ -131,6 +132,14 @@ extern const wchar_t *dsGUI_Filter;
 
 extern const char* dsSave_Image_To_File;
 extern const char* dsSave_Image_Ext_Spec;
+extern const char* dsSave_Viewport_To_File;
+extern const char* dsSave_Viewport_Ext_Spec;
+extern const char* dsDefault_Viewport_File_Name;
+extern const char* dsReset_Zoom;
+
+extern const char* dsDiagnosis_T1D;
+extern const char* dsDiagnosis_T2D;
+extern const char* dsDiagnosis_Gestational;
 
 extern const char* dsSave_Image_Default_Filename_Graph;
 extern const char* dsSave_Image_Default_Filename_Day;
@@ -220,6 +229,9 @@ extern const char *dsUpper_Bounds;
 
 extern const char *dsReset_Bounds;
 
+extern const char *dsLog_Table_View;
+extern const char *dsLog_Raw_View;
+
 extern const wchar_t *dsSignal_Measured_BG;
 extern const wchar_t *dsSignal_Measured_IG;
 extern const wchar_t *dsSignal_Measured_ISIG;
@@ -255,6 +267,13 @@ extern const wchar_t* rsInsert_Params_Base;
 extern const wchar_t* rsInsert_Params_Segmentid_Column;
 extern const wchar_t* rsInsert_Params_Values_Stmt;
 
+extern const wchar_t* rsCreated_Segment_Identifier_Base;
+extern const wchar_t* rsInsert_New_Time_Segment;
+extern const wchar_t* rsSelect_Time_Segment_Id_By_Name;
+extern const wchar_t* rsRename_Time_Segment;
+extern const wchar_t* rsDelete_Parameters_Of_Segment_Base;
+extern const wchar_t* rsDelete_Parameters_Of_Segment_Stmt;
+
 // ---- drawing-related constants
 
 extern const wchar_t* dsDrawingLocaleTitle;
@@ -272,6 +291,7 @@ extern const wchar_t* dsDrawingLocaleConcentration;
 extern const wchar_t* dsDrawingLocaleHypoglycemy;
 extern const wchar_t* dsDrawingLocaleHyperglycemy;
 extern const wchar_t* dsDrawingLocaleBlood;
+extern const wchar_t* dsDrawingLocaleBloodCalibration;
 extern const wchar_t* dsDrawingLocaleIst;
 extern const wchar_t* dsDrawingLocaleResults;
 extern const wchar_t* dsDrawingLocaleDiff2;
@@ -308,6 +328,63 @@ extern const wchar_t *dsUse_Just_Opened_Segments;
 extern const wchar_t *dsHold_During_Solve;
 extern const wchar_t *dsHold_During_Solve_Tooltip;
 
+extern const char *dsTime_Segments_Panel_Title;
+extern const char *dsSignals_Panel_Title;
+extern const char *dsRedraw_Button_Title;
+extern const char *dsTime_Segments_Panel_Segment_Name;
+
+extern const char *dsAnonymous_Subject;
+extern const char *dsCreate_New_Subject;
+extern const char *dsExisting_Subject;
+
+// filter configuration tooltips
+
+extern const wchar_t *dsDb_Host_Tooltip;
+extern const wchar_t *dsDb_Port_Tooltip;
+extern const wchar_t *dsDb_Provider_Tooltip;
+extern const wchar_t *dsDb_Name_Tooltip;
+extern const wchar_t *dsDb_Username_Tooltip;
+extern const wchar_t *dsDb_Password_Tooltip;
+extern const wchar_t *dsShutdown_After_Last_Tooltip;
+extern const wchar_t *dsGenerate_Primary_Keys_Tooltip;
+extern const wchar_t *dsStore_Data_Tooltip;
+extern const wchar_t *dsStore_Parameters_Tooltip;
+extern const wchar_t *dsInput_Values_File_Tooltip;
+extern const wchar_t *dsInput_Segment_Spacing_Tooltip;
+extern const wchar_t *dsHold_Values_Delay_Tooltip;
+
+extern const wchar_t *dsCanvas_Width_Tooltip;
+extern const wchar_t *dsCanvas_Height_Tooltip;
+extern const wchar_t *dsFilename_Graph_Tooltip;
+extern const wchar_t *dsFilename_Day_Tooltip;
+extern const wchar_t *dsFilename_AGP_Tooltip;
+extern const wchar_t *dsFilename_Parkes_Tooltip;
+extern const wchar_t *dsFilename_Clark_Tooltip;
+extern const wchar_t *dsFilename_ECDF_Tooltip;
+
+extern const wchar_t *dsLog_File_Output_Tooltip;
+extern const wchar_t *dsLog_File_Input_Tooltip;
+
+extern const wchar_t *dsSelected_Model_Tooltip;
+extern const wchar_t *dsSelected_Signal_Tooltip;
+extern const wchar_t *dsPrediction_Window_Tooltip;
+extern const wchar_t *dsMapping_Source_Signal_Tooltip;
+extern const wchar_t *dsMapping_Destination_Signal_Tooltip;
+extern const wchar_t *dsMasked_Signal_Tooltip;
+extern const wchar_t *dsSignal_Values_Mask_Tooltip;
+
+extern const wchar_t *dsSelected_Metric_Tooltip;
+extern const wchar_t *dsSelected_Solver_Tooltip;
+extern const wchar_t *dsUse_Relative_Error_Tooltip;
+extern const wchar_t *dsUse_Squared_Diff_Tooltip;
+extern const wchar_t *dsUse_Prefer_More_Levels_Tooltip;
+extern const wchar_t *dsMetric_Threshold_Tooltip;
+extern const wchar_t *dsUse_Measured_Levels_Tooltip;
+extern const wchar_t *dsRecalculate_On_Levels_Count_Tooltip;
+extern const wchar_t *dsRecalculate_On_Segment_End_Tooltip;
+extern const wchar_t *dsRecalculate_On_Calibration_Tooltip;
+extern const wchar_t *dsRecalculate_On_Parameters_Tooltip;
+extern const wchar_t *dsUse_Opened_Segments_Only_Tooltip;
 
 //--------------------------------- do not translate any of the rs-prefixed texts --
 
@@ -419,6 +496,7 @@ extern const char* rsFilter_Get_SVG_Parkes_Type2;
 extern const char* rsFilter_Get_Errors;
 
 extern const wchar_t* rsSelect_Subjects_And_Segments_For_Db_Reader_Filter;
+extern const wchar_t* rsSelect_Subjects;
 extern const wchar_t* rsSelect_Timesegment_Values_Filter;
 extern const wchar_t* rsSelect_Params_Base;
 extern const wchar_t* rsSelect_Params_From;
@@ -437,6 +515,7 @@ extern const wchar_t* rsDrawingLocaleConcentration;
 extern const wchar_t* rsDrawingLocaleHypoglycemy;
 extern const wchar_t* rsDrawingLocaleHyperglycemy;
 extern const wchar_t* rsDrawingLocaleBlood;
+extern const wchar_t* rsDrawingLocaleBloodCalibration;
 extern const wchar_t* rsDrawingLocaleIst;
 extern const wchar_t* rsDrawingLocaleResults;
 extern const wchar_t* rsDrawingLocaleDiff2;
@@ -477,11 +556,17 @@ extern const wchar_t *rsShutdown_After_Last;
 extern const wchar_t *rsGenerate_Primary_Keys;
 extern const wchar_t *rsStore_Data;
 extern const wchar_t *rsStore_Parameters;
+extern const wchar_t *rsSubject_Id;
 
 extern const wchar_t* rsReserved_Segment_Name;
 extern const wchar_t* rsFound_New_Segment;
 extern const wchar_t* rsSelect_Founded_Segment;
 extern const wchar_t* rsUpdate_Founded_Segment;
+
+extern const wchar_t* rsReserved_Subject_Name;
+extern const wchar_t* rsFound_New_Subject;
+extern const wchar_t* rsSelect_Founded_Subject;
+extern const wchar_t* rsUpdate_Founded_Subject;
 
 extern const wchar_t* rsPrediction_Window;
 extern const wchar_t* rsSolve_Parameters;

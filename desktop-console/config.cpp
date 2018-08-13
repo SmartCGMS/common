@@ -104,6 +104,7 @@ void CConfig::Load(CFilter_Chain &filter_chain) {
 								break;
 
 							case glucose::NParameter_Type::ptInt64:
+							case glucose::NParameter_Type::ptSubject_Id:
 								filter_parameter.int64 = mIni.GetLongValue(section_name.pItem, desc.config_parameter_name[i]);
 								break;
 
@@ -177,6 +178,7 @@ void CConfig::Save(const CFilter_Chain &filter_chain) {
 					break;
 
 				case glucose::NParameter_Type::ptInt64:
+				case glucose::NParameter_Type::ptSubject_Id:
 					mIni.SetLongValue(id_str.c_str(), WChar_Container_To_WString(param.config_name).c_str(), static_cast<long>(param.int64));
 					break;
 
