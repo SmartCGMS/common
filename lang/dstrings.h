@@ -574,6 +574,11 @@ extern const wchar_t* rsSolve_Using_All_Segments;
 extern const wchar_t* rsSolve_On_Level_Count;
 extern const wchar_t* rsSolve_On_Calibration;
 
+extern const wchar_t* rsDefault_Parameters;
+extern const wchar_t* rsLower_Bound;
+extern const wchar_t* rsUpper_Bound;
+
+
 //*******
 extern const wchar_t *rsCalculate_Past_New_Params;
 extern const wchar_t *rsRecalculate_With_Every_Params;

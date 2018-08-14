@@ -175,6 +175,16 @@ namespace glucose {
 		return result;
 	}
 
+	glucose::SModel_Parameter_Vector SFilter_Parameters::Read_Parameters(const wchar_t* name) {
+		const auto parameter = Resolve_Parameter(name);
+
+		if (parameter)
+			return refcnt::make_shared_reference_ext<glucose::SModel_Parameter_Vector, glucose::IModel_Parameter_Vector>(parameter->parameters, true);
+		
+		return glucose::SModel_Parameter_Vector{};
+	}
+
+
 	SError_Filter_Inspection::SError_Filter_Inspection(SFilter &error_filter) {
 		if (error_filter)
 			refcnt::Query_Interface<glucose::IFilter, glucose::IError_Filter_Inspection>(error_filter.get(), Error_Filter_Inspection, *this);		
