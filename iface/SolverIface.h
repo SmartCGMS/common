@@ -53,7 +53,7 @@ namespace glucose {
 		IMetric *metric; const size_t levels_required; const char use_measured_levels;
 		IModel_Parameter_Vector *lower_bound, *upper_bound; 
 		IModel_Parameter_Vector **solution_hints; const size_t hint_count;
-		IModel_Parameter_Vector **solved_parameters;		
+		IModel_Parameter_Vector *solved_parameters;		//obtained result
 		TSolver_Progress *progress;
 	};
 

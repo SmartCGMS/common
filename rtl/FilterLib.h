@@ -38,7 +38,7 @@ namespace glucose {
 		GUID Read_GUID(const wchar_t* name);
 		bool Read_Bool(const wchar_t* name);
 		double Read_Double(const wchar_t* name);
-		glucose::SModel_Parameter_Vector Read_Parameters(const wchar_t* name);
+		void Read_Parameters(const wchar_t* name, glucose::SModel_Parameter_Vector &lower_bound, glucose::SModel_Parameter_Vector &default_parameters, glucose::SModel_Parameter_Vector &upper_bound);
 		
 		std::vector<double> Read_Double_Array(const wchar_t* name);	//TODO: remove in the future in favor to Read_Parameters
 	};

@@ -175,13 +175,31 @@ namespace glucose {
 		return result;
 	}
 
-	glucose::SModel_Parameter_Vector SFilter_Parameters::Read_Parameters(const wchar_t* name) {
+	void SFilter_Parameters::Read_Parameters(const wchar_t* name, glucose::SModel_Parameter_Vector &lower_bound, glucose::SModel_Parameter_Vector &default_parameters, glucose::SModel_Parameter_Vector &upper_bound) {
 		const auto parameter = Resolve_Parameter(name);
 
-		if (parameter)
-			return refcnt::make_shared_reference_ext<glucose::SModel_Parameter_Vector, glucose::IModel_Parameter_Vector>(parameter->parameters, true);
+		bool success = false;
+		double *begin, *end;
+		if (parameter->parameters->get(&begin, &end) == S_OK) {
+			if ((begin != nullptr) && (begin != end)) {
+				const size_t distance = std::distance(begin, end);
+				if (distance % 3 == 0) {
+					const size_t paramcnt = distance / 3; // lower, default, upper
+					lower_bound = refcnt::Create_Container_shared<double, glucose::SModel_Parameter_Vector>(begin, &begin[paramcnt]);
+					default_parameters = refcnt::Create_Container_shared<double, glucose::SModel_Parameter_Vector>(&begin[paramcnt], &begin[2 * paramcnt]);
+					upper_bound = refcnt::Create_Container_shared<double, glucose::SModel_Parameter_Vector>(&begin[2 * paramcnt], &begin[3 * paramcnt]);
+					success = true;
+				}
+			}
+		}
 		
-		return glucose::SModel_Parameter_Vector{};
+		if (!success) {
+			lower_bound = glucose::SModel_Parameter_Vector{};
+			default_parameters = glucose::SModel_Parameter_Vector{};
+			upper_bound = glucose::SModel_Parameter_Vector{};
+		}
+
+	
 	}
 
 

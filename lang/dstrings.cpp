@@ -582,11 +582,6 @@ const wchar_t* rsSolve_Using_All_Segments = L"Solve_Using_All_Segments";
 const wchar_t* rsSolve_On_Level_Count = L"Solve_On_Level_Count (0=off)";
 const wchar_t* rsSolve_On_Calibration = L"Solve_On_Calibration";
 
-const wchar_t* rsDefault_Parameters = L"Default_Parameters";
-const wchar_t* rsLower_Bound = L"Lower_Bound";
-const wchar_t* rsUpper_Bound = L"Upper_Bound";
-
-
 //**************
 const wchar_t *rsCalculate_Past_New_Params = L"Calc_Past_First_Params";
 const wchar_t *rsRecalculate_With_Every_Params = L"Recalc_Every_Params";
