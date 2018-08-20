@@ -88,6 +88,8 @@ const wchar_t *dsRecalculate_On_Calibration = L"Recalculate on calibration";
 const wchar_t *dsFile_Reader = L"File Reader";
 const wchar_t *dsInput_Values_File = L"Input file";
 const wchar_t *dsInput_Segment_Spacing = L"Segment spacing [s]";
+const wchar_t *dsMinimum_Segment_Levels = L"Segment value minimum count";
+const wchar_t *dsRequire_IG_BG = L"Require both IG and BG values";
 
 const wchar_t *dsHold_Values_Delay = L"Hold delay [ms] (0 for real-time)";
 
@@ -334,6 +336,8 @@ const char *dsTime_Segments_Panel_Title = "Time segments";
 const char *dsSignals_Panel_Title = "Signals";
 const char *dsRedraw_Button_Title = "Redraw selected";
 const char *dsTime_Segments_Panel_Segment_Name = "Segment %1";
+const char *dsSelect_All_Segments = "All";
+const char *dsSelect_No_Segments = "None";
 
 const char *dsAnonymous_Subject = "Anonymous subject";
 const char *dsCreate_New_Subject = "Create new subject";
@@ -355,6 +359,8 @@ const wchar_t *dsStore_Parameters_Tooltip = L"Should all incoming parameters (of
 const wchar_t *dsInput_Values_File_Tooltip = L"File to be extracted and its contents to be sent to simulation";
 const wchar_t *dsInput_Segment_Spacing_Tooltip = L"Minimal spacing between values (in seconds) to end currently running segment and start a new one";
 const wchar_t *dsHold_Values_Delay_Tooltip = L"Input values will be held for this amount of milliseconds. For slowing down simulation to real-time, use 0";
+const wchar_t *dsMinimum_Segment_Levels_Tooltip = L"How many values does the segment need to have to be accepted?";
+const wchar_t *dsRequire_IG_BG_Tooltip = L"To accept a segment, it must contain both IG and BG values";
 
 // drawing filter group
 const wchar_t *dsCanvas_Width_Tooltip = L"Desired canvas width for output images. Also reflects GUI widget width";
@@ -560,6 +566,8 @@ const wchar_t* rsLog_Date_Time_Format = L"%Y-%m-%d %H:%M:%S";
 const wchar_t* rsLog_CSV_Separator = L"; ";
 const char* rsRattime_Edit_Mask = "h:mm:ss.zzz";
 const wchar_t *rsShutdown_After_Last = L"Shutdown_After_Last";
+const wchar_t *rsMinimum_Segment_Levels = L"Minimum_Segment_Levels";
+const wchar_t *rsRequire_IG_BG = L"Require_IG_BG";
 
 const wchar_t *rsGenerate_Primary_Keys = L"Generate_Primary_Keys";
 const wchar_t *rsStore_Data = L"Store_Data";

@@ -92,6 +92,8 @@ extern const wchar_t *dsRecalculate_On_Calibration;
 extern const wchar_t *dsFile_Reader;
 extern const wchar_t *dsInput_Values_File;
 extern const wchar_t *dsInput_Segment_Spacing;
+extern const wchar_t *dsMinimum_Segment_Levels;
+extern const wchar_t *dsRequire_IG_BG;
 
 extern const wchar_t *dsHold_Values_Delay;
 
@@ -332,6 +334,8 @@ extern const char *dsTime_Segments_Panel_Title;
 extern const char *dsSignals_Panel_Title;
 extern const char *dsRedraw_Button_Title;
 extern const char *dsTime_Segments_Panel_Segment_Name;
+extern const char *dsSelect_All_Segments;
+extern const char *dsSelect_No_Segments;
 
 extern const char *dsAnonymous_Subject;
 extern const char *dsCreate_New_Subject;
@@ -352,6 +356,8 @@ extern const wchar_t *dsStore_Parameters_Tooltip;
 extern const wchar_t *dsInput_Values_File_Tooltip;
 extern const wchar_t *dsInput_Segment_Spacing_Tooltip;
 extern const wchar_t *dsHold_Values_Delay_Tooltip;
+extern const wchar_t *dsMinimum_Segment_Levels_Tooltip;
+extern const wchar_t *dsRequire_IG_BG_Tooltip;
 
 extern const wchar_t *dsCanvas_Width_Tooltip;
 extern const wchar_t *dsCanvas_Height_Tooltip;
@@ -552,6 +558,8 @@ extern const wchar_t* rsLog_CSV_Separator;
 
 extern const char* rsRattime_Edit_Mask;
 extern const wchar_t *rsShutdown_After_Last;
+extern const wchar_t *rsMinimum_Segment_Levels;
+extern const wchar_t *rsRequire_IG_BG;
 
 extern const wchar_t *rsGenerate_Primary_Keys;
 extern const wchar_t *rsStore_Data;
@@ -573,7 +581,6 @@ extern const wchar_t* rsSolve_Parameters;
 extern const wchar_t* rsSolve_Using_All_Segments;
 extern const wchar_t* rsSolve_On_Level_Count;
 extern const wchar_t* rsSolve_On_Calibration;
-
 
 //*******
 extern const wchar_t *rsCalculate_Past_New_Params;
