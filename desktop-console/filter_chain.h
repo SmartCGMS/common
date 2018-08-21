@@ -18,7 +18,7 @@ public:
 };
 
 struct TFilter_Chain_Link {
-	glucose::TFilter_Descriptor descriptor;
+	glucose::TFilter_Descriptor descriptor{ 0 };
 	CFilter_Configuration configuration;
 };
 

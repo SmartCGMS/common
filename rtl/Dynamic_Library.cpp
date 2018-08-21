@@ -11,7 +11,7 @@
 CDynamic_Library::CDynamic_Library() noexcept : mHandle(nullptr) {	
 }
 
-CDynamic_Library::CDynamic_Library(CDynamic_Library&& other) : mHandle(nullptr) {
+CDynamic_Library::CDynamic_Library(CDynamic_Library&& other) noexcept : mHandle(nullptr) {
 	std::swap(mHandle, other.mHandle);
 }
 

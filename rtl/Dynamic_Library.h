@@ -16,7 +16,7 @@ class CDynamic_Library final {
 		CDynamic_Library() noexcept;
 		// disallow copying - the handle has to be unique
 		CDynamic_Library(const CDynamic_Library&) = delete;
-		CDynamic_Library(CDynamic_Library&& other);
+		CDynamic_Library(CDynamic_Library&& other) noexcept;
 		virtual ~CDynamic_Library();
 
 		// loads module and returns result

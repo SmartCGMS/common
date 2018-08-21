@@ -24,7 +24,7 @@ class CFilter_Chain_Manager : public virtual refcnt::CReferenced {
 		std::vector<glucose::SFilter_Pipe> mFilterPipes;
 
 		// is this filter chain initialized to consume all outputs?
-		bool mConsume_Outputs;
+		bool mConsume_Outputs = true;
 
 	public:
 		CFilter_Chain_Manager() noexcept;
