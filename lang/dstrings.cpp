@@ -161,7 +161,7 @@ const wchar_t* dsSolve_Parameters = L"Solve parameters";
 const wchar_t* dsSolve_Using_All_Segments = L"Solve using all segments";
 const wchar_t* dsMetric_Separator = L"Metric";
 const wchar_t* dsMetric_Levels_Required_Hint = L"Enter negative number as complement to current number of all reference levels";
-const wchar_t* dsSolve_On_Level_Count = L"Solve on level count";
+const wchar_t* dsSolve_On_Level_Count = L"Solve on level count (0=off)";
 const wchar_t* dsSolve_On_Calibration = L"Solve on calibration";
 
 const wchar_t *dsUse_Just_Opened_Segments = L"Determine parameters using all known segments";
@@ -587,7 +587,7 @@ const wchar_t* rsUpdate_Founded_Subject = L"update subject set name = ?, comment
 const wchar_t* rsPrediction_Window = L"Prediction_Window";
 const wchar_t* rsSolve_Parameters = L"Solve_Parameters";
 const wchar_t* rsSolve_Using_All_Segments = L"Solve_Using_All_Segments";
-const wchar_t* rsSolve_On_Level_Count = L"Solve_On_Level_Count (0=off)";
+const wchar_t* rsSolve_On_Level_Count = L"Solve_On_Level_Count";
 const wchar_t* rsSolve_On_Calibration = L"Solve_On_Calibration";
 
 //**************
