@@ -2,7 +2,9 @@
 #include "winapi_mapping.h"
 #include "FactoryLib.h"
 
+#include <map>
 #include <wchar.h>
+#include "../lang/dstrings.h"
 
 namespace glucose
 {
@@ -108,7 +110,37 @@ namespace glucose
 		L"Warning",
 		L"Error"
 	};
+
+
 	
+	CSignal_Names::CSignal_Names() {
+		mSignal_Names.clear();
+
+		mSignal_Names[glucose::signal_BG] = dsSignal_GUI_Name_BG ;
+		mSignal_Names[glucose::signal_IG] = dsSignal_GUI_Name_IG;
+		mSignal_Names[glucose::signal_ISIG] = dsSignal_GUI_Name_ISIG;
+		mSignal_Names[glucose::signal_Calibration] = dsSignal_GUI_Name_Calibration;
+		mSignal_Names[glucose::signal_Insulin] = dsSignal_GUI_Name_Insulin;
+		mSignal_Names[glucose::signal_Carb_Intake] = dsSignal_GUI_Name_Carbs;
+		mSignal_Names[glucose::signal_Health_Stress] = dsSignal_GUI_Name_Stress;
+
+		auto models = glucose::get_model_descriptors();
+		for (auto& model : models)
+		{
+			for (size_t i = 0; i < model.number_of_calculated_signals; i++)
+				mSignal_Names[model.calculated_signal_ids[i]] = std::wstring{ model.description } +std::wstring{ L" - " } +model.calculated_signal_names[i];
+		}
+
+		for (size_t i = 0; i < glucose::signal_Virtual.size(); i++)
+			mSignal_Names[glucose::signal_Virtual[i]] = dsSignal_Prefix_Virtual + std::wstring(L" ") + std::to_wstring(i);
+	}
+
+	std::wstring CSignal_Names::Get_Name(const GUID &signal_id) {
+		const auto result = mSignal_Names.find(signal_id);
+		if (result != mSignal_Names.end()) return result->second;
+			else return GUID_To_WString(signal_id);
+	}
+
 }
 
 GUID WString_To_GUID(const std::wstring& str) {

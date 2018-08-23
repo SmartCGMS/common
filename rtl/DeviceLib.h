@@ -14,6 +14,7 @@ namespace glucose {
 	public:
 		bool set(const std::vector<double> &params);
 		bool set(const SModel_Parameter_Vector &params);
+		bool empty() const;
 	};
 
 	class STime_Segment;

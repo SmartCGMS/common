@@ -18,12 +18,22 @@ bool glucose::SModel_Parameter_Vector::set(const std::vector<double> &params) {
 
 
 bool glucose::SModel_Parameter_Vector::set(const glucose::SModel_Parameter_Vector &params) {
-    if (!operator bool()) return false;
-    if (!params) return false;
+	if (!params) return false;
 
-    double *begin, *end;
-    if (params->get(&begin, &end) != S_OK) return false;
-    return get()->set(begin, end) == S_OK;
+	double *begin, *end;
+	if (params->get(&begin, &end) != S_OK) return false;
+
+	if (!operator bool()) {
+		glucose::IModel_Parameter_Vector *new_vector = refcnt::Create_Container<double>(begin, end);
+		reset(new_vector, [](glucose::IModel_Parameter_Vector* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });
+		return operator bool();
+	} else
+        return get()->set(begin, end) == S_OK;
+}
+
+bool glucose::SModel_Parameter_Vector::empty() const {
+	if (!operator bool()) return true;
+	return get()->empty() == S_OK;
 }
 
 glucose::SSignal::SSignal(glucose::STime_Segment segment, const GUID &signal_id) {

@@ -50,7 +50,7 @@ namespace glucose {
 	struct TSolver_Setup {
 		const GUID solver_id; const GUID calculated_signal_id; const GUID reference_signal_id;
 		ITime_Segment **segments; const size_t segment_count;
-		IMetric *metric; const size_t levels_required; const char use_measured_levels;
+		IMetric *metric; const size_t levels_required; const unsigned char use_measured_levels;
 		IModel_Parameter_Vector *lower_bound, *upper_bound; 
 		IModel_Parameter_Vector **solution_hints; const size_t hint_count;
 		IModel_Parameter_Vector *solved_parameters;		//obtained result

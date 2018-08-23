@@ -35,7 +35,7 @@ const char* dsMove_Down = "Move down";
 const char* dsStart = "Start";
 const char* dsStop = "Stop";
 const char* dsSolve = "Solve";
-const char* dsSolve_Reset = "Reset and solve";
+const char* dsSolve_Reset = "Reset and recalculate";
 const char* dsSuspend = "Suspend solvers";
 const char* dsResume = "Resume solvers";
 const char* dsStepUnit = "levels";
@@ -242,12 +242,20 @@ const wchar_t *dsSignal_Measured_Calibration = L"blood glucose calibration";
 const wchar_t *dsSignal_Measured_Insulin = L"insulin amount";
 const wchar_t *dsSignal_Measured_Carb_Intake = L"carbohydrates intake";
 const wchar_t *dsSignal_Measured_Health_Stress = L"health stress";
-//const wchar_t *dsSignal_Virtual_Base = L"dummy";
 const wchar_t *dsSignal_Suffix_Measured = L"measured";
 const wchar_t *dsSignal_Suffix_Calculated = L"calculated";
-//const wchar_t *dsSignal_Suffix_Virtual = L"virtual";
 const wchar_t *dsSignal_Unknown = L"Unknown";
 const wchar_t *dsSignal_Prefix_Virtual = L"virtual";
+
+const wchar_t *dsSignal_GUI_Name_BG = L"Blood glucose";
+const wchar_t *dsSignal_GUI_Name_IG = L"Interstitial glucose";
+const wchar_t *dsSignal_GUI_Name_ISIG = L"ISIG";
+const wchar_t *dsSignal_GUI_Name_Calibration = L"Calibration";
+const wchar_t *dsSignal_GUI_Name_Insulin = L"Insulin intake";
+const wchar_t *dsSignal_GUI_Name_Carbs = L"Carbohydrates intake";
+const wchar_t *dsSignal_GUI_Name_Stress = L"Health stress";
+
+const wchar_t *dsSignal_GUI_Name_Unknown = L"Unknown signal";
 
 const wchar_t *dsSolver_Progress_Box_Title = L"Solver progress";
 const wchar_t *dsError_Absolute = L"absolute";
@@ -334,7 +342,7 @@ const wchar_t *dsHold_During_Solve_Tooltip = L"Hold all incoming messages while 
 
 const char *dsTime_Segments_Panel_Title = "Time segments";
 const char *dsSignals_Panel_Title = "Signals";
-const char *dsRedraw_Button_Title = "Redraw selected";
+const char *dsRedraw_Button_Title = "Apply visibility";
 const char *dsTime_Segments_Panel_Segment_Name = "Segment %1";
 const char *dsSelect_All_Segments = "All";
 const char *dsSelect_No_Segments = "None";

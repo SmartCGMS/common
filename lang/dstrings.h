@@ -241,12 +241,21 @@ extern const wchar_t *dsSignal_Measured_Calibration;
 extern const wchar_t *dsSignal_Measured_Insulin;
 extern const wchar_t *dsSignal_Measured_Carb_Intake;
 extern const wchar_t *dsSignal_Measured_Health_Stress;
-//extern const wchar_t *dsSignal_Virtual_Base;
 extern const wchar_t *dsSignal_Suffix_Measured;
 extern const wchar_t *dsSignal_Suffix_Calculated;
-//extern const wchar_t *dsSignal_Suffix_Virtual;
 extern const wchar_t *dsSignal_Unknown;
 extern const wchar_t *dsSignal_Prefix_Virtual;
+
+extern const wchar_t *dsSignal_GUI_Name_BG;
+extern const wchar_t *dsSignal_GUI_Name_IG;
+extern const wchar_t *dsSignal_GUI_Name_ISIG;
+extern const wchar_t *dsSignal_GUI_Name_Calibration;
+extern const wchar_t *dsSignal_GUI_Name_Insulin;
+extern const wchar_t *dsSignal_GUI_Name_Carbs;
+extern const wchar_t *dsSignal_GUI_Name_Stress;
+
+
+extern const wchar_t *dsSignal_GUI_Name_Unknown;
 
 extern const wchar_t *dsSolver_Progress_Box_Title;
 extern const wchar_t *dsError_Absolute;
