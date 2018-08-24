@@ -6,6 +6,7 @@
 #include "referencedImpl.h"
 #include <vector>
 #include <string>
+#include <functional>
 
 namespace glucose {
 
@@ -56,6 +57,7 @@ namespace glucose {
 	void Release_Event(TDevice_Event &event);
 	*/
 
+	void Visit_Filter_Parameter(glucose::TFilter_Parameter& element, std::function<void(refcnt::IReferenced *obj)> func);
 	void Release_Filter_Parameter(TFilter_Parameter &parameter);
 
 	class SError_Filter_Inspection : public std::shared_ptr<IError_Filter_Inspection> {

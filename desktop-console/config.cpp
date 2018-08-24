@@ -87,7 +87,7 @@ void CConfig::Load(CFilter_Chain &filter_chain) {
 
 						bool valid = true;
 
-						//yes, there is somethign stored under this key
+						//yes, there is something stored under this key
 						switch (filter_parameter.type)
 						{
 							case glucose::NParameter_Type::ptWChar_Container:
@@ -129,10 +129,12 @@ void CConfig::Load(CFilter_Chain &filter_chain) {
 						}
 
 						if (valid) {
-							//creat the parameter name container, only if it is really neded - it is reference counted!
+							//create the parameter name container, only if it is really neded - it is reference counted!
 							filter_parameter.config_name = refcnt::WString_To_WChar_Container(desc.config_parameter_name[i]);
-							filter_config.push_back(filter_parameter);
-						}
+							filter_config.push_back(filter_parameter);	//overriden to call add ref!
+						}	
+
+						Release_Filter_Parameter(filter_parameter);	//do not forget, it is reference counted and we could have created some!
 					}
 				}
 

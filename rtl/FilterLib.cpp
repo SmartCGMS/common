@@ -94,23 +94,23 @@ namespace glucose {
 		return result;
 	}
 
-	
+	void Visit_Filter_Parameter(glucose::TFilter_Parameter& element, std::function<void(refcnt::IReferenced *obj)> func) {
+		if (element.config_name != nullptr) func(element.config_name);
+
+		switch (element.type) {
+			case glucose::NParameter_Type::ptWChar_Container: if (element.wstr != nullptr) func(element.wstr);
+				break;
+			case glucose::NParameter_Type::ptSelect_Time_Segment_ID: if (element.select_time_segment_id != nullptr) func(element.select_time_segment_id);
+				break;
+			case glucose::NParameter_Type::ptModel_Bounds: if (element.parameters != nullptr) func(element.parameters);
+				break;
+			default:
+				break;
+		}
+	}
 
 	void Release_Filter_Parameter(TFilter_Parameter &parameter) {
-		if (parameter.config_name) parameter.config_name->Release();
-
-		switch (parameter.type) {
-		case glucose::NParameter_Type::ptWChar_Container: parameter.wstr->Release();
-			parameter.wstr = nullptr;
-			break;
-		case glucose::NParameter_Type::ptSelect_Time_Segment_ID: parameter.select_time_segment_id->Release();
-			parameter.select_time_segment_id = nullptr;
-			break;
-
-		case glucose::NParameter_Type::ptModel_Bounds: parameter.parameters->Release();
-			parameter.parameters = nullptr;
-			break;
-		}
+		Visit_Filter_Parameter(parameter, [](refcnt::IReferenced *obj) { obj->Release(); });
 	}
 
 	TFilter_Parameter* SFilter_Parameters::Resolve_Parameter(const wchar_t* name) {

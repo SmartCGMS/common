@@ -1,5 +1,6 @@
 #include "filter_chain.h"
 
+#include "../rtl/FilterLib.h"
 
 CFilter_Configuration::CFilter_Configuration() noexcept : std::vector<glucose::TFilter_Parameter>() {
 }
@@ -12,29 +13,23 @@ CFilter_Configuration::~CFilter_Configuration() {
 	Traverse_Configuration([](refcnt::IReferenced *obj) { obj->Release(); });	
 }
 
-void CFilter_Configuration::Traverse_Configuration(std::function<void(refcnt::IReferenced *obj)> func) {
-	
-	for (auto &param : *this) {
-		func(param.config_name);
-
-		switch (param.type) {
-			case glucose::NParameter_Type::ptWChar_Container: func(param.wstr);
-				break;
-			case glucose::NParameter_Type::ptSelect_Time_Segment_ID: func(param.select_time_segment_id);
-				break;
-			case glucose::NParameter_Type::ptModel_Bounds: func(param.parameters);
-				break;
-			default:
-				break;
-		}
-	}
-	
+void CFilter_Configuration::Traverse_Configuration(std::function<void(refcnt::IReferenced *obj)> func) {	
+	for (auto &param : *this) 
+		glucose::Visit_Filter_Parameter(param, func);
 }
 
 CFilter_Configuration& CFilter_Configuration::operator=(const CFilter_Configuration& other) {	
-	std::vector<glucose::TFilter_Parameter>::operator=(other);
+	Traverse_Configuration([](refcnt::IReferenced *obj) { obj->Release(); });	//release what we are about to replace
 
-	Traverse_Configuration([](refcnt::IReferenced *obj) { obj->AddRef(); });
+	std::vector<glucose::TFilter_Parameter>::operator=(other);				//replace the raw content
+
+	Traverse_Configuration([](refcnt::IReferenced *obj) { obj->AddRef(); });	//and add ref on new content
 
 	return *this;
+}
+
+
+void CFilter_Configuration::push_back(const glucose::TFilter_Parameter &parameter) {
+	std::vector<glucose::TFilter_Parameter>::push_back(parameter);
+	glucose::Visit_Filter_Parameter(*rbegin(), [](refcnt::IReferenced *obj) { obj->AddRef(); });
 }

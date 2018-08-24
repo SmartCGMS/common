@@ -15,11 +15,10 @@ namespace factory {
 	T resolve_symbol(const char* symbol_name) {
 		if (internal::import_test_fails) 
 			return reinterpret_cast<T>(internal::resolve_not_impl_symbol(symbol_name));
-		
 
 		void *resolution = internal::resolve_factory_symbol(symbol_name);
 		if (!resolution) resolution = internal::resolve_not_impl_symbol(symbol_name);	//still returning not_impl if cannot load the symbol
 
-		return static_cast<T>(resolution);		
-	}	
+		return reinterpret_cast<T>(resolution);
+	}
 }

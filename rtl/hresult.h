@@ -13,6 +13,9 @@
 
   const HRESULT S_OK = 0;
   const HRESULT S_FALSE = -1;
+#ifndef ENOENT
+  const HRESULT ENOENT = 2;
+#endif
   const HRESULT E_INVALIDARG = 0x80070057;
   const HRESULT E_NOTIMPL = 0x80004001;
   const HRESULT E_UNEXPECTED = 0x8000FFFFL;

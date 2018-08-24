@@ -4,6 +4,8 @@
 
 #ifdef _WIN32
 	const wchar_t* rsShared_Object_Extension = L".dll";
+#elif __APPLE__
+	const wchar_t* rsShared_Object_Extension = L".dylib";
 #else
 	const wchar_t* rsShared_Object_Extension = L".so";
 #endif
