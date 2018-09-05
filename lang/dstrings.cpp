@@ -1,3 +1,34 @@
+/**
+ * SmartCGMS - continuous glucose monitoring and controlling framework
+ * https://diabetes.zcu.cz/
+ *
+ * Contact:
+ * diabetes@mail.kiv.zcu.cz
+ * Medical Informatics, Department of Computer Science and Engineering
+ * Faculty of Applied Sciences, University of West Bohemia
+ * Technicka 8
+ * 314 06, Pilsen
+ *
+ * Licensing terms:
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *
+ * a) For non-profit, academic research, this software is available under the
+ *    GPLv3 license. When publishing any related work, user of this software
+ *    must:
+ *    1) let us know about the publication,
+ *    2) acknowledge this software and respective literature - see the
+ *       https://diabetes.zcu.cz/about#publications,
+ *    3) At least, the user of this software must cite the following paper:
+ *       Parallel software architecture for the next generation of glucose
+ *       monitoring, Proceedings of the 8th International Conference on Current
+ *       and Future Trends of Information and Communication Technologies
+ *       in Healthcare (ICTH 2018) November 5-8, 2018, Leuven, Belgium
+ * b) For any other use, especially commercial use, you must contact us and
+ *    obtain specific terms and conditions for the use of the software.
+ */
+
 #include "dstrings.h"
 
 const char* dsFile = "File";
@@ -247,6 +278,7 @@ const wchar_t *dsSignal_Suffix_Calculated = L"calculated";
 const wchar_t *dsSignal_Unknown = L"Unknown";
 const wchar_t *dsSignal_Prefix_Virtual = L"virtual";
 
+const wchar_t *dsSignal_GUI_Name_All = L"All signals";
 const wchar_t *dsSignal_GUI_Name_BG = L"Blood glucose";
 const wchar_t *dsSignal_GUI_Name_IG = L"Interstitial glucose";
 const wchar_t *dsSignal_GUI_Name_ISIG = L"ISIG";
@@ -597,6 +629,40 @@ const wchar_t* rsSolve_Parameters = L"Solve_Parameters";
 const wchar_t* rsSolve_Using_All_Segments = L"Solve_Using_All_Segments";
 const wchar_t* rsSolve_On_Level_Count = L"Solve_On_Level_Count";
 const wchar_t* rsSolve_On_Calibration = L"Solve_On_Calibration";
+
+const wchar_t* rsMatlab_Manifest_File = L"matlab_manifest.xml";
+const wchar_t* rsMatlab_Manifest_Session_Name_Path = L"manifest.session:name";
+const wchar_t* rsMatlab_Manifest_Workdir_Path = L"manifest.directory:path";
+const wchar_t* rsMatlab_Manifest_Models_Path = L"manifest.models";
+const wchar_t* rsMatlab_Manifest_Solvers_Path = L"manifest.solvers";
+const wchar_t* rsMatlab_Manifest_Model_Tag = L"model";
+const wchar_t* rsMatlab_Manifest_Solver_Tag = L"solver";
+const wchar_t* rsMatlab_Manifest_Id_Parameter = L"id";
+const wchar_t* rsMatlab_Manifest_Description_Parameter = L"description";
+const wchar_t* rsMatlab_Manifest_Name_Parameter = L"name";
+const wchar_t* rsMatlab_Manifest_DB_Table_Parameter = L"dbtable";
+const wchar_t* rsMatlab_Manifest_Parameters_Tag = L"parameters";
+const wchar_t* rsMatlab_Manifest_Parameter_Tag = L"param";
+const wchar_t* rsMatlab_Manifest_DB_Column_Parameter = L"dbname";
+const wchar_t* rsMatlab_Manifest_Default_Parameter = L"default";
+const wchar_t* rsMatlab_Manifest_Param_Lowbound = L"lowerbound";
+const wchar_t* rsMatlab_Manifest_Param_Upbound = L"upperbound";
+const wchar_t* rsMatlab_Manifest_Signals_Tag = L"signals";
+const wchar_t* rsMatlab_Manifest_Signal_Tag = L"signal";
+const wchar_t* rsMatlab_Manifest_Reference_Signal_Id_Param = L"reference";
+const wchar_t* rsMatlab_Manifest_Script_Name = L"scriptname";
+const wchar_t* rsMatlab_Manifest_Models_Tag = L"models";
+
+const char16_t* rsMatlab_Variable_Model_Parameters = u"model_parameters";
+const char16_t* rsMatlab_Variable_Model_Times = u"model_times";
+const char16_t* rsMatlab_Variable_Model_Derivation = u"model_derivation";
+const char16_t* rsMatlab_Variable_Model_Output = u"model_output";
+const char16_t* rsMatlab_Variable_Solver_Times = u"solver_times";
+const char16_t* rsMatlab_Variable_Solver_Values = u"solver_values";
+const char16_t* rsMatlab_Variable_Solver_Hints = u"solver_hints";
+const char16_t* rsMatlab_Variable_Solver_Lowbounds = u"solver_lowerbounds";
+const char16_t* rsMatlab_Variable_Solver_Upbounds = u"solver_upperbounds";
+const char16_t* rsMatlab_Variable_Solver_Output = u"solver_output";
 
 //**************
 const wchar_t *rsCalculate_Past_New_Params = L"Calc_Past_First_Params";

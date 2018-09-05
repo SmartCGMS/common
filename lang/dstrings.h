@@ -1,3 +1,34 @@
+/**
+ * SmartCGMS - continuous glucose monitoring and controlling framework
+ * https://diabetes.zcu.cz/
+ *
+ * Contact:
+ * diabetes@mail.kiv.zcu.cz
+ * Medical Informatics, Department of Computer Science and Engineering
+ * Faculty of Applied Sciences, University of West Bohemia
+ * Technicka 8
+ * 314 06, Pilsen
+ *
+ * Licensing terms:
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *
+ * a) For non-profit, academic research, this software is available under the
+ *    GPLv3 license. When publishing any related work, user of this software
+ *    must:
+ *    1) let us know about the publication,
+ *    2) acknowledge this software and respective literature - see the
+ *       https://diabetes.zcu.cz/about#publications,
+ *    3) At least, the user of this software must cite the following paper:
+ *       Parallel software architecture for the next generation of glucose
+ *       monitoring, Proceedings of the 8th International Conference on Current
+ *       and Future Trends of Information and Communication Technologies
+ *       in Healthcare (ICTH 2018) November 5-8, 2018, Leuven, Belgium
+ * b) For any other use, especially commercial use, you must contact us and
+ *    obtain specific terms and conditions for the use of the software.
+ */
+
 #pragma once
 
 //UI strings used by the entire application
@@ -246,6 +277,7 @@ extern const wchar_t *dsSignal_Suffix_Calculated;
 extern const wchar_t *dsSignal_Unknown;
 extern const wchar_t *dsSignal_Prefix_Virtual;
 
+extern const wchar_t *dsSignal_GUI_Name_All;
 extern const wchar_t *dsSignal_GUI_Name_BG;
 extern const wchar_t *dsSignal_GUI_Name_IG;
 extern const wchar_t *dsSignal_GUI_Name_ISIG;
@@ -590,6 +622,40 @@ extern const wchar_t* rsSolve_Parameters;
 extern const wchar_t* rsSolve_Using_All_Segments;
 extern const wchar_t* rsSolve_On_Level_Count;
 extern const wchar_t* rsSolve_On_Calibration;
+
+extern const wchar_t* rsMatlab_Manifest_File;
+extern const wchar_t* rsMatlab_Manifest_Session_Name_Path;
+extern const wchar_t* rsMatlab_Manifest_Workdir_Path;
+extern const wchar_t* rsMatlab_Manifest_Models_Path;
+extern const wchar_t* rsMatlab_Manifest_Solvers_Path;
+extern const wchar_t* rsMatlab_Manifest_Model_Tag;
+extern const wchar_t* rsMatlab_Manifest_Solver_Tag;
+extern const wchar_t* rsMatlab_Manifest_Id_Parameter;
+extern const wchar_t* rsMatlab_Manifest_Description_Parameter;
+extern const wchar_t* rsMatlab_Manifest_Name_Parameter;
+extern const wchar_t* rsMatlab_Manifest_DB_Table_Parameter;
+extern const wchar_t* rsMatlab_Manifest_Parameters_Tag;
+extern const wchar_t* rsMatlab_Manifest_Parameter_Tag;
+extern const wchar_t* rsMatlab_Manifest_DB_Column_Parameter;
+extern const wchar_t* rsMatlab_Manifest_Default_Parameter;
+extern const wchar_t* rsMatlab_Manifest_Param_Lowbound;
+extern const wchar_t* rsMatlab_Manifest_Param_Upbound;
+extern const wchar_t* rsMatlab_Manifest_Signals_Tag;
+extern const wchar_t* rsMatlab_Manifest_Signal_Tag;
+extern const wchar_t* rsMatlab_Manifest_Reference_Signal_Id_Param;
+extern const wchar_t* rsMatlab_Manifest_Script_Name;
+extern const wchar_t* rsMatlab_Manifest_Models_Tag;
+
+extern const char16_t* rsMatlab_Variable_Model_Parameters;
+extern const char16_t* rsMatlab_Variable_Model_Times;
+extern const char16_t* rsMatlab_Variable_Model_Derivation;
+extern const char16_t* rsMatlab_Variable_Model_Output;
+extern const char16_t* rsMatlab_Variable_Solver_Times;
+extern const char16_t* rsMatlab_Variable_Solver_Values;
+extern const char16_t* rsMatlab_Variable_Solver_Hints;
+extern const char16_t* rsMatlab_Variable_Solver_Lowbounds;
+extern const char16_t* rsMatlab_Variable_Solver_Upbounds;
+extern const char16_t* rsMatlab_Variable_Solver_Output;
 
 //*******
 extern const wchar_t *rsCalculate_Past_New_Params;
