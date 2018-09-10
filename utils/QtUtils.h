@@ -31,23 +31,18 @@
 
 #pragma once
 
-#include "../../common/utils/SimpleIni.h"
+#include <QtCore/QString>
 
-#include "filter_chain.h"
+std::wstring QStringToStdWString(const QString &str);
+QString StdWStringToQString(const std::wstring &str);
 
-class CConfig {
-protected:
-	std::wstring mFile_Path;
-	// stored filename to be used in e.g. window title
-	std::wstring mFile_Name;
-	CSimpleIniW mIni;
-public:
-	void Resolve_And_Load_Config_File(const std::wstring &alternative_path);
+// we may want to define NOGUI macro for non-graphical environments which still needs some of Qt utils
+#ifndef NOGUI
 
-	void Load(CFilter_Chain &filter_chain);
-	void Save(const CFilter_Chain &filter_chain);
+#include <QtSql/QSqlTableModel>
+#include <QtWidgets/QTableView>
 
-	const wchar_t* Get_Config_File_Name() const;
-};
+int HideDbColByName(const QSqlTableModel &model, QTableView &view, const char* dbcolname);
+int SetupDbColUI(QSqlTableModel &model, QTableView &view, const char* dbcolname, const char* uicolname, const int width, const int moveto);
 
-extern CConfig Configuration;
+#endif

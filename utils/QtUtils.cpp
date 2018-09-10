@@ -29,25 +29,47 @@
  *    obtain specific terms and conditions for the use of the software.
  */
 
-#pragma once
+#include "QtUtils.h"
 
-#include "../../common/utils/SimpleIni.h"
+/*! Convert a QString to an std::wstring */
+std::wstring QStringToStdWString(const QString &str) {
+#ifdef _MSC_VER
+    return std::wstring((const wchar_t *)str.utf16());
+#else
+    return str.toStdWString();
+#endif
+}
 
-#include "filter_chain.h"
+/*! Convert an std::wstring to a QString */
+QString StdWStringToQString(const std::wstring &str) {
 
-class CConfig {
-protected:
-	std::wstring mFile_Path;
-	// stored filename to be used in e.g. window title
-	std::wstring mFile_Name;
-	CSimpleIniW mIni;
-public:
-	void Resolve_And_Load_Config_File(const std::wstring &alternative_path);
+#ifdef _MSC_VER
+    return QString::fromUtf16((const ushort *)str.c_str());
+#else
+    return QString::fromStdWString(str);
+#endif
+}
 
-	void Load(CFilter_Chain &filter_chain);
-	void Save(const CFilter_Chain &filter_chain);
+#ifndef NOGUI
 
-	const wchar_t* Get_Config_File_Name() const;
+#include <QtWidgets/QHeaderView>
+
+int HideDbColByName(const QSqlTableModel &model, QTableView &view, const char* dbcolname) {
+	int idx = model.fieldIndex(dbcolname);
+	if (idx >= 0) view.hideColumn(idx);
+	return idx;
 };
 
-extern CConfig Configuration;
+int SetupDbColUI(QSqlTableModel &model, QTableView &view, const char* dbcolname, const char* uicolname, const int width, const int moveto){
+	int idx = model.fieldIndex(dbcolname);
+	if (idx >= 0) {
+		model.setHeaderData(idx, Qt::Horizontal, QWidget::tr(uicolname));
+		view.setColumnWidth(idx, width);
+
+		QHeaderView *hdr = view.horizontalHeader();
+		hdr->moveSection(hdr->visualIndex(idx), moveto);
+	}
+	return idx;
+};
+
+#endif

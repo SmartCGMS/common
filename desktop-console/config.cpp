@@ -40,6 +40,8 @@
 #include <vector>
 #include <list>
 #include <fstream>
+#include <codecvt>
+#include <locale>
 
 CConfig Configuration;
 
@@ -58,7 +60,8 @@ void CConfig::Resolve_And_Load_Config_File(const std::wstring &alternative_path)
 	std::ifstream configfile;
 
 	try {
-		configfile.open(mFile_Path);
+		std::wstring_convert<std::codecvt_utf8<wchar_t>> myconv;
+		configfile.open(myconv.to_bytes(mFile_Path));
 
 		if (configfile.is_open()) {
 			buf.assign(std::istreambuf_iterator<char>(configfile), std::istreambuf_iterator<char>());
@@ -238,7 +241,8 @@ void CConfig::Save(const CFilter_Chain &filter_chain) {
 
 	std::string content;
 	mIni.Save(content);
-	std::ofstream config_file(mFile_Path);
+	std::wstring_convert<std::codecvt_utf8<wchar_t>> myconv;
+	std::ofstream config_file(myconv.to_bytes(mFile_Path));
 	if (config_file.is_open()) {
 		config_file << content;
 		config_file.close();

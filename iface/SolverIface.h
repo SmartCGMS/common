@@ -77,6 +77,8 @@ namespace glucose {
 		char cancelled;	//just cast it to bool, if set to true, solver cancels the current operation				   			
 	};
 
+	const TSolver_Progress Null_Solver_Progress = { 0, 0, 0.0, 0 };
+
 
 	struct TSolver_Setup {
 		const GUID solver_id; const GUID calculated_signal_id; const GUID reference_signal_id;
