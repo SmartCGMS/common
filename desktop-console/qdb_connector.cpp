@@ -108,6 +108,8 @@ HRESULT IfaceCalling CDb_Query::Get_Next(db::TParameter* const values, const siz
 
 					case db::NParameter_Type::ptBool:		values[i].boolean = db_value.toBool();
 															break;
+
+					default: break;
 				}
 			}
 			else

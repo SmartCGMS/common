@@ -33,7 +33,7 @@
 
 
 #include "hresult.h"
-#include "winapi_mapping.h"
+#include "../utils/winapi_mapping.h"
 
 #include <cstring>
 

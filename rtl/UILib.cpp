@@ -30,7 +30,7 @@
  */
 
 #include "UILib.h"
-#include "winapi_mapping.h"
+#include "../utils/winapi_mapping.h"
 #include "FactoryLib.h"
 
 #include <map>

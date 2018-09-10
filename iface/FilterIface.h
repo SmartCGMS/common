@@ -37,7 +37,7 @@
 
 #include "DeviceIface.h"
 
-#include "../rtl/winapi_mapping.h"
+#include "../utils/winapi_mapping.h"
 
 namespace glucose {
 

@@ -1,4 +1,4 @@
-/**
+ /**
  * SmartCGMS - continuous glucose monitoring and controlling framework
  * https://diabetes.zcu.cz/
  *
@@ -233,6 +233,8 @@ void CConfig::Save(const CFilter_Chain &filter_chain) {
 				case glucose::NParameter_Type::ptModel_Bounds:
 					mIni.SetValue(id_str.c_str(), WChar_Container_To_WString(param.config_name).c_str(), Model_Parameters_To_WString(param.parameters).c_str());
 					break;
+
+				default: break;
 			}
 		}
 			

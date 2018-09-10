@@ -32,7 +32,7 @@
 #pragma once 
 
 #include <stdlib.h>
-#include "winapi_mapping.h"
+#include "../utils/winapi_mapping.h"
 
 const size_t AVX2Alignment = 64;
 

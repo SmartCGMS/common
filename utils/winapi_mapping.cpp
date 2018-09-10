@@ -68,7 +68,7 @@ void gmtime_s(struct tm* t, const time_t* tim)
 
 void* _aligned_malloc(size_t n, size_t alignment)
 {
-	void* mem;
+	void* mem = nullptr;
 	posix_memalign(&mem, alignment, n);
 
 	return mem;

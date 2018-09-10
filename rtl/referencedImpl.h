@@ -202,6 +202,7 @@ namespace refcnt {
 
 	class Swstr_container : public virtual std::shared_ptr<refcnt::wstr_container> {
 	public:
+		Swstr_container& operator=(const Swstr_container&) = default;	//https://stackoverflow.com/questions/34554612/warning-defaulted-move-assignment-operator-of-x-will-move-assign-virtual-base-c
 		void set(const wchar_t *str);
 		bool operator==(const wchar_t *other) const;
 	};

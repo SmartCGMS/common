@@ -34,7 +34,7 @@
 #include <string>
 
 #include "referencedImpl.h"
-#include "winapi_mapping.h"
+#include "../utils/winapi_mapping.h"
 
 /*
  * Dynamic library (shared object) wrapper class
