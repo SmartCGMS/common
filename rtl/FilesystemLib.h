@@ -81,7 +81,7 @@ std::list<std::wstring, A> List_Directory(std::wstring basePath) {
 	if ((dp = opendir(sbase.c_str())) != NULL) {
 
 		while ((dirp = readdir(dp)) != NULL)
-			target.push_back(std::wstring(dirp->d_name, dirp->d_name + strlen(dirp->d_name)));
+			result.push_back(std::wstring(dirp->d_name, dirp->d_name + strlen(dirp->d_name)));
 
 		closedir(dp);
 	}
