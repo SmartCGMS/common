@@ -84,6 +84,8 @@ namespace glucose {
 		};
 	};
 
+	constexpr TFilter_Parameter Null_Filter_Parameter = { NParameter_Type::ptNull, nullptr, { nullptr } };
+
 	using IFilter_Configuration = refcnt::IVector_Container<glucose::TFilter_Parameter>;
 
 	class IFilter : public virtual refcnt::IReferenced {

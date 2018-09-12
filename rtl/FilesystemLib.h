@@ -76,12 +76,15 @@ std::list<std::wstring, A> List_Directory(std::wstring basePath) {
 #else
 	std::string sbase(basePath.begin(), basePath.end());
 
+	if (*basePath.rbegin() != L'/')
+		basePath += L"/";
+
 	DIR *dp;
 	struct dirent *dirp;
 	if ((dp = opendir(sbase.c_str())) != NULL) {
 
 		while ((dirp = readdir(dp)) != NULL)
-			result.push_back(std::wstring(dirp->d_name, dirp->d_name + strlen(dirp->d_name)));
+			result.push_back(basePath + std::wstring(dirp->d_name, dirp->d_name + strlen(dirp->d_name)));
 
 		closedir(dp);
 	}

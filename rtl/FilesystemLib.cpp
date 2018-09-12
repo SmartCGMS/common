@@ -29,8 +29,17 @@
  *    obtain specific terms and conditions for the use of the software.
  */
 
-#include "FilesystemLib.h"
+#ifdef __APPLE__
+	// small hack to avoid redefinition of TRUE and FALSE in non-strongly typed manner
+	// this "converts" Apple definition of DYLD_BOOL to strongly typed enum, therefore
+	// allowing us to define our own "global" TRUE and FALSE
+	#define DYLD_BOOL class DYLD_BOOL
 
+	#include <mach-o/dyld.h>
+#endif
+
+
+#include "FilesystemLib.h"
 
 #include "hresult.h"
 #include "../utils/winapi_mapping.h"
@@ -44,6 +53,13 @@ std::wstring Get_Application_Dir() {
 #ifdef _WIN32
 	wchar_t ModuleFileName[bufsize];
 	GetModuleFileNameW(((HINSTANCE)&__ImageBase), ModuleFileName, bufsize);
+#elif __APPLE__
+	char RelModuleFileName[bufsize];
+	uint32_t size = static_cast<uint32_t>(bufsize);
+	_NSGetExecutablePath(RelModuleFileName, &size);
+
+	char ModuleFileName[bufsize];
+	realpath(RelModuleFileName, ModuleFileName);
 #else
 	char ModuleFileName[bufsize];
 	memset(ModuleFileName, 0, bufsize);
@@ -53,7 +69,7 @@ std::wstring Get_Application_Dir() {
 
 
 #ifdef DHAS_FILESYSTEM
-	filesystem::path exePath { ModuleFileName};
+	filesystem::path exePath{ ModuleFileName };
 
 	return exePath.remove_filename().wstring();
 #else

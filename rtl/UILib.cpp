@@ -123,11 +123,11 @@ namespace glucose
 	}
 
 
-	const std::array<const wchar_t*, static_cast<size_t>(glucose::NDevice_Event_Code::count)> event_code_text = {
+	const std::array<const wchar_t*, static_cast<size_t>(glucose::NDevice_Event_Code::count)> event_code_text = { {
 		L"Nothing",
 		L"Shut_Down",
 		L"Level",
-		L"Masked_Level",		
+		L"Masked_Level",
 		L"Parameters",
 		L"Parameters_Hint",
 		L"Suspend_Parameter_Solving",
@@ -140,10 +140,9 @@ namespace glucose
 		L"Information",
 		L"Warning",
 		L"Error"
-	};
+	} };
 
 
-	
 	CSignal_Names::CSignal_Names() {
 		mSignal_Names.clear();
 
