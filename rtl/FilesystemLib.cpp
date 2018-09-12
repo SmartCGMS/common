@@ -69,12 +69,14 @@ std::wstring Get_Application_Dir() {
 }
 
 std::wstring& Path_Append(std::wstring& path, const wchar_t* level) {
-#ifdef DHAS_FILESYSTEM
+#ifdef DHAS_FILESYSTEMX
 	// use overloaded operator/, which uses preferred path component separator
 	path = (filesystem::path(path) / level).wstring();
 #else
-	if (path.substr(path.size() - 1, 1) != L"/")
-		path += L"/";
+	if (!path.empty()) {
+		if (path.substr(path.size() - 1, 1) != L"/")
+			path += L"/";
+	}
 	path += level;
 #endif
 	return path;

@@ -34,6 +34,7 @@
 #include "../iface/DbIface.h"
 
 #include <vector>
+#include <string>
 
 namespace db {
 
