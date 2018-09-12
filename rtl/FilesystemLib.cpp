@@ -37,8 +37,7 @@
 
 #include <cstring>
 
-std::wstring Get_Application_Dir()
-{
+std::wstring Get_Application_Dir() {
 
 	const size_t bufsize = 1024;
 
@@ -52,15 +51,32 @@ std::wstring Get_Application_Dir()
 	// TODO: error checking
 #endif
 
+
+#ifdef DHAS_FILESYSTEM
 	filesystem::path exePath { ModuleFileName};
 
 	return exePath.remove_filename().wstring();
+#else
+	std::string spath(ModuleFileName);
+	std::wstring path(spath.begin(), spath.end());
+
+	size_t pos = path.find_last_of('/');
+	if (pos != std::string::npos)
+		path = path.substr(0, pos + 1);
+
+	return path;
+#endif
 }
 
-std::wstring& Path_Append(std::wstring& path, const wchar_t* level)
-{
+std::wstring& Path_Append(std::wstring& path, const wchar_t* level) {
+#ifdef DHAS_FILESYSTEM
 	// use overloaded operator/, which uses preferred path component separator
 	path = (filesystem::path(path) / level).wstring();
+#else
+	if (path.substr(path.size() - 1, 1) != L"/")
+		path += L"/";
+	path += level;
+#endif
 	return path;
 }
 

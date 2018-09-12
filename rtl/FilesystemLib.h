@@ -34,11 +34,16 @@
 // feature check for C++17/TS support state - filesystem is supported on both MSVS2017 and GCC8, but
 // on MSVS it's still in experimental namespace, contrary to GCC8, where it's considered stable
 #if __has_include(<experimental/filesystem>)
-#include <experimental/filesystem>
-namespace filesystem = std::experimental::filesystem;
+	#include <experimental/filesystem>
+	namespace filesystem = std::experimental::filesystem;
+	#define DHAS_FILESYSTEM
 #elif __has_include(<filesystem>)
-#include <filesystem>
-namespace filesystem = std::filesystem;
+	#include <filesystem>
+	namespace filesystem = std::filesystem;
+	#define DHAS_FILESYSTEM
+#else
+	#include <dirent.h>
+	#include <unistd.h>
 #endif
 
 #include <string>
@@ -58,6 +63,7 @@ std::list<std::wstring, A> List_Directory(std::wstring basePath) {
 
 	std::list<std::wstring, A> result;
 
+#ifdef DHAS_FILESYSTEM
 	filesystem::path base(basePath);
 	if (!base.empty()) {
 
@@ -67,6 +73,19 @@ std::list<std::wstring, A> List_Directory(std::wstring basePath) {
 		for (auto& item : filesystem::directory_iterator(base))
 			result.push_back(item.path().wstring());
 	}
+#else
+	std::string sbase(basePath.begin(), basePath.end());
+
+	DIR *dp;
+	struct dirent *dirp;
+	if ((dp = opendir(sbase.c_str())) != NULL) {
+
+		while ((dirp = readdir(dp)) != NULL)
+			target.push_back(std::wstring(dirp->d_name, dirp->d_name + strlen(dirp->d_name)));
+
+		closedir(dp);
+	}
+#endif
 
 	return result;
 }

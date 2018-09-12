@@ -37,10 +37,14 @@
 	extern "C" char __ImageBase;
 
 	using socklen_t = int;
+
+	#define MainCalling __cdecl
 #else
 	#include <unistd.h>
 	#include <dlfcn.h>
 	#include <ctime>
+
+	#define MainCalling
 
 	using BOOL = int;
 	constexpr int TRUE = 1;
