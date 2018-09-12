@@ -39,7 +39,7 @@
 
 void* LoadLibraryW(const wchar_t *libname) {
 	std::string libstr{libname, libname + wcslen(libname)};
-	return (dlopen(libstr.c_str(), RTLD_NOW));
+	return (dlopen(libstr.c_str(), RTLD_LOCAL|RTLD_NOW));
 }
 
 void *GetProcAddress(void *libhandle, const char *symbolname) {

@@ -101,7 +101,6 @@ HRESULT CFilter_Chain_Manager::Init_And_Start_Filters(bool consumeOutputs) {
 	{
 		// the consume thread is considered a filter thread; it terminates with Shut_Down message
 		mFilterThreads.push_back(std::make_unique<std::thread>([this]() {
-			glucose::UDevice_Event evt;
 			auto input = mFilterPipes[mFilterPipes.size() - 1];
 
 			for (; glucose::UDevice_Event evt = input.Receive(); ) {
@@ -110,9 +109,9 @@ HRESULT CFilter_Chain_Manager::Init_And_Start_Filters(bool consumeOutputs) {
 				//and if it was a shutdown event, try to repost it into the first filter
 				//in the case, that some filter in the middle had produced the event
 				//then, we need to make sure that all preceding filters terminate as well
-				if (evt.event_code == glucose::NDevice_Event_Code::Shut_Down)
-					mFilterPipes[0].Send(evt);	// no need to test success
-
+				if (evt)
+					if (evt.event_code == glucose::NDevice_Event_Code::Shut_Down) 
+						mFilterPipes[0].Send(evt);	// no need to test success			
 			}
 		}));
 	}

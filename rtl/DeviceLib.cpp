@@ -168,6 +168,15 @@ glucose::UDevice_Event_internal::NDevice_Event_Major_Type glucose::UDevice_Event
     return glucose::UDevice_Event_internal::NDevice_Event_Major_Type::null;
 }
 
+void glucose::UDevice_Event::reset(std::nullptr_t nullp) {
+	if (operator bool()) {
+		auto deleter = get_deleter();
+		auto obj = get();
+		release();
+		deleter(obj);
+	}
+}
+
 bool glucose::UDevice_Event::is_level_event() const {
     return major_type() == glucose::UDevice_Event_internal::NDevice_Event_Major_Type::level;
 }

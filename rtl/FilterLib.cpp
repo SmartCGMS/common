@@ -86,9 +86,12 @@ namespace glucose {
 		if (!operator bool()) return false;
 		if (!event) return false;
 		
-		if (get()->send(event.get()) != S_OK) return false;
+		if (get()->send(event.get()) != S_OK) {
+			event.reset();	//delete and release the event anyway to prevent the event from being deleted twice
+			return false;
+		}
 			
-		event.release(); 	//release the resource from the sender
+		event.release(); 	//release the resource from the sender, but do not delete it to let it live in the next filter
 		
 		return true;
 	}

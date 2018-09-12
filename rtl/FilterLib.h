@@ -46,7 +46,7 @@ namespace glucose {
 	public:
 		SFilter_Pipe(glucose::IFilter_Pipe *pipe);
 		SFilter_Pipe();
-		bool Send(UDevice_Event &event);
+		bool Send(UDevice_Event &event);	//consumes the event in any case
 		UDevice_Event Receive();
 	};
 

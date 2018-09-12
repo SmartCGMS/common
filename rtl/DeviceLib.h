@@ -106,7 +106,9 @@ namespace glucose {
 	public:
 		explicit UDevice_Event(const NDevice_Event_Code code = NDevice_Event_Code::Nothing);
 		UDevice_Event(IDevice_Event *event);
+		//~UDevice_Event() { discard(); }
 		void reset(IDevice_Event *event) = delete;		//reset would break references tight to mRaw, therefore it is disallowed
+		void reset(std::nullptr_t nullp = nullptr);
 
 														//this must be const, because level, parameters and info shared the same data space!!!
 														//it is 100% fool proof, but programmer should still easily discover the error when overwriting e.g., info with level and then reading info
