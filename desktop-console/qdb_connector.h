@@ -56,7 +56,6 @@ public:
 
 class CDb_Connection : public virtual db::IDb_Connection, public virtual refcnt::CReferenced {
 protected:
-	QSqlDatabase mDb;
 	QString mConnection_Name;
 public:
 	CDb_Connection(const wchar_t *host, const wchar_t *provider, uint16_t port, const wchar_t *name, const wchar_t *user_name, const wchar_t *password);

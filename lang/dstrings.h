@@ -43,6 +43,10 @@ extern const char* dsSimulation;
 extern const char* dsLog_Tab;
 extern const char* dsErrors_Tab;
 
+extern const char* dsClose_Tab;
+extern const char* dsSave_Tab_State;
+extern const char* dsSaved_State_Tab_Suffix;
+
 extern const char* dsClose;
 extern const char* dsClose_All;
 

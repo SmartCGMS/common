@@ -41,6 +41,10 @@ const char* dsSimulation = "Simulation";
 const char* dsLog_Tab = "Log";
 const char* dsErrors_Tab = "Errors";
 
+const char* dsClose_Tab = "Close";
+const char* dsSave_Tab_State = "Save state";
+const char* dsSaved_State_Tab_Suffix = " (saved)";
+
 const char* dsClose = "Close";
 const char* dsClose_All = "Close All";
 

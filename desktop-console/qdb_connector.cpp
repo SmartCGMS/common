@@ -43,7 +43,7 @@ CDb_Connector db_connector{};
 
 
 CDb_Query::CDb_Query(QSqlDatabase &db, const wchar_t *statement) : mQuery(QSqlQuery{ db }) {
-	if (!mQuery.prepare(QString::fromWCharArray(statement))) throw std::invalid_argument{ "Malformed SQL statement."};
+	if (!mQuery.prepare(QString::fromWCharArray(statement))) throw std::invalid_argument{ "Malformed SQL statement." };
 }
 
 
@@ -131,21 +131,20 @@ HRESULT IfaceCalling CDb_Query::Cancel() {
 
 CDb_Connection::CDb_Connection(const wchar_t *host, const wchar_t *provider, uint16_t port, const wchar_t *name, const wchar_t *user_name, const wchar_t *password) {
 	mConnection_Name = "QDB_Connection_" + QUuid::createUuid().toString();
-	mDb = QSqlDatabase::addDatabase(QString::fromWCharArray(provider), mConnection_Name);
-	mDb.setHostName(QString::fromWCharArray(host));
-	if (port != 0) mDb.setPort(port);
-	mDb.setDatabaseName(QString::fromWCharArray(name));
-	mDb.setUserName(QString::fromWCharArray(user_name));
-	mDb.setPassword(QString::fromWCharArray(password));
+	QSqlDatabase db = QSqlDatabase::addDatabase(QString::fromWCharArray(provider), mConnection_Name);
+	db.setHostName(QString::fromWCharArray(host));
+	if (port != 0) db.setPort(port);
+	db.setDatabaseName(QString::fromWCharArray(name));
+	db.setUserName(QString::fromWCharArray(user_name));
+	db.setPassword(QString::fromWCharArray(password));
 
-	if (!mDb.open()) throw "Cannot open database";
-
+	if (!db.open()) throw "Cannot open database";
 }
 
 
 HRESULT IfaceCalling CDb_Connection::Query(const wchar_t *statement, db::IDb_Query **query) {
 	try {
-		return Manufacture_Object<CDb_Query, db::IDb_Query>(query, mDb, statement);
+		return Manufacture_Object<CDb_Query, db::IDb_Query>(query, QSqlDatabase::database(mConnection_Name), statement);
 	}
 	catch (...) {
 		return E_FAIL;
