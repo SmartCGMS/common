@@ -36,6 +36,7 @@
 #include <vector>
 
 #include "DeviceIface.h"
+#include "SolverIface.h"
 
 #include "../utils/winapi_mapping.h"
 
@@ -202,6 +203,15 @@ namespace glucose {
 		virtual HRESULT IfaceCalling Pop(refcnt::wstr_list **str) = 0;
 			//retrives newly available log records - caller TAKES ownership of the records
 			//returns S_OK if there was at least one log record, S_FALSE if none, E_FAIL otherwise
+	};
+
+
+	constexpr GUID Calculate_Filter_Inspection = { 0xec44cd18, 0x8d08, 0x46d1, { 0xa6, 0xcb, 0xc2, 0x43, 0x8e, 0x4, 0x19, 0x88 } };	
+	class ICalculate_Filter_Inspection : public virtual refcnt::IReferenced {
+	public:
+		virtual HRESULT IfaceCalling Get_Solver_Progress(glucose::TSolver_Progress const *progress) = 0;
+			//makes a deep copy of the entire progress
+		virtual HRESULT IfaceCalling Cancel_Solver() = 0;
 	};
 
 
