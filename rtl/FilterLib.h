@@ -109,6 +109,12 @@ namespace glucose {
 		SLog_Filter_Inspection(SFilter &log_filter);
 		bool pop(std::shared_ptr<refcnt::wstr_list> &list);
 	};
+
+	class SCalculate_Filter_Inspection : public std::shared_ptr<ICalculate_Filter_Inspection> {
+	public:
+		SCalculate_Filter_Inspection() noexcept {};
+		SCalculate_Filter_Inspection(SFilter &calculate_filter);
+	};
 }
 
 

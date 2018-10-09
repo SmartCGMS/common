@@ -42,6 +42,7 @@ protected:
 	std::wstring mFile_Name;
 	CSimpleIniW mIni;
 public:
+	explicit CConfig();
 	void Resolve_And_Load_Config_File(const std::wstring &alternative_path);
 
 	void Load(CFilter_Chain &filter_chain);

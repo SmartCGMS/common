@@ -39,7 +39,7 @@ HRESULT IfaceCalling CCommon_Calculation::Get_Discrete_Levels(double* const time
 	return E_NOTIMPL;
 }
 
-HRESULT IfaceCalling CCommon_Calculation::Get_Discrete_Bounds(glucose::TBounds *bounds, size_t *level_count) const {
+HRESULT IfaceCalling CCommon_Calculation::Get_Discrete_Bounds(glucose::TBounds* const time_bounds, glucose::TBounds* const level_bounds, size_t *level_count) const {
 	return E_NOTIMPL;
 }
 

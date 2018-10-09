@@ -46,6 +46,7 @@ extern const char* dsErrors_Tab;
 extern const char* dsClose_Tab;
 extern const char* dsSave_Tab_State;
 extern const char* dsSaved_State_Tab_Suffix;
+extern const char* dsBest_Metric_Label;
 
 extern const char* dsClose;
 extern const char* dsClose_All;
@@ -85,6 +86,7 @@ extern const char* dsSimulation_Window;
 
 extern const wchar_t *dsDb_Reader;
 extern const wchar_t *dsDb_Writer;
+extern const wchar_t *dsSinCos_Generator;
 
 extern const wchar_t *dsDb_Host;
 extern const wchar_t *dsDb_Port;
@@ -99,6 +101,16 @@ extern const wchar_t *dsGenerate_Primary_Keys;
 extern const wchar_t *dsStore_Data;
 extern const wchar_t *dsStore_Parameters;
 extern const wchar_t *dsSubject_Id;
+
+extern const wchar_t *dsGen_IG_Offset;
+extern const wchar_t *dsGen_IG_Amplitude;
+extern const wchar_t *dsGen_IG_Sin_Period;
+extern const wchar_t *dsGen_IG_Sampling_Period;
+extern const wchar_t *dsGen_BG_Offset;
+extern const wchar_t *dsGen_BG_Amplitude;
+extern const wchar_t *dsGen_BG_Cos_Period;
+extern const wchar_t *dsGen_BG_Sampling_Period;
+extern const wchar_t *dsGen_Total_Time;
 
 extern const wchar_t *dsNet_Comm;
 extern const wchar_t *dsNet_Host;
@@ -481,6 +493,16 @@ extern const wchar_t *rsSignal_Destination_Id;
 extern const wchar_t *rsSignal_Masked_Id;
 extern const wchar_t *rsSignal_Value_Bitmask;
 
+extern const wchar_t *rsGen_IG_Offset;
+extern const wchar_t *rsGen_IG_Amplitude;
+extern const wchar_t *rsGen_IG_Sin_Period;
+extern const wchar_t *rsGen_IG_Sampling_Period;
+extern const wchar_t *rsGen_BG_Level_Offset;
+extern const wchar_t *rsGen_BG_Amplitude;
+extern const wchar_t *rsGen_BG_Cos_Period;
+extern const wchar_t *rsGen_BG_Sampling_Period;
+extern const wchar_t *rsGen_Total_Time;
+
 //extern const wchar_t *rsRecalculate_Past_On_Params;
 //extern const wchar_t *rsRecalculate_Past_On_Segment_Stop;
 
@@ -528,7 +550,7 @@ extern const wchar_t *rsInfo_Redraw_Complete;
 extern const wchar_t *rsInfo_Solver_Progress;
 extern const wchar_t *rsInfo_Solver_Failed;
 extern const wchar_t *rsInfo_Error_Metrics_Ready;
-extern const wchar_t *rsInfo_Marker;
+extern const wchar_t *rsInfo_Shut_Down_Marker;
 
 extern const wchar_t *rsConfig_File_Name;
 extern const wchar_t *rsFilter_Section_Prefix;

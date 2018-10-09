@@ -44,6 +44,7 @@ const char* dsErrors_Tab = "Errors";
 const char* dsClose_Tab = "Close";
 const char* dsSave_Tab_State = "Save state";
 const char* dsSaved_State_Tab_Suffix = " (saved)";
+const char* dsBest_Metric_Label = "Best metric: %1";
 
 const char* dsClose = "Close";
 const char* dsClose_All = "Close All";
@@ -83,6 +84,7 @@ const char* dsSimulation_Window = "Simulation window";
 
 const wchar_t *dsDb_Reader = L"Db Reader";
 const wchar_t *dsDb_Writer = L"Db Writer";
+const wchar_t *dsSinCos_Generator = L"Sin/Cos IG/BG generator";
 
 const wchar_t *dsDb_Host = L"Host";
 const wchar_t *dsDb_Port = L"Port";
@@ -97,6 +99,16 @@ const wchar_t *dsGenerate_Primary_Keys = L"Generate new primary keys";
 const wchar_t *dsStore_Data = L"Store data";
 const wchar_t *dsStore_Parameters = L"Store parameters";
 const wchar_t *dsSubject_Id = L"Subject";
+
+const wchar_t *dsGen_IG_Offset = L"IG level offset";
+const wchar_t *dsGen_IG_Amplitude = L"IG amplitude";
+const wchar_t *dsGen_IG_Sin_Period = L"IG sinus period";
+const wchar_t *dsGen_IG_Sampling_Period = L"IG sampling period";
+const wchar_t *dsGen_BG_Offset = L"BG level offset";
+const wchar_t *dsGen_BG_Amplitude = L"BG amplitude";
+const wchar_t *dsGen_BG_Cos_Period = L"BG cosinus period";
+const wchar_t *dsGen_BG_Sampling_Period = L"BG sampling period";
+const wchar_t *dsGen_Total_Time = L"Total generated time interval";
 
 const wchar_t *dsNet_Comm = L"Network";
 const wchar_t *dsNet_Host = L"Host/Bind address";
@@ -491,6 +503,16 @@ const wchar_t *rsSignal_Destination_Id = L"Signal_Dst_Id";
 const wchar_t *rsRecalculate_Past_On_Params = L"Recalculate_Past_On_Params";
 //const wchar_t *rsRecalculate_Past_On_Segment_Stop = L"Recalculate_Past_On_Segment_Stop";
 
+const wchar_t *rsGen_IG_Offset = L"IG_Level_Offset";
+const wchar_t *rsGen_IG_Amplitude = L"IG_Amplitude";
+const wchar_t *rsGen_IG_Sin_Period = L"IG_Sinus_Period";
+const wchar_t *rsGen_IG_Sampling_Period = L"IG_Sampling_Period";
+const wchar_t *rsGen_BG_Level_Offset = L"BG_Level_Offset";
+const wchar_t *rsGen_BG_Amplitude = L"BG_Amplitude";
+const wchar_t *rsGen_BG_Cos_Period = L"BG_Cosinus_Period";
+const wchar_t *rsGen_BG_Sampling_Period = L"BG_Sampling_Period";
+const wchar_t *rsGen_Total_Time = L"Total_Time";
+
 const wchar_t *rsParameters_Reset = L"Model_Signal_Params_Reset";
 const wchar_t *rsParameters_Reset_Request = L"Model_Signal_Params_Reset_Request";
 const wchar_t *rsSegment_Recalculate_Complete = L"Segment_Recalculate_Complete";
@@ -536,7 +558,7 @@ const wchar_t *rsInfo_Redraw_Complete = L"RedrawComplete";
 const wchar_t *rsInfo_Solver_Progress = L"SolverProgress";
 const wchar_t *rsInfo_Solver_Failed = L"SolverFailed";
 const wchar_t *rsInfo_Error_Metrics_Ready = L"ErrorMetricsReady";
-const wchar_t *rsInfo_Marker = L"Marker";
+const wchar_t *rsInfo_Shut_Down_Marker = L"Shut_Down_Marker";
 
 const wchar_t *rsConfig_File_Name = L"config.ini";
 const wchar_t *rsFilter_Section_Prefix = L"Filter";

@@ -265,6 +265,11 @@ namespace glucose {
 
 		return result;
 	}
+
+	SCalculate_Filter_Inspection::SCalculate_Filter_Inspection(SFilter &calculate_filter) {
+		if (calculate_filter)
+			refcnt::Query_Interface<glucose::IFilter, glucose::ICalculate_Filter_Inspection>(calculate_filter.get(), Calculate_Filter_Inspection, *this);
+	}
 }
 
 

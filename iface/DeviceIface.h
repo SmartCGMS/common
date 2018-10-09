@@ -147,10 +147,7 @@ namespace glucose {
 	static constexpr decltype(TDevice_Event::segment_id) All_Segments_Id = std::numeric_limits<decltype(All_Segments_Id)>::max() - 1;
 
 	typedef struct {
-		double Min_Time,
-			Max_Time,
-			Min_Level,
-			Max_Level;
+		double Min, Max;
 	} TBounds;
 
 
@@ -161,7 +158,7 @@ namespace glucose {
 		//for measured signal, it returns the measured values
 		//for calculated signal, it returns the measured values of the referecne signal - to enable solving
 
-		virtual HRESULT IfaceCalling Get_Discrete_Bounds(TBounds *bounds, size_t *level_count) const = 0;
+		virtual HRESULT IfaceCalling Get_Discrete_Bounds(TBounds* const time_bounds, TBounds* const level_bounds, size_t *level_count) const = 0;
 		//gets bounds and level_count, any of these parameters can be nullptr
 		//for measured and calculated signals, dtto Get_Discrete_Levels
 

@@ -42,8 +42,14 @@
 #include <fstream>
 #include <codecvt>
 #include <locale>
+#include <clocale>
 
 CConfig Configuration;
+
+CConfig::CConfig() {
+	// set numeric locale to "C" for e.g. dot decimal point separator
+	std::setlocale(LC_NUMERIC, "C");
+}
 
 void CConfig::Resolve_And_Load_Config_File(const std::wstring &alternative_path) {
 	if (alternative_path.empty()) {

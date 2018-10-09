@@ -84,8 +84,8 @@ HRESULT glucose::WSignal::Get_Discrete_Levels(double* const times, double* const
     return mSignal ? mSignal->Get_Discrete_Levels(times, levels, count, filled) : E_FAIL;
 }
 
-HRESULT glucose::WSignal::Get_Discrete_Bounds(glucose::TBounds *bounds, size_t *level_count) const {
-    return mSignal ? mSignal->Get_Discrete_Bounds(bounds, level_count) : E_FAIL;
+HRESULT glucose::WSignal::Get_Discrete_Bounds(glucose::TBounds* const time_bounds, glucose::TBounds* const level_bounds, size_t *level_count) const {
+    return mSignal ? mSignal->Get_Discrete_Bounds(time_bounds, level_bounds, level_count) : E_FAIL;
 }
 
 
@@ -239,7 +239,7 @@ glucose::STime_Segment glucose::CTime_Segment::Clone()
             continue;
 
         // retrieve discrete bounds (this will fail for calculated signals, which we are not fancy copying)
-        if (signal.second->Get_Discrete_Bounds(nullptr, &count) != S_OK)
+        if (signal.second->Get_Discrete_Bounds(nullptr, nullptr, &count) != S_OK)
             continue;
 
         if (count == 0)

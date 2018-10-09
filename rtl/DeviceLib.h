@@ -63,7 +63,7 @@ namespace glucose {
 		WSignal(ISignal *signal);
 
 		HRESULT Get_Discrete_Levels(double* const times, double* const levels, const size_t count, size_t *filled) const;
-		HRESULT Get_Discrete_Bounds(TBounds *bounds, size_t *level_count) const;
+		HRESULT Get_Discrete_Bounds(glucose::TBounds* const time_bounds, glucose::TBounds* const level_bounds, size_t *level_count) const;
 	};
 
 	class WTime_Segment { //: public std::weak_ptr<ITime_Segment> { --cannot inherit because shared-weak relationshop cannot live across COM interface
