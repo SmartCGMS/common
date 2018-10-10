@@ -65,10 +65,10 @@ namespace glucose {
 		TFilter_Parameter* Resolve_Parameter(const wchar_t* name);
 	public:
 		std::wstring Read_String(const wchar_t* name);
-		int64_t Read_Int(const wchar_t* name);
+		int64_t Read_Int(const wchar_t* name, const int64_t default_value = std::numeric_limits<int64_t>::max());
 		std::vector<int64_t> Read_Int_Array(const wchar_t* name);
-		GUID Read_GUID(const wchar_t* name);
-		bool Read_Bool(const wchar_t* name);
+		GUID Read_GUID(const wchar_t* name, const GUID &default_value = Invalid_GUID);
+		bool Read_Bool(const wchar_t* name, bool default_value = false);
 		double Read_Double(const wchar_t* name);
 		void Read_Parameters(const wchar_t* name, glucose::SModel_Parameter_Vector &lower_bound, glucose::SModel_Parameter_Vector &default_parameters, glucose::SModel_Parameter_Vector &upper_bound);
 		

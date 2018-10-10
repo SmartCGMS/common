@@ -167,9 +167,9 @@ namespace glucose {
 	}
 
 
-	int64_t SFilter_Parameters::Read_Int(const wchar_t* name) {
+	int64_t SFilter_Parameters::Read_Int(const wchar_t* name, const int64_t default_value) {
 		const auto parameter = Resolve_Parameter(name);
-		return parameter != nullptr ? parameter->int64 : std::numeric_limits<int64_t>::max();
+		return parameter != nullptr ? parameter->int64 : default_value;
 	}
 
 	std::vector<int64_t> SFilter_Parameters::Read_Int_Array(const wchar_t* name) {
@@ -183,14 +183,14 @@ namespace glucose {
 		return result;
 	}
 
-	GUID SFilter_Parameters::Read_GUID(const wchar_t* name) {
+	GUID SFilter_Parameters::Read_GUID(const wchar_t* name, const GUID &default_value) {
 		const auto parameter = Resolve_Parameter(name);
-		return parameter != nullptr ? parameter->guid : Invalid_GUID;
+		return parameter != nullptr ? parameter->guid : default_value;
 	}
 
-	bool SFilter_Parameters::Read_Bool(const wchar_t* name) {
+	bool SFilter_Parameters::Read_Bool(const wchar_t* name, bool default_value) {
 		const auto parameter = Resolve_Parameter(name);
-		return parameter != nullptr ? parameter->boolean : false;
+		return parameter != nullptr ? parameter->boolean : default_value;
 	}
 
 	double SFilter_Parameters::Read_Double(const wchar_t* name) {
@@ -212,17 +212,20 @@ namespace glucose {
 	void SFilter_Parameters::Read_Parameters(const wchar_t* name, glucose::SModel_Parameter_Vector &lower_bound, glucose::SModel_Parameter_Vector &default_parameters, glucose::SModel_Parameter_Vector &upper_bound) {
 		const auto parameter = Resolve_Parameter(name);
 
-		bool success = false;
+		bool success = parameter != nullptr;
 		double *begin, *end;
-		if (parameter->parameters->get(&begin, &end) == S_OK) {
-			if ((begin != nullptr) && (begin != end)) {
-				const size_t distance = std::distance(begin, end);
-				if (distance % 3 == 0) {
-					const size_t paramcnt = distance / 3; // lower, default, upper
-					lower_bound = refcnt::Create_Container_shared<double, glucose::SModel_Parameter_Vector>(begin, &begin[paramcnt]);
-					default_parameters = refcnt::Create_Container_shared<double, glucose::SModel_Parameter_Vector>(&begin[paramcnt], &begin[2 * paramcnt]);
-					upper_bound = refcnt::Create_Container_shared<double, glucose::SModel_Parameter_Vector>(&begin[2 * paramcnt], &begin[3 * paramcnt]);
-					success = true;
+
+		if (success) {
+			if (parameter->parameters->get(&begin, &end) == S_OK) {
+				if ((begin != nullptr) && (begin != end)) {
+					const size_t distance = std::distance(begin, end);
+					if (distance % 3 == 0) {
+						const size_t paramcnt = distance / 3; // lower, default, upper
+						lower_bound = refcnt::Create_Container_shared<double, glucose::SModel_Parameter_Vector>(begin, &begin[paramcnt]);
+						default_parameters = refcnt::Create_Container_shared<double, glucose::SModel_Parameter_Vector>(&begin[paramcnt], &begin[2 * paramcnt]);
+						upper_bound = refcnt::Create_Container_shared<double, glucose::SModel_Parameter_Vector>(&begin[2 * paramcnt], &begin[3 * paramcnt]);
+						success = true;
+					}
 				}
 			}
 		}
