@@ -2,7 +2,7 @@
 #include <winver.h>
 
 
-#define VER_COMPANYNAME_STR			"Tomas Koutny\0"
+#define VER_COMPANYNAME_STR			"University of West Bohemia\0"
 #define VER_LEGALCOPYRIGHT_STR		"ZCU-FAV-KIV\0"
 
 #define VER_PRODUCTVERSION          3,0,0,0

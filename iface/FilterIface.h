@@ -2,31 +2,40 @@
  * SmartCGMS - continuous glucose monitoring and controlling framework
  * https://diabetes.zcu.cz/
  *
+ * Copyright (c) since 2018 University of West Bohemia.
+ *
  * Contact:
  * diabetes@mail.kiv.zcu.cz
  * Medical Informatics, Department of Computer Science and Engineering
  * Faculty of Applied Sciences, University of West Bohemia
- * Technicka 8
- * 314 06, Pilsen
+ * Univerzitni 8
+ * 301 00, Pilsen
+ * 
+ * 
+ * Purpose of this software:
+ * This software is intended to demonstrate work of the diabetes.zcu.cz research
+ * group to other scientists, to complement our published papers. It is strictly
+ * prohibited to use this software for diagnosis or treatment of any medical condition,
+ * without obtaining all required approvals from respective regulatory bodies.
+ *
+ * Especially, a diabetic patient is warned that unauthorized use of this software
+ * may result into severe injure, including death.
+ *
  *
  * Licensing terms:
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * distributed under these license terms is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *
  * a) For non-profit, academic research, this software is available under the
- *    GPLv3 license. When publishing any related work, user of this software
- *    must:
- *    1) let us know about the publication,
- *    2) acknowledge this software and respective literature - see the
- *       https://diabetes.zcu.cz/about#publications,
- *    3) At least, the user of this software must cite the following paper:
- *       Parallel software architecture for the next generation of glucose
- *       monitoring, Proceedings of the 8th International Conference on Current
+ *      GPLv3 license.
+ * b) For any other use, especially commercial use, you must contact us and
+ *       obtain specific terms and conditions for the use of the software.
+ * c) When publishing work with results obtained using this software, you agree to cite the following paper:
+ *       Tomas Koutny and Martin Ubl, "Parallel software architecture for the next generation of glucose
+ *       monitoring", Proceedings of the 8th International Conference on Current
  *       and Future Trends of Information and Communication Technologies
  *       in Healthcare (ICTH 2018) November 5-8, 2018, Leuven, Belgium
- * b) For any other use, especially commercial use, you must contact us and
- *    obtain specific terms and conditions for the use of the software.
  */
 
 #pragma once
@@ -44,10 +53,11 @@ namespace glucose {
 
 	class IFilter_Pipe : public virtual refcnt::IReferenced {
 	public:
+		// Pipe TAKES ownership of any nested reference-counted I-object so that send-caller is forbidden to call to release the nested objects
 		virtual HRESULT send(IDevice_Event *event) = 0;
-				//Pipe TAKES ownership of any nested reference-counted I-object so that send-caller is forbidden to call to release the nested objects				
+		// caller TAKES ownership of the received event and is responsible for freeing it
 		virtual HRESULT receive(IDevice_Event **event) = 0;
-				//caller TAKES ownership of the received event and is responsible for freeing it
+		// abort pipe operation explicitly - any subsequent send or receive calls will fail with S_FALSE
 		virtual HRESULT abort() = 0;
 	};
 
@@ -55,8 +65,8 @@ namespace glucose {
 
 	enum class NParameter_Type : size_t {
 		ptNull = 0,
-		ptWChar_Container,	//IParameter_Container<wchar_t>
-		ptSelect_Time_Segment_ID,	//alias for IParameter_Container<int64_t> that selects time segments id		
+		ptWChar_Container,			//IParameter_Container<wchar_t>
+		ptSelect_Time_Segment_ID,	//alias for IParameter_Container<int64_t> that selects time segments id
 		ptDouble,	
 		ptRatTime,					//double interperted as the rattime
 		ptInt64,
@@ -194,23 +204,27 @@ namespace glucose {
 	class IDrawing_Filter_Inspection : public virtual refcnt::IReferenced {
 	public:
 		// retrieves generated SVG for given drawing type and diagnosis
-		virtual HRESULT IfaceCalling Draw(TDrawing_Image_Type type, TDiagnosis diagnosis, refcnt::str_container *svg, refcnt::IVector_Container<uint64_t> *segmentIds, refcnt::IVector_Container<GUID> *signalIds) = 0; //should be const
+		virtual HRESULT IfaceCalling Draw(TDrawing_Image_Type type, TDiagnosis diagnosis, refcnt::str_container *svg, refcnt::IVector_Container<uint64_t> *segmentIds, refcnt::IVector_Container<GUID> *signalIds) = 0;
 	};
 
 	constexpr GUID Log_Filter_Inspection = { 0xa6054c8d, 0x5c01, 0x9e1d,{ 0x14, 0x39, 0x50, 0xda, 0xd1, 0x08, 0xc9, 0x48 } };
 	class ILog_Filter_Inspection : public virtual refcnt::IReferenced {
-	public:				
+	public:
+		/* retrives newly available log records - caller TAKES ownership of the records
+		   returns S_OK if there was at least one log record, S_FALSE if none, E_FAIL otherwise
+		*/
 		virtual HRESULT IfaceCalling Pop(refcnt::wstr_list **str) = 0;
-			//retrives newly available log records - caller TAKES ownership of the records
-			//returns S_OK if there was at least one log record, S_FALSE if none, E_FAIL otherwise
 	};
 
 
 	constexpr GUID Calculate_Filter_Inspection = { 0xec44cd18, 0x8d08, 0x46d1, { 0xa6, 0xcb, 0xc2, 0x43, 0x8e, 0x4, 0x19, 0x88 } };	
 	class ICalculate_Filter_Inspection : public virtual refcnt::IReferenced {
 	public:
+		// makes a deep copy of the entire progress
 		virtual HRESULT IfaceCalling Get_Solver_Progress(glucose::TSolver_Progress* const progress) = 0;
-			//makes a deep copy of the entire progress
+		// retrieves solver information
+		virtual HRESULT IfaceCalling Get_Solver_Information(GUID* const calculated_signal_id, glucose::TSolver_Status* const status) const = 0;
+		// explicitly cancels solver
 		virtual HRESULT IfaceCalling Cancel_Solver() = 0;
 	};
 

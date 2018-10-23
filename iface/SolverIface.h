@@ -2,31 +2,40 @@
  * SmartCGMS - continuous glucose monitoring and controlling framework
  * https://diabetes.zcu.cz/
  *
+ * Copyright (c) since 2018 University of West Bohemia.
+ *
  * Contact:
  * diabetes@mail.kiv.zcu.cz
  * Medical Informatics, Department of Computer Science and Engineering
  * Faculty of Applied Sciences, University of West Bohemia
- * Technicka 8
- * 314 06, Pilsen
+ * Univerzitni 8
+ * 301 00, Pilsen
+ * 
+ * 
+ * Purpose of this software:
+ * This software is intended to demonstrate work of the diabetes.zcu.cz research
+ * group to other scientists, to complement our published papers. It is strictly
+ * prohibited to use this software for diagnosis or treatment of any medical condition,
+ * without obtaining all required approvals from respective regulatory bodies.
+ *
+ * Especially, a diabetic patient is warned that unauthorized use of this software
+ * may result into severe injure, including death.
+ *
  *
  * Licensing terms:
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * distributed under these license terms is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *
  * a) For non-profit, academic research, this software is available under the
- *    GPLv3 license. When publishing any related work, user of this software
- *    must:
- *    1) let us know about the publication,
- *    2) acknowledge this software and respective literature - see the
- *       https://diabetes.zcu.cz/about#publications,
- *    3) At least, the user of this software must cite the following paper:
- *       Parallel software architecture for the next generation of glucose
- *       monitoring, Proceedings of the 8th International Conference on Current
+ *      GPLv3 license.
+ * b) For any other use, especially commercial use, you must contact us and
+ *       obtain specific terms and conditions for the use of the software.
+ * c) When publishing work with results obtained using this software, you agree to cite the following paper:
+ *       Tomas Koutny and Martin Ubl, "Parallel software architecture for the next generation of glucose
+ *       monitoring", Proceedings of the 8th International Conference on Current
  *       and Future Trends of Information and Communication Technologies
  *       in Healthcare (ICTH 2018) November 5-8, 2018, Leuven, Belgium
- * b) For any other use, especially commercial use, you must contact us and
- *    obtain specific terms and conditions for the use of the software.
  */
 
 #pragma once
@@ -34,9 +43,6 @@
 #include "DeviceIface.h"
 
 namespace glucose {
-
-	
-
 
 	struct TMetric_Parameters {
 		const GUID metric_id;
@@ -51,30 +57,40 @@ namespace glucose {
 
 	class IMetric: public virtual refcnt::IReferenced {
 	public:
+		/* let's the calculator to process a batch of known differences
+		   count is the number of elements of differences, which are encoded as vectors to exploit SIMD
+				this will becaome significant with ist prediction, where increased number of levels is expected compared to blood
+		   count is the total number of all levels that could have been calculated under optimal conditions
+				not calculated levels are quiet NaN
+		*/
 		virtual HRESULT IfaceCalling Accumulate(const double *times, const double *reference, const double *calculated, const size_t count) = 0;
-			//let's the calculator to process a batch of known differences
-			//count is the number of elements of differences, which are encoded as vectors to exploit SIMD
-			//		this will becaome significant with ist prediction, where increased number of levels is expected compared to blood
-			//count is the total number of all levels that could have been calculated under optimal conditions
-			//		not calculated levels are quiet NaN
-		virtual HRESULT IfaceCalling Reset() = 0;
-			//undo all previously called Accumulate
-		virtual HRESULT IfaceCalling Calculate(double *metric, size_t *levels_accumulated, size_t levels_required) = 0;
-			//calculates the metric - the less number is better
-			//levels will be the number of levels accumulated
-			//returns S_FALSE if *levels_accumulated < levels_required
 
+		// undo all previously called Accumulate
+		virtual HRESULT IfaceCalling Reset() = 0;
+
+		/* calculates the metric - the less number is better
+		   levels will be the number of levels accumulated
+		   returns S_FALSE if *levels_accumulated < levels_required
+		*/
+		virtual HRESULT IfaceCalling Calculate(double *metric, size_t *levels_accumulated, size_t levels_required) = 0;
+
+		// Retrieves metric parameter struct, so that we can clone the metric, e.g., over a network connection
 		virtual HRESULT IfaceCalling Get_Parameters(TMetric_Parameters *parameters) = 0;
-			//so that we can clone the metric, e.g., over a network connection
 	};
 
+	enum class TSolver_Status : uint8_t {
+		Disabled = 0,
+		Idle,
+		In_Progress,
+		Completed,
+		Failed
+	};
 
-
+	//solver sets these values to indicate its progress
 	struct TSolver_Progress {
-			//solver sets these values to indicate its progress
 		size_t current_progress, max_progress;	//minimum progress is zero
-		double best_metric;		
-		char cancelled;	//just cast it to bool, if set to true, solver cancels the current operation				   			
+		double best_metric;
+		char cancelled;	//just cast it to bool, if set to true, solver cancels the current operation
 	};
 
 	const TSolver_Progress Null_Solver_Progress = { 0, 0, 0.0, 0 };
@@ -94,7 +110,7 @@ namespace glucose {
 	using TCreate_Metric = HRESULT(IfaceCalling*)(const TMetric_Parameters *parameters, IMetric **metric);
 	using TSolve_Model_Parameters = HRESULT(IfaceCalling*)(const TSolver_Setup *setup);
 		//generic, e.g., evolutionary, solver uses signal_id to calculate its metric function on the given list of segments
-		//specialized solver has the signal ids encoded - i.e., specialized inside		
+		//specialized solver has the signal ids encoded - i.e., specialized inside
 		//the very first hint, if provided, has to be the best one
-	
+
 }
