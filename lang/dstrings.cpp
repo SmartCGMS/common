@@ -472,12 +472,44 @@ const wchar_t *dsUse_Opened_Segments_Only_Tooltip = L"Use currently opened segme
 
 //--------------------------------- do not translate any of the rs-prefixed texts --
 
-const char* rsAbout_Text = "<b>Glucose Predictor</b>, Version 3.0 Alpha<br>&nbsp;<br>"\
-"Tom\xc3\xa1\xc5\xa1 Koutn\xc3\xbd, Ph.D.<br><i>txkoutny@kiv.zcu.cz</i><br>&nbsp;<br>"\
-"Department of Computer Science and Engineering<br>"\
-"University of West Bohemia<br>"\
-"Plze\xc5\x88 306 14, Czech Republic<br>"\
-"&nbsp;<hr>diabetes.zcu.cz";
+const char* rsAbout_Text = R"CLC(
+<b>SmartCGMS</b> - continuous glucose monitoring and controlling framework<br>
+<a href="https://diabetes.zcu.cz/smartcgms">https://diabetes.zcu.cz/</a><br>
+&nbsp;<br>
+Copyright&copy; since 2018 University of West Bohemia.<br>
+&nbsp;<br>
+<i>Contact:</i><br>
+<a href="mailto:diabetes@mail.kiv.zcu.cz?Subject=SmartCGMS">diabetes@mail.kiv.zcu.cz</a><br>
+Medical Informatics, Department of Computer Science and Engineering<br>
+Faculty of Applied Sciences, University of West Bohemia<br>
+Univerzitni 8<br>
+301 00, Pilsen<br>
+Czech Republic<br>
+&nbsp;<br>
+&nbsp;<br>
+<i>Purpose of this software:</i><br>
+ This software is intended to demonstrate work of the diabetes.zcu.cz research
+ group to other scientists, to complement our published papers. It is strictly
+ prohibited to use this software for diagnosis or treatment of any medical condition,
+ without obtaining all required approvals from respective regulatory bodies.<br>
+&nbsp;<br>
+Especially, a diabetic patient is warned that unauthorized use of this software
+may result into severe injure, including death.<br>
+&nbsp;<br>
+&nbsp;<br>
+ <i>Licensing terms:</i><br>
+ Unless required by applicable law or agreed to in writing, software
+ distributed under these license terms is distributed on an "AS IS" BASIS, WITHOUT
+ WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.<br>
+ 
+<ol type="a"> 
+<li>For non-profit, academic research, this software is available under the <a href="https://www.gnu.org/licenses/gpl-3.0.html">GPLv3 license</a>.</li>
+<li>For any other use, especially commercial use, you must contact us and obtain specific terms and conditions for the use of the software.<li>
+<li>When publishing work with results obtained using this software, you agree to cite the following paper:<br>
+Tomas Koutny and Martin Ubl, <i>"Parallel software architecture for the next generation of glucose monitoring"</i>, 
+Proceedings of the 8th International Conference on Current and Future Trends of Information and Communication Technologies in Healthcare (ICTH 2018) November 5-8, 2018, Leuven, Belgium</li>
+ </ol>
+)CLC";
 
 const wchar_t *rsDb_Host = L"Host";
 const wchar_t *rsDb_Port = L"Port";
