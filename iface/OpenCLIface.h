@@ -70,7 +70,7 @@ namespace opencl {		//note that opencl does not clash with the official cl names
 			For a given kernel_id, it returns specific function source so that it can be compiled with OpenCL 2.0 or later.
 			The motivation is to compensate for the lack of OOP on GPU-like programming model.
 		*/
-		HRESULT IfaceCalling Get_Function_Source(const NFunction_Id function_id, const db::TParameter parameters, const size_t parameter_count, refcnt::wstr_container function_source) = 0;
+		HRESULT IfaceCalling Get_Function_Source(const NFunction_Id function_id, const db::TParameter *parameters, const size_t parameter_count, refcnt::wstr_container function_source) = 0;
 	};
 
 }
