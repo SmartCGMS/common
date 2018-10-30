@@ -59,7 +59,7 @@ namespace glucose {
 	public:
 		/* let's the calculator to process a batch of known differences
 		   count is the number of elements of differences, which are encoded as vectors to exploit SIMD
-				this will becaome significant with ist prediction, where increased number of levels is expected compared to blood
+				this will become significant with ist prediction, where increased number of levels is expected compared to blood
 		   count is the total number of all levels that could have been calculated under optimal conditions
 				not calculated levels are quiet NaN
 		*/
