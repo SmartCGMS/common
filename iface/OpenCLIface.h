@@ -63,7 +63,7 @@ namespace opencl {		//note that opencl does not clash with the official cl names
 	}
 		
 
-	constexpr GUID IID_Kernel = { 0xde4d9967, 0x8b, 0x445d, { 0xb4, 0xe7, 0x3b, 0xb6, 0xf5, 0x80, 0x6e, 0x1 } };
+	constexpr GUID IID_IFunction = { 0xde4d9967, 0x8b, 0x445d, { 0xb4, 0xe7, 0x3b, 0xb6, 0xf5, 0x80, 0x6e, 0x1 } };
 	class IFunction : public virtual refcnt::IReferenced {
 		/*
 			For a given kernel_id, it returns specific function source so that it can be compiled with OpenCL 2.0 or later.
