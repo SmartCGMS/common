@@ -40,9 +40,12 @@
 
 #pragma once
 
+#include "DeviceIface.h"
 #include "DbIface.h"
 
-namespace opencl {		//note that opencl does not clash with the official cl namespaces
+ //TODO: create rtl/opencllib.h with at least a function to rename OpenCL function to avoid name conflicts
+
+namespace opencl {		//note that opencl does not clash with the official cl namespace
 
 	enum class NFunction_Id : uint16_t {
 		Metric_Calculate_Accumulated = 0,		//equivalent to calling glucose::IMetric->Reset, Accumulate and Calculate
@@ -57,10 +60,6 @@ namespace opencl {		//note that opencl does not clash with the official cl names
 												//parameters[2].integer gives the desired degree of derivative
 												//returns a function source with the following signature
 												//void Get_Continous_Levels(double *parameters, double *times, double *calculated) {}
-
-
-		//TODO: solve dependencies on signals, e.g., on BG and IG for diffusion, when calling Get_Continuous_Levels
-
 	}
 		
 
@@ -69,8 +68,12 @@ namespace opencl {		//note that opencl does not clash with the official cl names
 		/*
 			For a given kernel_id, it returns specific function source so that it can be compiled with OpenCL 2.0 or later.
 			The motivation is to compensate for the lack of OOP on GPU-like programming model.
+
+			Segment is provided to resolve e.g., dependencies on other signals such Diffusion model depends on BG and IG.
+			In addition, the OpenCL code can assume that it does not work on live data and hence segment can be used to cache
+			those values, which will not change - e.g., results of ITimeSegments::Get_Discrete_Bounds.
 		*/
-		HRESULT IfaceCalling Get_Function_Source(const NFunction_Id function_id, const db::TParameter *parameters, const size_t parameter_count, refcnt::wstr_container function_source) = 0;
+		HRESULT IfaceCalling Get_Function_Source(const NFunction_Id function_id, glucose::ITimeSegment *segment, const db::TParameter *parameters, const size_t parameter_count, refcnt::wstr_container function_source) = 0;
 	};
 
 }
