@@ -132,4 +132,5 @@ namespace refcnt {
 	using wstr_container = IVector_Container<wchar_t>;
 	using wstr_list = IVector_Container<wstr_container*>;
 	using double_container = IVector_Container<double>;	
+	using byte_container = IVector_Container<uint8_t>;
 }

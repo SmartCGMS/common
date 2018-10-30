@@ -72,8 +72,15 @@ namespace opencl {		//note that opencl does not clash with the official cl names
 			Segment is provided to resolve e.g., dependencies on other signals such Diffusion model depends on BG and IG.
 			In addition, the OpenCL code can assume that it does not work on live data and hence segment can be used to cache
 			those values, which will not change - e.g., results of ITimeSegments::Get_Discrete_Bounds.
+
+			constant_memory may be already prefilled with some values, so the callee is supposed to add its constant
+			data as needed - for example, measured signal will copy its data there. However, constants should be embeded
+			into the function's source code to increase performance.
 		*/
-		HRESULT IfaceCalling Get_Function_Source(const NFunction_Id function_id, glucose::ITimeSegment *segment, const db::TParameter *parameters, const size_t parameter_count, refcnt::wstr_container function_source) = 0;
+		HRESULT IfaceCalling Generate_Source(const NFunction_Id function_id, 
+									 	     glucose::ITime_Segment *segment, const db::TParameter *parameters, const size_t parameter_count, 
+											 refcnt::str_container *function_source,
+											 refcnt::byte_container *constant_memory) = 0;
 	};
 
 }
