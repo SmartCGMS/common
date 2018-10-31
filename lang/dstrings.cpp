@@ -33,9 +33,7 @@
  *       obtain specific terms and conditions for the use of the software.
  * c) When publishing work with results obtained using this software, you agree to cite the following paper:
  *       Tomas Koutny and Martin Ubl, "Parallel software architecture for the next generation of glucose
- *       monitoring", Proceedings of the 8th International Conference on Current
- *       and Future Trends of Information and Communication Technologies
- *       in Healthcare (ICTH 2018) November 5-8, 2018, Leuven, Belgium
+ *       monitoring", Procedia Computer Science, Volume 141C, pp. 279-286, 2018
  */
 
 #include "dstrings.h"
@@ -507,7 +505,7 @@ may result into severe injure, including death.<br>
 <li>For any other use, especially commercial use, you must contact us and obtain specific terms and conditions for the use of the software.<li>
 <li>When publishing work with results obtained using this software, you agree to cite the following paper:<br>
 Tomas Koutny and Martin Ubl, <i>"Parallel software architecture for the next generation of glucose monitoring"</i>, 
-Proceedings of the 8th International Conference on Current and Future Trends of Information and Communication Technologies in Healthcare (ICTH 2018) November 5-8, 2018, Leuven, Belgium</li>
+Procedia Computer Science, Volume 141C, pp. 279-286, 2018</li>
  </ol>
 )CLC";
 
