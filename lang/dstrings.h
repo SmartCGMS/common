@@ -258,6 +258,7 @@ extern const wchar_t* dsInterstitial;
 
 extern const wchar_t* dsDiffusion_Model_v2;
 extern const wchar_t* dsSteil_Rebrin;
+extern const wchar_t* dsSteil_Rebrin_Diffusion_Prediction;
 
 extern const wchar_t* dsP;
 extern const wchar_t* dsCg;
@@ -270,6 +271,8 @@ extern const wchar_t* dsTau;
 extern const wchar_t* dsAlpha;
 extern const wchar_t* dsBeta;
 extern const wchar_t* dsGamma;
+
+extern const wchar_t* dsInv_G;
 
 extern const wchar_t* dsNewUOA;
 extern const wchar_t* dsMetaDE;
@@ -478,6 +481,7 @@ extern const wchar_t *rsTime_Segment_ID;
 extern const wchar_t *rsDiffusion_v2_Table;
 extern const wchar_t *rsDiffusion_v3_Table;
 extern const wchar_t *rsSteil_Rebrin_Table;
+extern const wchar_t *rsSteil_Rebrin_Diffusion_Prediction_Table;
 
 extern const wchar_t* rsP_Column;
 extern const wchar_t* rsCg_Column;
@@ -490,6 +494,8 @@ extern const wchar_t* rsTau_Column;
 extern const wchar_t* rsAlpha_Column;
 extern const wchar_t* rsBeta_Column;
 extern const wchar_t* rsGamma_Column;
+
+extern const wchar_t* rsInv_G_Column;
 
 extern const wchar_t *rsNet_Host;
 extern const wchar_t *rsNet_Port;

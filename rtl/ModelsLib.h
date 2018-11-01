@@ -47,3 +47,7 @@ namespace diffusion_v2_model {
 namespace steil_rebrin {
 	constexpr size_t param_count = 4;	//g=1 => tau, alpha, beta, gamma
 }
+
+namespace steil_rebrin_diffusion_prediction {
+	constexpr size_t param_count = 6;	//p, cg, c, dt, g, inv_tau
+}

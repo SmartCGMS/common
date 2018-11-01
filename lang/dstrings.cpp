@@ -258,6 +258,7 @@ const wchar_t* dsInterstitial = L"interstitial fluid";
 
 const wchar_t* dsDiffusion_Model_v2 = L"Diffusion model v2";
 const wchar_t* dsSteil_Rebrin = L"Steil-Rebrin";
+const wchar_t* dsSteil_Rebrin_Diffusion_Prediction = L"Steil-Rebrin Diffusion Prediction";
 
 const wchar_t* dsP = L"p";
 const wchar_t* dsCg = L"cg";
@@ -266,11 +267,12 @@ const wchar_t* dsDt = L"dt";
 const wchar_t* dsK = L"k";
 const wchar_t* dsH = L"h";
 
-
 const wchar_t* dsTau = L"tau";
 const wchar_t* dsAlpha = L"alpha";
 const wchar_t* dsBeta = L"beta";
 const wchar_t* dsGamma = L"gamma";
+
+const wchar_t* dsInv_G = L"1/g";
 
 const wchar_t* dsNewUOA = L"NewUOA";
 const wchar_t* dsMetaDE = L"MetaDE";
@@ -520,6 +522,7 @@ const wchar_t *rsTime_Segment_ID = L"Time_Segment_Id";
 const wchar_t *rsDiffusion_v2_Table = L"difuse2params";
 const wchar_t *rsDiffusion_v3_Table = L"difuse3params";
 const wchar_t *rsSteil_Rebrin_Table = L"steilrebrinparams";
+const wchar_t* rsSteil_Rebrin_Diffusion_Prediction_Table = L"steil_rebrin_diffusion_prediction";
 
 const wchar_t* rsP_Column = L"p";
 const wchar_t* rsCg_Column = L"cg";
@@ -527,6 +530,8 @@ const wchar_t* rsC_Column = L"c";
 const wchar_t* rsDt_Column = L"dt";
 const wchar_t* rsK_Column = L"k";
 const wchar_t* rsH_Column = L"h";
+
+const wchar_t* rsInv_G_Column = L"inv_g";
 
 const wchar_t* rsTau_Column = L"t";
 const wchar_t* rsAlpha_Column = L"alpha";
