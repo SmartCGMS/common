@@ -80,7 +80,8 @@ namespace glucose {
 		Disabled = 0,
 		Idle,
 		In_Progress,
-		Completed,
+		Completed_Improved,
+		Completed_Not_Improved,
 		Failed
 	};
 

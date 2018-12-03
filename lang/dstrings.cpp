@@ -56,7 +56,8 @@ const char* dsBest_Metric_Label = "Best metric: %1";
 const char* dsSolver_Status_Disabled = "Disabled";
 const char* dsSolver_Status_Idle = "Idle";
 const char* dsSolver_Status_In_Progress = "In progress";
-const char* dsSolver_Status_Completed = "Completed";
+const char* dsSolver_Status_Completed_Improved = "Completed and improved";
+const char* dsSolver_Status_Completed_Not_Improved = "Completed, but not improved";
 const char* dsSolver_Status_Failed = "Failed";
 
 const char* dsClose = "Close";
@@ -607,6 +608,7 @@ const wchar_t *rsCallback_Drawing_AGP = L"CallbackDrawing_AGP";
 const wchar_t *rsInfo_Redraw_Complete = L"RedrawComplete";
 const wchar_t *rsInfo_Solver_Progress = L"SolverProgress";
 const wchar_t *rsInfo_Solver_Failed = L"SolverFailed";
+const wchar_t *rsInfo_Solver_Completed_But_No_Improvement = L"Solver_Completed_But_No_Improvement";
 const wchar_t *rsInfo_Error_Metrics_Ready = L"ErrorMetricsReady";
 const wchar_t *rsInfo_Shut_Down_Marker = L"Shut_Down_Marker";
 

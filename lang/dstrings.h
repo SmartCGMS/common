@@ -58,7 +58,8 @@ extern const char* dsBest_Metric_Label;
 extern const char* dsSolver_Status_Disabled;
 extern const char* dsSolver_Status_Idle;
 extern const char* dsSolver_Status_In_Progress;
-extern const char* dsSolver_Status_Completed;
+extern const char* dsSolver_Status_Completed_Improved;
+extern const char* dsSolver_Status_Completed_Not_Improved;
 extern const char* dsSolver_Status_Failed;
 
 extern const char* dsClose;
@@ -568,6 +569,7 @@ extern const wchar_t *rsCallback_Drawing_AGP;
 extern const wchar_t *rsInfo_Redraw_Complete;
 extern const wchar_t *rsInfo_Solver_Progress;
 extern const wchar_t *rsInfo_Solver_Failed;
+extern const wchar_t *rsInfo_Solver_Completed_But_No_Improvement;
 extern const wchar_t *rsInfo_Error_Metrics_Ready;
 extern const wchar_t *rsInfo_Shut_Down_Marker;
 
