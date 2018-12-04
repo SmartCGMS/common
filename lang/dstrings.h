@@ -278,6 +278,7 @@ extern const wchar_t* dsInv_G;
 extern const wchar_t* dsNewUOA;
 extern const wchar_t* dsMetaDE;
 extern const wchar_t* dsBOBYQA;
+extern const wchar_t* dsHalton_Sequence;
 
 extern const wchar_t *dsLine_Approx;
 extern const wchar_t *dsAkima;

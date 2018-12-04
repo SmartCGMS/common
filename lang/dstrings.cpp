@@ -278,6 +278,7 @@ const wchar_t* dsInv_G = L"1/g";
 const wchar_t* dsNewUOA = L"NewUOA";
 const wchar_t* dsMetaDE = L"MetaDE";
 const wchar_t* dsBOBYQA = L"BOBYQA";
+const wchar_t* dsHalton_Sequence = L"Halton Sequence";
 
 const wchar_t *dsLine_Approx = L"Line";
 const wchar_t *dsAkima = L"Akima";
