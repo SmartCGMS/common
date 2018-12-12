@@ -260,6 +260,7 @@ const wchar_t* dsInterstitial = L"interstitial fluid";
 const wchar_t* dsDiffusion_Model_v2 = L"Diffusion model v2";
 const wchar_t* dsSteil_Rebrin = L"Steil-Rebrin";
 const wchar_t* dsSteil_Rebrin_Diffusion_Prediction = L"Steil-Rebrin Diffusion Prediction";
+const wchar_t* dsDiffusion_Prediction = L"Diffusion Prediction";
 
 const wchar_t* dsP = L"p";
 const wchar_t* dsCg = L"cg";
@@ -275,8 +276,19 @@ const wchar_t* dsGamma = L"gamma";
 
 const wchar_t* dsInv_G = L"1/g";
 
+const wchar_t* dsRetrospectiveP = L"p<sub>retro</sub>";
+const wchar_t* dsRetrospectiveCg = L"cg<sub>retro</sub>";
+const wchar_t* dsRetrospectiveC = L"c<sub>retro</sub>";
+const wchar_t* dsRetrospectiveDt = L"&Delta;t<sub>retro</sub>";
+
+const wchar_t* dsPredictiveP = L"p<sub>pred</sub>";
+const wchar_t* dsPredictiveCg = L"cg<sub>pred</sub>";
+const wchar_t* dsPredictiveC = L"c<sub>pred</sub>";
+const wchar_t* dsPredictiveDt = L"&Delta;t<sub>pred</sub>";
+
 const wchar_t* dsNewUOA = L"NewUOA";
 const wchar_t* dsMetaDE = L"MetaDE";
+const wchar_t* dsHalton_MetaDE = L"Halton MetaDE";
 const wchar_t* dsBOBYQA = L"BOBYQA";
 const wchar_t* dsHalton_Sequence = L"Halton Sequence";
 
@@ -525,6 +537,7 @@ const wchar_t *rsDiffusion_v2_Table = L"difuse2params";
 const wchar_t *rsDiffusion_v3_Table = L"difuse3params";
 const wchar_t *rsSteil_Rebrin_Table = L"steilrebrinparams";
 const wchar_t* rsSteil_Rebrin_Diffusion_Prediction_Table = L"steil_rebrin_diffusion_prediction";
+const wchar_t* rsDiffusion_Prediction_Table = L"diffusion_prediction";
 
 const wchar_t* rsP_Column = L"p";
 const wchar_t* rsCg_Column = L"cg";
@@ -534,6 +547,16 @@ const wchar_t* rsK_Column = L"k";
 const wchar_t* rsH_Column = L"h";
 
 const wchar_t* rsInv_G_Column = L"inv_g";
+
+const wchar_t* rsRetrospectiveP = L"p_retro";
+const wchar_t* rsRetrospectiveCg = L"cg_retro";
+const wchar_t* rsRetrospectiveC = L"c_retro";
+const wchar_t* rsRetrospectiveDt = L"dt_retro";
+
+const wchar_t* rsPredictiveP = L"p_pred";
+const wchar_t* rsPredictiveCg = L"cg_pred";
+const wchar_t* rsPredictiveC = L"c_pred";
+const wchar_t* rsPredictiveDt = L"dt_pred";
 
 const wchar_t* rsTau_Column = L"t";
 const wchar_t* rsAlpha_Column = L"alpha";

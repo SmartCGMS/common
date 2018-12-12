@@ -51,3 +51,7 @@ namespace steil_rebrin {
 namespace steil_rebrin_diffusion_prediction {
 	constexpr size_t param_count = 6;	//p, cg, c, dt, g, inv_tau
 }
+
+namespace diffusion_prediction {
+	constexpr size_t param_count = 8;	//2x p, cg, c, dt
+}
