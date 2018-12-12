@@ -186,7 +186,7 @@ const wchar_t *dsDevice_Interop_Filter = L"Real device interface";
 const wchar_t *dsInterop_Export_Filter = L"Interop export filter";
 
 const wchar_t *dsLog_Filter = L"CSV File Log";
-const wchar_t *dsLog_Output_File = L"Output file";
+const wchar_t *dsLog_Output_File = L"Log file";
 const wchar_t *dsLog_Header = L"Logical Clock; Device Time; Event Code; Signal; Info; Segment Id; Event Code Id; Device Id; Signal Id;";
 const wchar_t *dsLog_Filter_Replay = L"CSV File Log Replay";
 
@@ -609,7 +609,7 @@ const wchar_t *rsRecalculate_On_Levels_Count = L"Recalculate_Levels_Count";
 const wchar_t *rsRecalculate_On_Segment_End = L"Recalculate_At_Segment_End";
 const wchar_t *rsRecalculate_On_Calibration = L"Recalculate_On_Calibration";
 
-const wchar_t *rsLog_Output_File = L"Output_File";
+const wchar_t *rsLog_Output_File = L"Log_File";
 
 const wchar_t *rsDrawing_Filter_Period = L"Redraw_Period";
 const wchar_t *rsDiagnosis_Is_Type2 = L"Diabetes_Type_2";

@@ -50,7 +50,8 @@ CDb_Connector db_connector{};
 
 
 CDb_Query::CDb_Query(QSqlDatabase &db, const wchar_t *statement) : mQuery(QSqlQuery{ db }) {
-	if (!mQuery.prepare(QString::fromWCharArray(statement))) throw std::invalid_argument{ "Malformed SQL statement." };
+	if (!mQuery.prepare(QString::fromWCharArray(statement))) 
+		throw std::invalid_argument{ "Malformed SQL statement." };
 }
 
 
