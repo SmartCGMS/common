@@ -226,6 +226,7 @@ extern const wchar_t* dsMetric_Separator;
 extern const wchar_t* dsMetric_Levels_Required_Hint;
 extern const wchar_t* dsSolve_On_Level_Count;
 extern const wchar_t* dsSolve_On_Calibration;
+extern const wchar_t* dsSolve_On_Time_Segment_End;
 
 extern const char *dsConfiguration;
 extern const char *dsSelect_Just_One_Item;
@@ -693,6 +694,7 @@ extern const wchar_t* rsSolve_Parameters;
 extern const wchar_t* rsSolve_Using_All_Segments;
 extern const wchar_t* rsSolve_On_Level_Count;
 extern const wchar_t* rsSolve_On_Calibration;
+extern const wchar_t* rsSolve_On_Time_Segment_End;
 
 extern const wchar_t* rsMatlab_Manifest_File;
 extern const wchar_t* rsMatlab_Manifest_Session_Name_Path;
