@@ -157,11 +157,11 @@ const wchar_t *dsHold_Values_Delay = L"Hold delay [ms] (0 for real-time)";
 const wchar_t *dsSignal_Source_Id = L"Source ID";
 const wchar_t *dsSignal_Destination_Id = L"Map to ID";
 
-const wchar_t *rsSignal_Masked_Id = L"Signal_Masked_Id";
-const wchar_t *rsSignal_Value_Bitmask = L"Signal_Value_Bitmask";
+const wchar_t *rsSignal_Masked_Id = L"Signal";
+const wchar_t *rsSignal_Value_Bitmask = L"Bitmask";
 
 const wchar_t *dsSignal_Masked_Id = L"Signal ID";
-const wchar_t *dsSignal_Value_Bitmask = L"Value bitmask (64 bit)";
+const wchar_t *dsSignal_Value_Bitmask = L"(bit)Mask<br>(8-64 bit, reads left-to-right)";
 
 const wchar_t *dsHold_Filter = L"Hold";
 const wchar_t *dsErrors_Filter = L"Error metrics";
