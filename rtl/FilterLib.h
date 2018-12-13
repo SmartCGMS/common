@@ -68,8 +68,6 @@ namespace glucose {
 	SFilter create_filter(const GUID &id, SFilter_Pipe &input, SFilter_Pipe &output);
 
 	class SFilter_Parameters : public std::shared_ptr<glucose::IFilter_Configuration> {
-	protected:
-		TFilter_Parameter* Resolve_Parameter(const wchar_t* name);
 	public:
 		std::wstring Read_String(const wchar_t* name);
 		int64_t Read_Int(const wchar_t* name, const int64_t default_value = std::numeric_limits<int64_t>::max());
@@ -77,9 +75,11 @@ namespace glucose {
 		GUID Read_GUID(const wchar_t* name, const GUID &default_value = Invalid_GUID);
 		bool Read_Bool(const wchar_t* name, bool default_value = false);
 		double Read_Double(const wchar_t* name);
-		void Read_Parameters(const wchar_t* name, glucose::SModel_Parameter_Vector &lower_bound, glucose::SModel_Parameter_Vector &default_parameters, glucose::SModel_Parameter_Vector &upper_bound);
+		void Read_Parameters(const wchar_t* name, glucose::SModel_Parameter_Vector &lower_bound, glucose::SModel_Parameter_Vector &default_parameters, glucose::SModel_Parameter_Vector &upper_bound);		
 		
 		std::vector<double> Read_Double_Array(const wchar_t* name);	//TODO: remove in the future in favor to Read_Parameters
+
+		TFilter_Parameter* Resolve_Parameter(const wchar_t* name);
 	};
 
 

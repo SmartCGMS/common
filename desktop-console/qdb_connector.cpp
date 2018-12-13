@@ -39,8 +39,10 @@
 #include "qdb_connector.h"
 
 #include "../rtl/manufactory.h"
+#include "../utils/DebugHelper.h"
 #include <QtCore/QUuid>
 #include <QtCore/QVariant>
+#include <QtSql/QSqlError>
 
 #undef max
 
@@ -83,7 +85,11 @@ HRESULT IfaceCalling CDb_Query::Bind_Parameters(const db::TParameter *values, co
 
 HRESULT IfaceCalling CDb_Query::Get_Next(db::TParameter* const values, const size_t count) {
 	if (!mExecuted) mExecuted = mQuery.exec();
-	if (!mExecuted) return E_FAIL;
+	if (!mExecuted) {
+		dprintf(mQuery.lastError().driverText().toStdString().c_str());
+		dprintf("\n");
+		return E_FAIL;
+	}
 
 	if (mQuery.next()) {
 		mResult_String_Row.resize(std::max(mResult_String_Row.size(), count));
