@@ -289,8 +289,10 @@ const wchar_t* dsPredictiveC = L"c<sub>pred</sub>";
 const wchar_t* dsPredictiveDt = L"&Delta;t<sub>pred</sub>";
 
 const wchar_t* dsNewUOA = L"NewUOA";
-const wchar_t* dsMetaDE = L"MetaDE";
+const wchar_t* dsMT_MetaDE = L"MT MetaDE";
 const wchar_t* dsHalton_MetaDE = L"Halton MetaDE";
+const wchar_t* dsRnd_MetaDE = L"RND MetaDE";
+const wchar_t* dsMetaDE = L"MetaDE";
 const wchar_t* dsBOBYQA = L"BOBYQA";
 const wchar_t* dsHalton_Sequence = L"Halton Sequence";
 
