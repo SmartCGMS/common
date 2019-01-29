@@ -296,6 +296,7 @@ extern const wchar_t* dsRnd_MetaDE;
 extern const wchar_t* dsBOBYQA;
 extern const wchar_t* dsHalton_Sequence;
 extern const wchar_t* dsDeterministic_Evolution;
+extern const wchar_t* dsPSO;
 
 extern const wchar_t *dsLine_Approx;
 extern const wchar_t *dsAkima;

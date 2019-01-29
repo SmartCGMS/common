@@ -296,6 +296,7 @@ const wchar_t* dsMetaDE = L"MetaDE";
 const wchar_t* dsBOBYQA = L"BOBYQA";
 const wchar_t* dsHalton_Sequence = L"Halton Sequence";
 const wchar_t* dsDeterministic_Evolution = L"Deterministic Evolution";
+const wchar_t* dsPSO = L"PSO";
 
 const wchar_t *dsLine_Approx = L"Line";
 const wchar_t *dsAkima = L"Akima";
