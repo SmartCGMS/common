@@ -52,13 +52,16 @@
 template <typename TSolution>
 using TAligned_Solution_Vector = std::vector<TSolution, AlignmentAllocator<TSolution>>;
 
+#pragma warning( push )
+#pragma warning( disable : 4250 ) // C4250 - 'class1' : inherits 'class2::member' via dominance
 
 template <int n>
-class TSolution : public Eigen::Array<double, 1, n, Eigen::RowMajor> {
+class TSolution : public Eigen::Array<double, 1, n, Eigen::RowMajor>, public virtual glucose::IModel_Parameter_Vector, public virtual refcnt::CNotReferenced {	
 public:
 	TSolution<n>(const TSolution<n> &other) : Eigen::Array<double, 1, n, Eigen::RowMajor>(other) {}
 
 	TSolution<n>(void) : Eigen::Array<double, 1, n, Eigen::RowMajor>() {}
+	virtual ~TSolution<n>() {};
 
 	typedef Eigen::Array<double, 1, n, Eigen::RowMajor> Base;
 
@@ -94,8 +97,23 @@ public:
 
 		return S_OK;
 	}
+
+	virtual HRESULT add(double *begin, double *end) final  {
+		return E_NOTIMPL; 
+	} 
+
+	virtual HRESULT get(double **begin, double **end) const final {
+		*begin = const_cast<double*>(Base::data());
+		*end = *begin + Base::cols();
+		return S_OK;
+	} 
+		
+	virtual HRESULT empty() const override final {
+		return Base::cols() > 0 ? S_OK : S_FALSE;
+	}
 };
 
+#pragma warning( pop )
 
 using CDiffusion_v2_Solution = TSolution< diffusion_v2_model::param_count>;
 using CSteil_Rebrin_Solution = TSolution< steil_rebrin::param_count>;

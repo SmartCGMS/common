@@ -94,10 +94,8 @@ protected:
 
 		return solution;
 	}
-
 protected:
 	std::map <const GUID, TSolve<TSolution>, std::less<GUID>, tbb::tbb_allocator<std::pair<const GUID, TSolve<TSolution>>>> mSolver_Id_Map;
-
 protected:
 	//Here, we used to have Solution_To_Parameters, Solve_By_Class, and Solve_NLOpt.
 	//They used to compile fine with MSVC'17, ICC'18 but got broken with ICC'19.
@@ -127,14 +125,25 @@ DSpecialized_Id_Dispatcher
 
 class CId_Dispatcher {
 protected:
-	CSpecialized_Id_Dispatcher<CDiffusion_v2_Solution> mDiffusion_v2_Dispatcher;
-	CSpecialized_Id_Dispatcher<CSteil_Rebrin_Solution> mSteil_Rebrin_Dispatcher;
-	CSpecialized_Id_Dispatcher<CSteil_Rebrin_Diffusion_Prediction_Solution> mSteil_Rebrin_Diffusion_Prediction_Dispatcher;
-	CSpecialized_Id_Dispatcher<CDiffusion_Prediction_Solution> mDiffusion_Prediction_Dispatcher;
-	CSpecialized_Id_Dispatcher<CGeneric_Solution> mGeneric_Dispatcher;
+	CLocal_Id_Dispatcher<CDiffusion_v2_Solution> mDiffusion_v2_Dispatcher;
+	CLocal_Id_Dispatcher<CSteil_Rebrin_Solution> mSteil_Rebrin_Dispatcher;
+	CLocal_Id_Dispatcher<CSteil_Rebrin_Diffusion_Prediction_Solution> mSteil_Rebrin_Diffusion_Prediction_Dispatcher;
+	CLocal_Id_Dispatcher<CDiffusion_Prediction_Solution> mDiffusion_Prediction_Dispatcher;
+	CLocal_Id_Dispatcher<CGeneric_Solution> mGeneric_Dispatcher;
 	std::map<const GUID, CGeneral_Id_Dispatcher*, std::less<GUID>, tbb::tbb_allocator<std::pair<const GUID, CGeneral_Id_Dispatcher*>>> mSignal_Id_map;
+protected:	
+	HRESULT Solve_Model_Parameters(TShared_Solver_Setup &setup) {
+		HRESULT rc;
+		const auto iter = mSignal_Id_map.find(setup.calculated_signal_id);
+		if (iter != mSignal_Id_map.end()) rc = iter->second->Solve_Model_Parameters(setup);
+			else rc = mGeneric_Dispatcher.Solve_Model_Parameters(setup);
+
+		return rc;
+	}
+
 public:
 	CId_Dispatcher() {
+
 		//alternatively, we could call factory.dll and enumerate signals for known models
 		//however, this code is much simpler right now
 		mSignal_Id_map[glucose::signal_Diffusion_v2_Blood] = &mDiffusion_v2_Dispatcher;
@@ -144,62 +153,52 @@ public:
 		mSignal_Id_map[glucose::signal_Diffusion_Prediction] = &mDiffusion_Prediction_Dispatcher;
 	}
 
-	HRESULT Solve_Model_Parameters(TShared_Solver_Setup &setup) {
-		HRESULT rc;
-		const auto iter = mSignal_Id_map.find(setup.calculated_signal_id);
-		if (iter != mSignal_Id_map.end()) rc = iter->second->Solve_Model_Parameters(setup);
-			else rc = mGeneric_Dispatcher.Solve_Model_Parameters(setup);
-		
-		return rc;
-	}
-};
-
-
-template <typename TDispatcher>
-HRESULT do_solve_model_parameters_internal(TDispatcher &Id_Dispatcher, const glucose::TSolver_Setup *setup) {
+	HRESULT do_solve_model_parameters(const glucose::TSolver_Setup *setup) {
 	
-	if (setup->segment_count == 0) return E_INVALIDARG;
-	if (setup->metric == nullptr) return E_INVALIDARG;
+		if (setup->segment_count == 0) return E_INVALIDARG;
+		if (setup->metric == nullptr) return E_INVALIDARG;
 
-	try {	//COM like steps do not throw Exceptions
-		auto shared_segments = refcnt::Referenced_To_Vector<glucose::STime_Segment, glucose::ITime_Segment>(setup->segments, setup->segment_count);
-		const glucose::SMetric shared_metric = refcnt::make_shared_reference_ext<glucose::SMetric, glucose::IMetric>(setup->metric, true);
-		const auto shared_lower = refcnt::make_shared_reference_ext<glucose::SModel_Parameter_Vector, glucose::IModel_Parameter_Vector>(setup->lower_bound, true);
-		const auto shared_upper = refcnt::make_shared_reference_ext<glucose::SModel_Parameter_Vector, glucose::IModel_Parameter_Vector>(setup->upper_bound, true);
-		auto shared_solved = refcnt::make_shared_reference_ext<glucose::SModel_Parameter_Vector, glucose::IModel_Parameter_Vector>(setup->solved_parameters, true);
-		auto shared_hints = refcnt::Referenced_To_Vector<glucose::SModel_Parameter_Vector, glucose::IModel_Parameter_Vector>(setup->solution_hints, setup->hint_count);
+		try {	//COM like steps do not throw Exceptions
+			auto shared_segments = refcnt::Referenced_To_Vector<glucose::STime_Segment, glucose::ITime_Segment>(setup->segments, setup->segment_count);
+			const glucose::SMetric shared_metric = refcnt::make_shared_reference_ext<glucose::SMetric, glucose::IMetric>(setup->metric, true);
+			const auto shared_lower = refcnt::make_shared_reference_ext<glucose::SModel_Parameter_Vector, glucose::IModel_Parameter_Vector>(setup->lower_bound, true);
+			const auto shared_upper = refcnt::make_shared_reference_ext<glucose::SModel_Parameter_Vector, glucose::IModel_Parameter_Vector>(setup->upper_bound, true);
+			auto shared_solved = refcnt::make_shared_reference_ext<glucose::SModel_Parameter_Vector, glucose::IModel_Parameter_Vector>(setup->solved_parameters, true);
+			auto shared_hints = refcnt::Referenced_To_Vector<glucose::SModel_Parameter_Vector, glucose::IModel_Parameter_Vector>(setup->solution_hints, setup->hint_count);
 
-		//make sure that we do our best to supply at least one hint for local and evolutionary solvers
-		auto default_parameters = refcnt::Create_Container_shared<double, glucose::SModel_Parameter_Vector>(nullptr, nullptr);
-		if (shared_hints.empty()) {
-			//we need to try to obtain the default parameter at least
-			auto signal = shared_segments[0].Get_Signal(setup->calculated_signal_id);
-			if (signal) {
-				if (signal->Get_Default_Parameters(default_parameters.get()) == S_OK)
-					shared_hints.push_back(default_parameters);
+			//make sure that we do our best to supply at least one hint for local and evolutionary solvers
+			auto default_parameters = refcnt::Create_Container_shared<double, glucose::SModel_Parameter_Vector>(nullptr, nullptr);
+			if (shared_hints.empty()) {
+				//we need to try to obtain the default parameter at least
+				auto signal = shared_segments[0].Get_Signal(setup->calculated_signal_id);
+				if (signal) {
+					if (signal->Get_Default_Parameters(default_parameters.get()) == S_OK)
+						shared_hints.push_back(default_parameters);
+				}
 			}
-		}
 
-		glucose::TSolver_Progress dummy_progress = glucose::Null_Solver_Progress;
-		glucose::TSolver_Progress* local_progress = setup->progress;
-		if (local_progress == nullptr) local_progress = &dummy_progress;
+			glucose::TSolver_Progress dummy_progress = glucose::Null_Solver_Progress;
+			glucose::TSolver_Progress* local_progress = setup->progress;
+			if (local_progress == nullptr) local_progress = &dummy_progress;
 
 
-		const auto const_hints{ shared_hints };
+			const auto const_hints{ shared_hints };
 
-		TShared_Solver_Setup shared_setup {
-			setup->solver_id, setup->calculated_signal_id, setup->reference_signal_id,
-			shared_segments,
-			shared_metric, setup->levels_required, setup->use_measured_levels,
-			shared_lower, shared_upper,
-			const_hints,
-			shared_solved,
-			*local_progress
-		};
+			TShared_Solver_Setup shared_setup {
+				setup->solver_id, setup->calculated_signal_id, setup->reference_signal_id,
+				shared_segments,
+				shared_metric, setup->levels_required, setup->use_measured_levels,
+				shared_lower, shared_upper,
+				const_hints,
+				shared_solved,
+				*local_progress
+			};
 		
-		return Id_Dispatcher.Solve_Model_Parameters(shared_setup);
+			return Solve_Model_Parameters(shared_setup);
+		}
+		catch (...) {
+			return E_FAIL;
+		}
 	}
-	catch (...) {
-		return E_FAIL;
-	}
-}
+
+};
