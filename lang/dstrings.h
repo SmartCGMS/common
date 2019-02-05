@@ -297,6 +297,11 @@ extern const wchar_t* dsBOBYQA;
 extern const wchar_t* dsHalton_Sequence;
 extern const wchar_t* dsDeterministic_Evolution;
 extern const wchar_t* dsPSO;
+extern const wchar_t* dsSADE;
+extern const wchar_t* dsDE1220;
+extern const wchar_t* dsABC;
+extern const wchar_t* dsCMAES;
+extern const wchar_t* dsXNES;
 
 extern const wchar_t *dsLine_Approx;
 extern const wchar_t *dsAkima;
