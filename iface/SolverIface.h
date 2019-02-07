@@ -40,6 +40,41 @@
 
 #include "DeviceIface.h"
 
+#undef min
+
+namespace solver {
+	//solver sets these values to indicate its progress
+	struct TSolver_Progress {
+		size_t current_progress, max_progress;	//minimum progress is zero
+		double best_metric;
+		char cancelled;	//just cast it to bool, if set to true, solver cancels the current operation
+	};
+
+	const TSolver_Progress Null_Solver_Progress = { 0, 0, 0.0, 0 };
+	
+	using TObjective_Function = double(IfaceCalling*)(const void *data, const double *solution);
+
+	struct TSolver_Setup {
+		const size_t size;
+		const double *lower_bound, *upper_bound;
+		const double **hints;
+		const size_t hint_count;
+		double * const solution;
+
+		const void *data;
+		const TObjective_Function objective;
+
+		const size_t max_generations;	//where relevant, maximum number of generations
+		const size_t population_size;	//where relevant, maximum number of population
+		const double tolerance;			//where relevant, objective function tolerance that indicates no further improvement
+	};
+
+
+	const TSolver_Setup Default_Solver_Setup = { 0, nullptr, nullptr, nullptr, 0, nullptr, nullptr, nullptr, 100'000, 100, std::numeric_limits<double>::min() };
+	using TGeneric_Solver = HRESULT(IfaceCalling*)(const GUID *solver_id, const TSolver_Setup *setup, TSolver_Progress *progress);
+	
+}
+
 namespace glucose {
 
 	struct TMetric_Parameters {
@@ -85,16 +120,7 @@ namespace glucose {
 		Failed
 	};
 
-	//solver sets these values to indicate its progress
-	struct TSolver_Progress {
-		size_t current_progress, max_progress;	//minimum progress is zero
-		double best_metric;
-		char cancelled;	//just cast it to bool, if set to true, solver cancels the current operation
-	};
-
-	const TSolver_Progress Null_Solver_Progress = { 0, 0, 0.0, 0 };
-
-
+	
 	struct TSolver_Setup {
 		const GUID solver_id; const GUID calculated_signal_id; const GUID reference_signal_id;
 		ITime_Segment **segments; const size_t segment_count;
@@ -102,7 +128,7 @@ namespace glucose {
 		IModel_Parameter_Vector *lower_bound, *upper_bound; 
 		IModel_Parameter_Vector **solution_hints; const size_t hint_count;
 		IModel_Parameter_Vector *solved_parameters;		//obtained result
-		TSolver_Progress *progress;
+		solver::TSolver_Progress *progress;
 	};
 
 

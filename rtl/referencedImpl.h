@@ -147,8 +147,24 @@ namespace refcnt {
 			}
 		};
 
+
+		template <typename T>
+		class CVector_View : public virtual IVector_Container<T>, public virtual CNotReferenced, public TAligned_Vector<T> {
+		protected:
+			const T *mBegin, *mEnd;
+		public:
+			CVector_View(const T *begin, const T *end) : mBegin(begin), mEnd(end) {}
+
+			virtual HRESULT set(T *begin, T *end) override final { return E_NOTIMPL; };
+			virtual HRESULT add(T *begin, T *end) override final { return E_NOTIMPL; };
+			virtual HRESULT get(T **begin, T **end) const override final { *begin = const_cast<double*>(mBegin); *end = const_cast<double*>(mEnd); return S_OK; }
+			virtual HRESULT empty() const override final { return mEnd>mBegin ? S_OK : S_FALSE; }
+		};
+
 		#pragma warning( pop ) 
 	}
+
+	
 
 	template <typename T>
 	IVector_Container<T>* Create_Container(T *begin, T *end) {

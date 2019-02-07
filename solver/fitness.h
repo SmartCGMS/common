@@ -76,7 +76,7 @@ struct TShared_Solver_Setup {
 	const glucose::SModel_Parameter_Vector lower_bound, upper_bound;
 	const std::vector<glucose::SModel_Parameter_Vector> solution_hints;
 	glucose::SModel_Parameter_Vector solved_parameters;
-	glucose::TSolver_Progress &progress;
+	solver::TSolver_Progress &progress;
 };
 
 

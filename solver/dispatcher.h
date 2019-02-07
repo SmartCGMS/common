@@ -177,8 +177,8 @@ public:
 				}
 			}
 
-			glucose::TSolver_Progress dummy_progress = glucose::Null_Solver_Progress;
-			glucose::TSolver_Progress* local_progress = setup->progress;
+			solver::TSolver_Progress dummy_progress = solver::Null_Solver_Progress;
+			solver::TSolver_Progress* local_progress = setup->progress;
 			if (local_progress == nullptr) local_progress = &dummy_progress;
 
 

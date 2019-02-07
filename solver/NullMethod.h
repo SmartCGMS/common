@@ -49,5 +49,5 @@ public:
 	CNullMethod(const TAligned_Solution_Vector<TSolution> &initial_solutions, const TSolution &lower_bound, const TSolution &upper_bound, TFitness &fitness, glucose::SMetric &metric) :
 		mSolution(initial_solutions[0]) {};
 
-	TSolution Solve(volatile glucose::TSolver_Progress &progress) { return mSolution; };
+	TSolution Solve(volatile solver::TSolver_Progress &progress) { return mSolution; };
 };

@@ -219,7 +219,7 @@ namespace glucose {
 	class ICalculate_Filter_Inspection : public virtual refcnt::IReferenced {
 	public:
 		// makes a deep copy of the entire progress
-		virtual HRESULT IfaceCalling Get_Solver_Progress(glucose::TSolver_Progress* const progress) = 0;
+		virtual HRESULT IfaceCalling Get_Solver_Progress(solver::TSolver_Progress* const progress) = 0;
 		// retrieves solver information
 		virtual HRESULT IfaceCalling Get_Solver_Information(GUID* const calculated_signal_id, glucose::TSolver_Status* const status) const = 0;
 		// explicitly cancels solver
