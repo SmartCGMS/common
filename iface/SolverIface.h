@@ -55,7 +55,7 @@ namespace solver {
 	using TObjective_Function = double(IfaceCalling*)(const void *data, const double *solution);
 
 	struct TSolver_Setup {
-		const size_t size;
+		const size_t problem_size;
 		const double *lower_bound, *upper_bound;
 		const double **hints;
 		const size_t hint_count;
@@ -64,13 +64,13 @@ namespace solver {
 		const void *data;
 		const TObjective_Function objective;
 
-		const size_t max_generations;	//where relevant, maximum number of generations
-		const size_t population_size;	//where relevant, maximum number of population
+		const size_t max_generations;	//where relevant, maximum number of generations - zero for default value
+		const size_t population_size;	//where relevant, maximum number of population - zero for default value
 		const double tolerance;			//where relevant, objective function tolerance that indicates no further improvement
 	};
 
 
-	const TSolver_Setup Default_Solver_Setup = { 0, nullptr, nullptr, nullptr, 0, nullptr, nullptr, nullptr, 100'000, 100, std::numeric_limits<double>::min() };
+	const TSolver_Setup Default_Solver_Setup = { 0, nullptr, nullptr, nullptr, 0, nullptr, nullptr, nullptr, 0, 0, std::numeric_limits<double>::min() };
 	using TGeneric_Solver = HRESULT(IfaceCalling*)(const GUID *solver_id, const TSolver_Setup *setup, TSolver_Progress *progress);
 	
 }

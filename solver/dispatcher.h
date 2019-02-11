@@ -54,33 +54,33 @@ public:
 	virtual HRESULT Solve_Model_Parameters(TShared_Solver_Setup &setup) = 0;
 };
 
-template <typename TSolution>
-void Solution_To_Parameters(TSolution &src, glucose::SModel_Parameter_Vector dst) {
+template <typename TUsed_Solution>
+void Solution_To_Parameters(TUsed_Solution &src, glucose::SModel_Parameter_Vector dst) {
 	double *begin = src.data();
 	double *end = begin + src.cols();
 	dst->set(begin, end);
 }
 
-template <typename TSolver, typename TSolution, typename TFitness>
-HRESULT Solve_By_Class(TShared_Solver_Setup &setup, TAligned_Solution_Vector<TSolution>& hints, const TSolution& lower_bound, const TSolution& upper_bound) /*const */{
+template <typename TSolver, typename TUsed_Solution, typename TFitness>
+HRESULT Solve_By_Class(TShared_Solver_Setup &setup, TAligned_Solution_Vector<TUsed_Solution>& hints, const TUsed_Solution& lower_bound, const TUsed_Solution& upper_bound) /*const */{
 
 	TFitness fitness{ setup };
 	TSolver  solver{ hints, lower_bound, upper_bound, fitness, setup.metric };
 
-	TSolution solved = solver.Solve(setup.progress);
+	TUsed_Solution solved = solver.Solve(setup.progress);
 	Solution_To_Parameters(solved, setup.solved_parameters);
 
 	return S_OK;
 }
 
-template <typename TSolution>
-using  TSolve = std::function<HRESULT(TShared_Solver_Setup &, TAligned_Solution_Vector<TSolution>&, const TSolution&, const TSolution&)>;
+template <typename TUsed_Solution>
+using  TSolve = std::function<HRESULT(TShared_Solver_Setup &, TAligned_Solution_Vector<TUsed_Solution>&, const TSolution&, const TSolution&)>;
 
-template <typename TSolution, typename TFitness = CFitness<TSolution>>
+template <typename TUsed_Solution, typename TFitness = CFitness<TUsed_Solution>>
 class CSpecialized_Id_Dispatcher : public CGeneral_Id_Dispatcher {
 protected:
-	TSolution Parameters_To_Solution(const glucose::SModel_Parameter_Vector &parameters) const {
-		TSolution solution;
+	TUsed_Solution Parameters_To_Solution(const glucose::SModel_Parameter_Vector &parameters) const {
+		TUsed_Solution solution;
 
 		double *begin, *end;
 		if (parameters->get(&begin, &end) == S_OK) {
@@ -95,7 +95,7 @@ protected:
 		return solution;
 	}
 protected:
-	std::map <const GUID, TSolve<TSolution>, std::less<GUID>, tbb::tbb_allocator<std::pair<const GUID, TSolve<TSolution>>>> mSolver_Id_Map;
+	std::map <const GUID, TSolve<TUsed_Solution>, std::less<GUID>, tbb::tbb_allocator<std::pair<const GUID, TSolve<TUsed_Solution>>>> mSolver_Id_Map;
 protected:
 	//Here, we used to have Solution_To_Parameters, Solve_By_Class, and Solve_NLOpt.
 	//They used to compile fine with MSVC'17, ICC'18 but got broken with ICC'19.
@@ -103,7 +103,7 @@ protected:
 public:
 	virtual HRESULT Solve_Model_Parameters(TShared_Solver_Setup &setup) final {
 
-		TAligned_Solution_Vector<TSolution> converted_hints;
+		TAligned_Solution_Vector<TUsed_Solution> converted_hints;
 		for (auto &hint : setup.solution_hints) {
 			if (hint->empty() != S_OK) {
 				auto converted = Parameters_To_Solution(hint);
@@ -111,8 +111,8 @@ public:
 			}
 		}
 
-		TSolution convert_lower_bound = Parameters_To_Solution(setup.lower_bound);
-		TSolution convert_upper_bound = Parameters_To_Solution(setup.upper_bound);
+		TUsed_Solution convert_lower_bound = Parameters_To_Solution(setup.lower_bound);
+		TUsed_Solution convert_upper_bound = Parameters_To_Solution(setup.upper_bound);
 
 		const auto iter = mSolver_Id_Map.find(setup.solver_id);
 		if (iter != mSolver_Id_Map.end())

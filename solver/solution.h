@@ -49,8 +49,8 @@
 #include <vector>
 #include <random>
 
-template <typename TSolution>
-using TAligned_Solution_Vector = std::vector<TSolution, AlignmentAllocator<TSolution>>;
+template <typename TUsed_Solution>
+using TAligned_Solution_Vector = std::vector<TUsed_Solution, AlignmentAllocator<TUsed_Solution>>;
 
 #pragma warning( push )
 #pragma warning( disable : 4250 ) // C4250 - 'class1' : inherits 'class2::member' via dominance
