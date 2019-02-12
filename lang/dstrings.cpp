@@ -302,6 +302,9 @@ const wchar_t* dsDE1220 = L"DE1220";
 const wchar_t* dsABC = L"Artifical Bee Colony";
 const wchar_t* dsCMAES = L"Cov. Matrix Adapt. Evo.";
 const wchar_t* dsXNES = L"Exp. Evo. Strat.";
+const wchar_t* dsSimplex = L"Simplex";
+const wchar_t* dsSubplex = L"Subplex";
+const wchar_t* dsPraxis = L"Praxis";
 
 
 const wchar_t *dsLine_Approx = L"Line";

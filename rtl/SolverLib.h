@@ -42,6 +42,10 @@
 
 #include <memory>
 
+namespace solver {
+	solver::TSolver_Setup Check_Default_Parameters(const solver::TSolver_Setup &setup, const size_t default_max_generations, const size_t default_population_size);
+}
+
 namespace glucose {
 	
 	class SMetric : public std::shared_ptr<IMetric> {

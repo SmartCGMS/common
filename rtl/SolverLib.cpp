@@ -46,6 +46,24 @@ namespace imported {
 	glucose::TCreate_Metric create_metric = factory::resolve_symbol<glucose::TCreate_Metric>("create_metric");
 }
 
+solver::TSolver_Setup solver::Check_Default_Parameters(const solver::TSolver_Setup &setup, const size_t default_max_generations, const size_t default_population_size) {
+	//fill in the default values
+	solver::TSolver_Setup result{
+			setup.problem_size,
+			setup.lower_bound, setup.upper_bound,
+			setup.hints, setup.hint_count,
+			setup.solution,
+
+			setup.data, setup.objective,
+
+			setup.max_generations == 0 ? default_max_generations : setup.max_generations,
+			setup.population_size == 0 ? default_population_size : setup.population_size,
+			setup.tolerance
+	};
+
+	return result;
+}
+
 glucose::SMetric::SMetric() : std::shared_ptr<glucose::IMetric>() {
 	glucose::TMetric_Parameters params = glucose::Null_Metric_Parameters;
 	Init(params);
@@ -79,6 +97,6 @@ glucose::SMetric glucose::SMetric::Clone()
 	return result;
 }
 
-HRESULT glucose::Solve_Model_Parameters(const TSolver_Setup &setup) {
+HRESULT glucose::Solve_Model_Parameters(const glucose::TSolver_Setup &setup) {
 	return imported::solve_model_parameters(&setup);
 }

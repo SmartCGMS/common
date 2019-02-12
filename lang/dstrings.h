@@ -302,6 +302,9 @@ extern const wchar_t* dsDE1220;
 extern const wchar_t* dsABC;
 extern const wchar_t* dsCMAES;
 extern const wchar_t* dsXNES;
+extern const wchar_t* dsSimplex;
+extern const wchar_t* dsSubplex;
+extern const wchar_t* dsPraxis;
 
 extern const wchar_t *dsLine_Approx;
 extern const wchar_t *dsAkima;
