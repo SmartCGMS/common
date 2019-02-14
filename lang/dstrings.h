@@ -294,7 +294,7 @@ extern const wchar_t* dsMT_MetaDE;
 extern const wchar_t* dsHalton_MetaDE;
 extern const wchar_t* dsRnd_MetaDE;
 extern const wchar_t* dsBOBYQA;
-extern const wchar_t* dsHalton_Sequence;
+extern const wchar_t* dsHalton_Zooming;
 extern const wchar_t* dsPathfinder;
 extern const wchar_t* dsPSO;
 extern const wchar_t* dsSADE;
