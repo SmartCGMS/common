@@ -45,6 +45,7 @@
 
 #include <thread>
 #include <memory>
+#include <functional>
 
 /*
  * Filter chain holder class - holds filter chain and manages chain running
@@ -80,7 +81,7 @@ class CFilter_Chain_Manager : public virtual refcnt::CReferenced {
 		glucose::UDevice_Event Receive();
 
 		// traverse all filters in chain; the function supplied has a return value of type bool - returns false to stop traversing ("break" traverse loop)
-		void Traverse_Filters(std::function<bool(glucose::SFilter)> fnc);
+		void Traverse_Filters(std::function<bool(glucose::SFilter&)> fnc);
 
 		// retrieves filter chain (i.e. to be filled by configurator)
 		CFilter_Chain& Get_Filter_Chain();

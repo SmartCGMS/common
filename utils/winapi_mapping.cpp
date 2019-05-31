@@ -39,10 +39,10 @@
 #include "winapi_mapping.h"
 
 #ifdef _WIN32
-
 #else
 
 #include <string>
+#include <cstdlib>
 
 void* LoadLibraryW(const wchar_t *libname) {
 	std::string libstr{libname, libname + wcslen(libname)};
@@ -76,7 +76,11 @@ void gmtime_s(struct tm* t, const time_t* tim)
 void* _aligned_malloc(size_t n, size_t alignment)
 {
 	void* mem = nullptr;
+#if defined(__ARM_ARCH_7A__) || defined(__aarch64__)
+	mem = malloc(n);
+#else
 	posix_memalign(&mem, alignment, n);
+#endif
 
 	return mem;
 }
@@ -90,5 +94,12 @@ int wcstombs_s(size_t* converted, char* dst, size_t dstSizeBytes, const wchar_t*
 {
 	return wcstombs(dst, src, maxSizeBytes);
 }
+
+#if not defined(__ARM_ARCH_7A__) && not defined(__aarch64__)
+int closesocket(SOCKET skt)
+{
+	close(skt);
+}
+#endif
 
 #endif

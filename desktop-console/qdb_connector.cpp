@@ -52,8 +52,11 @@ CDb_Connector db_connector{};
 
 
 CDb_Query::CDb_Query(QSqlDatabase &db, const wchar_t *statement) : mQuery(QSqlQuery{ db }) {
-	if (!mQuery.prepare(QString::fromWCharArray(statement))) 
+	if (!mQuery.prepare(QString::fromWCharArray(statement))) {
+		dprintf(mQuery.lastError().databaseText().toStdString().c_str());
+		dprintf("\n");
 		throw std::invalid_argument{ "Malformed SQL statement." };
+	}
 }
 
 
@@ -87,6 +90,8 @@ HRESULT IfaceCalling CDb_Query::Get_Next(db::TParameter* const values, const siz
 	if (!mExecuted) mExecuted = mQuery.exec();
 	if (!mExecuted) {
 		dprintf(mQuery.lastError().driverText().toStdString().c_str());
+		dprintf("\n");
+		dprintf(mQuery.lastError().databaseText().toStdString().c_str());
 		dprintf("\n");
 		return E_FAIL;
 	}
@@ -152,7 +157,13 @@ CDb_Connection::CDb_Connection(const wchar_t *host, const wchar_t *provider, uin
 	db.setUserName(QString::fromWCharArray(user_name));
 	db.setPassword(QString::fromWCharArray(password));
 
-	if (!db.open()) throw "Cannot open database";
+	if (!db.open()) {
+		dprintf(db.lastError().driverText().toStdString().c_str());
+		dprintf("\n");
+		dprintf(db.lastError().databaseText().toStdString().c_str());
+		dprintf("\n");
+		throw "Cannot open database";
+	}
 }
 
 

@@ -50,6 +50,8 @@ class CDynamic_Library final {
 	private:
 		// stored module handle (nullptr if invalid)
 		HMODULE mHandle;
+		// library base for given platform (sometimes needs to be set in runtime, on e.g. Android)
+		static std::wstring mLibrary_Base;
 	public:
 		CDynamic_Library() noexcept;
 		// disallow copying - the handle has to be unique
@@ -69,4 +71,8 @@ class CDynamic_Library final {
 
 		// checks extension of supplied path to verify, if it's a library (platform-dependent check)
 		static bool Is_Library(const std::wstring& path);
+		// sets library base
+		static void Set_Library_Base(const std::wstring& base);
+		// retrieves library base directory
+		static const wchar_t* Get_Library_Base();
 };

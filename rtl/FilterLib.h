@@ -49,39 +49,46 @@
 namespace glucose {
 
 	
-	class SFilter_Pipe : public std::shared_ptr<IFilter_Pipe> {
+	class SFilter_Pipe : public std::shared_ptr<IFilter_Asynchronous_Pipe> {
 	public:
-		SFilter_Pipe(glucose::IFilter_Pipe *pipe);
+		SFilter_Pipe(glucose::IFilter_Asynchronous_Pipe *pipe);
 		SFilter_Pipe();
 		bool Send(UDevice_Event &event);	//consumes the event in any case
 		UDevice_Event Receive();
 	};
 
+	class SFilter_Synchronnous_Pipe : public SFilter_Pipe {
+	public:
+		SFilter_Synchronnous_Pipe(glucose::IFilter_Synchronnous_Pipe *pipe);
+		SFilter_Synchronnous_Pipe();
+	};
 
 	using SFilter = std::shared_ptr<IFilter>;
+	using SAsynchronnous_Filter = std::shared_ptr<IAsynchronnous_Filter>;
+	using SSynchronnous_Filter = std::shared_ptr<ISynchronnous_Filter>;
 
-	bool add_filters(const std::vector<glucose::TFilter_Descriptor> &descriptors, glucose::TCreate_Filter create_filter);
+	bool add_filters(const std::vector<glucose::TFilter_Descriptor> &descriptors, glucose::TCreate_Asynchronnous_Filter create_filter, glucose::TCreate_Synchronnous_Filter create_synchronnous_filter);
 
 	std::vector<TFilter_Descriptor> get_filter_descriptors();
 	bool get_filter_descriptor_by_id(const GUID &id, TFilter_Descriptor &desc);
-	
-	SFilter create_filter(const GUID &id, SFilter_Pipe &input, SFilter_Pipe &output);
+
+	SAsynchronnous_Filter create_asynchronnous_filter(const GUID &id, SFilter_Pipe &input, SFilter_Pipe &output);
+	SSynchronnous_Filter create_synchronnous_filter(const GUID &id);
 
 	class SFilter_Parameters : public std::shared_ptr<glucose::IFilter_Configuration> {
 	public:
-		std::wstring Read_String(const wchar_t* name);
-		int64_t Read_Int(const wchar_t* name, const int64_t default_value = std::numeric_limits<int64_t>::max());
-		std::vector<int64_t> Read_Int_Array(const wchar_t* name);
-		GUID Read_GUID(const wchar_t* name, const GUID &default_value = Invalid_GUID);
-		bool Read_Bool(const wchar_t* name, bool default_value = false);
-		double Read_Double(const wchar_t* name);
-		void Read_Parameters(const wchar_t* name, glucose::SModel_Parameter_Vector &lower_bound, glucose::SModel_Parameter_Vector &default_parameters, glucose::SModel_Parameter_Vector &upper_bound);		
-		
-		std::vector<double> Read_Double_Array(const wchar_t* name);	//TODO: remove in the future in favor to Read_Parameters
+		std::wstring Read_String(const wchar_t* name, const std::wstring& default_value = {}) const;
+		int64_t Read_Int(const wchar_t* name, const int64_t default_value = std::numeric_limits<int64_t>::max()) const;
+		std::vector<int64_t> Read_Int_Array(const wchar_t* name) const;
+		GUID Read_GUID(const wchar_t* name, const GUID &default_value = Invalid_GUID) const;
+		bool Read_Bool(const wchar_t* name, bool default_value = false) const;
+		double Read_Double(const wchar_t* name, const double default_value = std::numeric_limits<double>::quiet_NaN()) const;
+		void Read_Parameters(const wchar_t* name, glucose::SModel_Parameter_Vector &lower_bound, glucose::SModel_Parameter_Vector &default_parameters, glucose::SModel_Parameter_Vector &upper_bound) const;
 
-		TFilter_Parameter* Resolve_Parameter(const wchar_t* name);
+		std::vector<double> Read_Double_Array(const wchar_t* name) const;	//TODO: remove in the future in favor to Read_Parameters
+
+		TFilter_Parameter* Resolve_Parameter(const wchar_t* name) const;
 	};
-
 
 	void Visit_Filter_Parameter(glucose::TFilter_Parameter& element, std::function<void(refcnt::IReferenced *obj)> func);
 	void Release_Filter_Parameter(TFilter_Parameter &parameter);

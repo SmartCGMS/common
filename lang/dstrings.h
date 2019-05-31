@@ -54,6 +54,7 @@ extern const char* dsClose_Tab;
 extern const char* dsSave_Tab_State;
 extern const char* dsSaved_State_Tab_Suffix;
 extern const char* dsBest_Metric_Label;
+extern const char* dsBest_Metric_NotAvailable;
 
 extern const char* dsSolver_Status_Disabled;
 extern const char* dsSolver_Status_Idle;
@@ -97,10 +98,15 @@ extern const char* dsFilters_Window;
 extern const char* dsApplied_Filters;
 extern const char* dsAvailable_Filters;
 extern const char* dsSimulation_Window;
+extern const char* dsExport_To_CSV;
+extern const char* dsExport_CSV_Default_File_Name;
+extern const char* dsExport_CSV_Ext_Spec;
+extern const char* dsExport_CSV_Dialog_Title;
 
 extern const wchar_t *dsDb_Reader;
 extern const wchar_t *dsDb_Writer;
 extern const wchar_t *dsSinCos_Generator;
+extern const wchar_t *dsDummy_Generator;
 
 extern const wchar_t *dsDb_Host;
 extern const wchar_t *dsDb_Port;
@@ -126,10 +132,9 @@ extern const wchar_t *dsGen_BG_Cos_Period;
 extern const wchar_t *dsGen_BG_Sampling_Period;
 extern const wchar_t *dsGen_Total_Time;
 
-extern const wchar_t *dsNet_Comm;
-extern const wchar_t *dsNet_Host;
-extern const wchar_t *dsNet_Port;
-extern const wchar_t *dsNet_RecvSide;
+extern const wchar_t *dsFeedback_Channel_Identifier;
+extern const wchar_t *dsDevice_Driver_Id;
+extern const wchar_t *dsSynchronize_With_Pump;
 
 extern const wchar_t *dsSolver_Filter;
 
@@ -192,6 +197,11 @@ extern const wchar_t *dsIgnore_Shutdown_Msg;
 extern const wchar_t *dsLog_Header;
 extern const wchar_t *dsLog_Filter_Replay;
 
+extern const wchar_t *dsDevice_Feedback_Filter;
+extern const wchar_t *dsDevice_Filter;
+
+extern const wchar_t *dsT1DMS_Device_Driver;
+
 extern const wchar_t *dsGUI_Filter;
 
 extern const char* dsSave_Image_To_File;
@@ -211,6 +221,9 @@ extern const char* dsSave_Image_Default_Filename_Parkes;
 extern const char* dsSave_Image_Default_Filename_Clark;
 extern const char* dsSave_Image_Default_Filename_AGP;
 extern const char* dsSave_Image_Default_Filename_ECDF;
+extern const char* dsSave_Image_Default_Filename_Profile_Glucose;
+extern const char* dsSave_Image_Default_Filename_Profile_Insulin;
+extern const char* dsSave_Image_Default_Filename_Profile_Carbs;
 
 //extern const wchar_t *dsCalculate_Past_New_Params;
 //extern const wchar_t *dsRecalculate_With_Every_Params;
@@ -259,10 +272,31 @@ extern const wchar_t* dsAvg_Plus_Bessel_Std_Dev;
 extern const wchar_t* dsBlood;
 extern const wchar_t* dsInterstitial;
 
+extern const wchar_t* dsConstant_Blood_Signal;
+extern const wchar_t* dsConstant_Insulin;
+
 extern const wchar_t* dsDiffusion_Model_v2;
 extern const wchar_t* dsSteil_Rebrin;
 extern const wchar_t* dsSteil_Rebrin_Diffusion_Prediction;
 extern const wchar_t* dsDiffusion_Prediction;
+extern const wchar_t* dsOref0_Basal_Insulin;
+extern const wchar_t* dsOref0_Basal_Insulin_Orig;
+extern const wchar_t* dsOref0_IOB_Model;
+extern const wchar_t* dsOref0_COB_Model;
+extern const wchar_t* dsOref0_Insulin_Activity_Bilinear;
+extern const wchar_t* dsOref0_Insulin_Activity_Exponential;
+extern const wchar_t* dsOref0_IOB_Bilinear;
+extern const wchar_t* dsOref0_IOB_Exponential;
+extern const wchar_t* dsOref0_COB_Bilinear;
+extern const wchar_t* dsOref0_BG_Prediction;
+extern const wchar_t* dsOref0_BG_IOB_Prediction;
+extern const wchar_t* dsOref0_BG_COB_Prediction;
+extern const wchar_t* dsOref0_BG_UAM_Prediction;
+extern const wchar_t* dsOref0_BG_ZT_Prediction;
+extern const wchar_t* dsOref0_BG_Prediction_Signal;
+extern const wchar_t* dsConstant_Model;
+
+extern const wchar_t* dsOref0_Solver;
 
 extern const wchar_t* dsP;
 extern const wchar_t* dsCg;
@@ -278,6 +312,8 @@ extern const wchar_t* dsGamma;
 
 extern const wchar_t* dsInv_G;
 
+extern const wchar_t* dsConstantParam;
+
 extern const wchar_t* dsRetrospectiveP;
 extern const wchar_t* dsRetrospectiveCg;
 extern const wchar_t* dsRetrospectiveC;
@@ -287,6 +323,33 @@ extern const wchar_t* dsPredictiveP;
 extern const wchar_t* dsPredictiveCg;
 extern const wchar_t* dsPredictiveC;
 extern const wchar_t* dsPredictiveDt;
+
+extern const wchar_t* dsInsulin_TwoTerm_Regulation;
+extern const wchar_t* dsInsulin_PID_Regulation;
+extern const wchar_t* dsBetaPID;
+extern const wchar_t* dsInsulin_TwoTerm_OnOff_Rate;
+extern const wchar_t* dsInsulin_TwoTerm_OnNeturalOff_Rate;
+extern const wchar_t* dsInsulin_TwoTerm_OnOff_Hysteresis_Rate;
+extern const wchar_t* dsInsulin_PID_Regulation_Rate;
+extern const wchar_t* dsInsulin_BetaPID_Rate;
+extern const wchar_t* dsInsulin_BetaPID2_Rate;
+extern const wchar_t* dsKp;
+extern const wchar_t* dsKi;
+extern const wchar_t* dsKd;
+extern const wchar_t* dsBIN;
+extern const wchar_t* dsBolus_Calculator;
+
+extern const wchar_t* dsCalculated_Bolus_Insulin;
+extern const wchar_t* dsBolus_Calculator;
+extern const wchar_t* dsConst_Basal_Insulin;
+extern const wchar_t* dsConst_Basal_Low_Suspend_Insulin;
+
+extern const wchar_t* dsISF;
+extern const wchar_t* dsCSR;
+extern const wchar_t* dsInsulinPeak;
+extern const wchar_t* dsDIA;
+extern const wchar_t* dsCarbPeak;
+extern const wchar_t* dsCarbDA;
 
 extern const wchar_t* dsNewUOA;
 extern const wchar_t* dsMetaDE;
@@ -321,6 +384,9 @@ extern const char *dsDrawing_Tab_Clark;
 extern const char *dsDrawing_Tab_Parkes;
 extern const char *dsDrawing_Tab_AGP;
 extern const char *dsDrawing_Tab_ECDF;
+extern const char *dsDrawing_Tab_Profile_Glucose;
+extern const char *dsDrawing_Tab_Profile_Carbs;
+extern const char *dsDrawing_Tab_Profile_Insulin;
 
 extern const char *dsLower_Bounds;
 extern const char *dsDefault_Parameters;
@@ -335,9 +401,14 @@ extern const wchar_t *dsSignal_Measured_BG;
 extern const wchar_t *dsSignal_Measured_IG;
 extern const wchar_t *dsSignal_Measured_ISIG;
 extern const wchar_t *dsSignal_Measured_Calibration;
-extern const wchar_t *dsSignal_Measured_Insulin;
+extern const wchar_t *dsSignal_Measured_Bolus_Insulin;
+extern const wchar_t *dsSignal_Measured_Basal_Insulin;
+extern const wchar_t *dsSignal_Measured_Basal_Insulin_Rate;
+extern const wchar_t *dsSignal_Measured_Insulin_Activity;
+extern const wchar_t *dsSignal_Measured_IOB;
+extern const wchar_t *dsSignal_Measured_COB;
 extern const wchar_t *dsSignal_Measured_Carb_Intake;
-extern const wchar_t *dsSignal_Measured_Health_Stress;
+extern const wchar_t *dsSignal_Measured_Health_Physical_Activity;
 extern const wchar_t *dsSignal_Suffix_Measured;
 extern const wchar_t *dsSignal_Suffix_Calculated;
 extern const wchar_t *dsSignal_Unknown;
@@ -348,9 +419,14 @@ extern const wchar_t *dsSignal_GUI_Name_BG;
 extern const wchar_t *dsSignal_GUI_Name_IG;
 extern const wchar_t *dsSignal_GUI_Name_ISIG;
 extern const wchar_t *dsSignal_GUI_Name_Calibration;
-extern const wchar_t *dsSignal_GUI_Name_Insulin;
+extern const wchar_t *dsSignal_GUI_Name_Bolus_Insulin;
+extern const wchar_t *dsSignal_GUI_Name_Basal_Insulin;
+extern const wchar_t *dsSignal_GUI_Name_Basal_Insulin_Rate;
+extern const wchar_t *dsSignal_GUI_Name_Insulin_Activity;
+extern const wchar_t *dsSignal_GUI_Name_IOB;
+extern const wchar_t *dsSignal_GUI_Name_COB;
 extern const wchar_t *dsSignal_GUI_Name_Carbs;
-extern const wchar_t *dsSignal_GUI_Name_Stress;
+extern const wchar_t *dsSignal_GUI_Name_Physical_Activity;
 
 
 extern const wchar_t *dsSignal_GUI_Name_Unknown;
@@ -362,6 +438,7 @@ extern const wchar_t *dsError_Relative;
 extern const wchar_t *dsError_Column_Average;
 extern const wchar_t *dsError_Column_StdDev;
 extern const wchar_t *dsError_Column_AIC;
+extern const wchar_t *dsError_Column_Sum;
 extern const wchar_t *dsError_Column_Minimum;
 extern const wchar_t *dsError_Column_First_Quantile;
 extern const wchar_t *dsError_Column_Median;
@@ -369,6 +446,10 @@ extern const wchar_t *dsError_Column_Third_Quantile;
 extern const wchar_t *dsError_Column_95_Quantile;
 extern const wchar_t *dsError_Column_99_Quantile;
 extern const wchar_t *dsError_Column_Maximum;
+extern const wchar_t *dsError_Column_Range_5pct;
+extern const wchar_t *dsError_Column_Range_10pct;
+extern const wchar_t *dsError_Column_Range_25pct;
+extern const wchar_t *dsError_Column_Range_50pct;
 
 extern const wchar_t* rsInsert_New_Measured_Value;
 
@@ -383,6 +464,20 @@ extern const wchar_t* rsRename_Time_Segment;
 extern const wchar_t* rsDelete_Parameters_Of_Segment_Base;
 extern const wchar_t* rsDelete_Parameters_Of_Segment_Stmt;
 
+extern const wchar_t* rsT1DMS_Receiver_Filter;
+extern const wchar_t* rsT1DMS_Sender_Filter;
+
+extern const wchar_t* rsInsulin_Regulation;
+extern const wchar_t* rsInsulin_PID_Regulation;
+extern const wchar_t* rsBetaPID;
+extern const wchar_t* rsKp;
+extern const wchar_t* rsKi;
+extern const wchar_t* rsKd;
+extern const wchar_t* rsBIN;
+
+extern const wchar_t* rsBolus_Calculator;
+extern const wchar_t* rsConst_Basal_Insulin;
+
 // ---- drawing-related constants
 
 extern const wchar_t* dsDrawingLocaleTitle;
@@ -390,6 +485,7 @@ extern const wchar_t* dsDrawingLocaleTitleAgp;
 extern const wchar_t* dsDrawingLocaleTitleClark;
 extern const wchar_t* dsDrawingLocaleTitleParkes;
 extern const wchar_t* dsDrawingLocaleTitleECDF;
+extern const wchar_t* dsDrawingLocaleTitleProfileGlucose;
 extern const wchar_t* dsDrawingLocaleTitleDay;
 extern const wchar_t* dsDrawingLocaleSubtitle;
 extern const wchar_t* dsDrawingLocaleDiabetes1;
@@ -478,6 +574,10 @@ extern const wchar_t *dsFilename_ECDF_Tooltip;
 extern const wchar_t *dsLog_File_Output_Tooltip;
 extern const wchar_t *dsLog_File_Input_Tooltip;
 
+extern const wchar_t *dsPump_Interval_Tooltip;
+extern const wchar_t *dsFeedback_Channel_Identifier_Tooltip;
+extern const wchar_t *dsDevice_Driver_Id_Tooltip;
+
 extern const wchar_t *dsSelected_Model_Tooltip;
 extern const wchar_t *dsSelected_Signal_Tooltip;
 extern const wchar_t *dsPrediction_Window_Tooltip;
@@ -517,6 +617,15 @@ extern const wchar_t *rsDiffusion_v3_Table;
 extern const wchar_t *rsSteil_Rebrin_Table;
 extern const wchar_t *rsSteil_Rebrin_Diffusion_Prediction_Table;
 extern const wchar_t* rsDiffusion_Prediction_Table;
+extern const wchar_t* rsOref0_Basal_Insulin;
+extern const wchar_t* rsOref0_IOB;
+extern const wchar_t* rsOref0_COB;
+extern const wchar_t* rsOref0_BG_Prediction;
+extern const wchar_t* rsOref0_BG_IOB_Prediction;
+extern const wchar_t* rsOref0_BG_COB_Prediction;
+extern const wchar_t* rsOref0_BG_UAM_Prediction;
+extern const wchar_t* rsOref0_BG_ZT_Prediction;
+extern const wchar_t* rsConstant_Model;
 
 extern const wchar_t* rsP_Column;
 extern const wchar_t* rsCg_Column;
@@ -541,6 +650,13 @@ extern const wchar_t* rsPredictiveP;
 extern const wchar_t* rsPredictiveCg;
 extern const wchar_t* rsPredictiveC;
 extern const wchar_t* rsPredictiveDt;
+
+extern const wchar_t* rsISF;
+extern const wchar_t* rsCSR;
+extern const wchar_t* rsInsulinPeak;
+extern const wchar_t* rsDIA;
+extern const wchar_t* rsCarbPeak;
+extern const wchar_t* rsCarbDA;
 
 extern const wchar_t *rsNet_Host;
 extern const wchar_t *rsNet_Port;
@@ -591,6 +707,11 @@ extern const wchar_t *rsRecalculate_On_Calibration;
 
 extern const wchar_t *rsLog_Output_File;
 extern const wchar_t *rsIgnore_Shutdown_Msg;
+
+extern const wchar_t *rsPump_Interval;
+extern const wchar_t *rsFeedback_Channel_Identifier;
+extern const wchar_t *rsDevice_Driver_Id;
+extern const wchar_t *rsSynchronize_With_Pump;
 
 extern const wchar_t *rsDrawing_Filter_Period;
 extern const wchar_t *rsDiagnosis_Is_Type2;
@@ -689,6 +810,8 @@ extern const wchar_t* rsLog_Date_Time_Format;
 
 extern const wchar_t* rsLog_CSV_Separator;
 
+extern const wchar_t* rsConstantParam;
+
 extern const char* rsRattime_Edit_Mask;
 extern const wchar_t *rsShutdown_After_Last;
 extern const wchar_t *rsMinimum_Segment_Levels;
@@ -749,6 +872,18 @@ extern const char16_t* rsMatlab_Variable_Solver_Hints;
 extern const char16_t* rsMatlab_Variable_Solver_Lowbounds;
 extern const char16_t* rsMatlab_Variable_Solver_Upbounds;
 extern const char16_t* rsMatlab_Variable_Solver_Output;
+
+extern const wchar_t* rsT1DMS_Feedback_Request;
+extern const wchar_t* rsBergman_Feedback_Request;
+
+extern const wchar_t* rsOref0_Manifest_File;
+extern const wchar_t* rsOref0_Manifest_Workdir_Path;
+extern const wchar_t* rsOref0_Manifest_Runner_Script_Path;
+extern const wchar_t* rsOref0_Manifest_Node_Command_Path;
+extern const wchar_t* rsOref0_Manifest_Socket_Timeout_Path;
+extern const wchar_t* rsOref0_Manifest_Socket_Port_Path;
+extern const wchar_t* rsOref0_Manifest_Default_Runner_Script;
+extern const wchar_t* rsOref0_Manifest_Default_Node_Command;
 
 //*******
 extern const wchar_t *rsCalculate_Past_New_Params;

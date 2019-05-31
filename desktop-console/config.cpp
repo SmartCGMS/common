@@ -90,6 +90,11 @@ void CConfig::Resolve_And_Load_Config_File(const std::wstring &alternative_path)
 	}
 }
 
+void CConfig::Load_From_Raw_String(const char* contents, int len)
+{
+	mIni.LoadData(contents, len);
+}
+
 const wchar_t* CConfig::Get_Config_File_Name() const {
 	return mFile_Name.c_str();
 }
@@ -164,6 +169,7 @@ void CConfig::Load(CFilter_Chain &filter_chain) {
 							case glucose::NParameter_Type::ptModel_Signal_Id:
 							case glucose::NParameter_Type::ptSignal_Id:
 							case glucose::NParameter_Type::ptSolver_Id:
+							case glucose::NParameter_Type::ptDevice_Driver_Id:
 								filter_parameter.guid = WString_To_GUID(str_value);
 								break;
 
@@ -240,6 +246,7 @@ void CConfig::Save(const CFilter_Chain &filter_chain) {
 				case glucose::NParameter_Type::ptModel_Signal_Id:
 				case glucose::NParameter_Type::ptSignal_Id:
 				case glucose::NParameter_Type::ptSolver_Id:
+				case glucose::NParameter_Type::ptDevice_Driver_Id:
 					mIni.SetValue(id_str.c_str(), WChar_Container_To_WString(param.config_name).c_str(), GUID_To_WString(param.guid).c_str());
 					break;
 

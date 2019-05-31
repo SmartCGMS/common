@@ -50,8 +50,25 @@ namespace glucose {
 		DgPerDl,	//dg/dl
 	};
 
+	enum class NFilter_Flags : uint8_t {
+		Synchronnous	= 1 << 0,
+
+		None = 0
+	};
+
+	using TFilter_Flags = std::underlying_type<NFilter_Flags>::type;
+
+	inline NFilter_Flags operator|(const NFilter_Flags lhs, const NFilter_Flags rhs) {
+		return static_cast<NFilter_Flags>(static_cast<TFilter_Flags>(lhs) | static_cast<TFilter_Flags>(rhs));
+	}
+
+	inline NFilter_Flags operator&(const NFilter_Flags lhs, const NFilter_Flags rhs) {
+		return static_cast<NFilter_Flags>(static_cast<TFilter_Flags>(lhs) & static_cast<TFilter_Flags>(rhs));
+	}
+
 	struct TFilter_Descriptor {
 		const GUID id;
+		const NFilter_Flags flags;
 		const wchar_t *description;
 		const size_t parameters_count;	//can be zero
 		const NParameter_Type* parameter_type;
@@ -60,7 +77,7 @@ namespace glucose {
 		const wchar_t** ui_parameter_tooltip; // always the same size as other parameter fields, nullptr where no tooltip needed
 	};
 	
-	constexpr TFilter_Descriptor Null_Filter_Descriptor = { Invalid_GUID, nullptr, 0, nullptr, nullptr, nullptr, nullptr };
+	constexpr TFilter_Descriptor Null_Filter_Descriptor = { Invalid_GUID, NFilter_Flags::None, nullptr, 0, nullptr, nullptr, nullptr, nullptr };
 
 	struct TMetric_Descriptor {
 		const GUID id;
@@ -120,12 +137,25 @@ namespace glucose {
 		const wchar_t** config_parameter_name;
 	};
 
+	constexpr TApprox_Descriptor Null_Approx_Descriptor = { Invalid_GUID, nullptr, 0, nullptr, nullptr };
+
+	struct TDevice_Driver_Descriptor {
+		const GUID id;
+		const wchar_t *description;
+		const size_t parameters_count;	//can be zero
+		const NParameter_Type* parameter_type;
+		const wchar_t** ui_parameter_name;
+		const wchar_t** config_parameter_name;
+	};
+
+	constexpr TDevice_Driver_Descriptor Null_Device_Driver_Descriptor = { Invalid_GUID, nullptr, 0, nullptr, nullptr, nullptr };
 
 	using TGet_Filter_Descriptors = HRESULT(IfaceCalling*)(TFilter_Descriptor **begin, TFilter_Descriptor **end);
 	using TGet_Metric_Descriptors = HRESULT(IfaceCalling*)(TMetric_Descriptor **begin, TMetric_Descriptor **end);
 	using TGet_Model_Descriptors = HRESULT(IfaceCalling*)(TModel_Descriptor **begin, TModel_Descriptor **end);
 	using TGet_Solver_Descriptors = HRESULT(IfaceCalling*)(TSolver_Descriptor **begin, TSolver_Descriptor **end);
 	using TGet_Approx_Descriptors = HRESULT(IfaceCalling*)(TApprox_Descriptor **begin, TApprox_Descriptor **end);
+	using TGet_Device_Driver_Descriptors = HRESULT(IfaceCalling*)(TDevice_Driver_Descriptor **begin, TDevice_Driver_Descriptor **end);
 
-	using TAdd_Filters = HRESULT(IfaceCalling *)(const glucose::TFilter_Descriptor *begin, const glucose::TFilter_Descriptor *end, const glucose::TCreate_Filter create_filter);
+	using TAdd_Filters = HRESULT(IfaceCalling *)(const glucose::TFilter_Descriptor *begin, const glucose::TFilter_Descriptor *end, const glucose::TCreate_Asynchronnous_Filter create_asynchronnous_filter, const glucose::TCreate_Synchronnous_Filter create_synchronnous_filter);
 }

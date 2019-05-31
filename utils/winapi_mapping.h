@@ -66,7 +66,15 @@
 	void* GetProcAddress(void *libhandle, const char *symbolname);
 	void FreeLibrary(void* libhandle);
 
+	/* closesocket is present in Android standard library, but not on Unix */
+#if not defined(__ARM_ARCH_7A__) && not defined(__aarch64__)
 	int closesocket(int fd);
+#endif
+
+#ifndef FALSE
+	/* strangely, on some systems, FALSE constant is not defined */
+#define FALSE 0
+#endif
 
 	#define SOCKET int
 	#define InetPtonA inet_pton
@@ -79,4 +87,8 @@
 	void _aligned_free(void* _Block);
 
 	int wcstombs_s(size_t* converted, char* dst, size_t dstSizeBytes, const wchar_t* src, size_t maxSizeBytes);
+
+	int closesocket(SOCKET skt);
+
+	#define SD_BOTH SHUT_RDWR
 #endif

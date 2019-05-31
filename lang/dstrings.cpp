@@ -52,6 +52,7 @@ const char* dsClose_Tab = "Close";
 const char* dsSave_Tab_State = "Save state";
 const char* dsSaved_State_Tab_Suffix = " (saved)";
 const char* dsBest_Metric_Label = "Best metric: %1";
+const char* dsBest_Metric_NotAvailable = "N/A";
 
 const char* dsSolver_Status_Disabled = "Disabled";
 const char* dsSolver_Status_Idle = "Idle";
@@ -95,10 +96,15 @@ const char* dsFilters_Window = "Filters window";
 const char* dsApplied_Filters = "Applied filters";
 const char* dsAvailable_Filters = "Available filters";
 const char* dsSimulation_Window = "Simulation window";
+const char* dsExport_To_CSV = "Export to CSV";
+const char* dsExport_CSV_Default_File_Name = "export.csv";
+const char* dsExport_CSV_Ext_Spec = "CSV file (*.csv)";
+const char* dsExport_CSV_Dialog_Title = "Export to CSV";
 
 const wchar_t *dsDb_Reader = L"Db Reader";
 const wchar_t *dsDb_Writer = L"Db Writer";
 const wchar_t *dsSinCos_Generator = L"Sin/Cos IG/BG generator";
+const wchar_t *dsDummy_Generator = L"Dummy IG/BG generator";
 
 const wchar_t *dsDb_Host = L"Host";
 const wchar_t *dsDb_Port = L"Port";
@@ -124,10 +130,9 @@ const wchar_t *dsGen_BG_Cos_Period = L"BG cosinus period";
 const wchar_t *dsGen_BG_Sampling_Period = L"BG sampling period";
 const wchar_t *dsGen_Total_Time = L"Total generated time interval";
 
-const wchar_t *dsNet_Comm = L"Network";
-const wchar_t *dsNet_Host = L"Host/Bind address";
-const wchar_t *dsNet_Port = L"Port";
-const wchar_t *dsNet_RecvSide = L"Receiving side?";
+const wchar_t *dsFeedback_Channel_Identifier = L"Feedback channel identifier";
+const wchar_t *dsDevice_Driver_Id = L"Device driver";
+const wchar_t *dsSynchronize_With_Pump = L"Synchronize with pump";
 
 const wchar_t *dsSolver_Filter = L"Solver";
 
@@ -191,6 +196,11 @@ const wchar_t *dsIgnore_Shutdown_Msg = L"Ignore the shutdown message";
 const wchar_t *dsLog_Header = L"Logical Clock; Device Time; Event Code; Signal; Info; Segment Id; Event Code Id; Device Id; Signal Id;";
 const wchar_t *dsLog_Filter_Replay = L"CSV File Log Replay";
 
+const wchar_t *dsDevice_Feedback_Filter = L"Device feedback";
+const wchar_t *dsDevice_Filter = L"Device";
+
+const wchar_t *dsT1DMS_Device_Driver = L"T1DMS Device driver";
+
 const wchar_t *dsGUI_Filter = L"Visualization";
 
 const char* dsSave_Image_To_File = "Save to file";
@@ -210,6 +220,9 @@ const char* dsSave_Image_Default_Filename_Parkes = "parkes.svg";
 const char* dsSave_Image_Default_Filename_Clark = "clark.svg";
 const char* dsSave_Image_Default_Filename_AGP = "agp.svg";
 const char* dsSave_Image_Default_Filename_ECDF = "ecdf.svg";
+const char* dsSave_Image_Default_Filename_Profile_Glucose = "mobile_glucose.svg";
+const char* dsSave_Image_Default_Filename_Profile_Insulin = "mobile_insulin.svg";
+const char* dsSave_Image_Default_Filename_Profile_Carbs = "mobile_carbs.svg";
 
 
 //const wchar_t *dsCalculate_Past_New_Params = L"Calculate past with first parameter set";
@@ -259,10 +272,31 @@ const wchar_t* dsAvg_Plus_Bessel_Std_Dev = L"average plus standard deviation wit
 const wchar_t* dsBlood = L"blood";
 const wchar_t* dsInterstitial = L"interstitial fluid";
 
+const wchar_t* dsConstant_Blood_Signal = L"Constant blood";
+const wchar_t* dsConstant_Insulin = L"Constant insulin";
+
 const wchar_t* dsDiffusion_Model_v2 = L"Diffusion model v2";
 const wchar_t* dsSteil_Rebrin = L"Steil-Rebrin";
 const wchar_t* dsSteil_Rebrin_Diffusion_Prediction = L"Steil-Rebrin Diffusion Prediction";
 const wchar_t* dsDiffusion_Prediction = L"Diffusion Prediction";
+const wchar_t* dsOref0_Basal_Insulin = L"oref0 basal insulin";
+const wchar_t* dsOref0_Basal_Insulin_Orig = L"oref0 basal insulin (orig)";
+const wchar_t* dsOref0_IOB_Model = L"oref0 IOB";
+const wchar_t* dsOref0_COB_Model = L"oref0 COB";
+const wchar_t* dsOref0_Insulin_Activity_Bilinear = L"oref0 insulin activity bilinear";
+const wchar_t* dsOref0_Insulin_Activity_Exponential = L"oref0 insulin activity exponential";
+const wchar_t* dsOref0_IOB_Bilinear = L"oref0 IOB bilinear";
+const wchar_t* dsOref0_IOB_Exponential = L"oref0 IOB exponential";
+const wchar_t* dsOref0_COB_Bilinear = L"oref0 COB bilinear";
+const wchar_t* dsOref0_BG_Prediction = L"oref0 BG Prediction";
+const wchar_t* dsOref0_BG_IOB_Prediction = L"oref0 IOB-based BG Prediction";
+const wchar_t* dsOref0_BG_COB_Prediction = L"oref0 COB-based BG Prediction";
+const wchar_t* dsOref0_BG_UAM_Prediction = L"oref0 UAM-based BG Prediction";
+const wchar_t* dsOref0_BG_ZT_Prediction = L"oref0 ZT-based BG Prediction";
+const wchar_t* dsOref0_BG_Prediction_Signal = L"oref0 aggregated BG Prediction";
+const wchar_t* dsConstant_Model = L"Constant model";
+
+const wchar_t* dsOref0_Solver = L"oref0 solver";
 
 const wchar_t* dsP = L"p";
 const wchar_t* dsCg = L"cg";
@@ -278,6 +312,8 @@ const wchar_t* dsGamma = L"gamma";
 
 const wchar_t* dsInv_G = L"1/g";
 
+const wchar_t* dsConstantParam = L"c";
+
 const wchar_t* dsRetrospectiveP = L"p<sub>retro</sub>";
 const wchar_t* dsRetrospectiveCg = L"cg<sub>retro</sub>";
 const wchar_t* dsRetrospectiveC = L"c<sub>retro</sub>";
@@ -287,6 +323,33 @@ const wchar_t* dsPredictiveP = L"p<sub>pred</sub>";
 const wchar_t* dsPredictiveCg = L"cg<sub>pred</sub>";
 const wchar_t* dsPredictiveC = L"c<sub>pred</sub>";
 const wchar_t* dsPredictiveDt = L"&Delta;t<sub>pred</sub>";
+
+const wchar_t* dsInsulin_TwoTerm_Regulation = L"Insulin two-term regulation";
+const wchar_t* dsInsulin_PID_Regulation = L"Insulin PID regulation";
+const wchar_t* dsBetaPID = L"BetaPID";
+const wchar_t* dsInsulin_TwoTerm_OnOff_Rate = L"Two-term on-off regulator insulin rate";
+const wchar_t* dsInsulin_TwoTerm_OnNeturalOff_Rate = L"Two-term on-neutral-off regulator insulin rate";
+const wchar_t* dsInsulin_TwoTerm_OnOff_Hysteresis_Rate = L"Two-term on-off regulator with hysteresis insulin rate";
+const wchar_t* dsInsulin_PID_Regulation_Rate = L"PID regulator insulin rate";
+const wchar_t* dsInsulin_BetaPID_Rate = L"BetaPID regulator insulin rate";
+const wchar_t* dsInsulin_BetaPID2_Rate = L"BetaPID2 regulator insulin rate";
+const wchar_t* dsKp = L"Kp";
+const wchar_t* dsKi = L"Ki";
+const wchar_t* dsKd = L"Kd";
+const wchar_t* dsBIN = L"BIN";
+
+const wchar_t* dsBolus_Calculator = L"Bolus calculator";
+const wchar_t* dsCalculated_Bolus_Insulin = L"Calculated bolus insulin";
+const wchar_t* dsConst_Basal_Insulin = L"Constant basal insulin rate";
+const wchar_t* dsConst_Basal_Low_Suspend_Insulin = L"Constant basal insulin rate with low glucose suspend";
+
+const wchar_t* dsISF = L"ISF";
+const wchar_t* dsCSR = L"CSR";
+const wchar_t* dsInsulinPeak = L"Insulin activity peak";
+const wchar_t* dsDIA = L"DIA";
+
+const wchar_t* dsCarbPeak = L"Carbohydrates activity peak";
+const wchar_t* dsCarbDA = L"DCA?";
 
 const wchar_t* dsNewUOA = L"NewUOA";
 const wchar_t* dsMT_MetaDE = L"MT MetaDE";
@@ -313,6 +376,7 @@ const wchar_t* dsSubplex = L"Subplex";
 const wchar_t* dsPraxis = L"Praxis";
 
 
+
 const wchar_t *dsLine_Approx = L"Line";
 const wchar_t *dsAkima = L"Akima";
 
@@ -322,6 +386,9 @@ const char *dsDrawing_Tab_Clark = "Clarke's Grid";
 const char *dsDrawing_Tab_Parkes = "Parkes' Grid";
 const char *dsDrawing_Tab_AGP = "AGP";
 const char *dsDrawing_Tab_ECDF = "ECDF";
+const char *dsDrawing_Tab_Profile_Glucose = "Mobile - Glucose";
+const char *dsDrawing_Tab_Profile_Carbs = "Mobile - Carbohydrates";
+const char *dsDrawing_Tab_Profile_Insulin = "Mobile - Insulin";
 
 const char *dsLower_Bounds = "Lower bounds";
 const char *dsDefault_Parameters = "Default parameters";
@@ -336,9 +403,14 @@ const wchar_t *dsSignal_Measured_BG = L"blood glucose";
 const wchar_t *dsSignal_Measured_IG = L"interstitial fluid glucose";
 const wchar_t *dsSignal_Measured_ISIG = L"ISIG";
 const wchar_t *dsSignal_Measured_Calibration = L"blood glucose calibration";
-const wchar_t *dsSignal_Measured_Insulin = L"insulin amount";
+const wchar_t *dsSignal_Measured_Bolus_Insulin = L"insulin bolus amount";
+const wchar_t *dsSignal_Measured_Basal_Insulin = L"insulin basal amount";
+const wchar_t *dsSignal_Measured_Basal_Insulin_Rate = L"insulin basal rate";
+const wchar_t *dsSignal_Measured_Insulin_Activity = L"insulin activity";
+const wchar_t *dsSignal_Measured_IOB = L"insulin on board (IOB)";
+const wchar_t *dsSignal_Measured_COB = L"carbohydrates on board (COB)";
 const wchar_t *dsSignal_Measured_Carb_Intake = L"carbohydrates intake";
-const wchar_t *dsSignal_Measured_Health_Stress = L"health stress";
+const wchar_t *dsSignal_Measured_Health_Physical_Activity = L"physical activity";
 const wchar_t *dsSignal_Suffix_Measured = L"measured";
 const wchar_t *dsSignal_Suffix_Calculated = L"calculated";
 const wchar_t *dsSignal_Unknown = L"Unknown";
@@ -349,9 +421,14 @@ const wchar_t *dsSignal_GUI_Name_BG = L"Blood glucose";
 const wchar_t *dsSignal_GUI_Name_IG = L"Interstitial glucose";
 const wchar_t *dsSignal_GUI_Name_ISIG = L"ISIG";
 const wchar_t *dsSignal_GUI_Name_Calibration = L"Calibration";
-const wchar_t *dsSignal_GUI_Name_Insulin = L"Insulin intake";
+const wchar_t *dsSignal_GUI_Name_Bolus_Insulin = L"Bolus Insulin intake";
+const wchar_t *dsSignal_GUI_Name_Basal_Insulin = L"Basal Insulin intake";
+const wchar_t *dsSignal_GUI_Name_Basal_Insulin_Rate = L"Basal Insulin rate";
+const wchar_t *dsSignal_GUI_Name_Insulin_Activity = L"Insulin activity";
+const wchar_t *dsSignal_GUI_Name_IOB = L"IOB";
+const wchar_t *dsSignal_GUI_Name_COB = L"COB";
 const wchar_t *dsSignal_GUI_Name_Carbs = L"Carbohydrates intake";
-const wchar_t *dsSignal_GUI_Name_Stress = L"Health stress";
+const wchar_t *dsSignal_GUI_Name_Physical_Activity = L"Physical activity";
 
 const wchar_t *dsSignal_GUI_Name_Unknown = L"Unknown signal";
 
@@ -362,6 +439,7 @@ const wchar_t *dsError_Relative = L"relative";
 const wchar_t *dsError_Column_Average = L"Average";
 const wchar_t *dsError_Column_StdDev = L"Std.Dev (Bessel)";
 const wchar_t *dsError_Column_AIC = L"AIC";
+const wchar_t *dsError_Column_Sum = L"Sum";
 const wchar_t *dsError_Column_Minimum = L"Minimum";
 const wchar_t *dsError_Column_First_Quantile = L"1. Quartile";
 const wchar_t *dsError_Column_Median = L"Median";
@@ -369,8 +447,12 @@ const wchar_t *dsError_Column_Third_Quantile = L"3. Quartile";
 const wchar_t *dsError_Column_95_Quantile = L"95% Quantile";
 const wchar_t *dsError_Column_99_Quantile = L"99% Quantile";
 const wchar_t *dsError_Column_Maximum = L"Maximum";
+const wchar_t *dsError_Column_Range_5pct = L"5% range";
+const wchar_t *dsError_Column_Range_10pct = L"10% range";
+const wchar_t *dsError_Column_Range_25pct = L"25% range";
+const wchar_t *dsError_Column_Range_50pct = L"50% range";
 
-const wchar_t* rsInsert_New_Measured_Value = L"INSERT INTO measuredvalue (measuredat, blood, ist, isig, insulin, carbohydrates, calibration, segmentid) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+const wchar_t* rsInsert_New_Measured_Value = L"INSERT INTO measuredvalue (measuredat, blood, ist, isig, insulin_bolus, insulin_basal_rate, carbohydrates, calibration, segmentid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 const wchar_t* rsInsert_Params_Base = L"INSERT INTO ";
 const wchar_t* rsInsert_Params_Segmentid_Column = L"segmentid";
@@ -383,6 +465,20 @@ const wchar_t* rsRename_Time_Segment = L"UPDATE timesegment SET name = ? WHERE i
 const wchar_t* rsDelete_Parameters_Of_Segment_Base = L"DELETE FROM ";
 const wchar_t* rsDelete_Parameters_Of_Segment_Stmt = L" WHERE segmentid = ?";
 
+const wchar_t* rsT1DMS_Receiver_Filter = L"T1DMS Receiver filter";
+const wchar_t* rsT1DMS_Sender_Filter = L"T1DMS Sender filter";
+
+const wchar_t* rsInsulin_Regulation = L"insulin-regulation";
+const wchar_t* rsInsulin_PID_Regulation = L"insulin-pid-regulation";
+const wchar_t* rsBetaPID = L"betapid";
+const wchar_t* rsKp = L"kp";
+const wchar_t* rsKi = L"ki";
+const wchar_t* rsKd = L"kd";
+const wchar_t* rsBIN = L"bin";
+
+const wchar_t* rsBolus_Calculator = L"boluscalc";
+const wchar_t* rsConst_Basal_Insulin = L"const-basal";
+
 // ---- drawing-related constants
 
 const wchar_t* dsDrawingLocaleTitle = L"Calculated Blood Glucose Level";
@@ -390,6 +486,7 @@ const wchar_t* dsDrawingLocaleTitleAgp = L"Ambulatory Glucose Profile";
 const wchar_t* dsDrawingLocaleTitleClark = L"Clarke's error grid";
 const wchar_t* dsDrawingLocaleTitleParkes = L"Parkes' error grid";
 const wchar_t* dsDrawingLocaleTitleECDF = L"ECDF";
+const wchar_t* dsDrawingLocaleTitleProfileGlucose = L"Profile - glucose";
 const wchar_t* dsDrawingLocaleTitleDay = L"Day";
 const wchar_t* dsDrawingLocaleSubtitle = L"Blood glucose level that was calculated from CMGS-measured subcutanoues tissue glucose levels and sporadically measured blood glucose levels";
 const wchar_t* dsDrawingLocaleDiabetes1 = L"Diabetes 1";
@@ -482,6 +579,12 @@ const wchar_t *dsFilename_ECDF_Tooltip = L"Where to store 'ECDF' drawing at the 
 const wchar_t *dsLog_File_Output_Tooltip = L"Log file output. Any existing file with such name will be overwritten";
 const wchar_t *dsLog_File_Input_Tooltip = L"Log file to be parsed and its contents to be sent to simulation";
 
+// virtual pump group
+const wchar_t *dsPump_Interval_Tooltip = L"How often the pump should dose basal insulin";
+const wchar_t *dsFeedback_Channel_Identifier_Tooltip = L"Identifier of the feedback channel used for pairing and communication";
+const wchar_t *dsDevice_Driver_Id_Tooltip = L"Selected device driver to be loaded";
+const wchar_t *dsSynchronize_With_Pump_Tooltip = L"Synchronize with pump (pump driver)";
+
 // signals filter group
 const wchar_t *dsSelected_Model_Tooltip = L"Model to be used. Make sure you also select valid signal from signal box below";
 const wchar_t *dsSelected_Signal_Tooltip = L"Model signal to be used";
@@ -559,6 +662,15 @@ const wchar_t *rsDiffusion_v3_Table = L"difuse3params";
 const wchar_t *rsSteil_Rebrin_Table = L"steilrebrinparams";
 const wchar_t* rsSteil_Rebrin_Diffusion_Prediction_Table = L"steil_rebrin_diffusion_prediction";
 const wchar_t* rsDiffusion_Prediction_Table = L"diffusion_prediction";
+const wchar_t* rsOref0_Basal_Insulin = L"oref0_basal_insulin";
+const wchar_t* rsOref0_IOB = L"oref0_iob";
+const wchar_t* rsOref0_COB = L"oref0_cob";
+const wchar_t* rsOref0_BG_Prediction = L"oref0_bg_prediction";
+const wchar_t* rsOref0_BG_IOB_Prediction = L"oref0_bg_iob_prediction";
+const wchar_t* rsOref0_BG_COB_Prediction = L"oref0_bg_cob_prediction";
+const wchar_t* rsOref0_BG_UAM_Prediction = L"oref0_bg_uam_prediction";
+const wchar_t* rsOref0_BG_ZT_Prediction = L"oref0_bg_zt_prediction";
+const wchar_t* rsConstant_Model = L"constant_model";
 
 const wchar_t* rsP_Column = L"p";
 const wchar_t* rsCg_Column = L"cg";
@@ -583,6 +695,13 @@ const wchar_t* rsTau_Column = L"t";
 const wchar_t* rsAlpha_Column = L"alpha";
 const wchar_t* rsBeta_Column = L"beta";
 const wchar_t* rsGamma_Column = L"gamma";
+
+const wchar_t* rsISF = L"isf";
+const wchar_t* rsCSR = L"csr";
+const wchar_t* rsInsulinPeak = L"ia_peak";
+const wchar_t* rsDIA = L"dia";
+const wchar_t* rsCarbPeak = L"ca_peak";
+const wchar_t* rsCarbDA = L"carbda";
 
 const wchar_t *rsNet_Host = L"Host";
 const wchar_t *rsNet_Port = L"Port";
@@ -632,6 +751,11 @@ const wchar_t *rsRecalculate_On_Calibration = L"Recalculate_On_Calibration";
 const wchar_t *rsLog_Output_File = L"Log_File";
 const wchar_t *rsIgnore_Shutdown_Msg = L"Ignore_Shutdown";
 
+const wchar_t *rsPump_Interval = L"Pump_Interval";
+const wchar_t *rsFeedback_Channel_Identifier = L"Feedback_Channel_Identifier";
+const wchar_t *rsDevice_Driver_Id = L"Device_Driver_Id";
+const wchar_t *rsSynchronize_With_Pump = L"Synchronize_With_Pump";
+
 const wchar_t *rsDrawing_Filter_Period = L"Redraw_Period";
 const wchar_t *rsDiagnosis_Is_Type2 = L"Diabetes_Type_2";
 const wchar_t *rsDrawing_Filter_Canvas_Width = L"Canvas_Width";
@@ -676,7 +800,7 @@ const char* rsFilter_Get_Errors = "get_error_metrics";
 
 const wchar_t* rsSelect_Subjects_And_Segments_For_Db_Reader_Filter = L"select timesegment.id, subject.name, timesegment.name, count(measuredvalue.id) from subject, timesegment, measuredvalue where subject.id = timesegment.subjectid and timesegment.id = measuredvalue.segmentid group by timesegment.id, subject.name order by subject.name, timesegment.name asc";
 const wchar_t* rsSelect_Subjects = L"select id, name from subject";
-const wchar_t* rsSelect_Timesegment_Values_Filter = L"select measuredat, blood, ist, isig, insulin, carbohydrates, calibration from measuredvalue where segmentid = ? order by measuredat asc";
+const wchar_t* rsSelect_Timesegment_Values_Filter = L"select measuredat, blood, ist, isig, insulin_bolus, insulin_basal_rate, carbohydrates, calibration from measuredvalue where segmentid = ? order by measuredat asc";
 const wchar_t* rsSelect_Params_Base = L"select ";
 const wchar_t* rsSelect_Params_From = L" from ";
 const wchar_t* rsSelect_Params_Condition = L" where segmentid = ?";
@@ -733,18 +857,20 @@ const wchar_t *rsShutdown_After_Last = L"Shutdown_After_Last";
 const wchar_t *rsMinimum_Segment_Levels = L"Minimum_Segment_Levels";
 const wchar_t *rsRequire_IG_BG = L"Require_IG_BG";
 
+const wchar_t* rsConstantParam = L"c";
+
 const wchar_t *rsGenerate_Primary_Keys = L"Generate_Primary_Keys";
 const wchar_t *rsStore_Data = L"Store_Data";
 const wchar_t *rsStore_Parameters = L"Store_Parameters";
 const wchar_t *rsSubject_Id = L"Subject_Id";
 
 const wchar_t* rsReserved_Segment_Name = L"RESERVED_SEGMENT_NAME";
-const wchar_t* rsFound_New_Segment = L"insert into timesegment (name) values (?)";
+const wchar_t* rsFound_New_Segment = L"insert into timesegment (name, comment, deleted) values (?, ?, ?)";
 const wchar_t* rsSelect_Founded_Segment = L"select id from timesegment where name = ?";
 const wchar_t* rsUpdate_Founded_Segment = L"update timesegment set name = ?, comment = ?, deleted=?, subjectid=?, parallel_id=? where id=?";
 
 const wchar_t* rsReserved_Subject_Name = L"RESERVED_SUBJECT_NAME";
-const wchar_t* rsFound_New_Subject = L"insert into subject (name) values (?)";
+const wchar_t* rsFound_New_Subject = L"insert into subject (name, comments, sex, weight) values (?, ?, ?, ?)";
 const wchar_t* rsSelect_Founded_Subject = L"select id from subject where name = ?";
 const wchar_t* rsUpdate_Founded_Subject = L"update subject set name = ?, comments = ?, sex = ?, weight = ? where id=?";
 
@@ -788,6 +914,18 @@ const char16_t* rsMatlab_Variable_Solver_Hints = u"solver_hints";
 const char16_t* rsMatlab_Variable_Solver_Lowbounds = u"solver_lowerbounds";
 const char16_t* rsMatlab_Variable_Solver_Upbounds = u"solver_upperbounds";
 const char16_t* rsMatlab_Variable_Solver_Output = u"solver_output";
+
+const wchar_t* rsT1DMS_Feedback_Request = L"T1DMS_Feedback_Request";
+const wchar_t* rsBergman_Feedback_Request = L"Bergman_Feedback_Request";
+
+const wchar_t* rsOref0_Manifest_File = L"oref0_manifest.xml";
+const wchar_t* rsOref0_Manifest_Workdir_Path = L"manifest.workdir:path";
+const wchar_t* rsOref0_Manifest_Runner_Script_Path = L"manifest.runner:path";
+const wchar_t* rsOref0_Manifest_Node_Command_Path = L"manifest.node:command";
+const wchar_t* rsOref0_Manifest_Socket_Timeout_Path = L"manifest.socket:timeout";
+const wchar_t* rsOref0_Manifest_Socket_Port_Path = L"manifest.socket:port";
+const wchar_t* rsOref0_Manifest_Default_Runner_Script = L"runner.js";
+const wchar_t* rsOref0_Manifest_Default_Node_Command = L"node";
 
 //**************
 const wchar_t *rsCalculate_Past_New_Params = L"Calc_Past_First_Params";

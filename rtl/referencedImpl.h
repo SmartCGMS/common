@@ -98,7 +98,7 @@ namespace refcnt {
 			};
 
 			template <typename D = typename std::remove_pointer<T>::type>
-			typename std::enable_if<std::is_base_of<refcnt::IReferenced, D>::value || std::is_base_of<refcnt::IUnique_Reference, D>::value, void>::type
+			typename std::enable_if<std::is_base_of<refcnt::IReferenced, D>::value, void>::type
 			Add_Content(T *begin, T *end) {
 				for (T* iter = begin; iter != end; iter++) {
 					T real_ptr = *iter;
@@ -106,7 +106,18 @@ namespace refcnt {
 					real_ptr->AddRef();
 				}
 			}
-		
+
+			template <typename D = typename std::remove_pointer<T>::type>
+			typename std::enable_if<std::is_base_of<refcnt::IUnique_Reference, D>::value, void>::type
+				Add_Content(T *begin, T *end) {
+				for (T* iter = begin; iter != end; iter++) {
+					T real_ptr = *iter;
+					TAligned_Vector<T>::push_back(std::move(real_ptr));
+					*iter = nullptr;	//now, we own the unique reference and therefore we clean the caller's data not to ever use the reference again
+				}
+			}
+
+
 			template <typename D = typename std::remove_pointer<T>::type>
 			typename std::enable_if<!std::is_base_of<refcnt::IReferenced, D>::value && !std::is_base_of<refcnt::IUnique_Reference, D>::value, void>::type
 			Release_Content() {};
@@ -115,12 +126,15 @@ namespace refcnt {
 			typename std::enable_if<std::is_base_of<refcnt::IReferenced, D>::value || std::is_base_of<refcnt::IUnique_Reference, D>::value, void>::type
 			Release_Content() {
 				for (T &item : *this)
-					item->Release();
+					item->Release();	//as we own both kind of references, we release them
 			}
+			
+
 		public:
 			virtual ~CVector_Container() { Release_Content();  };
 
 			virtual HRESULT set(T *begin, T *end) override final {
+				Release_Content();
 				TAligned_Vector<T>::clear();
 				return add(begin, end);
 			}
@@ -142,6 +156,16 @@ namespace refcnt {
 				}
 			}
 		
+			virtual HRESULT pop(T* value) override final {
+				if (TAligned_Vector<T>::empty()) return S_FALSE;
+
+				*value = TAligned_Vector<T>::back();
+				TAligned_Vector<T>::pop_back();
+
+				//there is no reference add_refing/releasing needed, because we are moving from the vector out
+				return S_OK;
+			}
+
 			virtual HRESULT empty() const override final {
 				return TAligned_Vector<T>::empty() ? S_OK : S_FALSE;
 			}
@@ -157,8 +181,9 @@ namespace refcnt {
 
 			virtual HRESULT set(T *begin, T *end) override final { return E_NOTIMPL; };
 			virtual HRESULT add(T *begin, T *end) override final { return E_NOTIMPL; };
-			virtual HRESULT get(T **begin, T **end) const override final { *begin = const_cast<double*>(mBegin); *end = const_cast<double*>(mEnd); return S_OK; }
-			virtual HRESULT empty() const override final { return mEnd>mBegin ? S_OK : S_FALSE; }
+			virtual HRESULT get(T **begin, T **end) const override final { *begin = mBegin; *end = mEnd; return S_OK; }
+			virtual HRESULT pop(T* value) override final { return E_NOTIMPL; }
+			virtual HRESULT empty() const override final { return mEnd<=mBegin ? S_OK : S_FALSE; }
 		};
 
 		#pragma warning( pop ) 
@@ -174,15 +199,36 @@ namespace refcnt {
 		return obj;
 	}
 
+	template <typename T>
+	class SVector_Container : public std::shared_ptr<IVector_Container<T>> {
+	protected:
+		T* get_bound(const bool first) const {
+			//Do not cache these values as we cannot track every possible modification of the underlying vector.
+			//Hence, the code complexity is less or comparable to a stack-constructed solution that would cache both values once needed.
+			T* b = nullptr;
+			T* e = nullptr;
 
-	template <typename T, typename S = std::shared_ptr<IVector_Container<T>>>
+			if (operator bool()) {
+				if (std::shared_ptr<IVector_Container<T>>::get()->get(&b, &e) != S_OK)
+					return nullptr;
+			}
+
+			return first ? b : e;
+		}
+	public:
+		T* begin() const { return get_bound(true); } ;
+		T* end() const { return get_bound(false); };
+	};
+
+
+	template <typename T, typename S = SVector_Container<T>>
 	S Create_Container_shared(T *begin, T *end) {
 		IVector_Container<T> *obj = Create_Container<T>(begin, end);
 		return refcnt::make_shared_reference_ext <S, IVector_Container<T>>(obj, false);
 	}
 
-	template <typename T, typename S = std::shared_ptr<IVector_Container<T>>>
-	S Copy_Container(std::shared_ptr<IVector_Container<T>> src) {
+	template <typename T, typename S = SVector_Container<T>>
+	S Copy_Container(SVector_Container<T> src) {
 		S result;
 		// copy parameter hint to internal vector
 		T *begin, *end;

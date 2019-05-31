@@ -49,7 +49,7 @@
 
 namespace glucose {
 
-	class IFilter_Pipe : public virtual refcnt::IReferenced {
+	class IFilter_Asynchronous_Pipe : public virtual refcnt::IReferenced {
 	public:
 		// Pipe TAKES ownership of any nested reference-counted I-object so that send-caller is forbidden to call to release the nested objects
 		virtual HRESULT send(IDevice_Event *event) = 0;
@@ -57,6 +57,13 @@ namespace glucose {
 		virtual HRESULT receive(IDevice_Event **event) = 0;
 		// abort pipe operation explicitly - any subsequent send or receive calls will fail with S_FALSE
 		virtual HRESULT abort() = 0;
+	};
+
+	class ISynchronnous_Filter;
+
+	class IFilter_Synchronnous_Pipe : public virtual IFilter_Asynchronous_Pipe {
+	public:
+		virtual HRESULT add_filter(ISynchronnous_Filter* filter) = 0;
 	};
 
 	using time_segment_id_container = refcnt::IVector_Container<int64_t>;
@@ -76,6 +83,7 @@ namespace glucose {
 		ptSignal_Id,		// any signal available (measured, calculated)
 		ptModel_Bounds,		// three parameter sets in one container - lower bound, default values, higher bound
 		ptSubject_Id,		// int64_t, but with additional functionality in GUI
+		ptDevice_Driver_Id,	// device driver GUID (pump, sensor, ..)
 	};
 
 	struct TFilter_Parameter {
@@ -96,15 +104,37 @@ namespace glucose {
 	constexpr TFilter_Parameter Null_Filter_Parameter = { NParameter_Type::ptNull, nullptr, { nullptr } };
 
 	using IFilter_Configuration = refcnt::IVector_Container<glucose::TFilter_Parameter>;
+	using IDevice_Event_Vector = refcnt::IVector_Container<glucose::IDevice_Event*>;
 
 	class IFilter : public virtual refcnt::IReferenced {
+	public:
+		virtual ~IFilter() = default;
+
+		// just marker interface
+	};
+
+	class IAsynchronnous_Filter : public IFilter {
 	public:
 		// This method is already started within a thread - no need to create another one inside filter
 		virtual HRESULT IfaceCalling Run(IFilter_Configuration* configuration) = 0;
 	};
 
-	using TCreate_Filter = HRESULT(IfaceCalling *)(const GUID *id, IFilter_Pipe *input, IFilter_Pipe *output, glucose::IFilter **filter);
+	class ISynchronnous_Filter : public IFilter {
+	public:
+		// As this filter does not start in its own thread, therefore there's no place to call Configure before actual filter startup, we need to call it
+		// separately to avoid "configure just once" logic in Execute method
+		virtual HRESULT IfaceCalling Configure(IFilter_Configuration* configuration) = 0;
 
+		// This method is called when a new event comes to synchronnous filter subchain; any filter before this one could emit one or more additional events
+		// and add them to the vector, therefore this filter instance should process ALL events present in given vector
+		// This method CAN modify and/or delete any of events - as if it was asynchronnous scenario
+		virtual HRESULT IfaceCalling Execute(IDevice_Event_Vector* events) = 0;
+
+		//virtual HRESULT IfaceCalling Run_Step(const glucose::IDevice_Event *input, IDevice_Event_Vector* output) = 0;
+	};
+
+	using TCreate_Asynchronnous_Filter = HRESULT(IfaceCalling *)(const GUID *id, IFilter_Asynchronous_Pipe *input, IFilter_Asynchronous_Pipe *output, glucose::IAsynchronnous_Filter **filter);
+	using TCreate_Synchronnous_Filter = HRESULT(IfaceCalling *)(const GUID *id, glucose::ISynchronnous_Filter **ISynchronnous_Filter);
 
 	//The following GUIDs advertise known filters 
 	constexpr GUID Drawing_Filter = { 0x850a122c, 0x8943, 0xa211,{ 0xc5, 0x14, 0x25, 0xba, 0xa9, 0x14, 0x35, 0x74 } };
@@ -117,6 +147,7 @@ namespace glucose {
 		Average = 0,
 		StdDev,
 		AIC,
+		Sum,
 		count
 	};
 
@@ -131,6 +162,14 @@ namespace glucose {
 		count
 	};
 
+	enum class NError_Range : size_t {
+		R5,
+		R10,
+		R25,
+		R50,
+		count
+	};
+
 	// Structure for containing error metric values
 	struct TError_Markers {
 		union
@@ -141,6 +180,7 @@ namespace glucose {
 				double avg;						// average value
 				double stddev;					// standard deviation with Bessel's correction
 				double aic;						// Akaike's information criterion
+				double sum;						// sum of errors
 			};
 		};
 		union
@@ -155,6 +195,17 @@ namespace glucose {
 				double p95;						// 95. percentile
 				double p99;						// 99. percentile
 				double maxval;					// maximum value ("100." percentile)
+			};
+		};
+		union
+		{
+			double range[static_cast<size_t>(NError_Range::count)];
+			struct
+			{
+				double r5;						// 5% range
+				double r10;						// 10% range
+				double r25;						// 25% range
+				double r50;						// 50% range
 			};
 		};
 	};
@@ -176,6 +227,9 @@ namespace glucose {
 		Clark,
 		AGP,
 		ECDF,
+		Profile_Glucose,
+		Profile_Insulin,
+		Profile_Carbs,
 
 		count
 	};
@@ -226,6 +280,6 @@ namespace glucose {
 		virtual HRESULT IfaceCalling Cancel_Solver() = 0;
 	};
 
-
-	using TCreate_Filter_Pipe = HRESULT(IfaceCalling *)(glucose::IFilter_Pipe **pipe);
+	using TCreate_Filter_Asynchronous_Pipe = HRESULT(IfaceCalling *)(glucose::IFilter_Asynchronous_Pipe **pipe);
+	using TCreate_Filter_Synchronnous_Pipe = HRESULT(IfaceCalling *)(glucose::IFilter_Synchronnous_Pipe **pipe);
 }

@@ -48,14 +48,16 @@ namespace glucose {
 
 	namespace imported {
 		glucose::TGet_Filter_Descriptors get_filter_descriptors = factory::resolve_symbol<glucose::TGet_Filter_Descriptors>("get_filter_descriptors");
-		glucose::TCreate_Filter_Pipe create_filter_pipe = factory::resolve_symbol<glucose::TCreate_Filter_Pipe>("create_filter_pipe");
-		glucose::TCreate_Filter create_filter = factory::resolve_symbol<glucose::TCreate_Filter>("create_filter");
+		glucose::TCreate_Filter_Asynchronous_Pipe create_filter_pipe = factory::resolve_symbol<glucose::TCreate_Filter_Asynchronous_Pipe>("create_filter_asynchronous_pipe");
+		glucose::TCreate_Filter_Synchronnous_Pipe create_filter_synchronnous_pipe = factory::resolve_symbol<glucose::TCreate_Filter_Synchronnous_Pipe>("create_filter_synchronnous_pipe");
+		glucose::TCreate_Asynchronnous_Filter create_asynchronnous_filter = factory::resolve_symbol<glucose::TCreate_Asynchronnous_Filter>("create_asynchronnous_filter");
+		glucose::TCreate_Synchronnous_Filter create_synchronnous_filter = factory::resolve_symbol<glucose::TCreate_Synchronnous_Filter>("create_synchronnous_filter");
 		glucose::TAdd_Filters add_filters = factory::resolve_symbol<glucose::TAdd_Filters>("add_filters");
 	}
 
 
-	bool add_filters(const std::vector<glucose::TFilter_Descriptor> &descriptors, glucose::TCreate_Filter create_filter) {
-		return imported::add_filters(descriptors.data(), descriptors.data() + descriptors.size(), create_filter) == S_OK;
+	bool add_filters(const std::vector<glucose::TFilter_Descriptor> &descriptors, glucose::TCreate_Asynchronnous_Filter create_asynchronnous_filter, glucose::TCreate_Synchronnous_Filter create_synchronnous_filter) {
+		return imported::add_filters(descriptors.data(), descriptors.data() + descriptors.size(), create_asynchronnous_filter, create_synchronnous_filter) == S_OK;
 	}
 
 	std::vector<TFilter_Descriptor> get_filter_descriptors() {
@@ -93,7 +95,7 @@ namespace glucose {
 		if (!event) return false;
 		
 		if (get()->send(event.get()) != S_OK) {
-			event.reset();	//delete and release the event anyway to prevent the event from being deleted twice
+			event.reset(nullptr);	//delete and release the event anyway to prevent the event from being deleted twice
 			return false;
 		}
 
@@ -112,27 +114,50 @@ namespace glucose {
 	}
 
 
-	SFilter_Pipe::SFilter_Pipe(glucose::IFilter_Pipe *pipe) {
+	SFilter_Pipe::SFilter_Pipe(glucose::IFilter_Asynchronous_Pipe *pipe) {
 		if (pipe) pipe->AddRef();
-		reset(pipe, [](glucose::IFilter_Pipe* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });
+		reset(pipe, [](glucose::IFilter_Asynchronous_Pipe* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });
 	}
 
 	SFilter_Pipe::SFilter_Pipe() {
 		
-		IFilter_Pipe *pipe;
+		IFilter_Asynchronous_Pipe *pipe;
 		if (imported::create_filter_pipe(&pipe) == S_OK)
-			reset(pipe, [](glucose::IFilter_Pipe* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });
+			reset(pipe, [](glucose::IFilter_Asynchronous_Pipe* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });
 	}
 
-	SFilter create_filter(const GUID &id, SFilter_Pipe &input, SFilter_Pipe &output) {
-		SFilter result;
-		IFilter *filter;
+	SFilter_Synchronnous_Pipe::SFilter_Synchronnous_Pipe(glucose::IFilter_Synchronnous_Pipe *pipe) {
+		if (pipe) pipe->AddRef();
+		reset(pipe, [](glucose::IFilter_Synchronnous_Pipe* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });
+	}
 
-		if (imported::create_filter(&id, input.get(), output.get(), &filter) == S_OK)
-			result = refcnt::make_shared_reference_ext<SFilter, IFilter>(filter, false);
-	
+	SFilter_Synchronnous_Pipe::SFilter_Synchronnous_Pipe() {
+
+		IFilter_Synchronnous_Pipe *pipe;
+		if (imported::create_filter_synchronnous_pipe(&pipe) == S_OK)
+			reset(pipe, [](glucose::IFilter_Synchronnous_Pipe* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });
+	}
+
+	SAsynchronnous_Filter create_asynchronnous_filter(const GUID &id, SFilter_Pipe &input, SFilter_Pipe &output) {
+		SAsynchronnous_Filter result;
+		IAsynchronnous_Filter *filter;
+
+		if (imported::create_asynchronnous_filter(&id, input.get(), output.get(), &filter) == S_OK)
+			result = refcnt::make_shared_reference_ext<SAsynchronnous_Filter, IAsynchronnous_Filter>(filter, false);
+
 		return result;
 	}
+
+	SSynchronnous_Filter create_synchronnous_filter(const GUID &id) {
+		SSynchronnous_Filter result;
+		ISynchronnous_Filter *filter;
+
+		if (imported::create_synchronnous_filter(&id, &filter) == S_OK)
+			result = refcnt::make_shared_reference_ext<SSynchronnous_Filter, ISynchronnous_Filter>(filter, false);
+
+		return result;
+	}
+
 
 	void Visit_Filter_Parameter(glucose::TFilter_Parameter& element, std::function<void(refcnt::IReferenced *obj)> func) {
 		if (element.config_name != nullptr) func(element.config_name);
@@ -153,7 +178,7 @@ namespace glucose {
 		Visit_Filter_Parameter(parameter, [](refcnt::IReferenced *obj) { obj->Release(); });
 	}
 
-	TFilter_Parameter* SFilter_Parameters::Resolve_Parameter(const wchar_t* name) {
+	TFilter_Parameter* SFilter_Parameters::Resolve_Parameter(const wchar_t* name) const {
 		if (!operator bool()) return nullptr;
 
 		TFilter_Parameter* result = nullptr;
@@ -167,18 +192,18 @@ namespace glucose {
 		return result;
 	}
 
-	std::wstring SFilter_Parameters::Read_String(const wchar_t* name) {
+	std::wstring SFilter_Parameters::Read_String(const wchar_t* name, const std::wstring& default_value) const {
 		const auto parameter = Resolve_Parameter(name);
-		return parameter != nullptr ? WChar_Container_To_WString(parameter->wstr) : std::wstring{};
+		return parameter != nullptr ? WChar_Container_To_WString(parameter->wstr) : default_value;
 	}
 
 
-	int64_t SFilter_Parameters::Read_Int(const wchar_t* name, const int64_t default_value) {
+	int64_t SFilter_Parameters::Read_Int(const wchar_t* name, const int64_t default_value) const {
 		const auto parameter = Resolve_Parameter(name);
 		return parameter != nullptr ? parameter->int64 : default_value;
 	}
 
-	std::vector<int64_t> SFilter_Parameters::Read_Int_Array(const wchar_t* name) {
+	std::vector<int64_t> SFilter_Parameters::Read_Int_Array(const wchar_t* name) const {
 		const auto parameter = Resolve_Parameter(name);
 
 		std::vector<int64_t> result;
@@ -189,22 +214,22 @@ namespace glucose {
 		return result;
 	}
 
-	GUID SFilter_Parameters::Read_GUID(const wchar_t* name, const GUID &default_value) {
+	GUID SFilter_Parameters::Read_GUID(const wchar_t* name, const GUID &default_value) const {
 		const auto parameter = Resolve_Parameter(name);
 		return parameter != nullptr ? parameter->guid : default_value;
 	}
 
-	bool SFilter_Parameters::Read_Bool(const wchar_t* name, bool default_value) {
+	bool SFilter_Parameters::Read_Bool(const wchar_t* name, bool default_value) const {
 		const auto parameter = Resolve_Parameter(name);
 		return parameter != nullptr ? parameter->boolean : default_value;
 	}
 
-	double SFilter_Parameters::Read_Double(const wchar_t* name) {
+	double SFilter_Parameters::Read_Double(const wchar_t* name, const double default_value) const {
 		const auto parameter = Resolve_Parameter(name);
-		return parameter != nullptr ? parameter->dbl : std::numeric_limits<double>::quiet_NaN();
+		return parameter != nullptr ? parameter->dbl : default_value;
 	}
 
-	std::vector<double> SFilter_Parameters::Read_Double_Array(const wchar_t* name) {
+	std::vector<double> SFilter_Parameters::Read_Double_Array(const wchar_t* name) const {
 		const auto parameter = Resolve_Parameter(name);
 
 		std::vector<double> result;
@@ -215,7 +240,7 @@ namespace glucose {
 		return result;
 	}
 
-	void SFilter_Parameters::Read_Parameters(const wchar_t* name, glucose::SModel_Parameter_Vector &lower_bound, glucose::SModel_Parameter_Vector &default_parameters, glucose::SModel_Parameter_Vector &upper_bound) {
+	void SFilter_Parameters::Read_Parameters(const wchar_t* name, glucose::SModel_Parameter_Vector &lower_bound, glucose::SModel_Parameter_Vector &default_parameters, glucose::SModel_Parameter_Vector &upper_bound) const {
 		const auto parameter = Resolve_Parameter(name);
 
 		bool success = parameter != nullptr;
@@ -235,7 +260,7 @@ namespace glucose {
 				}
 			}
 		}
-		
+
 		if (!success) {
 			lower_bound = glucose::SModel_Parameter_Vector{};
 			default_parameters = glucose::SModel_Parameter_Vector{};
@@ -243,6 +268,8 @@ namespace glucose {
 		}
 
 	}
+
+
 
 
 	SError_Filter_Inspection::SError_Filter_Inspection(SFilter &error_filter) {

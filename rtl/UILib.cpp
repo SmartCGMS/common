@@ -143,7 +143,7 @@ namespace glucose
 		L"Time_Segment_Start",
 		L"Time_Segment_Stop",
 		L"Warm_Reset",
-		L"Simulation_Step",
+		L"Synchronization",
 		L"Information",
 		L"Warning",
 		L"Error"
@@ -158,9 +158,14 @@ namespace glucose
 		mSignal_Names[glucose::signal_IG] = dsSignal_GUI_Name_IG;
 		mSignal_Names[glucose::signal_ISIG] = dsSignal_GUI_Name_ISIG;
 		mSignal_Names[glucose::signal_Calibration] = dsSignal_GUI_Name_Calibration;
-		mSignal_Names[glucose::signal_Insulin] = dsSignal_GUI_Name_Insulin;
+		mSignal_Names[glucose::signal_Bolus_Insulin] = dsSignal_GUI_Name_Bolus_Insulin;
+		mSignal_Names[glucose::signal_Basal_Insulin] = dsSignal_GUI_Name_Basal_Insulin;
+		mSignal_Names[glucose::signal_Basal_Insulin_Rate] = dsSignal_GUI_Name_Basal_Insulin_Rate;
+		mSignal_Names[glucose::signal_Insulin_Activity] = dsSignal_GUI_Name_Insulin_Activity;
+		mSignal_Names[glucose::signal_IOB] = dsSignal_GUI_Name_IOB;
+		mSignal_Names[glucose::signal_COB] = dsSignal_GUI_Name_COB;
 		mSignal_Names[glucose::signal_Carb_Intake] = dsSignal_GUI_Name_Carbs;
-		mSignal_Names[glucose::signal_Health_Stress] = dsSignal_GUI_Name_Stress;
+		mSignal_Names[glucose::signal_Physical_Activity] = dsSignal_GUI_Name_Physical_Activity;
 
 		auto models = glucose::get_model_descriptors();
 		for (auto& model : models)

@@ -43,7 +43,9 @@
 #include <chrono>
 
 #include "../rtl/DbLib.h"
+#ifndef SMARTCGMS_NO_DB
 #include "qdb_connector.h"
+#endif
 
 CFilter_Chain_Manager::CFilter_Chain_Manager() noexcept {
 	
@@ -61,6 +63,8 @@ CFilter_Chain& CFilter_Chain_Manager::Get_Filter_Chain()
 }
 
 HRESULT CFilter_Chain_Manager::Init_And_Start_Filters(bool consumeOutputs) {
+	HRESULT res;
+
 	if (mFilterChain.empty()) return S_FALSE;
 
 	Terminate_Filters();
@@ -68,37 +72,132 @@ HRESULT CFilter_Chain_Manager::Init_And_Start_Filters(bool consumeOutputs) {
 
 	// create pipes
 	size_t i;
-	for (i = 0; i < mFilterChain.size() + 1; i++) {
+
+	auto addPipe = [this]() -> bool {
 		glucose::SFilter_Pipe pipe{};
 		if (!pipe)
-			return E_FAIL;
+			return false;
+
 		mFilterPipes.push_back(std::move(pipe));
+		return true;
+	};
+
+	auto addSynchronnousPipe = [this]() -> bool {
+		glucose::SFilter_Synchronnous_Pipe pipe{};
+		if (!pipe)
+			return false;
+
+		mFilterPipes.push_back(std::move(pipe));
+		return true;
+	};
+
+	// this loop creates "preceding" pipe for each filter
+	bool lastSync = false;
+	for (i = 0; i < mFilterChain.size(); i++) {
+
+		// consecutive synchronnous filters creates just one synchronnous pipe
+		if ((mFilterChain[i].descriptor.flags & glucose::NFilter_Flags::Synchronnous) == glucose::NFilter_Flags::Synchronnous)
+		{
+			if (!lastSync)
+			{
+				lastSync = true;
+				if (!addSynchronnousPipe())
+					return E_FAIL;
+			}
+		}
+		else
+		{
+			// only two or more consecutive asynchronnous filters need asynchronnous pipe
+
+			if (lastSync)
+				lastSync = false;
+			else
+			{
+				if (!addPipe())
+					return E_FAIL;
+			}
+		}
 	}
+
+	// add chain output pipe - only if the last filter wasn't synchronnous; otherwise the synchronnous pipe is also output pipe
+	if (!lastSync)
+	{
+		if (!addPipe())
+			return E_FAIL;
+	}
+
+	// Pipe assignment rules:
+	// 1) consecutive synchronnous filters are added to a single synchronnous pipe
+	// 2) async filter following sync filter retains sync pipe as input
+	// 3) async filter preceding sync filter retains sync pipe as output
+	// 4) async filter following another async filter shares async pipe with preceding filter
 
 	// create filters
 	i = 1;
 	for (auto& filt : mFilterChain)	{
-		// attempt to create filter; supply proper pipes
-		auto filter = glucose::create_filter(filt.descriptor.id, mFilterPipes[i - 1], mFilterPipes[i]);
-		if (!filter) 
-			return ENODEV;
 
+		if ((filt.descriptor.flags & glucose::NFilter_Flags::Synchronnous) == glucose::NFilter_Flags::Synchronnous)
 		{
-			db::SDb_Sink db_sink;
-			refcnt::Query_Interface<glucose::IFilter, db::IDb_Sink>(filter.get(), db::Db_Sink_Filter, db_sink);
-			if (db_sink) db_sink->Set_Connector(static_cast<db::IDb_Connector*>(&db_connector));
+			auto filter = glucose::create_synchronnous_filter(filt.descriptor.id);
+			if (!filter)
+				return ENODEV;
+
+			auto params = refcnt::Create_Container_shared<glucose::TFilter_Parameter>(filt.configuration.data(), filt.configuration.data() + filt.configuration.size());
+
+			res = filter->Configure(params.get());
+			if (res != S_OK)
+				return res;
+
+			// add filter to vector
+			mFilters.push_back(filter);
+
+			// retrieve last pipe (it must be synchronnous pipe, otherwise there's a logic error in pipe create loop)
+			auto syncpipe = std::dynamic_pointer_cast<glucose::IFilter_Synchronnous_Pipe>(mFilterPipes[i - 1]);
+			if (syncpipe)
+				syncpipe->add_filter(filter.get());
+			else
+				return E_FAIL;
 		}
+		else
+		{
+			// attempt to create filter; supply proper pipes
+			auto filter = glucose::create_asynchronnous_filter(filt.descriptor.id, mFilterPipes[i - 1], mFilterPipes[i]);
+			if (!filter)
+				return ENODEV;
 
-		auto params = refcnt::Create_Container_shared<glucose::TFilter_Parameter>(filt.configuration.data(), filt.configuration.data() + filt.configuration.size());
+#ifndef SMARTCGMS_NO_DB
+			{
+				db::SDb_Sink db_sink;
+				refcnt::Query_Interface<glucose::IFilter, db::IDb_Sink>(filter.get(), db::Db_Sink_Filter, db_sink);
+				if (db_sink) db_sink->Set_Connector(static_cast<db::IDb_Connector*>(&db_connector));
+			}
+#endif
 
-		// configure filter using loaded configuration and start the filter thread
-		mFilterThreads.push_back(std::make_unique<std::thread>([params, filter]() {
-			filter->Run(params.get());
-		}));
+			// add filter to vector
+			mFilters.push_back(filter);
 
-		// add filter to vector
-		mFilters.push_back(filter);
-		i++;
+			i++;
+		}
+	}
+
+	// to avoid race conditions, start asynchronnous filters after all filters are instantiated and pipes are initialized
+	for (i = 0; i < mFilters.size(); i++)
+	{
+		auto& filter = mFilters[i];
+
+		if ((mFilterChain[i].descriptor.flags & glucose::NFilter_Flags::Synchronnous) != glucose::NFilter_Flags::Synchronnous)
+		{
+			glucose::IAsynchronnous_Filter* asyncFilter = static_cast<glucose::IAsynchronnous_Filter*>(filter.get());
+			if (asyncFilter)
+			{
+				auto params = refcnt::Create_Container_shared<glucose::TFilter_Parameter>(mFilterChain[i].configuration.data(), mFilterChain[i].configuration.data() + mFilterChain[i].configuration.size());
+
+				// configure filter using loaded configuration and start the filter thread
+				mFilterThreads.push_back(std::make_unique<std::thread>([params, asyncFilter]() {
+					asyncFilter->Run(params.get());
+				}));
+			}
+		}
 	}
 
 	// the default behaviour is to consume outputs of the last pipe, so the chain does not get stuck
@@ -117,8 +216,8 @@ HRESULT CFilter_Chain_Manager::Init_And_Start_Filters(bool consumeOutputs) {
 				//in the case, that some filter in the middle had produced the event
 				//then, we need to make sure that all preceding filters terminate as well
 				if (evt)
-					if (evt.event_code == glucose::NDevice_Event_Code::Shut_Down) 
-						mFilterPipes[0].Send(evt);	// no need to test success			
+					if (evt.event_code() == glucose::NDevice_Event_Code::Shut_Down)
+						mFilterPipes[0].Send(evt);	// no need to test success
 			}
 		}));
 	}
@@ -162,7 +261,7 @@ glucose::UDevice_Event CFilter_Chain_Manager::Receive() {
 	return mFilterPipes[mFilterPipes.size() - 1].Receive();
 }
 
-void CFilter_Chain_Manager::Traverse_Filters(std::function<bool(glucose::SFilter)> fnc) {
+void CFilter_Chain_Manager::Traverse_Filters(std::function<bool(glucose::SFilter&)> fnc) {
 	for (auto& filter : mFilters) {
 		if (!fnc(filter))
 			break;

@@ -112,21 +112,21 @@ namespace glucose {
 		UDevice_Event_internal::NDevice_Event_Major_Type major_type() const;
 	public:
 		explicit UDevice_Event(const NDevice_Event_Code code = NDevice_Event_Code::Nothing);
+		UDevice_Event(UDevice_Event&& event);
 		UDevice_Event(IDevice_Event *event);
 		//~UDevice_Event() { discard(); }
-		void reset(IDevice_Event *event) = delete;		//reset would break references tight to mRaw, therefore it is disallowed
-		void reset(std::nullptr_t nullp = nullptr);
+		void reset(IDevice_Event *event);		
 
 														//this must be const, because level, parameters and info shared the same data space!!!
 														//it is 100% fool proof, but programmer should still easily discover the error when overwriting e.g., info with level and then reading info
-		const NDevice_Event_Code &event_code = mRaw->event_code;
-		const int64_t &logical_time = mRaw->logical_time;
+		const NDevice_Event_Code& event_code() const;
+		const int64_t& logical_time() const;
 
-		GUID &device_id = mRaw->device_id;
-		GUID &signal_id = mRaw->signal_id;
-		double &device_time = mRaw->device_time;
-		uint64_t &segment_id = mRaw->segment_id;
-		double &level = mRaw->level;
+		GUID& device_id() const;
+		GUID& signal_id() const;
+		double& device_time() const;
+		uint64_t& segment_id() const;
+		double& level() const;
 
 
 		SModel_Parameter_Vector parameters;

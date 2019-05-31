@@ -10,8 +10,8 @@
  * Faculty of Applied Sciences, University of West Bohemia
  * Univerzitni 8
  * 301 00, Pilsen
- * 
- * 
+ *
+ *
  * Purpose of this software:
  * This software is intended to demonstrate work of the diabetes.zcu.cz research
  * group to other scientists, to complement our published papers. It is strictly
@@ -36,71 +36,38 @@
  *       monitoring", Procedia Computer Science, Volume 141C, pp. 279-286, 2018
  */
 
-#include "Dynamic_Library.h"
+#include "../iface/DeviceIface.h"
+#include "SensorLib.h"
+#include "FactoryLib.h"
+#include "FilterLib.h"
+#include "UILib.h"
 
-#include <algorithm>
-
-std::wstring CDynamic_Library::mLibrary_Base{ L"" };
-
-#ifdef _WIN32
-	const wchar_t* rsShared_Object_Extension = L".dll";
-#elif __APPLE__
-	const wchar_t* rsShared_Object_Extension = L".dylib";
-#else
-	const wchar_t* rsShared_Object_Extension = L".so";
-#endif
-
-CDynamic_Library::CDynamic_Library() noexcept : mHandle(nullptr) {
-}
-
-CDynamic_Library::CDynamic_Library(CDynamic_Library&& other) noexcept : mHandle(nullptr) {
-	std::swap(mHandle, other.mHandle);
-}
-
-CDynamic_Library::~CDynamic_Library() {
-	if (mHandle)
-		Unload();
-}
-
-
-bool CDynamic_Library::Load(const wchar_t *file_path) {
-	mHandle = LoadLibraryW((mLibrary_Base + file_path).c_str());
-
-	return mHandle != nullptr;
-}
-
-bool CDynamic_Library::Is_Loaded() const {
-	return (mHandle != nullptr);
-}
-
-void CDynamic_Library::Unload() {
-	if (mHandle) {
-		FreeLibrary(mHandle);
-		mHandle = nullptr;
+namespace glucose
+{
+	namespace imported {
+		glucose::TGet_Device_Driver_Descriptors get_device_driver_descriptors = factory::resolve_symbol<glucose::TGet_Device_Driver_Descriptors>("get_device_driver_descriptors");
+		glucose::TCreate_Device_Driver create_device_driver = factory::resolve_symbol<glucose::TCreate_Device_Driver>("create_device_driver");
 	}
-}
 
-void* CDynamic_Library::Resolve(const char* symbolName) {
-	if (!mHandle)
-		return nullptr;
+	std::vector<TDevice_Driver_Descriptor> get_device_driver_descriptors()
+	{
+		std::vector<TDevice_Driver_Descriptor> result;
+		TDevice_Driver_Descriptor *desc_begin, *desc_end;
 
-	return GetProcAddress(mHandle, symbolName);
-}
+		if (imported::get_device_driver_descriptors(&desc_begin, &desc_end) == S_OK) {
+			std::copy(desc_begin, desc_end, std::back_inserter(result));
+		}
 
-bool CDynamic_Library::Is_Library(const std::wstring& path) {
-	size_t extLen = wcslen(rsShared_Object_Extension);
+		return result;
+	}
 
-	return (path.length() > extLen) && path.substr(path.length() - extLen, extLen) == rsShared_Object_Extension;
-}
+	SDevice_Driver create_device_driver(const GUID &id, glucose::SFilter_Pipe& output) {
+		SDevice_Driver result;
+		IDevice_Driver *device_driver;
 
-void CDynamic_Library::Set_Library_Base(const std::wstring& base)
-{
-	mLibrary_Base = base;
-	if (mLibrary_Base.empty() || (*mLibrary_Base.rbegin() != L'/' && *mLibrary_Base.rbegin() != L'\\'))
-		mLibrary_Base += L"/";
-}
+		if (imported::create_device_driver(&id, output.get(), &device_driver) == S_OK)
+			result = refcnt::make_shared_reference_ext<SDevice_Driver, IDevice_Driver>(device_driver, false);
 
-const wchar_t* CDynamic_Library::Get_Library_Base()
-{
-	return mLibrary_Base.c_str();
+		return result;
+	}
 }

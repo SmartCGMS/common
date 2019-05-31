@@ -123,6 +123,7 @@ namespace refcnt {
 		virtual HRESULT set(T *begin, T *end) = 0;		//T may point to e.g., IReferenced, thus cannot be const
 		virtual HRESULT add(T *begin, T *end) = 0;
 		virtual HRESULT get(T **begin, T **end) const = 0;
+		virtual HRESULT pop(T* value) = 0;
 		virtual HRESULT empty() const = 0;
 	};
 

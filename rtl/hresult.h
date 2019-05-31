@@ -59,6 +59,7 @@
   const HRESULT E_UNEXPECTED = 0x8000FFFFL;
   const HRESULT E_FAIL = 0x80004005L;
   const HRESULT E_NOINTERFACE = 0x80004002L;
+  const HRESULT E_ABORT = 0x80004004L;
 
   #define SUCCEEDED(hr) (((HRESULT)(hr)) >= 0)
   #define FAILED(hr) (((HRESULT)(hr)) < 0)

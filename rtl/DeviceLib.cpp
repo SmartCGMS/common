@@ -139,6 +139,10 @@ glucose::IDevice_Event* Create_Event(const glucose::NDevice_Event_Code code) {
 glucose::UDevice_Event::UDevice_Event(const glucose::NDevice_Event_Code code) : UDevice_Event(Create_Event(code)) {
 }
 
+glucose::UDevice_Event::UDevice_Event(glucose::UDevice_Event&& event) : mRaw(event.mRaw) {
+	event.release();
+}
+
 glucose::UDevice_Event::UDevice_Event(IDevice_Event *event) : std::unique_ptr<IDevice_Event, UDevice_Event_Deleter>(event), mRaw(Get_Raw_Event(event)){
 	switch (major_type()) {
 		case glucose::UDevice_Event_internal::NDevice_Event_Major_Type::info:
@@ -175,14 +179,48 @@ glucose::UDevice_Event_internal::NDevice_Event_Major_Type glucose::UDevice_Event
 	return glucose::UDevice_Event_internal::NDevice_Event_Major_Type::null;
 }
 
-void glucose::UDevice_Event::reset(std::nullptr_t nullp) {
+void glucose::UDevice_Event::reset(IDevice_Event *event) {
 	if (operator bool()) {
 		auto deleter = get_deleter();
 		auto obj = get();
 		release();
 		deleter(obj);
 	}
+
+	if (event) {
+		if (event->Raw(&mRaw) == S_OK) event->Release();	//do not forget that we're moving the object!
+	}
+	
 }
+
+const glucose::NDevice_Event_Code& glucose::UDevice_Event::event_code() const {
+	return mRaw->event_code;
+}
+
+const int64_t& glucose::UDevice_Event::logical_time() const {
+	return mRaw->logical_time;
+}
+
+GUID& glucose::UDevice_Event::device_id() const {
+	return mRaw->device_id;
+}
+
+GUID& glucose::UDevice_Event::signal_id() const {
+	return mRaw->signal_id;
+}
+
+double& glucose::UDevice_Event::device_time() const {
+	return mRaw->device_time;
+}
+	
+uint64_t& glucose::UDevice_Event::segment_id() const {
+	return mRaw->segment_id;
+}
+
+double& glucose::UDevice_Event::level() const {
+	return mRaw->level;
+}
+
 
 bool glucose::UDevice_Event::is_level_event() const {
 	return major_type() == glucose::UDevice_Event_internal::NDevice_Event_Major_Type::level;
