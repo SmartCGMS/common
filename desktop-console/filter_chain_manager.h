@@ -60,11 +60,20 @@ class CFilter_Chain_Manager : public virtual refcnt::CReferenced {
 		// filter threads
 		std::vector<std::unique_ptr<std::thread>> mFilterThreads;
 		// instantiated filter pipes (including the "border" ones)
-		std::vector<glucose::SFilter_Pipe> mFilterPipes;
+		std::vector<std::unique_ptr<glucose::CFilter_Pipe>> mFilterPipes;
 
 		// is this filter chain initialized to consume all outputs?
 		bool mConsume_Outputs = true;
+	protected:
+		template <typename S>
+		bool add_pipe() {
+			std::unique_ptr<glucose::CFilter_Pipe> pipe = std::make_unique<S>();
+			if (!(pipe.get()->operator bool())) return false;
 
+			mFilterPipes.push_back(std::move(pipe));
+
+			return true;
+		}
 	public:
 		CFilter_Chain_Manager() noexcept;
 		CFilter_Chain_Manager(CFilter_Chain& sourceChain);

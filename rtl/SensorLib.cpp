@@ -61,7 +61,7 @@ namespace glucose
 		return result;
 	}
 
-	SDevice_Driver create_device_driver(const GUID &id, glucose::SFilter_Pipe& output) {
+	SDevice_Driver create_device_driver(const GUID &id, glucose::SFilter_Asynchronnous_Pipe& output) {
 		SDevice_Driver result;
 		IDevice_Driver *device_driver;
 

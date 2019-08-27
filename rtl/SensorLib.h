@@ -50,5 +50,5 @@ namespace glucose
 	using SDevice_Driver = std::shared_ptr<IDevice_Driver>;
 
 	std::vector<TDevice_Driver_Descriptor> get_device_driver_descriptors();
-	SDevice_Driver create_device_driver(const GUID &id, glucose::SFilter_Pipe& output);
+	SDevice_Driver create_device_driver(const GUID &id, glucose::SFilter_Asynchronnous_Pipe& output);
 }

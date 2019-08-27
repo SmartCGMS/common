@@ -38,42 +38,45 @@
 
 #pragma once
 
-#include <string>
-#include <memory>
+#include "Drawing.h"
 
-#include "referencedImpl.h"
-#include "../utils/winapi_mapping.h"
+namespace drawing
+{
+	class IRenderer
+	{
+		protected:
+			double mCanvas_Width;
+			double mCanvas_Height;
 
-/*
- * Dynamic library (shared object) wrapper class
- */
-class CDynamic_Library final {
-	private:
-		// stored module handle (nullptr if invalid)
-		HMODULE mHandle;
-		// library base for given platform (sometimes needs to be set in runtime, on e.g. Android)
-		static std::wstring mLibrary_Base;
-	public:
-		CDynamic_Library() noexcept;
-		// disallow copying - the handle has to be unique
-		CDynamic_Library(const CDynamic_Library&) = delete;
-		CDynamic_Library(CDynamic_Library&& other) noexcept;
-		virtual ~CDynamic_Library();
+		public:
+			IRenderer() : mCanvas_Width(0), mCanvas_Height(0) {}
+			IRenderer(double canvasWidth, double canvasHeight) : mCanvas_Width(canvasWidth), mCanvas_Height(canvasHeight) {}
 
-		// loads module and returns result
-		bool Load(const wchar_t *file_path);
-		// unloads module if loaded
-		void Unload();
-		// resolves symbol from loaded module; returns nullptr if no such symbol found or no module loaded
-		void* Resolve(const char* symbolName);
+			// disallow copy and move, renderer is supposed to be one-shot instance
+			IRenderer(const IRenderer&) = delete;
+			IRenderer& operator=(const IRenderer&) = delete;
+			IRenderer(IRenderer&&) = delete;
+			IRenderer& operator=(IRenderer&&) = delete;
 
-		// is module (properly) loaded?
-		bool Is_Loaded() const;
+			double Get_Canvas_Width() const { return mCanvas_Width; }
+			double Get_Canvas_Height() const { return mCanvas_Height; }
+			void Set_Canvas_Width(double canvasWidth) { mCanvas_Width = canvasWidth; }
+			void Set_Canvas_Height(double canvasHeight) { mCanvas_Height = canvasHeight; }
 
-		// checks extension of supplied path to verify, if it's a library (platform-dependent check)
-		static bool Is_Library(const std::wstring& path);
-		// sets library base
-		static void Set_Library_Base(const std::wstring& base);
-		// retrieves library base directory
-		static const wchar_t* Get_Library_Base();
-};
+			void Set_Canvas_Size(double canvasWidth, double canvasHeight) {
+				mCanvas_Width = canvasWidth;
+				mCanvas_Height = canvasHeight;
+			}
+
+			virtual void Begin_Render() = 0;
+			virtual void Finalize_Render() = 0;
+
+			virtual void Render_Circle(drawing::Circle& shape) = 0;
+			virtual void Render_Line(drawing::Line& shape) = 0;
+			virtual void Render_PolyLine(drawing::PolyLine& shape) = 0;
+			virtual void Render_Rectangle(drawing::Rectangle& shape) = 0;
+			virtual void Render_Polygon(drawing::Polygon& shape) = 0;
+			virtual void Render_Text(drawing::Text& shape) = 0;
+			virtual void Render_Group(drawing::Group& shape) = 0;
+	};
+}

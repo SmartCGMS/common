@@ -48,31 +48,79 @@
 
 namespace glucose {
 
-	
-	class SFilter_Pipe : public std::shared_ptr<IFilter_Asynchronous_Pipe> {
-	public:
-		SFilter_Pipe(glucose::IFilter_Asynchronous_Pipe *pipe);
-		SFilter_Pipe();
-		bool Send(UDevice_Event &event);	//consumes the event in any case
-		UDevice_Event Receive();
-	};
-
-	class SFilter_Synchronnous_Pipe : public SFilter_Pipe {
-	public:
-		SFilter_Synchronnous_Pipe(glucose::IFilter_Synchronnous_Pipe *pipe);
-		SFilter_Synchronnous_Pipe();
-	};
-
 	using SFilter = std::shared_ptr<IFilter>;
 	using SAsynchronnous_Filter = std::shared_ptr<IAsynchronnous_Filter>;
 	using SSynchronnous_Filter = std::shared_ptr<ISynchronnous_Filter>;
+
+	class CFilter_Pipe {
+	public:
+		virtual bool Send(UDevice_Event &event) = 0;	//consumes the event in any case
+		virtual UDevice_Event Receive() = 0;
+		virtual bool add_filter(SSynchronnous_Filter &filter) = 0;
+		virtual operator bool() const = 0;
+
+		virtual glucose::IFilter_Asynchronous_Pipe* get_raw_pipe() = 0;
+	};
+
+	template <typename I>
+	class SFilter_Pipe : public virtual CFilter_Pipe, public std::shared_ptr<I>{
+	public:
+		SFilter_Pipe(I *pipe) {
+			if (pipe) pipe->AddRef();
+			reset(pipe, [](I* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });
+		}
+
+		virtual ~SFilter_Pipe() {}
+		
+
+		virtual bool Send(UDevice_Event &event) final {	//consumes the event in any case
+			if (!operator bool()) return false;
+			if (!event) return false;
+
+			if (get()->send(event.get()) != S_OK) {
+				event.reset(nullptr);	//delete and release the event anyway to prevent the event from being deleted twice
+				return false;
+			}
+
+			event.release(); 	//release the resource from the sender, but do not delete it to let it live in the next filter
+
+			return true;
+		}
+
+		virtual UDevice_Event Receive() final {
+			if (!operator bool()) return UDevice_Event{};
+
+			IDevice_Event *raw_event;
+			if (get()->receive(&raw_event) != S_OK) return nullptr;
+
+			return UDevice_Event{ raw_event };
+		}
+
+		virtual glucose::IFilter_Asynchronous_Pipe* get_raw_pipe() final {						
+			return static_cast<glucose::IFilter_Asynchronous_Pipe*>(std::shared_ptr<I>::get());
+		}
+	};
+
+	class SFilter_Asynchronnous_Pipe : public virtual SFilter_Pipe<glucose::IFilter_Asynchronous_Pipe> {
+	public:
+		SFilter_Asynchronnous_Pipe();
+		virtual bool add_filter(SSynchronnous_Filter &filter) final;
+	};
+
+	class SFilter_Synchronnous_Pipe : public virtual SFilter_Pipe<glucose::IFilter_Synchronnous_Pipe> {
+	public:
+		SFilter_Synchronnous_Pipe();
+		virtual bool add_filter(SSynchronnous_Filter &filter) final;
+	};
+	
+	
 
 	bool add_filters(const std::vector<glucose::TFilter_Descriptor> &descriptors, glucose::TCreate_Asynchronnous_Filter create_filter, glucose::TCreate_Synchronnous_Filter create_synchronnous_filter);
 
 	std::vector<TFilter_Descriptor> get_filter_descriptors();
 	bool get_filter_descriptor_by_id(const GUID &id, TFilter_Descriptor &desc);
 
-	SAsynchronnous_Filter create_asynchronnous_filter(const GUID &id, SFilter_Pipe &input, SFilter_Pipe &output);
+	SAsynchronnous_Filter create_asynchronnous_filter(const GUID &id, IFilter_Asynchronous_Pipe *input, IFilter_Asynchronous_Pipe *output);
 	SSynchronnous_Filter create_synchronnous_filter(const GUID &id);
 
 	class SFilter_Parameters : public std::shared_ptr<glucose::IFilter_Configuration> {
@@ -116,6 +164,26 @@ namespace glucose {
 	public:
 		SCalculate_Filter_Inspection() noexcept {};
 		SCalculate_Filter_Inspection(SFilter &calculate_filter);
+	};
+
+	using UDevice_Event_Iterator = refcnt::IVector_Container_Casting_Iterator<glucose::IDevice_Event*, glucose::UDevice_Event>;
+
+	class SDevice_Event_Vector : public std::shared_ptr<glucose::IDevice_Event_Vector> {
+	private:
+		std::vector<glucose::IDevice_Event*> mAddedEvents;
+
+	public:
+		SDevice_Event_Vector();
+		virtual ~SDevice_Event_Vector();
+		SDevice_Event_Vector& operator=(const SDevice_Event_Vector&) = default;
+
+		// adds event to wrapped container
+		bool Add(glucose::UDevice_Event& evt);
+		// adds event to internal vector; this required Apply or Discard to be called
+		bool Add_Defered(glucose::UDevice_Event& evt);
+
+		bool Apply();
+		bool Discard();
 	};
 }
 

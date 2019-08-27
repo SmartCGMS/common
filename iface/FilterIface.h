@@ -52,18 +52,18 @@ namespace glucose {
 	class IFilter_Asynchronous_Pipe : public virtual refcnt::IReferenced {
 	public:
 		// Pipe TAKES ownership of any nested reference-counted I-object so that send-caller is forbidden to call to release the nested objects
-		virtual HRESULT send(IDevice_Event *event) = 0;
+		virtual HRESULT IfaceCalling send(IDevice_Event *event) = 0;
 		// caller TAKES ownership of the received event and is responsible for freeing it
-		virtual HRESULT receive(IDevice_Event **event) = 0;
+		virtual HRESULT IfaceCalling receive(IDevice_Event **event) = 0;
 		// abort pipe operation explicitly - any subsequent send or receive calls will fail with S_FALSE
-		virtual HRESULT abort() = 0;
+		virtual HRESULT IfaceCalling abort() = 0;
 	};
 
 	class ISynchronnous_Filter;
 
 	class IFilter_Synchronnous_Pipe : public virtual IFilter_Asynchronous_Pipe {
 	public:
-		virtual HRESULT add_filter(ISynchronnous_Filter* filter) = 0;
+		virtual HRESULT IfaceCalling add_filter(ISynchronnous_Filter* filter) = 0;
 	};
 
 	using time_segment_id_container = refcnt::IVector_Container<int64_t>;

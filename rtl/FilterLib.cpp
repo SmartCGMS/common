@@ -48,7 +48,7 @@ namespace glucose {
 
 	namespace imported {
 		glucose::TGet_Filter_Descriptors get_filter_descriptors = factory::resolve_symbol<glucose::TGet_Filter_Descriptors>("get_filter_descriptors");
-		glucose::TCreate_Filter_Asynchronous_Pipe create_filter_pipe = factory::resolve_symbol<glucose::TCreate_Filter_Asynchronous_Pipe>("create_filter_asynchronous_pipe");
+		glucose::TCreate_Filter_Asynchronous_Pipe create_filter_asynchronous_pipe = factory::resolve_symbol<glucose::TCreate_Filter_Asynchronous_Pipe>("create_filter_asynchronous_pipe");
 		glucose::TCreate_Filter_Synchronnous_Pipe create_filter_synchronnous_pipe = factory::resolve_symbol<glucose::TCreate_Filter_Synchronnous_Pipe>("create_filter_synchronnous_pipe");
 		glucose::TCreate_Asynchronnous_Filter create_asynchronnous_filter = factory::resolve_symbol<glucose::TCreate_Asynchronnous_Filter>("create_asynchronnous_filter");
 		glucose::TCreate_Synchronnous_Filter create_synchronnous_filter = factory::resolve_symbol<glucose::TCreate_Synchronnous_Filter>("create_synchronnous_filter");
@@ -89,60 +89,12 @@ namespace glucose {
 		return result;
 	}
 
-	
-	bool SFilter_Pipe::Send(UDevice_Event &event) {
-		if (!operator bool()) return false;
-		if (!event) return false;
-		
-		if (get()->send(event.get()) != S_OK) {
-			event.reset(nullptr);	//delete and release the event anyway to prevent the event from being deleted twice
-			return false;
-		}
 
-		event.release(); 	//release the resource from the sender, but do not delete it to let it live in the next filter
-
-		return true;
-	}
-
-	UDevice_Event SFilter_Pipe::Receive() {
-		if (!operator bool()) return UDevice_Event{};
-
-		IDevice_Event *raw_event;
-		if (get()->receive(&raw_event) != S_OK) return nullptr;
-
-		return UDevice_Event{ raw_event };
-	}
-
-
-	SFilter_Pipe::SFilter_Pipe(glucose::IFilter_Asynchronous_Pipe *pipe) {
-		if (pipe) pipe->AddRef();
-		reset(pipe, [](glucose::IFilter_Asynchronous_Pipe* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });
-	}
-
-	SFilter_Pipe::SFilter_Pipe() {
-		
-		IFilter_Asynchronous_Pipe *pipe;
-		if (imported::create_filter_pipe(&pipe) == S_OK)
-			reset(pipe, [](glucose::IFilter_Asynchronous_Pipe* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });
-	}
-
-	SFilter_Synchronnous_Pipe::SFilter_Synchronnous_Pipe(glucose::IFilter_Synchronnous_Pipe *pipe) {
-		if (pipe) pipe->AddRef();
-		reset(pipe, [](glucose::IFilter_Synchronnous_Pipe* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });
-	}
-
-	SFilter_Synchronnous_Pipe::SFilter_Synchronnous_Pipe() {
-
-		IFilter_Synchronnous_Pipe *pipe;
-		if (imported::create_filter_synchronnous_pipe(&pipe) == S_OK)
-			reset(pipe, [](glucose::IFilter_Synchronnous_Pipe* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });
-	}
-
-	SAsynchronnous_Filter create_asynchronnous_filter(const GUID &id, SFilter_Pipe &input, SFilter_Pipe &output) {
+	SAsynchronnous_Filter create_asynchronnous_filter(const GUID &id, glucose::IFilter_Asynchronous_Pipe *input, glucose::IFilter_Asynchronous_Pipe *output) {
 		SAsynchronnous_Filter result;
 		IAsynchronnous_Filter *filter;
 
-		if (imported::create_asynchronnous_filter(&id, input.get(), output.get(), &filter) == S_OK)
+		if (imported::create_asynchronnous_filter(&id, input, output, &filter) == S_OK)
 			result = refcnt::make_shared_reference_ext<SAsynchronnous_Filter, IAsynchronnous_Filter>(filter, false);
 
 		return result;
@@ -305,6 +257,86 @@ namespace glucose {
 		if (calculate_filter)
 			refcnt::Query_Interface<glucose::IFilter, glucose::ICalculate_Filter_Inspection>(calculate_filter.get(), Calculate_Filter_Inspection, *this);
 	}
+
+	SDevice_Event_Vector::SDevice_Event_Vector() {
+		reset(refcnt::Create_Container<glucose::IDevice_Event*>(nullptr, nullptr),
+			[](glucose::IDevice_Event_Vector* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); }
+		);
+	}
+
+	SDevice_Event_Vector::~SDevice_Event_Vector() {
+		if (!mAddedEvents.empty()) {
+			// should we warn the user? This may be a result of forgotten Apply call
+			Discard();
+		}
+	}
+
+	bool SDevice_Event_Vector::Add(glucose::UDevice_Event& evt) {
+		if (!operator bool()) return false;
+		if (!evt) return false;
+
+		glucose::IDevice_Event* raw = evt.get();
+
+		get()->add(&raw, &raw + 1);
+
+		evt.release();
+		return true;
+	}
+
+	bool SDevice_Event_Vector::Add_Defered(glucose::UDevice_Event& evt) {
+		if (!operator bool()) return false;
+		if (!evt) return false;
+
+		glucose::IDevice_Event* raw = evt.get();
+
+		mAddedEvents.push_back(raw);
+
+		evt.release();
+		return true;
+	}
+
+	bool SDevice_Event_Vector::Apply() {
+		if (get()->add(mAddedEvents.data(), mAddedEvents.data() + mAddedEvents.size()) != S_OK) {
+			Discard();
+			return false;
+		}
+
+		mAddedEvents.clear();
+
+		return true;
+	}
+
+	bool SDevice_Event_Vector::Discard() {
+		// since we dropped reference counting during Add call, we need to explicitly release the reference now
+		for (auto& evt : mAddedEvents)
+			evt->Release();
+
+		mAddedEvents.clear();
+		return true;
+	}
+
+	SFilter_Asynchronnous_Pipe::SFilter_Asynchronnous_Pipe() {
+		IFilter_Asynchronous_Pipe *pipe;
+		if (imported::create_filter_asynchronous_pipe(&pipe) == S_OK)
+			reset(pipe, [](IFilter_Asynchronous_Pipe* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });
+	}
+		
+	bool SFilter_Asynchronnous_Pipe::add_filter(SSynchronnous_Filter &filter) {
+		return false;
+	}
+
+	SFilter_Synchronnous_Pipe::SFilter_Synchronnous_Pipe() {
+		IFilter_Synchronnous_Pipe *pipe;
+		if (imported::create_filter_synchronnous_pipe(&pipe) == S_OK)
+			reset(pipe, [](IFilter_Synchronnous_Pipe* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });
+	}	
+
+	bool SFilter_Synchronnous_Pipe::add_filter(SSynchronnous_Filter &filter) {
+		auto self = get();
+		if (!self) return false;
+		return self->add_filter(filter.get()) == S_OK;
+	}
+
 }
 
 

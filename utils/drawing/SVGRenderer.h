@@ -38,42 +38,37 @@
 
 #pragma once
 
+#include "IRenderer.h"
+#include "Drawing.h"
+
 #include <string>
-#include <memory>
+#include <sstream>
 
-#include "referencedImpl.h"
-#include "../utils/winapi_mapping.h"
-
-/*
- * Dynamic library (shared object) wrapper class
- */
-class CDynamic_Library final {
+class CSVG_Renderer : public drawing::IRenderer
+{
 	private:
-		// stored module handle (nullptr if invalid)
-		HMODULE mHandle;
-		// library base for given platform (sometimes needs to be set in runtime, on e.g. Android)
-		static std::wstring mLibrary_Base;
+		std::string &mSvg_String_Target;
+		std::ostringstream mSvg_Target;
+
+		size_t mRenderer_Depth = 0;
+
+	protected:
+		static std::string Color_To_String(const RGBColor& color);
+		static std::string Anchor_To_String(const drawing::Text::TextAnchor anchor);
+		static std::string Weight_To_String(const drawing::Text::FontWeight weight);
+		void Render_Default_Params(drawing::Element& shape);
+
 	public:
-		CDynamic_Library() noexcept;
-		// disallow copying - the handle has to be unique
-		CDynamic_Library(const CDynamic_Library&) = delete;
-		CDynamic_Library(CDynamic_Library&& other) noexcept;
-		virtual ~CDynamic_Library();
+		CSVG_Renderer(double canvasWidth, double canvasHeight, std::string& svgTarget);
 
-		// loads module and returns result
-		bool Load(const wchar_t *file_path);
-		// unloads module if loaded
-		void Unload();
-		// resolves symbol from loaded module; returns nullptr if no such symbol found or no module loaded
-		void* Resolve(const char* symbolName);
+		virtual void Begin_Render() override;
+		virtual void Finalize_Render() override;
 
-		// is module (properly) loaded?
-		bool Is_Loaded() const;
-
-		// checks extension of supplied path to verify, if it's a library (platform-dependent check)
-		static bool Is_Library(const std::wstring& path);
-		// sets library base
-		static void Set_Library_Base(const std::wstring& base);
-		// retrieves library base directory
-		static const wchar_t* Get_Library_Base();
+		virtual void Render_Circle(drawing::Circle& shape) override;
+		virtual void Render_Line(drawing::Line& shape) override;
+		virtual void Render_PolyLine(drawing::PolyLine& shape) override;
+		virtual void Render_Rectangle(drawing::Rectangle& shape) override;
+		virtual void Render_Polygon(drawing::Polygon& shape) override;
+		virtual void Render_Text(drawing::Text& shape) override;
+		virtual void Render_Group(drawing::Group& shape) override;
 };

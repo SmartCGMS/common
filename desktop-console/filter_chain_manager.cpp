@@ -73,24 +73,6 @@ HRESULT CFilter_Chain_Manager::Init_And_Start_Filters(bool consumeOutputs) {
 	// create pipes
 	size_t i;
 
-	auto addPipe = [this]() -> bool {
-		glucose::SFilter_Pipe pipe{};
-		if (!pipe)
-			return false;
-
-		mFilterPipes.push_back(std::move(pipe));
-		return true;
-	};
-
-	auto addSynchronnousPipe = [this]() -> bool {
-		glucose::SFilter_Synchronnous_Pipe pipe{};
-		if (!pipe)
-			return false;
-
-		mFilterPipes.push_back(std::move(pipe));
-		return true;
-	};
-
 	// this loop creates "preceding" pipe for each filter
 	bool lastSync = false;
 	for (i = 0; i < mFilterChain.size(); i++) {
@@ -101,7 +83,7 @@ HRESULT CFilter_Chain_Manager::Init_And_Start_Filters(bool consumeOutputs) {
 			if (!lastSync)
 			{
 				lastSync = true;
-				if (!addSynchronnousPipe())
+				if (!add_pipe<glucose::SFilter_Synchronnous_Pipe>())
 					return E_FAIL;
 			}
 		}
@@ -113,7 +95,7 @@ HRESULT CFilter_Chain_Manager::Init_And_Start_Filters(bool consumeOutputs) {
 				lastSync = false;
 			else
 			{
-				if (!addPipe())
+				if (!add_pipe<glucose::SFilter_Asynchronnous_Pipe>())
 					return E_FAIL;
 			}
 		}
@@ -122,7 +104,7 @@ HRESULT CFilter_Chain_Manager::Init_And_Start_Filters(bool consumeOutputs) {
 	// add chain output pipe - only if the last filter wasn't synchronnous; otherwise the synchronnous pipe is also output pipe
 	if (!lastSync)
 	{
-		if (!addPipe())
+		if (!add_pipe<glucose::SFilter_Asynchronnous_Pipe>())
 			return E_FAIL;
 	}
 
@@ -152,16 +134,12 @@ HRESULT CFilter_Chain_Manager::Init_And_Start_Filters(bool consumeOutputs) {
 			mFilters.push_back(filter);
 
 			// retrieve last pipe (it must be synchronnous pipe, otherwise there's a logic error in pipe create loop)
-			auto syncpipe = std::dynamic_pointer_cast<glucose::IFilter_Synchronnous_Pipe>(mFilterPipes[i - 1]);
-			if (syncpipe)
-				syncpipe->add_filter(filter.get());
-			else
-				return E_FAIL;
+			if (!mFilterPipes[i - 1]->add_filter(filter)) return E_FAIL;
 		}
 		else
 		{
 			// attempt to create filter; supply proper pipes
-			auto filter = glucose::create_asynchronnous_filter(filt.descriptor.id, mFilterPipes[i - 1], mFilterPipes[i]);
+			auto filter = glucose::create_asynchronnous_filter(filt.descriptor.id, mFilterPipes[i - 1]->get_raw_pipe(), mFilterPipes[i]->get_raw_pipe());
 			if (!filter)
 				return ENODEV;
 
@@ -207,9 +185,9 @@ HRESULT CFilter_Chain_Manager::Init_And_Start_Filters(bool consumeOutputs) {
 	{
 		// the consume thread is considered a filter thread; it terminates with Shut_Down message
 		mFilterThreads.push_back(std::make_unique<std::thread>([this]() {
-			auto input = mFilterPipes[mFilterPipes.size() - 1];
+			auto input = mFilterPipes[mFilterPipes.size() - 1].get();
 
-			for (; glucose::UDevice_Event evt = input.Receive(); ) {
+			for (; glucose::UDevice_Event evt = input->Receive(); ) {
 				// just read and do nothing - this effectively consumes any incoming event through pipe
 
 				//and if it was a shutdown event, try to repost it into the first filter
@@ -217,7 +195,7 @@ HRESULT CFilter_Chain_Manager::Init_And_Start_Filters(bool consumeOutputs) {
 				//then, we need to make sure that all preceding filters terminate as well
 				if (evt)
 					if (evt.event_code() == glucose::NDevice_Event_Code::Shut_Down)
-						mFilterPipes[0].Send(evt);	// no need to test success
+						mFilterPipes[0]->Send(evt);	// no need to test success
 			}
 		}));
 	}
@@ -229,7 +207,7 @@ HRESULT CFilter_Chain_Manager::Terminate_Filters() {
 	if (!mFilterPipes.empty()) {
 		// send Shut_Down event through the chain - pipes inside the chain will abort, causing filters to shut down on next Send or Receive call
 		glucose::UDevice_Event shut_down_event{ glucose::NDevice_Event_Code::Shut_Down };
-		mFilterPipes[0].Send(shut_down_event);
+		mFilterPipes[0]->Send(shut_down_event);
 
 		// join filter threads; they should shut down very soon after the pipe is aborted
 		Join_Filters();
@@ -253,12 +231,12 @@ HRESULT CFilter_Chain_Manager::Join_Filters() {
 
 HRESULT CFilter_Chain_Manager::Send(glucose::UDevice_Event &event) {
 	if (mFilterPipes.empty()) return S_FALSE;
-	return mFilterPipes[0].Send(event) ? S_OK : E_FAIL;
+	return mFilterPipes[0]->Send(event) ? S_OK : E_FAIL;
 }
 
 glucose::UDevice_Event CFilter_Chain_Manager::Receive() {
 	if (mConsume_Outputs || mFilterPipes.empty()) return glucose::UDevice_Event{};
-	return mFilterPipes[mFilterPipes.size() - 1].Receive();
+	return mFilterPipes[mFilterPipes.size() - 1]->Receive();
 }
 
 void CFilter_Chain_Manager::Traverse_Filters(std::function<bool(glucose::SFilter&)> fnc) {
