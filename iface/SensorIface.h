@@ -47,10 +47,10 @@ namespace glucose
 {
 	/*
 	 * Class representing a device (either simulated or real)
-	 * Note it has the same interface, as an asynchronnous filter - this is due to fact, that it should behave like
-	 * an asynchronnous entity, have input and output pipe and be managed by device filter (own its thread)
+	 * Note it has the same interface, as an asynchronous filter - this is due to fact, that it should behave like
+	 * an asynchronous entity, have input and output pipe and be managed by device filter (own its thread)
 	 */
-	class IDevice_Driver : public glucose::IAsynchronnous_Filter {
+	class IDevice_Driver : public glucose::IAsynchronous_Filter {
 	public:
 		virtual ~IDevice_Driver() = default;
 	};

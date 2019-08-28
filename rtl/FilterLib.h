@@ -49,15 +49,18 @@
 namespace glucose {
 
 	using SFilter = std::shared_ptr<IFilter>;
-	using SAsynchronnous_Filter = std::shared_ptr<IAsynchronnous_Filter>;
-	using SSynchronnous_Filter = std::shared_ptr<ISynchronnous_Filter>;
+	using SAsynchronous_Filter = std::shared_ptr<IAsynchronous_Filter>;
+	using SSynchronous_Filter = std::shared_ptr<ISynchronous_Filter>;
 
 	class CFilter_Pipe {
 	public:
+		CFilter_Pipe() {}
+		virtual ~CFilter_Pipe() {}
+
 		virtual bool Send(UDevice_Event &event) = 0;	//consumes the event in any case
 		virtual UDevice_Event Receive() = 0;
-		virtual bool add_filter(SSynchronnous_Filter &filter) = 0;
-		virtual operator bool() const = 0;
+		virtual bool add_filter(SSynchronous_Filter &filter) = 0;
+		virtual bool empty() const = 0;
 
 		virtual glucose::IFilter_Asynchronous_Pipe* get_raw_pipe() = 0;
 	};
@@ -70,14 +73,16 @@ namespace glucose {
 			reset(pipe, [](I* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });
 		}
 
+		SFilter_Pipe() : CFilter_Pipe() {}
+
 		virtual ~SFilter_Pipe() {}
 		
 
 		virtual bool Send(UDevice_Event &event) final {	//consumes the event in any case
-			if (!operator bool()) return false;
+			if (!(std::shared_ptr<I>::operator bool())) return false;
 			if (!event) return false;
 
-			if (get()->send(event.get()) != S_OK) {
+			if (std::shared_ptr<I>::get()->send(event.get()) != S_OK) {
 				event.reset(nullptr);	//delete and release the event anyway to prevent the event from being deleted twice
 				return false;
 			}
@@ -88,40 +93,45 @@ namespace glucose {
 		}
 
 		virtual UDevice_Event Receive() final {
-			if (!operator bool()) return UDevice_Event{};
+			if (!(std::shared_ptr<I>::operator bool())) return UDevice_Event{};
 
 			IDevice_Event *raw_event;
-			if (get()->receive(&raw_event) != S_OK) return nullptr;
+			auto self = std::shared_ptr<I>::get();
+			if (std::shared_ptr<I>::get()->receive(&raw_event) != S_OK) return nullptr;
 
 			return UDevice_Event{ raw_event };
 		}
 
-		virtual glucose::IFilter_Asynchronous_Pipe* get_raw_pipe() final {						
+		virtual glucose::IFilter_Asynchronous_Pipe* get_raw_pipe() final {					
 			return static_cast<glucose::IFilter_Asynchronous_Pipe*>(std::shared_ptr<I>::get());
+		}
+
+		virtual bool empty() const final {
+			return !(std::shared_ptr<I>::operator bool());
 		}
 	};
 
-	class SFilter_Asynchronnous_Pipe : public virtual SFilter_Pipe<glucose::IFilter_Asynchronous_Pipe> {
+	class SFilter_Asynchronous_Pipe : public virtual SFilter_Pipe<glucose::IFilter_Asynchronous_Pipe> {
 	public:
-		SFilter_Asynchronnous_Pipe();
-		virtual bool add_filter(SSynchronnous_Filter &filter) final;
+		SFilter_Asynchronous_Pipe();				
+		virtual bool add_filter(SSynchronous_Filter &filter) final;
 	};
 
-	class SFilter_Synchronnous_Pipe : public virtual SFilter_Pipe<glucose::IFilter_Synchronnous_Pipe> {
+	class SFilter_Synchronous_Pipe : public virtual SFilter_Pipe<glucose::IFilter_Synchronous_Pipe> {
 	public:
-		SFilter_Synchronnous_Pipe();
-		virtual bool add_filter(SSynchronnous_Filter &filter) final;
+		SFilter_Synchronous_Pipe();
+		virtual bool add_filter(SSynchronous_Filter &filter) final;
 	};
 	
 	
 
-	bool add_filters(const std::vector<glucose::TFilter_Descriptor> &descriptors, glucose::TCreate_Asynchronnous_Filter create_filter, glucose::TCreate_Synchronnous_Filter create_synchronnous_filter);
+	bool add_filters(const std::vector<glucose::TFilter_Descriptor> &descriptors, glucose::TCreate_Asynchronous_Filter create_filter, glucose::TCreate_Synchronous_Filter create_synchronous_filter);
 
 	std::vector<TFilter_Descriptor> get_filter_descriptors();
 	bool get_filter_descriptor_by_id(const GUID &id, TFilter_Descriptor &desc);
 
-	SAsynchronnous_Filter create_asynchronnous_filter(const GUID &id, IFilter_Asynchronous_Pipe *input, IFilter_Asynchronous_Pipe *output);
-	SSynchronnous_Filter create_synchronnous_filter(const GUID &id);
+	SAsynchronous_Filter create_asynchronous_filter(const GUID &id, IFilter_Asynchronous_Pipe *input, IFilter_Asynchronous_Pipe *output);
+	SSynchronous_Filter create_synchronous_filter(const GUID &id);
 
 	class SFilter_Parameters : public std::shared_ptr<glucose::IFilter_Configuration> {
 	public:

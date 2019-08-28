@@ -59,11 +59,11 @@ namespace glucose {
 		virtual HRESULT IfaceCalling abort() = 0;
 	};
 
-	class ISynchronnous_Filter;
+	class ISynchronous_Filter;
 
-	class IFilter_Synchronnous_Pipe : public virtual IFilter_Asynchronous_Pipe {
+	class IFilter_Synchronous_Pipe : public virtual IFilter_Asynchronous_Pipe {
 	public:
-		virtual HRESULT IfaceCalling add_filter(ISynchronnous_Filter* filter) = 0;
+		virtual HRESULT IfaceCalling add_filter(ISynchronous_Filter* filter) = 0;
 	};
 
 	using time_segment_id_container = refcnt::IVector_Container<int64_t>;
@@ -113,28 +113,28 @@ namespace glucose {
 		// just marker interface
 	};
 
-	class IAsynchronnous_Filter : public IFilter {
+	class IAsynchronous_Filter : public IFilter {
 	public:
 		// This method is already started within a thread - no need to create another one inside filter
 		virtual HRESULT IfaceCalling Run(IFilter_Configuration* configuration) = 0;
 	};
 
-	class ISynchronnous_Filter : public IFilter {
+	class ISynchronous_Filter : public IFilter {
 	public:
 		// As this filter does not start in its own thread, therefore there's no place to call Configure before actual filter startup, we need to call it
 		// separately to avoid "configure just once" logic in Execute method
 		virtual HRESULT IfaceCalling Configure(IFilter_Configuration* configuration) = 0;
 
-		// This method is called when a new event comes to synchronnous filter subchain; any filter before this one could emit one or more additional events
+		// This method is called when a new event comes to synchronous filter subchain; any filter before this one could emit one or more additional events
 		// and add them to the vector, therefore this filter instance should process ALL events present in given vector
-		// This method CAN modify and/or delete any of events - as if it was asynchronnous scenario
+		// This method CAN modify and/or delete any of events - as if it was asynchronous scenario
 		virtual HRESULT IfaceCalling Execute(IDevice_Event_Vector* events) = 0;
 
 		//virtual HRESULT IfaceCalling Run_Step(const glucose::IDevice_Event *input, IDevice_Event_Vector* output) = 0;
 	};
 
-	using TCreate_Asynchronnous_Filter = HRESULT(IfaceCalling *)(const GUID *id, IFilter_Asynchronous_Pipe *input, IFilter_Asynchronous_Pipe *output, glucose::IAsynchronnous_Filter **filter);
-	using TCreate_Synchronnous_Filter = HRESULT(IfaceCalling *)(const GUID *id, glucose::ISynchronnous_Filter **ISynchronnous_Filter);
+	using TCreate_Asynchronous_Filter = HRESULT(IfaceCalling *)(const GUID *id, IFilter_Asynchronous_Pipe *input, IFilter_Asynchronous_Pipe *output, glucose::IAsynchronous_Filter **filter);
+	using TCreate_Synchronous_Filter = HRESULT(IfaceCalling *)(const GUID *id, glucose::ISynchronous_Filter **ISynchronous_Filter);
 
 	//The following GUIDs advertise known filters 
 	constexpr GUID Drawing_Filter = { 0x850a122c, 0x8943, 0xa211,{ 0xc5, 0x14, 0x25, 0xba, 0xa9, 0x14, 0x35, 0x74 } };
@@ -281,5 +281,5 @@ namespace glucose {
 	};
 
 	using TCreate_Filter_Asynchronous_Pipe = HRESULT(IfaceCalling *)(glucose::IFilter_Asynchronous_Pipe **pipe);
-	using TCreate_Filter_Synchronnous_Pipe = HRESULT(IfaceCalling *)(glucose::IFilter_Synchronnous_Pipe **pipe);
+	using TCreate_Filter_Synchronous_Pipe = HRESULT(IfaceCalling *)(glucose::IFilter_Synchronous_Pipe **pipe);
 }

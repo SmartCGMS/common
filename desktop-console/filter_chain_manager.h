@@ -68,7 +68,7 @@ class CFilter_Chain_Manager : public virtual refcnt::CReferenced {
 		template <typename S>
 		bool add_pipe() {
 			std::unique_ptr<glucose::CFilter_Pipe> pipe = std::make_unique<S>();
-			if (!(pipe.get()->operator bool())) return false;
+			if (pipe->empty()) return false;			
 
 			mFilterPipes.push_back(std::move(pipe));
 

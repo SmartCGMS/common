@@ -49,15 +49,15 @@ namespace glucose {
 	namespace imported {
 		glucose::TGet_Filter_Descriptors get_filter_descriptors = factory::resolve_symbol<glucose::TGet_Filter_Descriptors>("get_filter_descriptors");
 		glucose::TCreate_Filter_Asynchronous_Pipe create_filter_asynchronous_pipe = factory::resolve_symbol<glucose::TCreate_Filter_Asynchronous_Pipe>("create_filter_asynchronous_pipe");
-		glucose::TCreate_Filter_Synchronnous_Pipe create_filter_synchronnous_pipe = factory::resolve_symbol<glucose::TCreate_Filter_Synchronnous_Pipe>("create_filter_synchronnous_pipe");
-		glucose::TCreate_Asynchronnous_Filter create_asynchronnous_filter = factory::resolve_symbol<glucose::TCreate_Asynchronnous_Filter>("create_asynchronnous_filter");
-		glucose::TCreate_Synchronnous_Filter create_synchronnous_filter = factory::resolve_symbol<glucose::TCreate_Synchronnous_Filter>("create_synchronnous_filter");
+		glucose::TCreate_Filter_Synchronous_Pipe create_filter_synchronous_pipe = factory::resolve_symbol<glucose::TCreate_Filter_Synchronous_Pipe>("create_filter_synchronous_pipe");
+		glucose::TCreate_Asynchronous_Filter create_asynchronous_filter = factory::resolve_symbol<glucose::TCreate_Asynchronous_Filter>("create_asynchronous_filter");
+		glucose::TCreate_Synchronous_Filter create_synchronous_filter = factory::resolve_symbol<glucose::TCreate_Synchronous_Filter>("create_synchronous_filter");
 		glucose::TAdd_Filters add_filters = factory::resolve_symbol<glucose::TAdd_Filters>("add_filters");
 	}
 
 
-	bool add_filters(const std::vector<glucose::TFilter_Descriptor> &descriptors, glucose::TCreate_Asynchronnous_Filter create_asynchronnous_filter, glucose::TCreate_Synchronnous_Filter create_synchronnous_filter) {
-		return imported::add_filters(descriptors.data(), descriptors.data() + descriptors.size(), create_asynchronnous_filter, create_synchronnous_filter) == S_OK;
+	bool add_filters(const std::vector<glucose::TFilter_Descriptor> &descriptors, glucose::TCreate_Asynchronous_Filter create_asynchronous_filter, glucose::TCreate_Synchronous_Filter create_synchronous_filter) {
+		return imported::add_filters(descriptors.data(), descriptors.data() + descriptors.size(), create_asynchronous_filter, create_synchronous_filter) == S_OK;
 	}
 
 	std::vector<TFilter_Descriptor> get_filter_descriptors() {
@@ -90,22 +90,22 @@ namespace glucose {
 	}
 
 
-	SAsynchronnous_Filter create_asynchronnous_filter(const GUID &id, glucose::IFilter_Asynchronous_Pipe *input, glucose::IFilter_Asynchronous_Pipe *output) {
-		SAsynchronnous_Filter result;
-		IAsynchronnous_Filter *filter;
+	SAsynchronous_Filter create_asynchronous_filter(const GUID &id, glucose::IFilter_Asynchronous_Pipe *input, glucose::IFilter_Asynchronous_Pipe *output) {
+		SAsynchronous_Filter result;
+		IAsynchronous_Filter *filter;
 
-		if (imported::create_asynchronnous_filter(&id, input, output, &filter) == S_OK)
-			result = refcnt::make_shared_reference_ext<SAsynchronnous_Filter, IAsynchronnous_Filter>(filter, false);
+		if (imported::create_asynchronous_filter(&id, input, output, &filter) == S_OK)
+			result = refcnt::make_shared_reference_ext<SAsynchronous_Filter, IAsynchronous_Filter>(filter, false);
 
 		return result;
 	}
 
-	SSynchronnous_Filter create_synchronnous_filter(const GUID &id) {
-		SSynchronnous_Filter result;
-		ISynchronnous_Filter *filter;
+	SSynchronous_Filter create_synchronous_filter(const GUID &id) {
+		SSynchronous_Filter result;
+		ISynchronous_Filter *filter;
 
-		if (imported::create_synchronnous_filter(&id, &filter) == S_OK)
-			result = refcnt::make_shared_reference_ext<SSynchronnous_Filter, ISynchronnous_Filter>(filter, false);
+		if (imported::create_synchronous_filter(&id, &filter) == S_OK)
+			result = refcnt::make_shared_reference_ext<SSynchronous_Filter, ISynchronous_Filter>(filter, false);
 
 		return result;
 	}
@@ -315,23 +315,23 @@ namespace glucose {
 		return true;
 	}
 
-	SFilter_Asynchronnous_Pipe::SFilter_Asynchronnous_Pipe() {
+	SFilter_Asynchronous_Pipe::SFilter_Asynchronous_Pipe() : SFilter_Pipe() {
 		IFilter_Asynchronous_Pipe *pipe;
 		if (imported::create_filter_asynchronous_pipe(&pipe) == S_OK)
 			reset(pipe, [](IFilter_Asynchronous_Pipe* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });
 	}
 		
-	bool SFilter_Asynchronnous_Pipe::add_filter(SSynchronnous_Filter &filter) {
+	bool SFilter_Asynchronous_Pipe::add_filter(SSynchronous_Filter &filter) {
 		return false;
 	}
 
-	SFilter_Synchronnous_Pipe::SFilter_Synchronnous_Pipe() {
-		IFilter_Synchronnous_Pipe *pipe;
-		if (imported::create_filter_synchronnous_pipe(&pipe) == S_OK)
-			reset(pipe, [](IFilter_Synchronnous_Pipe* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });
+	SFilter_Synchronous_Pipe::SFilter_Synchronous_Pipe() : SFilter_Pipe() {
+		IFilter_Synchronous_Pipe *pipe;
+		if (imported::create_filter_synchronous_pipe(&pipe) == S_OK)
+			reset(pipe, [](IFilter_Synchronous_Pipe* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });
 	}	
 
-	bool SFilter_Synchronnous_Pipe::add_filter(SSynchronnous_Filter &filter) {
+	bool SFilter_Synchronous_Pipe::add_filter(SSynchronous_Filter &filter) {
 		auto self = get();
 		if (!self) return false;
 		return self->add_filter(filter.get()) == S_OK;
