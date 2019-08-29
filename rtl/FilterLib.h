@@ -176,8 +176,6 @@ namespace glucose {
 		SCalculate_Filter_Inspection(SFilter &calculate_filter);
 	};
 
-	using UDevice_Event_Iterator = refcnt::IVector_Container_Casting_Iterator<glucose::IDevice_Event*, glucose::UDevice_Event>;
-
 	class SDevice_Event_Vector : public std::shared_ptr<glucose::IDevice_Event_Vector> {
 	private:
 		std::vector<glucose::IDevice_Event*> mAddedEvents;
@@ -188,12 +186,14 @@ namespace glucose {
 		SDevice_Event_Vector& operator=(const SDevice_Event_Vector&) = default;
 
 		// adds event to wrapped container
-		bool Add(glucose::UDevice_Event& evt);
+		bool push(glucose::UDevice_Event& evt); - bylo add, proc mit dve varianty?
 		// adds event to internal vector; this required Apply or Discard to be called
-		bool Add_Defered(glucose::UDevice_Event& evt);
+		bool push_deferred(glucose::UDevice_Event& evt);
 
-		bool Apply();
-		bool Discard();
+		bool pop(glucose::UDevice_Event &evt);
+
+		bool commit_push();
+		bool discard_push();
 	};
 }
 

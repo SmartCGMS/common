@@ -267,11 +267,11 @@ namespace glucose {
 	SDevice_Event_Vector::~SDevice_Event_Vector() {
 		if (!mAddedEvents.empty()) {
 			// should we warn the user? This may be a result of forgotten Apply call
-			Discard();
+			discard_push();
 		}
 	}
 
-	bool SDevice_Event_Vector::Add(glucose::UDevice_Event& evt) {
+	bool SDevice_Event_Vector::push(glucose::UDevice_Event& evt) {
 		if (!operator bool()) return false;
 		if (!evt) return false;
 
@@ -283,7 +283,7 @@ namespace glucose {
 		return true;
 	}
 
-	bool SDevice_Event_Vector::Add_Defered(glucose::UDevice_Event& evt) {
+	bool SDevice_Event_Vector::push_deferred(glucose::UDevice_Event& evt) {
 		if (!operator bool()) return false;
 		if (!evt) return false;
 
@@ -295,9 +295,9 @@ namespace glucose {
 		return true;
 	}
 
-	bool SDevice_Event_Vector::Apply() {
+	bool SDevice_Event_Vector::commit_push() {
 		if (get()->add(mAddedEvents.data(), mAddedEvents.data() + mAddedEvents.size()) != S_OK) {
-			Discard();
+			discard_push();
 			return false;
 		}
 
@@ -306,7 +306,7 @@ namespace glucose {
 		return true;
 	}
 
-	bool SDevice_Event_Vector::Discard() {
+	bool SDevice_Event_Vector::discard_push() {
 		// since we dropped reference counting during Add call, we need to explicitly release the reference now
 		for (auto& evt : mAddedEvents)
 			evt->Release();

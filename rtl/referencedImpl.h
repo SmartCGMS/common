@@ -276,7 +276,7 @@ namespace refcnt {
 		bool operator==(const wchar_t *other) const;
 	};
 	
-
+/*
 	// iterator class to make e.g. range based for loops work with pointer contents
 		// example: for (Element* element : IVector_Container_Iterator<Element*>(container)) { ... }
 	template<typename T>
@@ -352,4 +352,6 @@ namespace refcnt {
 			return IVector_Container_Iterator_Element<T, C>(mEnd);
 		}
 	};
+
+	*/
 }
