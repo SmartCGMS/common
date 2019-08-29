@@ -57,14 +57,11 @@ CFilter_Chain_Manager::CFilter_Chain_Manager(CFilter_Chain& sourceChain)
 	//
 }
 
-CFilter_Chain& CFilter_Chain_Manager::Get_Filter_Chain()
-{
+CFilter_Chain& CFilter_Chain_Manager::Get_Filter_Chain() {
 	return mFilterChain;
 }
 
 HRESULT CFilter_Chain_Manager::Init_And_Start_Filters(bool consumeOutputs) {
-	HRESULT res;
-
 	if (mFilterChain.empty()) return S_FALSE;
 
 	Terminate_Filters();
@@ -120,15 +117,9 @@ HRESULT CFilter_Chain_Manager::Init_And_Start_Filters(bool consumeOutputs) {
 
 		if ((filt.descriptor.flags & glucose::NFilter_Flags::Synchronous) == glucose::NFilter_Flags::Synchronous)
 		{
-			auto filter = glucose::create_synchronous_filter(filt.descriptor.id);
+			auto filter = glucose::create_filter(filt.descriptor.id, mFilterPipes[i-1]->get_sync_reader(), mFilterPipes[i - 1]->get_sync_writer());
 			if (!filter)
 				return ENODEV;
-
-			auto params = refcnt::Create_Container_shared<glucose::TFilter_Parameter>(filt.configuration.data(), filt.configuration.data() + filt.configuration.size());
-
-			res = filter->Configure(params.get());
-			if (res != S_OK)
-				return res;
 
 			// add filter to vector
 			mFilters.push_back(filter);
@@ -139,7 +130,7 @@ HRESULT CFilter_Chain_Manager::Init_And_Start_Filters(bool consumeOutputs) {
 		else
 		{
 			// attempt to create filter; supply proper pipes
-			auto filter = glucose::create_asynchronous_filter(filt.descriptor.id, mFilterPipes[i - 1]->get_raw_pipe(), mFilterPipes[i]->get_raw_pipe());
+			auto filter = glucose::create_filter(filt.descriptor.id, mFilterPipes[i - 1]->get_async_reader(), mFilterPipes[i]->get_async_writer());
 			if (!filter)
 				return ENODEV;
 
@@ -159,23 +150,17 @@ HRESULT CFilter_Chain_Manager::Init_And_Start_Filters(bool consumeOutputs) {
 	}
 
 	// to avoid race conditions, start asynchronous filters after all filters are instantiated and pipes are initialized
-	for (i = 0; i < mFilters.size(); i++)
-	{
+	for (i = 0; i < mFilters.size(); i++){
 		auto& filter = mFilters[i];
+		auto params = refcnt::Create_Container_shared<glucose::TFilter_Parameter>(mFilterChain[i].configuration.data(), mFilterChain[i].configuration.data() + mFilterChain[i].configuration.size());
+		filter->Configure(params.get());
 
-		if ((mFilterChain[i].descriptor.flags & glucose::NFilter_Flags::Synchronous) != glucose::NFilter_Flags::Synchronous)
-		{
-			glucose::IAsynchronous_Filter* asyncFilter = static_cast<glucose::IAsynchronous_Filter*>(filter.get());
-			if (asyncFilter)
-			{
-				auto params = refcnt::Create_Container_shared<glucose::TFilter_Parameter>(mFilterChain[i].configuration.data(), mFilterChain[i].configuration.data() + mFilterChain[i].configuration.size());
-
-				// configure filter using loaded configuration and start the filter thread
-				mFilterThreads.push_back(std::make_unique<std::thread>([params, asyncFilter]() {
-					asyncFilter->Run(params.get());
-				}));
-			}
-		}
+		if ((mFilterChain[i].descriptor.flags & glucose::NFilter_Flags::Synchronous) != glucose::NFilter_Flags::Synchronous) {
+			// start the asynchronous filter in a dedicated thread
+			mFilterThreads.push_back(std::make_unique<std::thread>([filter]() {
+				filter->Execute();
+			}));
+		}		
 	}
 
 	// the default behaviour is to consume outputs of the last pipe, so the chain does not get stuck

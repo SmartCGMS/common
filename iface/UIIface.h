@@ -157,5 +157,5 @@ namespace glucose {
 	using TGet_Approx_Descriptors = HRESULT(IfaceCalling*)(TApprox_Descriptor **begin, TApprox_Descriptor **end);
 	using TGet_Device_Driver_Descriptors = HRESULT(IfaceCalling*)(TDevice_Driver_Descriptor **begin, TDevice_Driver_Descriptor **end);
 
-	using TAdd_Filters = HRESULT(IfaceCalling *)(const glucose::TFilter_Descriptor *begin, const glucose::TFilter_Descriptor *end, const glucose::TCreate_Asynchronous_Filter create_asynchronous_filter, const glucose::TCreate_Synchronous_Filter create_synchronous_filter);
+	using TAdd_Filters = HRESULT(IfaceCalling *)(const glucose::TFilter_Descriptor *begin, const glucose::TFilter_Descriptor *end, const glucose::TCreate_Filter create_filter);
 }

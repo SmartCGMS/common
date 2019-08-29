@@ -49,22 +49,19 @@
 
 namespace glucose {
 
-	class IFilter_Asynchronous_Pipe : public virtual refcnt::IReferenced {
+	class IFilter_Pipe_Reader : public virtual refcnt::IReferenced {
+	public:
+		//caller TAKES ownership of the received event and is responsible for freeing it
+		//on receiving anything else but S_OK, any filter is supposed to terminate its Execute method
+		virtual HRESULT IfaceCalling receive(IDevice_Event **event) = 0;
+	};
+
+	class IFilter_Pipe_Writer : public virtual refcnt::IReferenced {
 	public:
 		// Pipe TAKES ownership of any nested reference-counted I-object so that send-caller is forbidden to call to release the nested objects
 		virtual HRESULT IfaceCalling send(IDevice_Event *event) = 0;
-		// caller TAKES ownership of the received event and is responsible for freeing it
-		virtual HRESULT IfaceCalling receive(IDevice_Event **event) = 0;
-		// abort pipe operation explicitly - any subsequent send or receive calls will fail with S_FALSE
-		virtual HRESULT IfaceCalling abort() = 0;
 	};
 
-	class ISynchronous_Filter;
-
-	class IFilter_Synchronous_Pipe : public virtual IFilter_Asynchronous_Pipe {
-	public:
-		virtual HRESULT IfaceCalling add_filter(ISynchronous_Filter* filter) = 0;
-	};
 
 	using time_segment_id_container = refcnt::IVector_Container<int64_t>;
 
@@ -104,37 +101,21 @@ namespace glucose {
 	constexpr TFilter_Parameter Null_Filter_Parameter = { NParameter_Type::ptNull, nullptr, { nullptr } };
 
 	using IFilter_Configuration = refcnt::IVector_Container<glucose::TFilter_Parameter>;
-	using IDevice_Event_Vector = refcnt::IVector_Container<glucose::IDevice_Event*>;
+	//using IDevice_Event_Vector = refcnt::IVector_Container<glucose::IDevice_Event*>;
 
 	class IFilter : public virtual refcnt::IReferenced {
 	public:
-		virtual ~IFilter() = default;
-
-		// just marker interface
-	};
-
-	class IAsynchronous_Filter : public IFilter {
-	public:
-		// This method is already started within a thread - no need to create another one inside filter
-		virtual HRESULT IfaceCalling Run(IFilter_Configuration* configuration) = 0;
-	};
-
-	class ISynchronous_Filter : public IFilter {
-	public:
-		// As this filter does not start in its own thread, therefore there's no place to call Configure before actual filter startup, we need to call it
-		// separately to avoid "configure just once" logic in Execute method
+		//Set up filter configuration, possibly during its execution
 		virtual HRESULT IfaceCalling Configure(IFilter_Configuration* configuration) = 0;
 
-		// This method is called when a new event comes to synchronous filter subchain; any filter before this one could emit one or more additional events
-		// and add them to the vector, therefore this filter instance should process ALL events present in given vector
-		// This method CAN modify and/or delete any of events - as if it was asynchronous scenario
-		virtual HRESULT IfaceCalling Execute(IDevice_Event_Vector* events) = 0;
-
-		//virtual HRESULT IfaceCalling Run_Step(const glucose::IDevice_Event *input, IDevice_Event_Vector* output) = 0;
+		//Executes the filter's control loop
+		//Asynchronously executed filter runs in a dedicated thread
+		//Synchronously execeuted filters runs repeatedly in a worker thread, each Execute ends oncee IPipe_Reader fails to return an event
+		virtual HRESULT IfaceCalling Execute() = 0;
 	};
 
-	using TCreate_Asynchronous_Filter = HRESULT(IfaceCalling *)(const GUID *id, IFilter_Asynchronous_Pipe *input, IFilter_Asynchronous_Pipe *output, glucose::IAsynchronous_Filter **filter);
-	using TCreate_Synchronous_Filter = HRESULT(IfaceCalling *)(const GUID *id, glucose::ISynchronous_Filter **ISynchronous_Filter);
+	
+	using TCreate_Filter = HRESULT(IfaceCalling *)(const GUID *id, IFilter_Pipe_Reader *input, IFilter_Pipe_Writer *output, glucose::IFilter **filter);
 
 	//The following GUIDs advertise known filters 
 	constexpr GUID Drawing_Filter = { 0x850a122c, 0x8943, 0xa211,{ 0xc5, 0x14, 0x25, 0xba, 0xa9, 0x14, 0x35, 0x74 } };
@@ -278,6 +259,24 @@ namespace glucose {
 		virtual HRESULT IfaceCalling Get_Solver_Information(GUID* const calculated_signal_id, glucose::TSolver_Status* const status) const = 0;
 		// explicitly cancels solver
 		virtual HRESULT IfaceCalling Cancel_Solver() = 0;
+	};
+
+
+	/* sync and async pipes will vanish by moving filter chain manager into the factory dll*/
+
+	class IFilter_Asynchronous_Pipe : public virtual IFilter_Pipe_Reader, public virtual IFilter_Pipe_Writer {
+	public:
+		// abort pipe operation explicitly - any subsequent send or receive calls will fail with S_FALSE
+		virtual HRESULT IfaceCalling abort() = 0;
+	};
+
+	class IFilter_Synchronous_Pipe : public virtual IFilter_Asynchronous_Pipe {
+	public:
+		virtual HRESULT IfaceCalling add_filter(IFilter* filter) = 0;
+
+		//helper functions that will stop violating the COM rules once the pipe iface vanishes by residing solely in factory dll
+		virtual IFilter_Pipe_Reader* Get_Reader() = 0;
+		virtual IFilter_Pipe_Writer* Get_Writer() = 0;
 	};
 
 	using TCreate_Filter_Asynchronous_Pipe = HRESULT(IfaceCalling *)(glucose::IFilter_Asynchronous_Pipe **pipe);

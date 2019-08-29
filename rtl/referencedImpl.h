@@ -78,6 +78,19 @@ namespace refcnt {
 	};
 
 
+	template <typename I>
+	class SReferenced : public std::shared_ptr<I> {
+	public:
+		SReferenced() : std::shared_ptr<I>() {}
+
+		SReferenced(I *obj) {			
+			if (obj) obj->AddRef();
+			reset(obj, [](I* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });		
+		}
+
+		virtual ~SReferenced() {}
+	};
+
 
 	namespace internal {
 

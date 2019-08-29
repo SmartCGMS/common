@@ -50,10 +50,10 @@ namespace glucose
 	 * Note it has the same interface, as an asynchronous filter - this is due to fact, that it should behave like
 	 * an asynchronous entity, have input and output pipe and be managed by device filter (own its thread)
 	 */
-	class IDevice_Driver : public glucose::IAsynchronous_Filter {
+	class IDevice_Driver : public glucose::IFilter {
 	public:
 		virtual ~IDevice_Driver() = default;
 	};
 
-	using TCreate_Device_Driver = HRESULT(IfaceCalling *)(const GUID *id, glucose::IFilter_Asynchronous_Pipe* output, glucose::IDevice_Driver **device_driver);
+	using TCreate_Device_Driver = HRESULT(IfaceCalling *)(const GUID *id, glucose::IFilter_Pipe_Writer* output, glucose::IDevice_Driver **device_driver);
 }
