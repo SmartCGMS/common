@@ -66,7 +66,7 @@ CDynamic_Library::~CDynamic_Library() {
 bool CDynamic_Library::Load(const wchar_t *file_path) {
 	mHandle = LoadLibraryW((mLibrary_Base + file_path).c_str());
 
-	return mHandle != nullptr;
+	return mHandle != NULL;
 }
 
 bool CDynamic_Library::Is_Loaded() const {
@@ -76,7 +76,7 @@ bool CDynamic_Library::Is_Loaded() const {
 void CDynamic_Library::Unload() {
 	if (mHandle) {
 		FreeLibrary(mHandle);
-		mHandle = nullptr;
+		mHandle = NULL;
 	}
 }
 
