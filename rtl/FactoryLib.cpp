@@ -90,8 +90,7 @@ namespace factory {
 		const char* rsCreate_Signal = "create_signal";
 		const char* rsCreate_Device_Event = "create_device_event";
 		const char* rsCreate_Filter_Asynchronous_Pipe = "create_filter_asynhronous_pipe";
-		const char* rsCreate_Asynchronous_Filter = "create_asynchronous_filter";
-		const char* rsCreate_Synchronous_Filter = "create_synchronous_filter";
+		const char* rsCreate_Filter = "create_filter";		
 		const char* rsCreate_Device_Driver = "create_device_driver";
 		const char* rsAdd_Filters = "add_filters";
 		const char* rsCreate_Approximator = "create_approximator";
@@ -111,8 +110,7 @@ namespace factory {
 		HRESULT IfaceCalling create_signal_not_impl(void *signal_id, void* *segment, void *signal) { return E_NOTIMPL; }
 		HRESULT IfaceCalling create_device_event_not_impl(void *event, glucose::NDevice_Event_Code code) { return E_NOTIMPL; }
 		HRESULT IfaceCalling create_filter_pipe_not_impl(void* pipe) { return E_NOTIMPL; }
-		HRESULT IfaceCalling create_asynchronous_filter_not_impl(void* id, void* input, void* output, void* filter) { return E_NOTIMPL; }
-		HRESULT IfaceCalling create_synchronous_filter_not_impl(void* id, void* filter) { return E_NOTIMPL; }
+		HRESULT IfaceCalling create_filter_not_impl(void* id, void* input, void* output, void* filter) { return E_NOTIMPL; }
 		HRESULT IfaceCalling create_device_driver_not_impl(void* id, void* pump_driver) { return E_NOTIMPL; }
 		HRESULT IfaceCalling add_filters_not_impl(void *begin, void *end, void* create_filter) { return E_NOTIMPL; }
 		HRESULT IfaceCalling create_approximator_not_impl(void* approx_id, void *signal, void* configuration, void* approx) { return E_NOTIMPL; }
@@ -138,8 +136,7 @@ namespace factory {
 		HRESULT IfaceCalling create_signal_lazy(void *signal_id, void* *segment, void *signal) { return factory_lazy_load(rsCreate_Signal, signal_id, segment, signal); }
 		HRESULT IfaceCalling create_device_event_lazy(void *event, glucose::NDevice_Event_Code code) { return factory_lazy_load(rsCreate_Device_Event, event, code); }
 		HRESULT IfaceCalling create_filter_pipe_lazy(void* pipe) { return factory_lazy_load(rsCreate_Filter_Asynchronous_Pipe, pipe); }
-		HRESULT IfaceCalling create_asynchronous_filter_lazy(void* id, void* input, void* output, void* filter) { return factory_lazy_load(rsCreate_Asynchronous_Filter, id, input, output, filter); }
-		HRESULT IfaceCalling create_synchronous_filter_lazy(void* id, void* filter) { return factory_lazy_load(rsCreate_Synchronous_Filter, id, filter); }
+		HRESULT IfaceCalling create_filter_lazy(void* id, void* input, void* output, void* filter) { return factory_lazy_load(rsCreate_Filter, id, input, output, filter); }		
 		HRESULT IfaceCalling create_device_driver_lazy(void* id, void* pump_driver) { return factory_lazy_load(rsCreate_Device_Driver, id, pump_driver); }
 		HRESULT IfaceCalling add_filters_lazy(void *begin, void *end, void* create_filter) { return factory_lazy_load(rsAdd_Filters, begin, end, create_filter); }
 		HRESULT IfaceCalling create_approximator_lazy(void* approx_id, void *signal, void* configuration, void* approx) { return factory_lazy_load(rsCreate_Approximator, approx_id, signal, configuration, approx); }
@@ -158,9 +155,7 @@ namespace factory {
 			if (strcmp(symbol_name, rsCreate_Signal) == 0) return reinterpret_cast<void(*)>(internal::create_signal_lazy);
 			if (strcmp(symbol_name, rsCreate_Device_Event) == 0) return reinterpret_cast<void(*)>(internal::create_device_event_lazy);
 			if (strcmp(symbol_name, rsCreate_Filter_Pipe) == 0) return reinterpret_cast<void(*)>(internal::create_filter_pipe_lazy);
-			if (strcmp(symbol_name, rsCreate_Asynchronous_Filter) == 0) return reinterpret_cast<void(*)>(internal::create_asynchronous_filter_lazy);
-			if (strcmp(symbol_name, rsCreate_Synchronous_Filter) == 0) return reinterpret_cast<void(*)>(internal::create_synchronous_filter_lazy);
-			if (strcmp(symbol_name, rsCreate_Synchronous_Filter) == 0) return reinterpret_cast<void(*)>(internal::create_synchronous_filter_lazy);
+			if (strcmp(symbol_name, rsCreate_Filter) == 0) return reinterpret_cast<void(*)>(internal::create_filter_lazy);
 			if (strcmp(symbol_name, rsCreate_Device_Driver) == 0) return reinterpret_cast<void(*)>(internal::create_device_driver_lazy);
 			if (strcmp(symbol_name, rsAdd_Filters) == 0) return reinterpret_cast<void(*)>(internal::add_filters_lazy);
 			if (strcmp(symbol_name, rsCreate_Approximator) == 0) return reinterpret_cast<void(*)>(internal::create_approximator_lazy);
@@ -169,8 +164,7 @@ namespace factory {
 			if (strcmp(symbol_name, rsCreate_Signal) == 0) return reinterpret_cast<void(*)>(internal::create_signal_not_impl);
 			if (strcmp(symbol_name, rsCreate_Device_Event) == 0) return reinterpret_cast<void(*)>(internal::create_device_event_not_impl);
 			if (strcmp(symbol_name, rsCreate_Filter_Asynchronous_Pipe) == 0) return reinterpret_cast<void(*)>(internal::create_filter_pipe_not_impl);
-			if (strcmp(symbol_name, rsCreate_Asynchronous_Filter) == 0) return reinterpret_cast<void(*)>(internal::create_asynchronous_filter_not_impl);
-			if (strcmp(symbol_name, rsCreate_Synchronous_Filter) == 0) return reinterpret_cast<void(*)>(internal::create_synchronous_filter_not_impl);
+			if (strcmp(symbol_name, rsCreate_Filter) == 0) return reinterpret_cast<void(*)>(internal::create_filter_not_impl);
 			if (strcmp(symbol_name, rsCreate_Device_Driver) == 0) return reinterpret_cast<void(*)>(internal::create_device_driver_not_impl);
 			if (strcmp(symbol_name, rsAdd_Filters) == 0) return reinterpret_cast<void(*)>(internal::add_filters_not_impl);
 			if (strcmp(symbol_name, rsCreate_Approximator) == 0) return reinterpret_cast<void(*)>(internal::create_approximator_not_impl);
