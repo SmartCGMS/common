@@ -110,12 +110,20 @@ namespace glucose {
 
 		//Executes the filter's control loop
 		//Asynchronously executed filter runs in a dedicated thread
-		//Synchronously execeuted filters runs repeatedly in a worker thread, each Execute ends oncee IPipe_Reader fails to return an event
+		//Synchronously executed filters runs repeatedly in a worker thread, each Execute ends oncee IPipe_Reader fails to return an event
 		virtual HRESULT IfaceCalling Execute() = 0;
 	};
 
 	
 	using TCreate_Filter = HRESULT(IfaceCalling *)(const GUID *id, IFilter_Pipe_Reader *input, IFilter_Pipe_Writer *output, glucose::IFilter **filter);
+
+	class IFilter_Executor : public virtual refcnt::IReferenced {
+	public:
+		HRESULT IfaceCalling push_back(IDevice_Event *event);
+	};
+
+	using TCreate_Filter_Executor = HRESULT(IfaceCalling*)(const GUID *filter_id, IFilter_Executor* next_in_chain);
+
 
 	//The following GUIDs advertise known filters 
 	constexpr GUID Drawing_Filter = { 0x850a122c, 0x8943, 0xa211,{ 0xc5, 0x14, 0x25, 0xba, 0xa9, 0x14, 0x35, 0x74 } };

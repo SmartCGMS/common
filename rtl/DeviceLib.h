@@ -111,7 +111,7 @@ namespace glucose {
 									//which returns pointers only
 		UDevice_Event_internal::NDevice_Event_Major_Type major_type() const;
 	public:
-		explicit UDevice_Event(const NDevice_Event_Code code = NDevice_Event_Code::Nothing);
+		explicit UDevice_Event(const NDevice_Event_Code code = NDevice_Event_Code::Nothing)  noexcept;
 		UDevice_Event(UDevice_Event&& event);
 		UDevice_Event(IDevice_Event *event);
 		//~UDevice_Event() { discard(); }

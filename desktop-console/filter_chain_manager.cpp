@@ -61,9 +61,9 @@ CFilter_Chain& CFilter_Chain_Manager::Get_Filter_Chain() {
 	return mFilterChain;
 }
 
-HRESULT CFilter_Chain_Manager::Init_And_Start_Filters(bool consumeOutputs) {
+HRESULT CFilter_Chain_Manager::Init_And_Start_Filters(bool consumeOutputs) {	
 	if (mFilterChain.empty()) return S_FALSE;
-
+	
 	Terminate_Filters();
 	mConsume_Outputs = consumeOutputs;
 
