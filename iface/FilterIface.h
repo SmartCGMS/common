@@ -116,10 +116,11 @@ namespace glucose {
 
 	
 	using TCreate_Filter = HRESULT(IfaceCalling *)(const GUID *id, IFilter_Pipe_Reader *input, IFilter_Pipe_Writer *output, glucose::IFilter **filter);
+	using TOn_Filter_Created = HRESULT(IfaceCalling *)(const void* data, glucose::IFilter *filter);
 
 	class IFilter_Executor : public virtual refcnt::IReferenced {
 	public:
-		HRESULT IfaceCalling push_back(IDevice_Event *event);
+		virtual HRESULT IfaceCalling push_back(IDevice_Event *event) = 0;		
 	};
 
 	using TCreate_Filter_Executor = HRESULT(IfaceCalling*)(const GUID *filter_id, IFilter_Executor* next_in_chain);
