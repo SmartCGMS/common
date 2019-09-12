@@ -45,18 +45,18 @@
 #include "DeviceIface.h"
 #include "SolverIface.h"
 
-#include "../utils/winapi_mapping.h"
+//#include "../utils/winapi_mapping.h" - should not be here, remove if compiles OK; otherwise find another way to remove it from here
 
 namespace glucose {
 
-	class IFilter_Pipe_Reader : public virtual refcnt::IReferenced {
+	class IEvent_Receiver : public virtual refcnt::IReferenced {
 	public:
 		//caller TAKES ownership of the received event and is responsible for freeing it
 		//on receiving anything else but S_OK, any filter is supposed to terminate its Execute method
 		virtual HRESULT IfaceCalling receive(IDevice_Event **event) = 0;
 	};
 
-	class IFilter_Pipe_Writer : public virtual refcnt::IReferenced {
+	class IEvent_Sender : public virtual refcnt::IReferenced {
 	public:
 		// Pipe TAKES ownership of any nested reference-counted I-object so that send-caller is forbidden to call to release the nested objects
 		virtual HRESULT IfaceCalling send(IDevice_Event *event) = 0;
@@ -82,7 +82,7 @@ namespace glucose {
 		ptSubject_Id,		// int64_t, but with additional functionality in GUI
 		ptDevice_Driver_Id,	// device driver GUID (pump, sensor, ..)
 	};
-
+/*
 	struct TFilter_Parameter {
 		//data marshalling to enable inter-operability
 		NParameter_Type type;
@@ -97,11 +97,51 @@ namespace glucose {
 			glucose::IModel_Parameter_Vector* parameters;
 		};
 	};
+*/
 
-	constexpr TFilter_Parameter Null_Filter_Parameter = { NParameter_Type::ptNull, nullptr, { nullptr } };
+	class IFilter_Parameter : public virtual refcnt::IReferenced {
+	public:
+		//read-only
+		virtual HRESULT IfaceCalling Get_Type(NParameter_Type *type) = 0;
+		virtual HRESULT IfaceCalling Get_Config_Name(wchar_t const **config_name) = 0;	
+		
+		//read-write
+		virtual HRESULT IfaceCalling Get_WChar_Container(refcnt::wstr_container **wstr) = 0;
+		virtual HRESULT IfaceCalling Set_WChar_Container(refcnt::wstr_container *wstr) = 0;	
 
-	using IFilter_Configuration = refcnt::IVector_Container<glucose::TFilter_Parameter>;
-	//using IDevice_Event_Vector = refcnt::IVector_Container<glucose::IDevice_Event*>;
+		virtual HRESULT IfaceCalling Get_Time_Segment_Id_Container(time_segment_id_container **ids) = 0;
+		virtual HRESULT IfaceCalling Set_Time_Segment_Id_Container(time_segment_id_container *ids) = 0;
+
+		virtual HRESULT IfaceCalling Get_Double(double *value) = 0;
+		virtual HRESULT IfaceCalling Set_Double(const double value) = 0;
+
+		virtual HRESULT IfaceCalling Get_Int64(int64_t *value) = 0;
+		virtual HRESULT IfaceCalling Set_Int64(const int64_t value) = 0;
+
+		virtual HRESULT IfaceCalling Get_Bool(uint8_t *boolean) = 0;
+		virtual HRESULT IfaceCalling Set_Bool(const uint8_t boolean) = 0;
+
+		virtual HRESULT IfaceCalling Get_GUID(GUID *id) = 0;
+		virtual HRESULT IfaceCalling Set_GUID(const GUID *id) = 0;
+
+		virtual HRESULT IfaceCalling Get_Model_Parameters(glucose::IModel_Parameter_Vector **parameters) = 0;
+		virtual HRESULT IfaceCalling Set_Model_Parameters(glucose::IModel_Parameter_Vector *parameters) = 0;
+	};
+
+	//constexpr TFilter_Parameter Null_Filter_Parameter = { NParameter_Type::ptNull, nullptr, { nullptr } };
+
+	using IFilter_Configuration = refcnt::IVector_Container<glucose::IFilter_Parameter>;
+	
+	class IFilter_Configuration_Link : public virtual IFilter_Configuration {
+	public:
+		virtual HRESULT IfaceCalling Get_Filter_Id(GUID *id) = 0;		
+	};
+
+	class IFilter_Chain_Configuration : public virtual refcnt::IVector_Container<IFilter_Configuration_Link> {
+	public:
+		virtual HRESULT IfaceCalling Deserialize(const wchar_t *str) = 0;
+		virtual HRESULT IfaceCalling Serialize(refcnt::wstr_container **str) = 0;
+	};
 
 	class IFilter : public virtual refcnt::IReferenced {
 	public:
@@ -115,7 +155,7 @@ namespace glucose {
 	};
 
 	
-	using TCreate_Filter = HRESULT(IfaceCalling *)(const GUID *id, IFilter_Pipe_Reader *input, IFilter_Pipe_Writer *output, glucose::IFilter **filter);
+	using TCreate_Filter = HRESULT(IfaceCalling *)(const GUID *id, IEvent_Receiver *input, IEvent_Sender *output, glucose::IFilter **filter);
 	using TOn_Filter_Created = HRESULT(IfaceCalling *)(const void* data, glucose::IFilter *filter);
 
 	class IFilter_Executor : public virtual refcnt::IReferenced {
@@ -273,7 +313,7 @@ namespace glucose {
 
 	/* sync and async pipes will vanish by moving filter chain manager into the factory dll*/
 
-	class IFilter_Asynchronous_Pipe : public virtual IFilter_Pipe_Reader, public virtual IFilter_Pipe_Writer {
+	class IFilter_Asynchronous_Pipe : public virtual IEvent_Receiver, public virtual IEvent_Sender {
 	public:
 		// abort pipe operation explicitly - any subsequent send or receive calls will fail with S_FALSE
 		virtual HRESULT IfaceCalling abort() = 0;
@@ -284,8 +324,8 @@ namespace glucose {
 		virtual HRESULT IfaceCalling add_filter(IFilter* filter) = 0;
 
 		//helper functions that will stop violating the COM rules once the pipe iface vanishes by residing solely in factory dll
-		virtual IFilter_Pipe_Reader* Get_Reader() = 0;
-		virtual IFilter_Pipe_Writer* Get_Writer() = 0;
+		virtual IEvent_Receiver* Get_Reader() = 0;
+		virtual IEvent_Sender* Get_Writer() = 0;
 	};
 
 	using TCreate_Filter_Asynchronous_Pipe = HRESULT(IfaceCalling *)(glucose::IFilter_Asynchronous_Pipe **pipe);

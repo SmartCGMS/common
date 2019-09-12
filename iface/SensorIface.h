@@ -55,5 +55,5 @@ namespace glucose
 		virtual ~IDevice_Driver() = default;
 	};
 
-	using TCreate_Device_Driver = HRESULT(IfaceCalling *)(const GUID *id, glucose::IFilter_Pipe_Writer* output, glucose::IDevice_Driver **device_driver);
+	using TCreate_Device_Driver = HRESULT(IfaceCalling *)(const GUID *id, glucose::IEvent_Sender* output, glucose::IDevice_Driver **device_driver);
 }

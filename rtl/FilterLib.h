@@ -48,7 +48,7 @@
 
 namespace glucose {
 
-	class SFilter_Pipe_Reader : public virtual refcnt::SReferenced<IFilter_Pipe_Reader> {
+	class SFilter_Pipe_Reader : public virtual refcnt::SReferenced<IEvent_Receiver> {
 	public:
 		UDevice_Event Receive()  {
 			if (!(operator bool())) return UDevice_Event{};
@@ -60,7 +60,7 @@ namespace glucose {
 		}
 	};
 
-	class SFilter_Pipe_Writer : public virtual refcnt::SReferenced<IFilter_Pipe_Writer> {
+	class SFilter_Pipe_Writer : public virtual refcnt::SReferenced<IEvent_Sender> {
 	public:
 		bool Send(UDevice_Event &event)  {	//consumes the event in any case
 			if (!(operator bool())) return false;
@@ -89,11 +89,11 @@ namespace glucose {
 		virtual bool add_filter(SFilter &filter) = 0;
 		virtual bool empty() const = 0;
 
-		virtual glucose::IFilter_Pipe_Reader* get_async_reader() = 0;
-		virtual glucose::IFilter_Pipe_Writer* get_async_writer() = 0;
+		virtual glucose::IEvent_Receiver* get_async_reader() = 0;
+		virtual glucose::IEvent_Sender* get_async_writer() = 0;
 
-		virtual glucose::IFilter_Pipe_Reader* get_sync_reader() = 0;
-		virtual glucose::IFilter_Pipe_Writer* get_sync_writer() = 0;
+		virtual glucose::IEvent_Receiver* get_sync_reader() = 0;
+		virtual glucose::IEvent_Sender* get_sync_writer() = 0;
 	};
 
 	template <typename I>
@@ -146,11 +146,11 @@ namespace glucose {
 		SFilter_Asynchronous_Pipe();				
 		virtual bool add_filter(SFilter &filter) final;
 
-		virtual glucose::IFilter_Pipe_Reader* get_async_reader() { return static_cast<glucose::IFilter_Pipe_Reader*>(get()); }
-		virtual glucose::IFilter_Pipe_Writer* get_async_writer() { return static_cast<glucose::IFilter_Pipe_Writer*>(get()); }
+		virtual glucose::IEvent_Receiver* get_async_reader() { return static_cast<glucose::IEvent_Receiver*>(get()); }
+		virtual glucose::IEvent_Sender* get_async_writer() { return static_cast<glucose::IEvent_Sender*>(get()); }
 
-		virtual glucose::IFilter_Pipe_Reader* get_sync_reader() { return nullptr; }
-		virtual glucose::IFilter_Pipe_Writer* get_sync_writer() { return nullptr; }
+		virtual glucose::IEvent_Receiver* get_sync_reader() { return nullptr; }
+		virtual glucose::IEvent_Sender* get_sync_writer() { return nullptr; }
 	};
 
 	class SFilter_Synchronous_Pipe : public virtual SFilter_Pipe<glucose::IFilter_Synchronous_Pipe> {
@@ -158,11 +158,11 @@ namespace glucose {
 		SFilter_Synchronous_Pipe();
 		virtual bool add_filter(SFilter &filter) final;
 
-		virtual glucose::IFilter_Pipe_Reader* get_async_reader() { return static_cast<glucose::IFilter_Pipe_Reader*>(get()); }
-		virtual glucose::IFilter_Pipe_Writer* get_async_writer() { return static_cast<glucose::IFilter_Pipe_Writer*>(get()); }
+		virtual glucose::IEvent_Receiver* get_async_reader() { return static_cast<glucose::IEvent_Receiver*>(get()); }
+		virtual glucose::IEvent_Sender* get_async_writer() { return static_cast<glucose::IEvent_Sender*>(get()); }
 
-		virtual glucose::IFilter_Pipe_Reader* get_sync_reader() { return get()->Get_Reader(); }
-		virtual glucose::IFilter_Pipe_Writer* get_sync_writer() { return get()->Get_Writer(); }
+		virtual glucose::IEvent_Receiver* get_sync_reader() { return get()->Get_Reader(); }
+		virtual glucose::IEvent_Sender* get_sync_writer() { return get()->Get_Writer(); }
 	};
 	
 	
@@ -172,7 +172,7 @@ namespace glucose {
 	std::vector<TFilter_Descriptor> get_filter_descriptors();
 	bool get_filter_descriptor_by_id(const GUID &id, TFilter_Descriptor &desc);
 
-	SFilter create_filter(const GUID &id, IFilter_Pipe_Reader *input, IFilter_Pipe_Writer *output);
+	SFilter create_filter(const GUID &id, IEvent_Receiver *input, IEvent_Sender *output);
 
 	class SFilter_Parameters : public std::shared_ptr<glucose::IFilter_Configuration> {
 	public:
@@ -186,11 +186,11 @@ namespace glucose {
 
 		std::vector<double> Read_Double_Array(const wchar_t* name) const;	//TODO: remove in the future in favor to Read_Parameters
 
-		TFilter_Parameter* Resolve_Parameter(const wchar_t* name) const;
+		//TFilter_Parameter* Resolve_Parameter(const wchar_t* name) const;
 	};
 
-	void Visit_Filter_Parameter(glucose::TFilter_Parameter& element, std::function<void(refcnt::IReferenced *obj)> func);
-	void Release_Filter_Parameter(TFilter_Parameter &parameter);
+	//void Visit_Filter_Parameter(glucose::TFilter_Parameter& element, std::function<void(refcnt::IReferenced *obj)> func);
+	//void Release_Filter_Parameter(TFilter_Parameter &parameter);
 
 	class SError_Filter_Inspection : public std::shared_ptr<IError_Filter_Inspection> {
 	public:
