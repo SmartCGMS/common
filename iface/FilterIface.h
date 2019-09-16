@@ -103,7 +103,7 @@ namespace glucose {
 	public:
 		//read-only
 		virtual HRESULT IfaceCalling Get_Type(NParameter_Type *type) = 0;
-		virtual HRESULT IfaceCalling Get_Config_Name(wchar_t const **config_name) = 0;	
+		virtual HRESULT IfaceCalling Get_Config_Name(wchar_t **config_name) = 0;	
 		
 		//read-write
 		virtual HRESULT IfaceCalling Get_WChar_Container(refcnt::wstr_container **wstr) = 0;
@@ -130,18 +130,21 @@ namespace glucose {
 
 	//constexpr TFilter_Parameter Null_Filter_Parameter = { NParameter_Type::ptNull, nullptr, { nullptr } };
 
-	using IFilter_Configuration = refcnt::IVector_Container<glucose::IFilter_Parameter>;
+	using IFilter_Configuration = refcnt::IVector_Container<glucose::IFilter_Parameter*>;
 	
 	class IFilter_Configuration_Link : public virtual IFilter_Configuration {
 	public:
 		virtual HRESULT IfaceCalling Get_Filter_Id(GUID *id) = 0;		
 	};
 
-	class IFilter_Chain_Configuration : public virtual refcnt::IVector_Container<IFilter_Configuration_Link> {
+	using IFilter_Chain_Configuration = refcnt::IVector_Container<IFilter_Configuration_Link*>;
+
+	class IPersistent_Filter_Chain_Configuration : public virtual IFilter_Chain_Configuration {
 	public:
-		virtual HRESULT IfaceCalling Deserialize(const wchar_t *str) = 0;
-		virtual HRESULT IfaceCalling Serialize(refcnt::wstr_container **str) = 0;
-	};
+		virtual HRESULT IfaceCalling Load_From_File(const wchar_t *file_path) = 0;	//if nullptr, assumes default config file name
+		virtual HRESULT IfaceCalling Load_From_Memory(const char *memory, const size_t len) = 0;
+		virtual HRESULT IfaceCalling Save_To_File(const wchar_t *file_path) = 0; //if nullptr, saves to the file_name previously supplied to Load_From_File
+	};	
 
 	class IFilter : public virtual refcnt::IReferenced {
 	public:

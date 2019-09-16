@@ -175,6 +175,17 @@ namespace glucose {
 	SFilter create_filter(const GUID &id, IEvent_Receiver *input, IEvent_Sender *output);
 
 	class SFilter_Parameters : public std::shared_ptr<glucose::IFilter_Configuration> {
+	protected:
+		template <typename T, typename F>	//F== std::function < HRESULT(refcnt::SReferenced<glucose::IFilter_Parameter>, T &) > ?
+		T Read_Parameter(const wchar_t *name, F func, T default_value) const {
+			refcnt::SReferenced<glucose::IFilter_Parameter> parameter = Resolve_Parameter(name);
+			if (!parameter) return default_value;
+
+			T value;
+			if (func(parameter, value) != S_OK) return default_value;
+
+			return value;
+		}
 	public:
 		std::wstring Read_String(const wchar_t* name, const std::wstring& default_value = {}) const;
 		int64_t Read_Int(const wchar_t* name, const int64_t default_value = std::numeric_limits<int64_t>::max()) const;
@@ -184,9 +195,9 @@ namespace glucose {
 		double Read_Double(const wchar_t* name, const double default_value = std::numeric_limits<double>::quiet_NaN()) const;
 		void Read_Parameters(const wchar_t* name, glucose::SModel_Parameter_Vector &lower_bound, glucose::SModel_Parameter_Vector &default_parameters, glucose::SModel_Parameter_Vector &upper_bound) const;
 
-		std::vector<double> Read_Double_Array(const wchar_t* name) const;	//TODO: remove in the future in favor to Read_Parameters
+		//std::vector<double> Read_Double_Array(const wchar_t* name) const;	//TODO: remove in the future in favor to Read_Parameters
 
-		//TFilter_Parameter* Resolve_Parameter(const wchar_t* name) const;
+		refcnt::SReferenced<glucose::IFilter_Parameter> Resolve_Parameter(const wchar_t* name) const;
 	};
 
 	//void Visit_Filter_Parameter(glucose::TFilter_Parameter& element, std::function<void(refcnt::IReferenced *obj)> func);
