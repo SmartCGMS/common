@@ -157,16 +157,24 @@ namespace glucose {
 		virtual HRESULT IfaceCalling Execute() = 0;
 	};
 
-	
-	using TCreate_Filter = HRESULT(IfaceCalling *)(const GUID *id, IEvent_Receiver *input, IEvent_Sender *output, glucose::IFilter **filter);
-	using TOn_Filter_Created = HRESULT(IfaceCalling *)(const void* data, glucose::IFilter *filter);
-
 	class IFilter_Executor : public virtual refcnt::IReferenced {
 	public:
 		virtual HRESULT IfaceCalling push_back(IDevice_Event *event) = 0;		
 	};
 
+	class IFilter_Chain_Executor : public virtual refcnt::IReferenced {
+	public:
+		virtual HRESULT IfaceCalling Start() = 0;	//returns once all filters are executing
+		virtual HRESULT IfaceCalling Stop() = 0;	//returns once all filters have terminated and joined
+	};
+
+	using TCreate_Filter = HRESULT(IfaceCalling *)(const GUID *id, IEvent_Receiver *input, IEvent_Sender *output, glucose::IFilter **filter);
+	using TOn_Filter_Created = HRESULT(IfaceCalling *)(const void* data, glucose::IFilter *filter);
+	
 	using TCreate_Filter_Executor = HRESULT(IfaceCalling*)(const GUID *filter_id, IFilter_Executor* next_in_chain);
+	
+		//if output == nullptr, the executor consumes all events
+	using TCreate_Filter_Chain_Executor = HRESULT(IfaceCalling *)(IFilter_Chain_Configuration *configuration, IEvent_Receiver *input, IEvent_Sender *output, glucose::IFilter_Chain_Executor **executor);
 
 
 	//The following GUIDs advertise known filters 
