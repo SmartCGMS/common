@@ -48,7 +48,7 @@
 
 namespace glucose {
 
-	class SFilter_Pipe_Reader : public virtual refcnt::SReferenced<IEvent_Receiver> {
+	class SEvent_Receiver : public virtual refcnt::SReferenced<IEvent_Receiver> {
 	public:
 		UDevice_Event Receive()  {
 			if (!(operator bool())) return UDevice_Event{};
@@ -60,7 +60,7 @@ namespace glucose {
 		}
 	};
 
-	class SFilter_Pipe_Writer : public virtual refcnt::SReferenced<IEvent_Sender> {
+	class SEvent_Sender : public virtual refcnt::SReferenced<IEvent_Sender> {
 	public:
 		bool Send(UDevice_Event &event)  {	//consumes the event in any case
 			if (!(operator bool())) return false;

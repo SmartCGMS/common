@@ -52,6 +52,7 @@ namespace glucose {
 		glucose::TCreate_Filter_Synchronous_Pipe create_filter_synchronous_pipe = factory::resolve_symbol<glucose::TCreate_Filter_Synchronous_Pipe>("create_filter_synchronous_pipe");
 		glucose::TCreate_Filter create_filter = factory::resolve_symbol<glucose::TCreate_Filter>("create_filter");		
 		glucose::TAdd_Filters add_filters = factory::resolve_symbol<glucose::TAdd_Filters>("add_filters");
+		glucose::TCreate_Filter_Chain_Executor create_filter_chain_executor = factory::resolve_symbol<glucose::TCreate_Filter_Chain_Executor>("create_filter_chain_executor");		
 	}
 
 

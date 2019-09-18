@@ -171,9 +171,7 @@ namespace glucose {
 	using TCreate_Filter = HRESULT(IfaceCalling *)(const GUID *id, IEvent_Receiver *input, IEvent_Sender *output, glucose::IFilter **filter);
 	using TOn_Filter_Created = HRESULT(IfaceCalling *)(const void* data, glucose::IFilter *filter);
 	
-	using TCreate_Filter_Executor = HRESULT(IfaceCalling*)(const GUID *filter_id, IFilter_Executor* next_in_chain);
-	
-		//if output == nullptr, the executor consumes all events
+			//if output == nullptr, the executor consumes all events
 	using TCreate_Filter_Chain_Executor = HRESULT(IfaceCalling *)(IFilter_Chain_Configuration *configuration, IEvent_Receiver *input, IEvent_Sender *output, glucose::IFilter_Chain_Executor **executor);
 
 
