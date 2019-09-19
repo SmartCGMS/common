@@ -184,3 +184,17 @@ HRESULT IfaceCalling CDb_Connector::Connect(const wchar_t *host, const wchar_t *
 		return E_FAIL;
 	}
 }
+
+
+HRESULT IfaceCalling Setup_Filter_DB_Access(glucose::IFilter *filter, const void* data) {
+	HRESULT rc = S_OK;
+#ifndef SMARTCGMS_NO_DB
+	{
+		db::SDb_Sink db_sink;
+		refcnt::Query_Interface<glucose::IFilter, db::IDb_Sink>(filter, db::Db_Sink_Filter, db_sink);
+		if (db_sink) rc = db_sink->Set_Connector(static_cast<db::IDb_Connector*>(&db_connector));
+	}
+#endif
+
+	return rc;
+}

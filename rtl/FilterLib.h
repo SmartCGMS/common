@@ -79,6 +79,19 @@ namespace glucose {
 
 	using SFilter = refcnt::SReferenced<IFilter>;
 
+	class SPersistent_Filter_Chain_Configuration : public virtual refcnt::SReferenced<glucose::IPersistent_Filter_Chain_Configuration> {
+	public:
+		SPersistent_Filter_Chain_Configuration(const std::wstring config_filepath); //file pah can be nullptr
+	};
+
+	class SFilter_Chain_Executor : public virtual refcnt::SReferenced<glucose::IFilter_Chain_Executor> {
+	public:
+		SFilter_Chain_Executor() : refcnt::SReferenced<glucose::IFilter_Chain_Executor>() {};
+		SFilter_Chain_Executor(SPersistent_Filter_Chain_Configuration configuration, IEvent_Sender *output, glucose::TOn_Filter_Created on_filter_created, const void* on_filter_created_data);
+	};
+
+
+/*
 	class CFilter_Pipe {
 	public:
 		CFilter_Pipe() {}
@@ -165,14 +178,14 @@ namespace glucose {
 		virtual glucose::IEvent_Sender* get_sync_writer() { return get()->Get_Writer(); }
 	};
 	
-	
+	*/
 
 	bool add_filters(const std::vector<glucose::TFilter_Descriptor> &descriptors, glucose::TCreate_Filter create_filter);
 
 	std::vector<TFilter_Descriptor> get_filter_descriptors();
 	bool get_filter_descriptor_by_id(const GUID &id, TFilter_Descriptor &desc);
 
-	SFilter create_filter(const GUID &id, IEvent_Receiver *input, IEvent_Sender *output);
+	//SFilter create_filter(const GUID &id, IEvent_Receiver *input, IEvent_Sender *output); //let this one be consumed b
 
 	class SFilter_Parameters : public std::shared_ptr<glucose::IFilter_Configuration> {
 	protected:

@@ -85,7 +85,7 @@ namespace refcnt {
 
 		SReferenced(I *obj) {			
 			if (obj) obj->AddRef();
-			reset(obj, [](I* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });		
+			std::shared_ptr<I>::reset(obj, [](I* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });
 		}
 
 		virtual ~SReferenced() {}

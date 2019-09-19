@@ -48,11 +48,31 @@ namespace glucose {
 
 	namespace imported {
 		glucose::TGet_Filter_Descriptors get_filter_descriptors = factory::resolve_symbol<glucose::TGet_Filter_Descriptors>("get_filter_descriptors");
-		glucose::TCreate_Filter_Asynchronous_Pipe create_filter_asynchronous_pipe = factory::resolve_symbol<glucose::TCreate_Filter_Asynchronous_Pipe>("create_filter_asynchronous_pipe");
-		glucose::TCreate_Filter_Synchronous_Pipe create_filter_synchronous_pipe = factory::resolve_symbol<glucose::TCreate_Filter_Synchronous_Pipe>("create_filter_synchronous_pipe");
-		glucose::TCreate_Filter create_filter = factory::resolve_symbol<glucose::TCreate_Filter>("create_filter");		
+//		glucose::TCreate_Filter_Asynchronous_Pipe create_filter_asynchronous_pipe = factory::resolve_symbol<glucose::TCreate_Filter_Asynchronous_Pipe>("create_filter_asynchronous_pipe");
+//		glucose::TCreate_Filter_Synchronous_Pipe create_filter_synchronous_pipe = factory::resolve_symbol<glucose::TCreate_Filter_Synchronous_Pipe>("create_filter_synchronous_pipe");
+//		glucose::TCreate_Filter create_filter = factory::resolve_symbol<glucose::TCreate_Filter>("create_filter");		
 		glucose::TAdd_Filters add_filters = factory::resolve_symbol<glucose::TAdd_Filters>("add_filters");
+		glucose::TCreate_Persistent_Filter_Chain_Configuration create_persistent_filter_chain_configuration = factory::resolve_symbol<glucose::TCreate_Persistent_Filter_Chain_Configuration>("create_persistent_filter_chain_configuration");
 		glucose::TCreate_Filter_Chain_Executor create_filter_chain_executor = factory::resolve_symbol<glucose::TCreate_Filter_Chain_Executor>("create_filter_chain_executor");		
+	}
+
+	SPersistent_Filter_Chain_Configuration::SPersistent_Filter_Chain_Configuration(const std::wstring config_filepath) {
+		IPersistent_Filter_Chain_Configuration *configuration;
+		HRESULT rc = imported::create_persistent_filter_chain_configuration(&configuration);
+		if (rc == S_OK) {
+			if (!config_filepath.empty()) {					//were we requested to load a specific configuration file?
+				rc = configuration->Load_From_File(config_filepath.c_str());	//try to load the configuration file
+			}
+			if (rc == S_OK) reset(configuration, [](IPersistent_Filter_Chain_Configuration* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });				
+				else configuration->Release(); //release if has not succeded
+		}
+	}
+
+	SFilter_Chain_Executor::SFilter_Chain_Executor(SPersistent_Filter_Chain_Configuration configuration, IEvent_Sender *output, glucose::TOn_Filter_Created on_filter_created, const void* on_filter_created_data)  {
+		glucose::IFilter_Chain_Executor *executor;
+		HRESULT rc = imported::create_filter_chain_executor(configuration.get(), output, on_filter_created, on_filter_created_data, &executor);
+		if (rc == S_OK)
+			reset(executor, [](IFilter_Chain_Executor* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });
 	}
 
 
@@ -90,7 +110,7 @@ namespace glucose {
 	}
 
 
-	SFilter create_filter(const GUID &id, IEvent_Receiver *input, IEvent_Sender *output) {
+	/*SFilter create_filter(const GUID &id, IEvent_Receiver *input, IEvent_Sender *output) {
 		SFilter result;
 		IFilter *filter;
 
@@ -99,6 +119,7 @@ namespace glucose {
 
 		return result;
 	}
+	*/
 
 	/* to delete on factory rehaul
 	void Visit_Filter_Parameter(glucose::TFilter_Parameter& element, std::function<void(refcnt::IReferenced *obj)> func) {
@@ -347,7 +368,7 @@ namespace glucose {
 		return true;
 	}
 
-	*/
+
 
 	SFilter_Asynchronous_Pipe::SFilter_Asynchronous_Pipe() : SFilter_Pipe() {
 		IFilter_Asynchronous_Pipe *pipe;
@@ -370,7 +391,7 @@ namespace glucose {
 		if (!self) return false;
 		return self->add_filter(filter.get()) == S_OK;
 	}
-
+	*/
 }
 
 

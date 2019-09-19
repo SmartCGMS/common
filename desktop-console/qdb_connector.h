@@ -38,7 +38,8 @@
 
 #pragma once
 
-#include "../iface/DbIface.h"
+#include "../iface/FilterIface.h"
+#include "../rtl/DbLib.h"
 #include "../rtl/referencedImpl.h"
 
 #include <vector>
@@ -80,4 +81,4 @@ public:
 
 #pragma warning( pop )
 
-extern CDb_Connector db_connector;
+HRESULT IfaceCalling Setup_Filter_DB_Access(glucose::IFilter *filter, const void* data);

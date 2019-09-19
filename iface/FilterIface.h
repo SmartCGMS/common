@@ -162,17 +162,19 @@ namespace glucose {
 		virtual HRESULT IfaceCalling push_back(IDevice_Event *event) = 0;		
 	};
 
-	class IFilter_Chain_Executor : public virtual refcnt::IReferenced {
+	class IFilter_Chain_Executor : public virtual IEvent_Sender, public virtual refcnt::IReferenced {	//IEvent_Sender sends the event to the first filter
 	public:
 		virtual HRESULT IfaceCalling Start() = 0;	//returns once all filters are executing
 		virtual HRESULT IfaceCalling Stop() = 0;	//returns once all filters have terminated and joined
 	};
 
+	using TCreate_Persistent_Filter_Chain_Configuration = HRESULT(IfaceCalling *)(IPersistent_Filter_Chain_Configuration **configuration);
+
 	using TCreate_Filter = HRESULT(IfaceCalling *)(const GUID *id, IEvent_Receiver *input, IEvent_Sender *output, glucose::IFilter **filter);
-	using TOn_Filter_Created = HRESULT(IfaceCalling *)(const void* data, glucose::IFilter *filter);
+	using TOn_Filter_Created = HRESULT(IfaceCalling *)(glucose::IFilter *filter, const void* data);
 	
 			//if output == nullptr, the executor consumes all events
-	using TCreate_Filter_Chain_Executor = HRESULT(IfaceCalling *)(IFilter_Chain_Configuration *configuration, IEvent_Receiver *input, IEvent_Sender *output, glucose::IFilter_Chain_Executor **executor);
+	using TCreate_Filter_Chain_Executor = HRESULT(IfaceCalling *)(IFilter_Chain_Configuration *configuration, IEvent_Sender *output, glucose::TOn_Filter_Created on_filter_created, const void* on_filter_created_data, glucose::IFilter_Chain_Executor **executor);
 
 
 	//The following GUIDs advertise known filters 
