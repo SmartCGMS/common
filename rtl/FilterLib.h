@@ -81,7 +81,7 @@ namespace glucose {
 
 	class SPersistent_Filter_Chain_Configuration : public virtual refcnt::SReferenced<glucose::IPersistent_Filter_Chain_Configuration> {
 	public:
-		SPersistent_Filter_Chain_Configuration(const std::wstring config_filepath); //file pah can be nullptr
+		SPersistent_Filter_Chain_Configuration(); 
 	};
 
 	class SFilter_Chain_Executor : public virtual refcnt::SReferenced<glucose::IFilter_Chain_Executor> {

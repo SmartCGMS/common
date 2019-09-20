@@ -52,7 +52,7 @@ class CDynamic_Library final {
 		// stored module handle (nullptr if invalid)
 		HMODULE mHandle;
 		// library base for given platform (sometimes needs to be set in runtime, on e.g. Android)
-		static std::wstring mLibrary_Base;
+		static std::unique_ptr<std::wstring> mLibrary_Base;	//unique_ptr to avoid a memory leak due to TBB allocator
 	public:
 		CDynamic_Library() noexcept;
 		// disallow copying - the handle has to be unique

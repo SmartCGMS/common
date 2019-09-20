@@ -56,22 +56,15 @@ namespace glucose {
 		glucose::TCreate_Filter_Chain_Executor create_filter_chain_executor = factory::resolve_symbol<glucose::TCreate_Filter_Chain_Executor>("create_filter_chain_executor");		
 	}
 
-	SPersistent_Filter_Chain_Configuration::SPersistent_Filter_Chain_Configuration(const std::wstring config_filepath) {
+	SPersistent_Filter_Chain_Configuration::SPersistent_Filter_Chain_Configuration() {
 		IPersistent_Filter_Chain_Configuration *configuration;
-		HRESULT rc = imported::create_persistent_filter_chain_configuration(&configuration);
-		if (rc == S_OK) {
-			if (!config_filepath.empty()) {					//were we requested to load a specific configuration file?
-				rc = configuration->Load_From_File(config_filepath.c_str());	//try to load the configuration file
-			}
-			if (rc == S_OK) reset(configuration, [](IPersistent_Filter_Chain_Configuration* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });				
-				else configuration->Release(); //release if has not succeded
-		}
+		if (imported::create_persistent_filter_chain_configuration(&configuration) == S_OK)
+			reset(configuration, [](IPersistent_Filter_Chain_Configuration* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });							
 	}
 
 	SFilter_Chain_Executor::SFilter_Chain_Executor(SPersistent_Filter_Chain_Configuration configuration, IEvent_Sender *output, glucose::TOn_Filter_Created on_filter_created, const void* on_filter_created_data)  {
-		glucose::IFilter_Chain_Executor *executor;
-		HRESULT rc = imported::create_filter_chain_executor(configuration.get(), output, on_filter_created, on_filter_created_data, &executor);
-		if (rc == S_OK)
+		glucose::IFilter_Chain_Executor *executor;		
+		if (imported::create_filter_chain_executor(configuration.get(), output, on_filter_created, on_filter_created_data, &executor) == S_OK)
 			reset(executor, [](IFilter_Chain_Executor* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });
 	}
 
@@ -144,21 +137,20 @@ namespace glucose {
 
 	refcnt::SReferenced<glucose::IFilter_Parameter> SFilter_Parameters::Resolve_Parameter(const wchar_t* name) const {	
 		if (!operator bool()) return nullptr;
-
-		IFilter_Parameter* result = nullptr;
+		
 		glucose::IFilter_Parameter **cbegin, **cend;
 		if (get()->get(&cbegin, &cend) == S_OK)
 
-			for (glucose::IFilter_Parameter* cur = *cbegin; cur < *cend; cur++) {
+			for (glucose::IFilter_Parameter** cur = cbegin; cur < cend; cur++) {
 				wchar_t* conf_name;
-				if (cur->Get_Config_Name(&conf_name) == S_OK) {
+				if ((*cur)->Get_Config_Name(&conf_name) == S_OK) {
 					if (wcscmp(conf_name, name) == 0) {
-						return refcnt::make_shared_reference_ext<refcnt::SReferenced<glucose::IFilter_Parameter>, glucose::IFilter_Parameter>(cur, true);
+						return refcnt::make_shared_reference_ext<refcnt::SReferenced<glucose::IFilter_Parameter>, glucose::IFilter_Parameter>(*cur, true);
 					}
 				}
 			}
 
-		return result;
+		return nullptr;	//not found
 	}
 	
 

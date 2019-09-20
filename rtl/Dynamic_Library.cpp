@@ -40,7 +40,7 @@
 
 #include <algorithm>
 
-std::wstring CDynamic_Library::mLibrary_Base{ L"" };
+std::unique_ptr<std::wstring> CDynamic_Library::mLibrary_Base{  };
 
 #ifdef _WIN32
 	const wchar_t* rsShared_Object_Extension = L".dll";
@@ -64,7 +64,8 @@ CDynamic_Library::~CDynamic_Library() {
 
 
 bool CDynamic_Library::Load(const wchar_t *file_path) {
-	mHandle = LoadLibraryW((mLibrary_Base + file_path).c_str());
+	if (mLibrary_Base) mHandle = LoadLibraryW((*mLibrary_Base + file_path).c_str());
+		else mHandle = LoadLibraryW(file_path);
 
 	return mHandle != NULL;
 }
@@ -93,14 +94,14 @@ bool CDynamic_Library::Is_Library(const std::wstring& path) {
 	return (path.length() > extLen) && path.substr(path.length() - extLen, extLen) == rsShared_Object_Extension;
 }
 
-void CDynamic_Library::Set_Library_Base(const std::wstring& base)
-{
-	mLibrary_Base = base;
-	if (mLibrary_Base.empty() || (*mLibrary_Base.rbegin() != L'/' && *mLibrary_Base.rbegin() != L'\\'))
-		mLibrary_Base += L"/";
+void CDynamic_Library::Set_Library_Base(const std::wstring& base) {
+	mLibrary_Base = std::make_unique<std::wstring>(base);
+
+	if (mLibrary_Base->empty() || (*(mLibrary_Base->rbegin()) != L'/' && *(mLibrary_Base->rbegin()) != L'\\'))
+		*mLibrary_Base += L"/";
 }
 
-const wchar_t* CDynamic_Library::Get_Library_Base()
-{
-	return mLibrary_Base.c_str();
+const wchar_t* CDynamic_Library::Get_Library_Base() {
+	if (!mLibrary_Base) return nullptr;
+	return mLibrary_Base->c_str();
 }
