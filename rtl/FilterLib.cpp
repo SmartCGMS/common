@@ -53,7 +53,8 @@ namespace glucose {
 //		glucose::TCreate_Filter create_filter = factory::resolve_symbol<glucose::TCreate_Filter>("create_filter");		
 		glucose::TAdd_Filters add_filters = factory::resolve_symbol<glucose::TAdd_Filters>("add_filters");
 		glucose::TCreate_Persistent_Filter_Chain_Configuration create_persistent_filter_chain_configuration = factory::resolve_symbol<glucose::TCreate_Persistent_Filter_Chain_Configuration>("create_persistent_filter_chain_configuration");
-		glucose::TCreate_Filter_Chain_Executor create_filter_chain_executor = factory::resolve_symbol<glucose::TCreate_Filter_Chain_Executor>("create_filter_chain_executor");		
+		glucose::TCreate_Filter_Communicator create_filter_communicator = factory::resolve_symbol<glucose::TCreate_Filter_Communicator>("create_filter_communicator");		
+		glucose::TCreate_Composite_Filter create_composite_filter = factory::resolve_symbol<glucose::TCreate_Composite_Filter>("create_composite_filter");
 	}
 
 	SPersistent_Filter_Chain_Configuration::SPersistent_Filter_Chain_Configuration() {
@@ -62,12 +63,18 @@ namespace glucose {
 			reset(configuration, [](IPersistent_Filter_Chain_Configuration* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });							
 	}
 
-	SFilter_Chain_Executor::SFilter_Chain_Executor(SPersistent_Filter_Chain_Configuration configuration, IEvent_Sender *output, glucose::TOn_Filter_Created on_filter_created, const void* on_filter_created_data)  {
-		glucose::IFilter_Chain_Executor *executor;		
-		if (imported::create_filter_chain_executor(configuration.get(), output, on_filter_created, on_filter_created_data, &executor) == S_OK)
-			reset(executor, [](IFilter_Chain_Executor* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });
-	}
 
+	SFilter_Communicator::SFilter_Communicator() {
+		IFilter_Communicator *communicator;
+		if (imported::create_filter_communicator(&communicator) == S_OK)
+			reset(communicator, [](IFilter_Communicator* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });
+	}
+	
+	SComposite_Filter::SComposite_Filter(SPersistent_Filter_Chain_Configuration configuration, SFilter_Communicator communicator, IFilter *next_filter, glucose::TOn_Filter_Created on_filter_created, const void* on_filter_created_data) {
+		glucose::IFilter *filter;
+		if (imported::create_composite_filter(configuration.get(), communicator.get(), next_filter, on_filter_created, on_filter_created_data, &filter) == S_OK)
+			reset(filter, [](glucose::IFilter* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });
+	}
 
 	bool add_filters(const std::vector<glucose::TFilter_Descriptor> &descriptors, glucose::TCreate_Filter create_filter) {
 		return imported::add_filters(descriptors.data(), descriptors.data() + descriptors.size(), create_filter) == S_OK;
@@ -134,6 +141,14 @@ namespace glucose {
 		Visit_Filter_Parameter(parameter, [](refcnt::IReferenced *obj) { obj->Release(); });
 	}
 	*/
+
+	CFilter_Communicator_Lock::CFilter_Communicator_Lock(SFilter_Communicator &communicator) : mCommunicator(communicator) {
+		if (mCommunicator->Acquire_Channel() != S_OK) throw std::runtime_error{ "Cannot acquire communicator channel!" };
+	}
+
+	CFilter_Communicator_Lock::~CFilter_Communicator_Lock() {
+		if (mCommunicator->Release_Channel() != S_OK) throw std::runtime_error{ "Cannot release communicator channel!" };
+	}
 
 	refcnt::SReferenced<glucose::IFilter_Parameter> SFilter_Parameters::Resolve_Parameter(const wchar_t* name) const {	
 		if (!operator bool()) return nullptr;

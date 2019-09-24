@@ -44,11 +44,13 @@
 
 #include "DeviceIface.h"
 #include "SolverIface.h"
+#include "referencedIface.h"
 
 //#include "../utils/winapi_mapping.h" - should not be here, remove if compiles OK; otherwise find another way to remove it from here
 
 namespace glucose {
 
+	/* to vanish once remplementing the feedback pipes */
 	class IEvent_Receiver : public virtual refcnt::IReferenced {
 	public:
 		//caller TAKES ownership of the received event and is responsible for freeing it
@@ -61,6 +63,7 @@ namespace glucose {
 		// Pipe TAKES ownership of any nested reference-counted I-object so that send-caller is forbidden to call to release the nested objects
 		virtual HRESULT IfaceCalling send(IDevice_Event *event) = 0;
 	};
+	
 
 
 	using time_segment_id_container = refcnt::IVector_Container<int64_t>;
@@ -152,29 +155,36 @@ namespace glucose {
 		virtual HRESULT IfaceCalling Configure(IFilter_Configuration* configuration) = 0;
 
 		//Executes the filter's control loop
-		//Asynchronously executed filter runs in a dedicated thread
-		//Synchronously executed filters runs repeatedly in a worker thread, each Execute ends oncee IPipe_Reader fails to return an event
-		virtual HRESULT IfaceCalling Execute() = 0;
+		//when called, the filter owns the event - the filter has to either forward the event, 
+		//or call Release on it to discard it
+		//Filter forwards existing/sends new event using IFilter_Communicator * supplied to its constructor
+		virtual HRESULT IfaceCalling Execute(glucose::IDevice_Event *event) = 0;	
 	};
 
-	class IFilter_Executor : public virtual refcnt::IReferenced {
-	public:
-		virtual HRESULT IfaceCalling push_back(IDevice_Event *event) = 0;		
+	class IFilter_Communicator : public virtual refcnt::IReferenced {
+	public:		
+		virtual HRESULT IfaceCalling Acquire_Channel() = 0;
+		virtual HRESULT IfaceCalling Release_Channel() = 0;
 	};
+	
 
-	class IFilter_Chain_Executor : public virtual IEvent_Sender, public virtual refcnt::IReferenced {	//IEvent_Sender sends the event to the first filter
+
+/*
+	class IFilter_Chain_Executor : public virtual IFilter_Communicator, public virtual refcnt::IReferenced {	//IEvent_Sender sends the event to the first filter
 	public:
 		virtual HRESULT IfaceCalling Start() = 0;	//returns once all filters are executing
 		virtual HRESULT IfaceCalling Stop() = 0;	//returns once all filters have terminated and joined
 	};
+	*/
 
 	using TCreate_Persistent_Filter_Chain_Configuration = HRESULT(IfaceCalling *)(IPersistent_Filter_Chain_Configuration **configuration);
 
-	using TCreate_Filter = HRESULT(IfaceCalling *)(const GUID *id, IEvent_Receiver *input, IEvent_Sender *output, glucose::IFilter **filter);
+	//using TCreate_Filter = HRESULT(IfaceCalling *)(const GUID *id, IEvent_Receiver *input, IEvent_Sender *output, glucose::IFilter **filter);
+	using TCreate_Filter = HRESULT(IfaceCalling *)(const GUID *id, IFilter *next_filter, glucose::IFilter **filter);
 	using TOn_Filter_Created = HRESULT(IfaceCalling *)(glucose::IFilter *filter, const void* data);
-	
-			//if output == nullptr, the executor consumes all events
-	using TCreate_Filter_Chain_Executor = HRESULT(IfaceCalling *)(IFilter_Chain_Configuration *configuration, IEvent_Sender *output, glucose::TOn_Filter_Created on_filter_created, const void* on_filter_created_data, glucose::IFilter_Chain_Executor **executor);
+	using TCreate_Filter_Communicator = HRESULT(IfaceCalling *)(IFilter_Communicator **communicator);
+			//if next_filter == nullptr, the filter consumes all events
+	using TCreate_Composite_Filter = HRESULT(IfaceCalling *)(IFilter_Chain_Configuration *configuration, IFilter_Communicator* communicator, IFilter *next_filter, glucose::TOn_Filter_Created on_filter_created, const void* on_filter_created_data, glucose::IFilter **filter);
 
 
 	//The following GUIDs advertise known filters 
@@ -341,4 +351,5 @@ namespace glucose {
 
 	using TCreate_Filter_Asynchronous_Pipe = HRESULT(IfaceCalling *)(glucose::IFilter_Asynchronous_Pipe **pipe);
 	using TCreate_Filter_Synchronous_Pipe = HRESULT(IfaceCalling *)(glucose::IFilter_Synchronous_Pipe **pipe);
+	
 }

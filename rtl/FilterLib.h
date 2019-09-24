@@ -77,6 +77,19 @@ namespace glucose {
 		}
 	};
 
+	class SFilter_Communicator : public virtual refcnt::SReferenced<glucose::IFilter_Communicator> {
+	public:
+		SFilter_Communicator();
+	};
+
+	class CFilter_Communicator_Lock {
+	protected:
+		SFilter_Communicator mCommunicator;
+	public:
+		CFilter_Communicator_Lock(SFilter_Communicator &communicator);
+		~CFilter_Communicator_Lock();
+	};
+
 	using SFilter = refcnt::SReferenced<IFilter>;
 
 	class SPersistent_Filter_Chain_Configuration : public virtual refcnt::SReferenced<glucose::IPersistent_Filter_Chain_Configuration> {
@@ -84,13 +97,13 @@ namespace glucose {
 		SPersistent_Filter_Chain_Configuration(); 
 	};
 
-	class SFilter_Chain_Executor : public virtual refcnt::SReferenced<glucose::IFilter_Chain_Executor> {
+	class SComposite_Filter : public virtual refcnt::SReferenced<glucose::IFilter> {
 	public:
-		SFilter_Chain_Executor() : refcnt::SReferenced<glucose::IFilter_Chain_Executor>() {};
-		SFilter_Chain_Executor(SPersistent_Filter_Chain_Configuration configuration, IEvent_Sender *output, glucose::TOn_Filter_Created on_filter_created, const void* on_filter_created_data);
+		SComposite_Filter() : refcnt::SReferenced<glucose::IFilter>() {};
+		SComposite_Filter(SPersistent_Filter_Chain_Configuration configuration, SFilter_Communicator communicator, IFilter *next_filter, glucose::TOn_Filter_Created on_filter_created, const void* on_filter_created_data);
 	};
 
-
+	
 /*
 	class CFilter_Pipe {
 	public:
