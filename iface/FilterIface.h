@@ -161,30 +161,17 @@ namespace glucose {
 		virtual HRESULT IfaceCalling Execute(glucose::IDevice_Event *event) = 0;	
 	};
 
-	class IFilter_Communicator : public virtual refcnt::IReferenced {
-	public:		
-		virtual HRESULT IfaceCalling Acquire_Channel() = 0;
-		virtual HRESULT IfaceCalling Release_Channel() = 0;
-	};
-	
-
-
-/*
-	class IFilter_Chain_Executor : public virtual IFilter_Communicator, public virtual refcnt::IReferenced {	//IEvent_Sender sends the event to the first filter
+	class IFilter_Executor : public virtual refcnt::IReferenced {	//IEvent_Sender sends the event to the first filter
 	public:
-		virtual HRESULT IfaceCalling Start() = 0;	//returns once all filters are executing
-		virtual HRESULT IfaceCalling Stop() = 0;	//returns once all filters have terminated and joined
+		virtual HRESULT IfaceCalling Execute(glucose::IDevice_Event *event) = 0;
+		virtual HRESULT IfaceCalling Wait_For_Shutdown_and_Terminate() = 0;	//returns once all filters have terminated and joined
+		virtual HRESULT IfaceCalling Terminate() = 0;	//returns once all filters are executing		
 	};
-	*/
 
 	using TCreate_Persistent_Filter_Chain_Configuration = HRESULT(IfaceCalling *)(IPersistent_Filter_Chain_Configuration **configuration);
-
-	//using TCreate_Filter = HRESULT(IfaceCalling *)(const GUID *id, IEvent_Receiver *input, IEvent_Sender *output, glucose::IFilter **filter);
 	using TCreate_Filter = HRESULT(IfaceCalling *)(const GUID *id, IFilter *next_filter, glucose::IFilter **filter);
 	using TOn_Filter_Created = HRESULT(IfaceCalling *)(glucose::IFilter *filter, const void* data);
-	using TCreate_Filter_Communicator = HRESULT(IfaceCalling *)(IFilter_Communicator **communicator);
-			//if next_filter == nullptr, the filter consumes all events
-	using TCreate_Composite_Filter = HRESULT(IfaceCalling *)(IFilter_Chain_Configuration *configuration, IFilter_Communicator* communicator, IFilter *next_filter, glucose::TOn_Filter_Created on_filter_created, const void* on_filter_created_data, glucose::IFilter **filter);
+	using TExecute_Filter_Configuration = HRESULT(IfaceCalling*)(IFilter_Chain_Configuration *configuration, glucose::TOn_Filter_Created on_filter_created, const void* on_filter_created_data, glucose::IFilter_Executor **executor);
 
 
 	//The following GUIDs advertise known filters 

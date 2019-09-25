@@ -48,13 +48,9 @@ namespace glucose {
 
 	namespace imported {
 		glucose::TGet_Filter_Descriptors get_filter_descriptors = factory::resolve_symbol<glucose::TGet_Filter_Descriptors>("get_filter_descriptors");
-//		glucose::TCreate_Filter_Asynchronous_Pipe create_filter_asynchronous_pipe = factory::resolve_symbol<glucose::TCreate_Filter_Asynchronous_Pipe>("create_filter_asynchronous_pipe");
-//		glucose::TCreate_Filter_Synchronous_Pipe create_filter_synchronous_pipe = factory::resolve_symbol<glucose::TCreate_Filter_Synchronous_Pipe>("create_filter_synchronous_pipe");
-//		glucose::TCreate_Filter create_filter = factory::resolve_symbol<glucose::TCreate_Filter>("create_filter");		
 		glucose::TAdd_Filters add_filters = factory::resolve_symbol<glucose::TAdd_Filters>("add_filters");
-		glucose::TCreate_Persistent_Filter_Chain_Configuration create_persistent_filter_chain_configuration = factory::resolve_symbol<glucose::TCreate_Persistent_Filter_Chain_Configuration>("create_persistent_filter_chain_configuration");
-		glucose::TCreate_Filter_Communicator create_filter_communicator = factory::resolve_symbol<glucose::TCreate_Filter_Communicator>("create_filter_communicator");		
-		glucose::TCreate_Composite_Filter create_composite_filter = factory::resolve_symbol<glucose::TCreate_Composite_Filter>("create_composite_filter");
+		glucose::TCreate_Persistent_Filter_Chain_Configuration create_persistent_filter_chain_configuration = factory::resolve_symbol<glucose::TCreate_Persistent_Filter_Chain_Configuration>("create_persistent_filter_chain_configuration");		
+		glucose::TExecute_Filter_Configuration execute_filter_configuration = factory::resolve_symbol<glucose::TExecute_Filter_Configuration>("execute_filter_configuration");
 	}
 
 	SPersistent_Filter_Chain_Configuration::SPersistent_Filter_Chain_Configuration() {
@@ -63,17 +59,11 @@ namespace glucose {
 			reset(configuration, [](IPersistent_Filter_Chain_Configuration* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });							
 	}
 
-
-	SFilter_Communicator::SFilter_Communicator() {
-		IFilter_Communicator *communicator;
-		if (imported::create_filter_communicator(&communicator) == S_OK)
-			reset(communicator, [](IFilter_Communicator* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });
-	}
 	
-	SComposite_Filter::SComposite_Filter(SPersistent_Filter_Chain_Configuration configuration, SFilter_Communicator communicator, IFilter *next_filter, glucose::TOn_Filter_Created on_filter_created, const void* on_filter_created_data) {
-		glucose::IFilter *filter;
-		if (imported::create_composite_filter(configuration.get(), communicator.get(), next_filter, on_filter_created, on_filter_created_data, &filter) == S_OK)
-			reset(filter, [](glucose::IFilter* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });
+	SFilter_Executor::SFilter_Executor(SPersistent_Filter_Chain_Configuration configuration, glucose::TOn_Filter_Created on_filter_created, const void* on_filter_created_data) {
+		glucose::IFilter_Executor *executor;
+		if (imported::execute_filter_configuration(configuration.get(), on_filter_created, on_filter_created_data, &executor) == S_OK)
+			reset(executor, [](glucose::IFilter_Executor* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });
 	}
 
 	bool add_filters(const std::vector<glucose::TFilter_Descriptor> &descriptors, glucose::TCreate_Filter create_filter) {
@@ -109,46 +99,6 @@ namespace glucose {
 		return result;
 	}
 
-
-	/*SFilter create_filter(const GUID &id, IEvent_Receiver *input, IEvent_Sender *output) {
-		SFilter result;
-		IFilter *filter;
-
-		if (imported::create_filter(&id, input, output, &filter) == S_OK)
-			result = refcnt::make_shared_reference_ext<SFilter, IFilter>(filter, false);
-
-		return result;
-	}
-	*/
-
-	/* to delete on factory rehaul
-	void Visit_Filter_Parameter(glucose::TFilter_Parameter& element, std::function<void(refcnt::IReferenced *obj)> func) {
-		if (element.config_name != nullptr) func(element.config_name);
-
-		switch (element.type) {
-			case glucose::NParameter_Type::ptWChar_Container: if (element.wstr != nullptr) func(element.wstr);
-				break;
-			case glucose::NParameter_Type::ptSelect_Time_Segment_ID: if (element.select_time_segment_id != nullptr) func(element.select_time_segment_id);
-				break;
-			case glucose::NParameter_Type::ptModel_Bounds: if (element.parameters != nullptr) func(element.parameters);
-				break;
-			default:
-				break;
-		}
-	}
-
-	void Release_Filter_Parameter(TFilter_Parameter &parameter) {
-		Visit_Filter_Parameter(parameter, [](refcnt::IReferenced *obj) { obj->Release(); });
-	}
-	*/
-
-	CFilter_Communicator_Lock::CFilter_Communicator_Lock(SFilter_Communicator &communicator) : mCommunicator(communicator) {
-		if (mCommunicator->Acquire_Channel() != S_OK) throw std::runtime_error{ "Cannot acquire communicator channel!" };
-	}
-
-	CFilter_Communicator_Lock::~CFilter_Communicator_Lock() {
-		if (mCommunicator->Release_Channel() != S_OK) throw std::runtime_error{ "Cannot release communicator channel!" };
-	}
 
 	refcnt::SReferenced<glucose::IFilter_Parameter> SFilter_Parameters::Resolve_Parameter(const wchar_t* name) const {	
 		if (!operator bool()) return nullptr;
@@ -220,32 +170,7 @@ namespace glucose {
 		}, default_value);
 	}
 
-	/* to vanish
-	std::vector<double> SFilter_Parameters::Read_Double_Array(const wchar_t* name) const {
-		return Read_Parameter<std::vector<double>>(name, [](refcnt::SReferenced<glucose::IFilter_Parameter> parameter, std::vector<double> &value) {
-			refcnt::wstr_container *wstr;
-			glucose::IModel_Parameter_Vector *parameters;
-			HRESULT rc = parameter->Get_WChar_Container(&wstr);
-			if (rc == S_OK) {
-				value = WChar_Container_To_WString(wstr);
-				wstr->Release();
-			}
-			return rc;
-		}, default_value);
-
-
-		const auto parameter = Resolve_Parameter(name);
-		if (!parameter) return default_value;
-
-		std::vector<double> result;
-
-		if (parameter)
-			result = refcnt::Container_To_Vector<double>(parameter->parameters);
-
-		return result;
-	}
-	*/
-
+	
 	void SFilter_Parameters::Read_Parameters(const wchar_t* name, glucose::SModel_Parameter_Vector &lower_bound, glucose::SModel_Parameter_Vector &default_parameters, glucose::SModel_Parameter_Vector &upper_bound) const {
 		const auto parameter = Resolve_Parameter(name);
 
