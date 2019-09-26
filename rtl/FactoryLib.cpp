@@ -67,9 +67,10 @@ namespace factory {
 			return name;
 		}
 
-		CDynamic_Library gFactory_Library{};
+		CDynamic_Library gFactory_Library;
 
-		void* resolve_factory_symbol(const char* symbol_name) {
+		void* resolve_factory_symbol(const char* symbol_name) {			
+
 			if (!gFactory_Library.Is_Loaded()) {
 				std::wstring path = Get_Platform_Library_Name(factory_dynamic_lib_name);
 		

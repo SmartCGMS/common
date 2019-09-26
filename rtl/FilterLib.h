@@ -59,6 +59,8 @@ namespace glucose {
 	public:
 		SFilter_Executor() : refcnt::SReferenced<glucose::IFilter_Executor>() {};
 		SFilter_Executor(SPersistent_Filter_Chain_Configuration configuration, glucose::TOn_Filter_Created on_filter_created, const void* on_filter_created_data);
+
+		HRESULT Execute(glucose::UDevice_Event event);
 	};
 
 
@@ -68,7 +70,7 @@ namespace glucose {
 	bool get_filter_descriptor_by_id(const GUID &id, TFilter_Descriptor &desc);
 
 
-	class SFilter_Parameters : public std::shared_ptr<glucose::IFilter_Configuration> {
+	class SFilter_Configuration : public std::shared_ptr<glucose::IFilter_Configuration> {
 	protected:
 		template <typename T, typename F>	//F== std::function < HRESULT(refcnt::SReferenced<glucose::IFilter_Parameter>, T &) > ?
 		T Read_Parameter(const wchar_t *name, F func, T default_value) const {
@@ -91,6 +93,29 @@ namespace glucose {
 
 		refcnt::SReferenced<glucose::IFilter_Parameter> Resolve_Parameter(const wchar_t* name) const;
 	};
+
+
+
+	#pragma warning( push )
+	#pragma warning( disable : 4250 ) // C4250 - 'class1' : inherits 'class2::member' via dominance
+
+	class CBase_Filter : public virtual glucose::IFilter, public virtual refcnt::CReferenced {
+	protected:
+		glucose::SFilter mOutput;	//aka the next_filter
+		HRESULT Send(glucose::UDevice_Event &event);
+	protected:
+		//Descending class is supposed to implement these two methods only
+		virtual HRESULT Do_Execute(glucose::UDevice_Event event) = 0;
+		virtual HRESULT Do_Configure(glucose::SFilter_Configuration configuration) = 0;
+	public:
+		CBase_Filter(glucose::IFilter *output);
+		virtual ~CBase_Filter();
+		virtual HRESULT IfaceCalling Configure(IFilter_Configuration* configuration) override final;
+		virtual HRESULT IfaceCalling Execute(glucose::IDevice_Event *event) override final;
+	};
+
+	#pragma warning( pop )
+
 
 	class SError_Filter_Inspection : public std::shared_ptr<IError_Filter_Inspection> {
 	public:

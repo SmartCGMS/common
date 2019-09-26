@@ -53,6 +53,7 @@ namespace glucose {
 		glucose::TExecute_Filter_Configuration execute_filter_configuration = factory::resolve_symbol<glucose::TExecute_Filter_Configuration>("execute_filter_configuration");
 	}
 
+
 	SPersistent_Filter_Chain_Configuration::SPersistent_Filter_Chain_Configuration() {
 		IPersistent_Filter_Chain_Configuration *configuration;
 		if (imported::create_persistent_filter_chain_configuration(&configuration) == S_OK)
@@ -64,6 +65,13 @@ namespace glucose {
 		glucose::IFilter_Executor *executor;
 		if (imported::execute_filter_configuration(configuration.get(), on_filter_created, on_filter_created_data, &executor) == S_OK)
 			reset(executor, [](glucose::IFilter_Executor* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });
+	}
+
+
+	HRESULT SFilter_Executor::Execute(glucose::UDevice_Event event) {
+		glucose::IDevice_Event *raw_event = event.get();
+		event.release();
+		return get()->Execute(raw_event);		
 	}
 
 	bool add_filters(const std::vector<glucose::TFilter_Descriptor> &descriptors, glucose::TCreate_Filter create_filter) {
@@ -100,7 +108,7 @@ namespace glucose {
 	}
 
 
-	refcnt::SReferenced<glucose::IFilter_Parameter> SFilter_Parameters::Resolve_Parameter(const wchar_t* name) const {	
+	refcnt::SReferenced<glucose::IFilter_Parameter> SFilter_Configuration::Resolve_Parameter(const wchar_t* name) const {	
 		if (!operator bool()) return nullptr;
 		
 		glucose::IFilter_Parameter **cbegin, **cend;
@@ -119,7 +127,7 @@ namespace glucose {
 	}
 	
 
-	std::wstring SFilter_Parameters::Read_String(const wchar_t* name, const std::wstring& default_value) const {
+	std::wstring SFilter_Configuration::Read_String(const wchar_t* name, const std::wstring& default_value) const {
 		return Read_Parameter<std::wstring>(name, [](refcnt::SReferenced<glucose::IFilter_Parameter> parameter, std::wstring &value) {
 			refcnt::wstr_container *wstr;
 			HRESULT rc = parameter->Get_WChar_Container(&wstr);
@@ -132,13 +140,13 @@ namespace glucose {
 	}
 
 
-	int64_t SFilter_Parameters::Read_Int(const wchar_t* name, const int64_t default_value) const {
+	int64_t SFilter_Configuration::Read_Int(const wchar_t* name, const int64_t default_value) const {
 		return Read_Parameter<int64_t>(name, [](refcnt::SReferenced<glucose::IFilter_Parameter> parameter, int64_t &value) {
 			return parameter->Get_Int64(&value);
 		}, default_value);
 	}
 
-	std::vector<int64_t> SFilter_Parameters::Read_Int_Array(const wchar_t* name) const {
+	std::vector<int64_t> SFilter_Configuration::Read_Int_Array(const wchar_t* name) const {
 		const auto parameter = Resolve_Parameter(name);		
 		std::vector<int64_t> result;
 		if (!parameter) return result;
@@ -146,16 +154,18 @@ namespace glucose {
 		glucose::time_segment_id_container *ids;
 		if (parameter->Get_Time_Segment_Id_Container(&ids) != S_OK) return result;
 
-		return refcnt::Container_To_Vector<int64_t>(ids);
+		result = refcnt::Container_To_Vector<int64_t>(ids);
+		ids->Release();
+		return result;
 	}
 
-	GUID SFilter_Parameters::Read_GUID(const wchar_t* name, const GUID &default_value) const {
+	GUID SFilter_Configuration::Read_GUID(const wchar_t* name, const GUID &default_value) const {
 		return Read_Parameter<GUID>(name, [](refcnt::SReferenced<glucose::IFilter_Parameter> parameter, GUID &value) {
 			return parameter->Get_GUID(&value);
 		}, default_value);
 	}
 
-	bool SFilter_Parameters::Read_Bool(const wchar_t* name, bool default_value) const {
+	bool SFilter_Configuration::Read_Bool(const wchar_t* name, bool default_value) const {
 		return Read_Parameter<bool>(name, [](refcnt::SReferenced<glucose::IFilter_Parameter> parameter, bool &value) {
 			uint8_t raw_value;
 			HRESULT rc = parameter->Get_Bool(&raw_value);
@@ -164,14 +174,14 @@ namespace glucose {
 		}, default_value);
 	}
 
-	double SFilter_Parameters::Read_Double(const wchar_t* name, const double default_value) const {
+	double SFilter_Configuration::Read_Double(const wchar_t* name, const double default_value) const {
 		return Read_Parameter<double>(name, [](refcnt::SReferenced<glucose::IFilter_Parameter> parameter, double &value) {
 			return parameter->Get_Double(&value);
 		}, default_value);
 	}
 
 	
-	void SFilter_Parameters::Read_Parameters(const wchar_t* name, glucose::SModel_Parameter_Vector &lower_bound, glucose::SModel_Parameter_Vector &default_parameters, glucose::SModel_Parameter_Vector &upper_bound) const {
+	void SFilter_Configuration::Read_Parameters(const wchar_t* name, glucose::SModel_Parameter_Vector &lower_bound, glucose::SModel_Parameter_Vector &default_parameters, glucose::SModel_Parameter_Vector &upper_bound) const {
 		const auto parameter = Resolve_Parameter(name);
 
 		bool success = parameter.operator bool();
@@ -204,6 +214,37 @@ namespace glucose {
 		}
 
 	}
+
+
+	
+	CBase_Filter::CBase_Filter(glucose::IFilter *output) : mOutput(output) {
+		//
+	}
+
+	CBase_Filter::~CBase_Filter() {
+		//
+
+	}
+
+	HRESULT CBase_Filter::Send(glucose::UDevice_Event &event) {
+		if (!event) return E_INVALIDARG;
+
+		glucose::IDevice_Event *raw_event = event.get();
+		event.release();
+		return mOutput->Execute(raw_event);
+	}
+
+	
+	HRESULT IfaceCalling CBase_Filter::Configure(IFilter_Configuration* configuration) {
+		SFilter_Configuration shared_configuration = refcnt::make_shared_reference_ext<SFilter_Configuration, IFilter_Configuration> ( configuration, true);
+		return Do_Configure(shared_configuration);
+	}
+
+	HRESULT IfaceCalling CBase_Filter::Execute(glucose::IDevice_Event *event) {
+		if (!event) return E_INVALIDARG;
+		return Do_Execute(glucose::UDevice_Event{event});
+	}
+
 
 
 
@@ -242,88 +283,6 @@ namespace glucose {
 			refcnt::Query_Interface<glucose::IFilter, glucose::ICalculate_Filter_Inspection>(calculate_filter.get(), Calculate_Filter_Inspection, *this);
 	}
 
-	/* to vanish
-	SDevice_Event_Vector::SDevice_Event_Vector() {
-		reset(refcnt::Create_Container<glucose::IDevice_Event*>(nullptr, nullptr),
-			[](glucose::IDevice_Event_Vector* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); }
-		);
-	}
-
-	SDevice_Event_Vector::~SDevice_Event_Vector() {
-		if (!mAddedEvents.empty()) {
-			// should we warn the user? This may be a result of forgotten Apply call
-			discard_push();
-		}
-	}
-
-	bool SDevice_Event_Vector::push(glucose::UDevice_Event& evt) {
-		if (!operator bool()) return false;
-		if (!evt) return false;
-
-		glucose::IDevice_Event* raw = evt.get();
-
-		get()->add(&raw, &raw + 1);
-
-		evt.release();
-		return true;
-	}
-
-	bool SDevice_Event_Vector::push_deferred(glucose::UDevice_Event& evt) {
-		if (!operator bool()) return false;
-		if (!evt) return false;
-
-		glucose::IDevice_Event* raw = evt.get();
-
-		mAddedEvents.push_back(raw);
-
-		evt.release();
-		return true;
-	}
-
-	bool SDevice_Event_Vector::commit_push() {
-		if (get()->add(mAddedEvents.data(), mAddedEvents.data() + mAddedEvents.size()) != S_OK) {
-			discard_push();
-			return false;
-		}
-
-		mAddedEvents.clear();
-
-		return true;
-	}
-
-	bool SDevice_Event_Vector::discard_push() {
-		// since we dropped reference counting during Add call, we need to explicitly release the reference now
-		for (auto& evt : mAddedEvents)
-			evt->Release();
-
-		mAddedEvents.clear();
-		return true;
-	}
-
-
-
-	SFilter_Asynchronous_Pipe::SFilter_Asynchronous_Pipe() : SFilter_Pipe() {
-		IFilter_Asynchronous_Pipe *pipe;
-		if (imported::create_filter_asynchronous_pipe(&pipe) == S_OK)
-			reset(pipe, [](IFilter_Asynchronous_Pipe* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });
-	}
-		
-	bool SFilter_Asynchronous_Pipe::add_filter(SFilter &filter) {
-		return false;
-	}
-
-	SFilter_Synchronous_Pipe::SFilter_Synchronous_Pipe() : SFilter_Pipe() {
-		IFilter_Synchronous_Pipe *pipe;
-		if (imported::create_filter_synchronous_pipe(&pipe) == S_OK)
-			reset(pipe, [](IFilter_Synchronous_Pipe* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });
-	}	
-
-	bool SFilter_Synchronous_Pipe::add_filter(SFilter &filter) {
-		auto self = get();
-		if (!self) return false;
-		return self->add_filter(filter.get()) == S_OK;
-	}
-	*/
 }
 
 

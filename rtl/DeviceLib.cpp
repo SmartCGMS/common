@@ -139,7 +139,7 @@ glucose::IDevice_Event* Create_Event(const glucose::NDevice_Event_Code code) {
 glucose::UDevice_Event::UDevice_Event(const glucose::NDevice_Event_Code code) noexcept : UDevice_Event(Create_Event(code)) {
 }
 
-glucose::UDevice_Event::UDevice_Event(glucose::UDevice_Event&& event) : mRaw(event.mRaw) {
+glucose::UDevice_Event::UDevice_Event(glucose::UDevice_Event&& event) noexcept: mRaw(event.mRaw) {
 	event.release();
 }
 
