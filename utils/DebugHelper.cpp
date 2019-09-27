@@ -55,9 +55,7 @@ public:
 	~CMemory_Leak_Tracker();
 };
 
-extern const CMemory_Leak_Tracker Memory_Leak_Tracker;
-
-	
+const CMemory_Leak_Tracker Memory_Leak_Tracker;
 
 CMemory_Leak_Tracker::CMemory_Leak_Tracker() {
 	#ifdef TrackLeaks
@@ -98,5 +96,3 @@ CMemory_Leak_Tracker::~CMemory_Leak_Tracker() {
 		#endif
 	#endif
 }
-
-const CMemory_Leak_Tracker Memory_Leak_Tracker;
