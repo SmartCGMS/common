@@ -599,6 +599,8 @@ extern const wchar_t *dsRecalculate_On_Calibration_Tooltip;
 extern const wchar_t *dsRecalculate_On_Parameters_Tooltip;
 extern const wchar_t *dsUse_Opened_Segments_Only_Tooltip;
 
+extern const wchar_t *dsParameter_Configuration_Failed_RC;
+
 //--------------------------------- do not translate any of the rs-prefixed texts --
 
 extern const char* rsAbout_Text;

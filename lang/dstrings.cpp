@@ -608,6 +608,8 @@ const wchar_t *dsRecalculate_On_Calibration_Tooltip = L"Run solver on every cali
 const wchar_t *dsRecalculate_On_Parameters_Tooltip = L"Request signal recalculation on every parameter set";
 const wchar_t *dsUse_Opened_Segments_Only_Tooltip = L"Use currently opened segments only";
 
+const wchar_t *dsParameter_Configuration_Failed_RC = L"Parameter (%1) configuration fail with HRESULT == %2";
+
 //--------------------------------- do not translate any of the rs-prefixed texts --
 
 const char* rsAbout_Text = R"CLC(

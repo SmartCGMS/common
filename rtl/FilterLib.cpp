@@ -54,12 +54,86 @@ namespace glucose {
 	}
 
 
+	std::wstring SFilter_Parameter::as_string(HRESULT &rc) {
+		std::wstring result = nullptr;
+
+		refcnt::wstr_container* wstr;
+		rc = get()->Get_WChar_Container(&wstr);
+		if (rc == S_OK) {
+			result = refcnt::WChar_Container_To_WString(wstr);
+			wstr->Release();
+		}
+
+		return result;
+	}
+
+	void SFilter_Parameter::set_string(const wchar_t *str, HRESULT &rc) {
+		std::shared_ptr<refcnt::wstr_container> wstr = refcnt::WString_To_WChar_Container_shared(str);
+		rc = get()->Set_WChar_Container(wstr.get());
+	}
+
+	int64_t SFilter_Parameter::as_int(HRESULT &rc) {
+		int64_t result = 0;
+		rc = get()->Get_Int64(&result);	//if fails, it returns 0
+		return result;
+	}
+
+	void SFilter_Parameter::set_int(const int64_t value, HRESULT &rc) {
+		rc = get()->Set_Int64(value);
+	}
+
+
+	double SFilter_Parameter::as_double(HRESULT &rc) {
+		double result = std::numeric_limits<double>::quiet_NaN();
+		rc = get()->Get_Double(&result);	//if fails, it returns nan
+		return result;
+	}
+
+	void SFilter_Parameter::set_double(const double value, HRESULT &rc) {
+		rc = get()->Set_Double(value);
+	}
+
+	bool SFilter_Parameter::as_bool(HRESULT &rc) {
+		bool result = false;
+		uint8_t uint8;
+		rc = get()->Get_Bool(&uint8);
+		if (rc == S_OK) 
+			result = uint8 != 0;
+		
+		return result;
+	}
+
+	void SFilter_Parameter::set_bool(const bool value, HRESULT &rc) {
+		rc = get()->Set_Bool(value ? static_cast<uint8_t>(-1) : 0);
+	}
+
+	TFilter_Descriptor SFilter_Configuration_Link::descriptor() {
+		glucose::TFilter_Descriptor filter_desc = glucose::Null_Filter_Descriptor;
+
+		GUID filter_id;
+		if (operator bool())
+			if (get()->Get_Filter_Id(&filter_id) == S_OK)
+				glucose::get_filter_descriptor_by_id(filter_id, filter_desc);			
+
+		return filter_desc;
+	}	
+
 	SPersistent_Filter_Chain_Configuration::SPersistent_Filter_Chain_Configuration() {
 		IPersistent_Filter_Chain_Configuration *configuration;
 		if (imported::create_persistent_filter_chain_configuration(&configuration) == S_OK)
 			reset(configuration, [](IPersistent_Filter_Chain_Configuration* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });							
 	}
 
+
+	void SPersistent_Filter_Chain_Configuration::for_each(std::function<void(glucose::SFilter_Configuration_Link)> callback) {
+		glucose::IFilter_Configuration_Link **link_begin, **link_end;
+		HRESULT rc = get()->get(&link_begin, &link_end);
+		if (rc != S_OK) return;
+
+
+		for (; *link_begin != *link_end; link_begin++)
+			callback(refcnt::make_shared_reference_ext<SFilter_Configuration_Link, IFilter_Configuration_Link>(*link_begin, true));
+	}
 	
 	SFilter_Executor::SFilter_Executor(SPersistent_Filter_Chain_Configuration configuration, glucose::TOn_Filter_Created on_filter_created, const void* on_filter_created_data) {
 		glucose::IFilter_Executor *executor;

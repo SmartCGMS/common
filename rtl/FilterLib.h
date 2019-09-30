@@ -50,9 +50,31 @@ namespace glucose {
 
 	using SFilter = refcnt::SReferenced<IFilter>;
 
+	class SFilter_Parameter : public virtual refcnt::SReferenced<glucose::IFilter_Parameter> {
+	public:
+		std::wstring as_string(HRESULT &rc);
+		void set_string(const wchar_t *str, HRESULT &rc);
+
+		int64_t as_int(HRESULT &rc);
+		void set_int(const int64_t value, HRESULT &rc);
+
+		double as_double(HRESULT &rc);
+		void set_double(const double value, HRESULT &rc);
+
+		bool as_bool(HRESULT &rc);
+		void set_bool(const bool value, HRESULT &rc);
+	};
+
+	class SFilter_Configuration_Link : public virtual refcnt::SReferenced<IFilter_Configuration_Link> {
+	public:
+		TFilter_Descriptor descriptor();
+	};
+
 	class SPersistent_Filter_Chain_Configuration : public virtual refcnt::SReferenced<glucose::IPersistent_Filter_Chain_Configuration> {
 	public:
 		SPersistent_Filter_Chain_Configuration(); 
+		
+		void for_each(std::function<void(glucose::SFilter_Configuration_Link)> callback);
 	};
 
 	class SFilter_Executor : public virtual refcnt::SReferenced<glucose::IFilter_Executor> {
