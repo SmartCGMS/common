@@ -46,7 +46,6 @@
 #include "SolverIface.h"
 #include "referencedIface.h"
 
-//#include "../utils/winapi_mapping.h" - should not be here, remove if compiles OK; otherwise find another way to remove it from here
 
 namespace glucose {
 
@@ -141,6 +140,7 @@ namespace glucose {
 	using TCreate_Filter = HRESULT(IfaceCalling *)(const GUID *id, IFilter *next_filter, glucose::IFilter **filter);
 	using TOn_Filter_Created = HRESULT(IfaceCalling *)(glucose::IFilter *filter, const void* data);
 	using TExecute_Filter_Configuration = HRESULT(IfaceCalling*)(IFilter_Chain_Configuration *configuration, glucose::TOn_Filter_Created on_filter_created, const void* on_filter_created_data, glucose::IFilter_Executor **executor);
+	using TCreate_Filter_Parameter = HRESULT(IfaceCalling*)(const glucose::NParameter_Type type, const wchar_t *config_name, glucose::IFilter_Parameter **parameter);
 
 
 	//The following GUIDs advertise known filters 

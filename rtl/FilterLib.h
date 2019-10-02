@@ -52,28 +52,146 @@ namespace glucose {
 
 	class SFilter_Parameter : public virtual refcnt::SReferenced<glucose::IFilter_Parameter> {
 	public:
-		std::wstring as_string(HRESULT &rc);
-		void set_string(const wchar_t *str, HRESULT &rc);
+		std::wstring as_wstring(HRESULT &rc);
+		HRESULT set_wstring(const wchar_t *str);		
 
-		int64_t as_int(HRESULT &rc);
-		void set_int(const int64_t value, HRESULT &rc);
+		int64_t as_int(HRESULT &rc);		
 
-		double as_double(HRESULT &rc);
-		void set_double(const double value, HRESULT &rc);
+		double as_double(HRESULT &rc);		
 
 		bool as_bool(HRESULT &rc);
-		void set_bool(const bool value, HRESULT &rc);
+		HRESULT set_bool(const bool value);
+
+		GUID as_guid(HRESULT &rc);		
+		HRESULT guid_from_wstring(const wchar_t *str_value);
+
+		std::vector<int64_t> as_int_array(HRESULT &rc);
+		HRESULT set_int_array(const std::vector<int64_t> &values);
+		HRESULT int_array_from_wstring(const wchar_t *str_value);
+
+		HRESULT double_array_from_wstring(const wchar_t *str_value);
 	};
 
-	class SFilter_Configuration_Link : public virtual refcnt::SReferenced<IFilter_Configuration_Link> {
+	bool add_filters(const std::vector<glucose::TFilter_Descriptor> &descriptors, glucose::TCreate_Filter create_filter);
+
+	std::vector<TFilter_Descriptor> get_filter_descriptors();
+	bool get_filter_descriptor_by_id(const GUID &id, TFilter_Descriptor &desc);
+
+
+	//class SFilter_Configuration : public std::shared_ptr<glucose::IFilter_Configuration> {
+	namespace internal {
+
+		template <typename IConfiguration>
+		class CInternal_Filter_Configuration : public virtual refcnt::SReferenced<IConfiguration> {
+		protected:
+			template <typename T, typename M>
+			T Read_Parameter(const wchar_t *name, M method, T default_value) const {
+			//T Read_Parameter(const wchar_t *name, T (glucose::SFilter_Parameter::*method)(HRESULT), T default_value) const {
+				SFilter_Parameter parameter = Resolve_Parameter(name);
+				if (!parameter) return default_value;
+
+				HRESULT rc;
+				T value = ((&parameter)->*method)(rc);
+				if (rc != S_OK) return default_value;
+
+				return value;
+			}
+		public:
+			virtual ~CInternal_Filter_Configuration() {};
+
+			std::wstring Read_String(const wchar_t* name, const std::wstring& default_value = {}) const {
+				return Read_Parameter<std::wstring>(name, &SFilter_Parameter::as_wstring, default_value);
+			}
+
+			int64_t Read_Int(const wchar_t* name, const int64_t default_value = std::numeric_limits<int64_t>::max()) const {
+				return Read_Parameter<int64_t>(name, &SFilter_Parameter::as_int, default_value);
+			}
+
+			std::vector<int64_t> Read_Int_Array(const wchar_t* name) const {
+				return Read_Parameter<std::vector<int64_t>>(name, &SFilter_Parameter::as_int_array, std::vector<int64_t>{});
+			}
+
+
+			GUID Read_GUID(const wchar_t* name, const GUID &default_value = Invalid_GUID) const {
+				return Read_Parameter<GUID>(name, &SFilter_Parameter::as_guid, default_value);
+			}
+			
+			bool Read_Bool(const wchar_t* name, bool default_value = false) const {				
+				return Read_Parameter<bool>(name, &SFilter_Parameter::as_bool, default_value);				
+			}
+
+			double Read_Double(const wchar_t* name, const double default_value = std::numeric_limits<double>::quiet_NaN()) const {
+				return Read_Parameter<double>(name, &SFilter_Parameter::as_double, default_value);
+			}
+
+			void Read_Parameters(const wchar_t* name, glucose::SModel_Parameter_Vector &lower_bound, glucose::SModel_Parameter_Vector &default_parameters, glucose::SModel_Parameter_Vector &upper_bound) const {
+				const auto parameter = Resolve_Parameter(name);
+
+				bool success = parameter.operator bool();
+
+				if (success) {
+					glucose::IModel_Parameter_Vector *raw_parameters;
+					if (parameter->Get_Model_Parameters(&raw_parameters) == S_OK) {
+
+						double *begin, *end;
+						if (raw_parameters->get(&begin, &end) == S_OK) {
+							if ((begin != nullptr) && (begin != end)) {
+								const size_t distance = std::distance(begin, end);
+								if (distance % 3 == 0) {
+									const size_t paramcnt = distance / 3; // lower, default, upper
+									lower_bound = refcnt::Create_Container_shared<double, glucose::SModel_Parameter_Vector>(begin, &begin[paramcnt]);
+									default_parameters = refcnt::Create_Container_shared<double, glucose::SModel_Parameter_Vector>(&begin[paramcnt], &begin[2 * paramcnt]);
+									upper_bound = refcnt::Create_Container_shared<double, glucose::SModel_Parameter_Vector>(&begin[2 * paramcnt], &begin[3 * paramcnt]);
+									success = true;
+								}
+							}
+						}
+					}
+					raw_parameters->Release();
+				}
+
+				if (!success) {
+					lower_bound = glucose::SModel_Parameter_Vector{};
+					default_parameters = glucose::SModel_Parameter_Vector{};
+					upper_bound = glucose::SModel_Parameter_Vector{};
+				}
+
+			}
+
+			SFilter_Parameter Resolve_Parameter(const wchar_t* name) const {
+				SFilter_Parameter result;
+
+				if (refcnt::SReferenced<IConfiguration>::operator bool()) {
+					glucose::IFilter_Parameter **cbegin, **cend;					
+					if (refcnt::SReferenced<IConfiguration>::get()->get(&cbegin, &cend) == S_OK)
+
+						for (glucose::IFilter_Parameter** cur = cbegin; cur < cend; cur++) {
+							wchar_t* conf_name;
+							if ((*cur)->Get_Config_Name(&conf_name) == S_OK) {
+								if (wcscmp(conf_name, name) == 0) {
+									result = refcnt::make_shared_reference_ext<SFilter_Parameter, glucose::IFilter_Parameter>(*cur, true);
+								}
+							}
+						}
+				}
+
+				return result;	//not found
+			}			
+		};
+	}
+
+	using SFilter_Configuration = internal::CInternal_Filter_Configuration<IFilter_Configuration>;
+
+	class SFilter_Configuration_Link : public virtual internal::CInternal_Filter_Configuration<IFilter_Configuration_Link> {
 	public:
 		TFilter_Descriptor descriptor();
+		SFilter_Parameter Add_Parameter(const glucose::NParameter_Type type, const wchar_t *conf_name);
 	};
 
 	class SPersistent_Filter_Chain_Configuration : public virtual refcnt::SReferenced<glucose::IPersistent_Filter_Chain_Configuration> {
 	public:
-		SPersistent_Filter_Chain_Configuration(); 
-		
+		SPersistent_Filter_Chain_Configuration();
+
 		void for_each(std::function<void(glucose::SFilter_Configuration_Link)> callback);
 	};
 
@@ -84,38 +202,6 @@ namespace glucose {
 
 		HRESULT Execute(glucose::UDevice_Event event);
 	};
-
-
-	bool add_filters(const std::vector<glucose::TFilter_Descriptor> &descriptors, glucose::TCreate_Filter create_filter);
-
-	std::vector<TFilter_Descriptor> get_filter_descriptors();
-	bool get_filter_descriptor_by_id(const GUID &id, TFilter_Descriptor &desc);
-
-
-	class SFilter_Configuration : public std::shared_ptr<glucose::IFilter_Configuration> {
-	protected:
-		template <typename T, typename F>	//F== std::function < HRESULT(refcnt::SReferenced<glucose::IFilter_Parameter>, T &) > ?
-		T Read_Parameter(const wchar_t *name, F func, T default_value) const {
-			refcnt::SReferenced<glucose::IFilter_Parameter> parameter = Resolve_Parameter(name);
-			if (!parameter) return default_value;
-
-			T value;
-			if (func(parameter, value) != S_OK) return default_value;
-
-			return value;
-		}
-	public:
-		std::wstring Read_String(const wchar_t* name, const std::wstring& default_value = {}) const;
-		int64_t Read_Int(const wchar_t* name, const int64_t default_value = std::numeric_limits<int64_t>::max()) const;
-		std::vector<int64_t> Read_Int_Array(const wchar_t* name) const;
-		GUID Read_GUID(const wchar_t* name, const GUID &default_value = Invalid_GUID) const;
-		bool Read_Bool(const wchar_t* name, bool default_value = false) const;
-		double Read_Double(const wchar_t* name, const double default_value = std::numeric_limits<double>::quiet_NaN()) const;
-		void Read_Parameters(const wchar_t* name, glucose::SModel_Parameter_Vector &lower_bound, glucose::SModel_Parameter_Vector &default_parameters, glucose::SModel_Parameter_Vector &upper_bound) const;
-
-		refcnt::SReferenced<glucose::IFilter_Parameter> Resolve_Parameter(const wchar_t* name) const;
-	};
-
 
 
 	#pragma warning( push )
