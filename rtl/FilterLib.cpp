@@ -54,6 +54,11 @@ namespace glucose {
 		glucose::TCreate_Filter_Parameter create_filter_parameter = factory::resolve_symbol<glucose::TCreate_Filter_Parameter>("create_filter_parameter");
 	}
 
+	NParameter_Type SFilter_Parameter::type() {
+		NParameter_Type result = NParameter_Type::ptNull;
+		get()->Get_Type(&result);
+		return result;
+	}
 
 	std::wstring SFilter_Parameter::as_wstring(HRESULT &rc) {
 		std::wstring result;

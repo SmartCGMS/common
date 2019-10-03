@@ -52,6 +52,8 @@ namespace glucose {
 
 	class SFilter_Parameter : public virtual refcnt::SReferenced<glucose::IFilter_Parameter> {
 	public:
+		NParameter_Type type();
+
 		std::wstring as_wstring(HRESULT &rc);
 		HRESULT set_wstring(const wchar_t *str);		
 
@@ -176,7 +178,17 @@ namespace glucose {
 				}
 
 				return result;	//not found
-			}			
+			}
+
+			void for_each(std::function<void(glucose::SFilter_Parameter)> callback) {
+				glucose::IFilter_Parameter **begin, **end;
+				HRESULT rc = get()->get(&begin, &begin);
+				if (rc != S_OK) return;
+
+
+				for (; *begin != *end; begin++)
+					callback(refcnt::make_shared_reference_ext<SFilter_Parameter, IFilter_Parameter>(*begin, true));
+			}
 		};
 	}
 
