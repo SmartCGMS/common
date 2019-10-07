@@ -60,6 +60,9 @@ namespace glucose {
 		int64_t as_int(HRESULT &rc);		
 
 		double as_double(HRESULT &rc);		
+		std::vector<double> as_double_array(HRESULT &rc);
+		HRESULT set_double_array(const std::vector<double> &values);
+		HRESULT double_array_from_wstring(const wchar_t *str_value);
 
 		bool as_bool(HRESULT &rc);
 		HRESULT set_bool(const bool value);
@@ -69,9 +72,7 @@ namespace glucose {
 
 		std::vector<int64_t> as_int_array(HRESULT &rc);
 		HRESULT set_int_array(const std::vector<int64_t> &values);
-		HRESULT int_array_from_wstring(const wchar_t *str_value);
-
-		HRESULT double_array_from_wstring(const wchar_t *str_value);
+		HRESULT int_array_from_wstring(const wchar_t *str_value);	
 	};
 
 	bool add_filters(const std::vector<glucose::TFilter_Descriptor> &descriptors, glucose::TCreate_Filter create_filter);
@@ -182,7 +183,7 @@ namespace glucose {
 
 			void for_each(std::function<void(glucose::SFilter_Parameter)> callback) {
 				glucose::IFilter_Parameter **begin, **end;
-				HRESULT rc = get()->get(&begin, &begin);
+				HRESULT rc = refcnt::SReferenced<IConfiguration>::get()->get(&begin, &end);
 				if (rc != S_OK) return;
 
 
@@ -210,7 +211,7 @@ namespace glucose {
 	class SFilter_Executor : public virtual refcnt::SReferenced<glucose::IFilter_Executor> {
 	public:
 		SFilter_Executor() : refcnt::SReferenced<glucose::IFilter_Executor>() {};
-		SFilter_Executor(SPersistent_Filter_Chain_Configuration configuration, glucose::TOn_Filter_Created on_filter_created, const void* on_filter_created_data);
+		SFilter_Executor(refcnt::SReferenced<glucose::IFilter_Chain_Configuration> configuration, glucose::TOn_Filter_Created on_filter_created, const void* on_filter_created_data);
 
 		HRESULT Execute(glucose::UDevice_Event event);
 	};

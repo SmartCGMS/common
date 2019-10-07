@@ -91,6 +91,36 @@ namespace glucose {
 		return result;
 	}
 
+	HRESULT SFilter_Parameter::set_double_array(const std::vector<double> &values) {
+		auto parameters = refcnt::Create_Container_shared<double>(const_cast<double*>(values.data()), const_cast<double*>(values.data() + values.size()));
+		return get()->Set_Model_Parameters(parameters.get());
+	}
+
+	std::vector<double> SFilter_Parameter::as_double_array(HRESULT &rc) {
+		std::vector<double> result;
+		glucose::IModel_Parameter_Vector *container;
+		rc = get()->Get_Model_Parameters(&container);
+		if (rc == S_OK) {
+			result = refcnt::Container_To_Vector<double>(container);
+			container->Release();
+		}
+
+		return result;
+	}
+
+
+	HRESULT SFilter_Parameter::double_array_from_wstring(const wchar_t *str_value) {
+		HRESULT rc = E_FAIL;
+		glucose::IModel_Parameter_Vector *parameters = WString_To_Model_Parameters(str_value);
+		if (parameters) {
+			rc = get()->Set_Model_Parameters(parameters);;
+			parameters->Release();
+		}
+
+		return rc;
+	}
+
+
 	bool SFilter_Parameter::as_bool(HRESULT &rc) {
 		bool result = false;
 		uint8_t uint8;
@@ -106,6 +136,7 @@ namespace glucose {
 	}
 
 
+	
 	std::vector<int64_t> SFilter_Parameter::as_int_array(HRESULT &rc) {
 		std::vector<int64_t> result;
 
@@ -138,17 +169,7 @@ namespace glucose {
 		return rc;
 	}
 
-	HRESULT SFilter_Parameter::double_array_from_wstring(const wchar_t *str_value) {
-		HRESULT rc = E_FAIL;
-		glucose::IModel_Parameter_Vector *parameters = WString_To_Model_Parameters(str_value);
-		if (parameters) {
-			rc = get()->Set_Model_Parameters(parameters);;
-			parameters->Release();
-		}
-
-		return rc;
-	}
-
+	
 	GUID SFilter_Parameter::as_guid(HRESULT &rc) {
 		GUID result;
 		rc = get()->Get_GUID(&result);
@@ -201,7 +222,7 @@ namespace glucose {
 			callback(refcnt::make_shared_reference_ext<SFilter_Configuration_Link, IFilter_Configuration_Link>(*link_begin, true));
 	}
 	
-	SFilter_Executor::SFilter_Executor(SPersistent_Filter_Chain_Configuration configuration, glucose::TOn_Filter_Created on_filter_created, const void* on_filter_created_data) {
+	SFilter_Executor::SFilter_Executor(refcnt::SReferenced<glucose::IFilter_Chain_Configuration> configuration, glucose::TOn_Filter_Created on_filter_created, const void* on_filter_created_data) {
 		glucose::IFilter_Executor *executor;
 		if (imported::execute_filter_configuration(configuration.get(), on_filter_created, on_filter_created_data, &executor) == S_OK)
 			reset(executor, [](glucose::IFilter_Executor* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });
