@@ -133,13 +133,17 @@ namespace refcnt {
 
 			template <typename D = typename std::remove_pointer<T>::type>
 			typename std::enable_if<!std::is_base_of<refcnt::IReferenced, D>::value && !std::is_base_of<refcnt::IUnique_Reference, D>::value, void>::type
-			Release_Content() {};
+			Release_Item(T &item) {};
 
 			template <typename D = typename std::remove_pointer<T>::type>
 			typename std::enable_if<std::is_base_of<refcnt::IReferenced, D>::value || std::is_base_of<refcnt::IUnique_Reference, D>::value, void>::type
-			Release_Content() {
+			Release_Item(T &item) {				
+				item->Release();	//as we own both kind of references, we release them
+			}
+
+			void Release_Content() {
 				for (T &item : *this)
-					item->Release();	//as we own both kind of references, we release them
+					Release_Item(item);	//as we own both kind of references, we release them
 			}
 			
 
@@ -179,6 +183,15 @@ namespace refcnt {
 				return S_OK;
 			}
 
+			virtual HRESULT remove(const size_t index) {
+				if (TAligned_Vector<T>::empty()) return S_FALSE;
+								
+				Release_Item(TAligned_Vector<T>::operator [](index));
+				TAligned_Vector<T>::erase(TAligned_Vector<T>::begin() + index);
+				
+				return S_OK;
+			}
+
 			virtual HRESULT empty() const override final {
 				return TAligned_Vector<T>::empty() ? S_OK : S_FALSE;
 			}
@@ -196,6 +209,7 @@ namespace refcnt {
 			virtual HRESULT add(T *begin, T *end) override final { return E_NOTIMPL; };
 			virtual HRESULT get(T **begin, T **end) const override final { *begin = const_cast<T*>(mBegin); *end = const_cast<T*>(mEnd); return S_OK; }
 			virtual HRESULT pop(T* value) override final { return E_NOTIMPL; }
+			virtual HRESULT remove(const size_t index) override final { return E_NOTIMPL; }
 			virtual HRESULT empty() const override final { return mEnd<=mBegin ? S_OK : S_FALSE; }
 		};
 

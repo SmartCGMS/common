@@ -162,20 +162,22 @@ namespace glucose {
 			}
 
 			SFilter_Parameter Resolve_Parameter(const wchar_t* name) const {
-				SFilter_Parameter result;
+				SFilter_Parameter result;				
 
-				if (refcnt::SReferenced<IConfiguration>::operator bool()) {
-					glucose::IFilter_Parameter **cbegin, **cend;					
-					if (refcnt::SReferenced<IConfiguration>::get()->get(&cbegin, &cend) == S_OK)
+				if (name) {
+					if (refcnt::SReferenced<IConfiguration>::operator bool()) {
+						glucose::IFilter_Parameter **cbegin, **cend;
+						if (refcnt::SReferenced<IConfiguration>::get()->get(&cbegin, &cend) == S_OK)
 
-						for (glucose::IFilter_Parameter** cur = cbegin; cur < cend; cur++) {
-							wchar_t* conf_name;
-							if ((*cur)->Get_Config_Name(&conf_name) == S_OK) {
-								if (wcscmp(conf_name, name) == 0) {
-									result = refcnt::make_shared_reference_ext<SFilter_Parameter, glucose::IFilter_Parameter>(*cur, true);
+							for (glucose::IFilter_Parameter** cur = cbegin; cur != cend; cur++) {
+								wchar_t* conf_name;
+								if ((*cur)->Get_Config_Name(&conf_name) == S_OK) {
+									if (wcscmp(conf_name, name) == 0) {
+										result = refcnt::make_shared_reference_ext<SFilter_Parameter, glucose::IFilter_Parameter>(*cur, true);
+									}
 								}
 							}
-						}
+					}
 				}
 
 				return result;	//not found
@@ -187,9 +189,10 @@ namespace glucose {
 				if (rc != S_OK) return;
 
 
-				for (; *begin != *end; begin++)
+				for (; begin != end; begin++)
 					callback(refcnt::make_shared_reference_ext<SFilter_Parameter, IFilter_Parameter>(*begin, true));
 			}
+
 		};
 	}
 
@@ -206,6 +209,7 @@ namespace glucose {
 		SPersistent_Filter_Chain_Configuration();
 
 		void for_each(std::function<void(glucose::SFilter_Configuration_Link)> callback);
+		SFilter_Configuration_Link Add_Link(const GUID &id);
 	};
 
 	class SFilter_Executor : public virtual refcnt::SReferenced<glucose::IFilter_Executor> {

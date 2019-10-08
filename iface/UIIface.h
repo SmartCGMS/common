@@ -51,8 +51,6 @@ namespace glucose {
 	};
 
 	enum class NFilter_Flags : uint8_t {
-		Synchronous	= 1 << 0,
-
 		None = 0
 	};
 

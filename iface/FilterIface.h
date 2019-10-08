@@ -141,6 +141,7 @@ namespace glucose {
 	using TOn_Filter_Created = HRESULT(IfaceCalling *)(glucose::IFilter *filter, const void* data);
 	using TExecute_Filter_Configuration = HRESULT(IfaceCalling*)(IFilter_Chain_Configuration *configuration, glucose::TOn_Filter_Created on_filter_created, const void* on_filter_created_data, glucose::IFilter_Executor **executor);
 	using TCreate_Filter_Parameter = HRESULT(IfaceCalling*)(const glucose::NParameter_Type type, const wchar_t *config_name, glucose::IFilter_Parameter **parameter);
+	using TCreate_Filter_Configuration_Link = HRESULT(IfaceCalling*)(const GUID *filter_id, glucose::IFilter_Configuration_Link **link);
 
 
 	//The following GUIDs advertise known filters 

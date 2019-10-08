@@ -124,6 +124,7 @@ namespace refcnt {
 		virtual HRESULT add(T *begin, T *end) = 0;
 		virtual HRESULT get(T **begin, T **end) const = 0;
 		virtual HRESULT pop(T* value) = 0;
+		virtual HRESULT remove(const size_t index) = 0;
 		virtual HRESULT empty() const = 0;
 	};
 

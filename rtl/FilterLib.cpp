@@ -52,6 +52,7 @@ namespace glucose {
 		glucose::TCreate_Persistent_Filter_Chain_Configuration create_persistent_filter_chain_configuration = factory::resolve_symbol<glucose::TCreate_Persistent_Filter_Chain_Configuration>("create_persistent_filter_chain_configuration");		
 		glucose::TExecute_Filter_Configuration execute_filter_configuration = factory::resolve_symbol<glucose::TExecute_Filter_Configuration>("execute_filter_configuration");
 		glucose::TCreate_Filter_Parameter create_filter_parameter = factory::resolve_symbol<glucose::TCreate_Filter_Parameter>("create_filter_parameter");
+		glucose::TCreate_Filter_Configuration_Link create_filter_configuration_link = factory::resolve_symbol<glucose::TCreate_Filter_Configuration_Link>("create_filter_configuration_link");
 	}
 
 	NParameter_Type SFilter_Parameter::type() {
@@ -178,7 +179,7 @@ namespace glucose {
 
 	HRESULT SFilter_Parameter::guid_from_wstring(const wchar_t *str_value) {
 		const GUID tmp_guid = WString_To_GUID(str_value);
-		return get()->Set_GUID(&tmp_guid) == S_OK;
+		return get()->Set_GUID(&tmp_guid);
 	}
 
 
@@ -218,10 +219,22 @@ namespace glucose {
 		if (rc != S_OK) return;
 
 
-		for (; *link_begin != *link_end; link_begin++)
+		for (; link_begin != link_end; link_begin++)
 			callback(refcnt::make_shared_reference_ext<SFilter_Configuration_Link, IFilter_Configuration_Link>(*link_begin, true));
 	}
 	
+
+	SFilter_Configuration_Link SPersistent_Filter_Chain_Configuration::Add_Link(const GUID &id) {		
+		glucose::SFilter_Configuration_Link result;
+		glucose::IFilter_Configuration_Link *link;
+		if (imported::create_filter_configuration_link(&id, &link) == S_OK) {
+			if (get()->add(&link, &link+1) == S_OK) result = refcnt::make_shared_reference_ext<glucose::SFilter_Configuration_Link, glucose::IFilter_Configuration_Link>(link, false);
+			else link->Release();
+		}
+			
+		return result;
+	}
+
 	SFilter_Executor::SFilter_Executor(refcnt::SReferenced<glucose::IFilter_Chain_Configuration> configuration, glucose::TOn_Filter_Created on_filter_created, const void* on_filter_created_data) {
 		glucose::IFilter_Executor *executor;
 		if (imported::execute_filter_configuration(configuration.get(), on_filter_created, on_filter_created_data, &executor) == S_OK)
