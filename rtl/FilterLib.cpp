@@ -242,7 +242,7 @@ namespace glucose {
 	}
 
 
-	HRESULT SFilter_Executor::Execute(glucose::UDevice_Event event) {
+	HRESULT SFilter_Executor::Execute(glucose::UDevice_Event &event) {
 		glucose::IDevice_Event *raw_event = event.get();
 		event.release();
 		return get()->Execute(raw_event);		

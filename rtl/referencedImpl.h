@@ -186,7 +186,7 @@ namespace refcnt {
 			virtual HRESULT remove(const size_t index) {
 				if (TAligned_Vector<T>::empty()) return S_FALSE;
 								
-				Release_Item(TAligned_Vector<T>::operator [](index));
+				Release_Item(TAligned_Vector<T>::operator [](index) );
 				TAligned_Vector<T>::erase(TAligned_Vector<T>::begin() + index);
 				
 				return S_OK;

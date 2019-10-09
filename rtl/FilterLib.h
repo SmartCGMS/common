@@ -88,12 +88,11 @@ namespace glucose {
 		class CInternal_Filter_Configuration : public virtual refcnt::SReferenced<IConfiguration> {
 		protected:
 			template <typename T, typename M>
-			T Read_Parameter(const wchar_t *name, M method, T default_value) const {
-			//T Read_Parameter(const wchar_t *name, T (glucose::SFilter_Parameter::*method)(HRESULT), T default_value) const {
+			T Read_Parameter(const wchar_t *name, M method, T default_value) const {			
 				SFilter_Parameter parameter = Resolve_Parameter(name);
 				if (!parameter) return default_value;
 
-				HRESULT rc;
+				HRESULT rc = E_FAIL;
 				T value = ((&parameter)->*method)(rc);
 				if (rc != S_OK) return default_value;
 
@@ -217,7 +216,7 @@ namespace glucose {
 		SFilter_Executor() : refcnt::SReferenced<glucose::IFilter_Executor>() {};
 		SFilter_Executor(refcnt::SReferenced<glucose::IFilter_Chain_Configuration> configuration, glucose::TOn_Filter_Created on_filter_created, const void* on_filter_created_data);
 
-		HRESULT Execute(glucose::UDevice_Event event);
+		HRESULT Execute(glucose::UDevice_Event &event);
 	};
 
 
