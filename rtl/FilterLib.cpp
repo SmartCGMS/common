@@ -316,17 +316,17 @@ namespace glucose {
 
 	SError_Filter_Inspection::SError_Filter_Inspection(SFilter &error_filter) {
 		if (error_filter)
-			refcnt::Query_Interface<glucose::IFilter, glucose::IError_Filter_Inspection>(error_filter.get(), Error_Filter_Inspection, *this);
+			refcnt::Query_Interface<glucose::IFilter, glucose::IError_Filter_Inspection>(error_filter.get(), IID_Error_Filter_Inspection, *this);
 	}
 
 	SDrawing_Filter_Inspection::SDrawing_Filter_Inspection(SFilter &drawing_filter) {
 		if (drawing_filter)
-			refcnt::Query_Interface<glucose::IFilter, glucose::IDrawing_Filter_Inspection>(drawing_filter.get(), Drawing_Filter_Inspection, *this);
+			refcnt::Query_Interface<glucose::IFilter, glucose::IDrawing_Filter_Inspection>(drawing_filter.get(), IID_Drawing_Filter_Inspection, *this);
 	}
 
 	SLog_Filter_Inspection::SLog_Filter_Inspection(SFilter &log_filter) {
 		if (log_filter)
-			refcnt::Query_Interface<glucose::IFilter, glucose::ILog_Filter_Inspection>(log_filter.get(), Log_Filter_Inspection, *this);
+			refcnt::Query_Interface<glucose::IFilter, glucose::ILog_Filter_Inspection>(log_filter.get(), IID_Log_Filter_Inspection, *this);
 	}
 
 	bool SLog_Filter_Inspection::pop(std::shared_ptr<refcnt::wstr_list> &list) {
@@ -345,7 +345,7 @@ namespace glucose {
 
 	SCalculate_Filter_Inspection::SCalculate_Filter_Inspection(SFilter &calculate_filter) {
 		if (calculate_filter)
-			refcnt::Query_Interface<glucose::IFilter, glucose::ICalculate_Filter_Inspection>(calculate_filter.get(), Calculate_Filter_Inspection, *this);
+			refcnt::Query_Interface<glucose::IFilter, glucose::ICalculate_Filter_Inspection>(calculate_filter.get(), IID_Calculate_Filter_Inspection, *this);
 	}
 
 }

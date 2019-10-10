@@ -135,6 +135,21 @@ namespace glucose {
 		virtual HRESULT IfaceCalling Wait_For_Shutdown_and_Terminate() = 0;	//returns once all filters have terminated and joined
 		virtual HRESULT IfaceCalling Terminate() = 0;	//returns once all filters are executing		
 	};
+	
+	class IFilter_Feedback : public virtual glucose::IFilter {
+	public:
+		virtual HRESULT IfaceCalling Name(wchar_t* const *name) = 0;
+	};
+
+	constexpr GUID IID_Filter_Feedback_Receiver = { 0xee9d9028, 0xb714, 0x4412, { 0x98, 0xd8, 0xe5, 0xf7, 0xe5, 0xf1, 0xcf, 0x7a } };
+	class IFilter_Feedback_Receiver : public virtual glucose::IFilter_Feedback, public virtual glucose::IFilter {
+	};
+
+	constexpr GUID IID_Filter_Feedback_Sender = { 0x19d21259, 0x7358, 0x4533, { 0x8c, 0x18, 0x85, 0x65, 0x25, 0xc2, 0x35, 0x9 } };
+	class IFilter_Feedback_Sender : public virtual glucose::IFilter_Feedback {
+	public:
+		virtual HRESULT IfaceCalling Sink(glucose::IFilter_Feedback_Receiver *receiver) = 0;
+	};
 
 	using TCreate_Persistent_Filter_Chain_Configuration = HRESULT(IfaceCalling *)(IPersistent_Filter_Chain_Configuration **configuration);
 	using TCreate_Filter = HRESULT(IfaceCalling *)(const GUID *id, IFilter *next_filter, glucose::IFilter **filter);
@@ -144,10 +159,10 @@ namespace glucose {
 	using TCreate_Filter_Configuration_Link = HRESULT(IfaceCalling*)(const GUID *filter_id, glucose::IFilter_Configuration_Link **link);
 
 
-	//The following GUIDs advertise known filters 
-	constexpr GUID Drawing_Filter = { 0x850a122c, 0x8943, 0xa211,{ 0xc5, 0x14, 0x25, 0xba, 0xa9, 0x14, 0x35, 0x74 } };
-	constexpr GUID Log_Filter = { 0xc0e942b9, 0x3928, 0x4b81,{ 0x9b, 0x43, 0xa3, 0x47, 0x66, 0x82, 0x0, 0xBA } };
-	constexpr GUID Error_Filter = { 0x4a125499, 0x5dc8, 0x128e,{ 0xa5, 0x5c, 0x14, 0x22, 0xbc, 0xac, 0x10, 0x74 } };
+	//The following GUIDs advertise known filters 		
+	constexpr GUID IID_Drawing_Filter = { 0x850a122c, 0x8943, 0xa211,{ 0xc5, 0x14, 0x25, 0xba, 0xa9, 0x14, 0x35, 0x74 } };
+	constexpr GUID IID_Log_Filter = { 0xc0e942b9, 0x3928, 0x4b81,{ 0x9b, 0x43, 0xa3, 0x47, 0x66, 0x82, 0x0, 0xBA } };
+	constexpr GUID IID_Error_Filter = { 0x4a125499, 0x5dc8, 0x128e,{ 0xa5, 0x5c, 0x14, 0x22, 0xbc, 0xac, 0x10, 0x74 } };
 
 	//The following interfaces can be access via refcnt::IUnknown::QueryInterface 
 
@@ -253,7 +268,7 @@ namespace glucose {
 		NotSpecified = Type1
 	};
 
-	constexpr GUID Error_Filter_Inspection = { 0x13ebd008, 0x5284, 0x4520,{ 0xbc, 0x2a, 0xa9, 0x18, 0x25, 0x7e, 0x66, 0x8 } };
+	constexpr GUID IID_Error_Filter_Inspection = { 0x13ebd008, 0x5284, 0x4520,{ 0xbc, 0x2a, 0xa9, 0x18, 0x25, 0x7e, 0x66, 0x8 } };
 	class IError_Filter_Inspection : public virtual refcnt::IReferenced {
 	public:		
 		virtual HRESULT IfaceCalling New_Data_Available() = 0;
@@ -261,7 +276,7 @@ namespace glucose {
 		virtual HRESULT IfaceCalling Get_Errors(const GUID *signal_id, const glucose::NError_Type type, glucose::TError_Markers *markers) = 0;
 	};
 
-	constexpr GUID Drawing_Filter_Inspection = { 0xd0c81596, 0xdea0, 0x4edf,{ 0x8b, 0x97, 0xe1, 0xd3, 0x78, 0xda, 0xfe, 0x3d } };
+	constexpr GUID IID_Drawing_Filter_Inspection = { 0xd0c81596, 0xdea0, 0x4edf,{ 0x8b, 0x97, 0xe1, 0xd3, 0x78, 0xda, 0xfe, 0x3d } };
 	class IDrawing_Filter_Inspection : public virtual refcnt::IReferenced {
 	public:
 		virtual HRESULT IfaceCalling New_Data_Available() = 0;
@@ -269,7 +284,7 @@ namespace glucose {
 		virtual HRESULT IfaceCalling Draw(TDrawing_Image_Type type, TDiagnosis diagnosis, refcnt::str_container *svg, refcnt::IVector_Container<uint64_t> *segmentIds, refcnt::IVector_Container<GUID> *signalIds) = 0;
 	};
 
-	constexpr GUID Log_Filter_Inspection = { 0xa6054c8d, 0x5c01, 0x9e1d,{ 0x14, 0x39, 0x50, 0xda, 0xd1, 0x08, 0xc9, 0x48 } };
+	constexpr GUID IID_Log_Filter_Inspection = { 0xa6054c8d, 0x5c01, 0x9e1d,{ 0x14, 0x39, 0x50, 0xda, 0xd1, 0x08, 0xc9, 0x48 } };
 	class ILog_Filter_Inspection : public virtual refcnt::IReferenced {
 	public:
 		/* retrives newly available log records - caller TAKES ownership of the records
@@ -279,7 +294,7 @@ namespace glucose {
 	};
 
 
-	constexpr GUID Calculate_Filter_Inspection = { 0xec44cd18, 0x8d08, 0x46d1, { 0xa6, 0xcb, 0xc2, 0x43, 0x8e, 0x4, 0x19, 0x88 } };	
+	constexpr GUID IID_Calculate_Filter_Inspection = { 0xec44cd18, 0x8d08, 0x46d1, { 0xa6, 0xcb, 0xc2, 0x43, 0x8e, 0x4, 0x19, 0x88 } };	
 	class ICalculate_Filter_Inspection : public virtual refcnt::IReferenced {
 	public:
 		// makes a deep copy of the entire progress
