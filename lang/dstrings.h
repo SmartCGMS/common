@@ -764,6 +764,29 @@ extern const wchar_t* rsSelect_Params_Base;
 extern const wchar_t* rsSelect_Params_From;
 extern const wchar_t* rsSelect_Params_Condition;
 
+extern const wchar_t* dsBergman_Minimal_Model;
+extern const wchar_t* dsBergman_p1;
+extern const wchar_t* dsBergman_p2;
+extern const wchar_t* dsBergman_p3;
+extern const wchar_t* dsBergman_p4;
+extern const wchar_t* dsBergman_Vi;
+extern const wchar_t* dsBergman_BW;
+extern const wchar_t* dsBergman_VgDist;
+extern const wchar_t* dsBergman_d1rate;
+extern const wchar_t* dsBergman_d2rate;
+extern const wchar_t* dsBergman_irate;
+extern const wchar_t* dsBergman_Gb;
+extern const wchar_t* dsBergman_Ib;
+extern const wchar_t* dsBergman_G0;
+extern const wchar_t* dsBergman_diff2_p;
+extern const wchar_t* dsBergman_diff2_cg;
+extern const wchar_t* dsBergman_diff2_c;
+
+extern const wchar_t* dsParameters;
+extern const wchar_t* dsFeedback_Name;
+extern const wchar_t* dsSynchronize_to_Signal;
+extern const wchar_t* dsSynchronization_Signal;
+
 // ---- drawing-related constants
 
 extern const wchar_t* rsDrawingLocaleTitle;
@@ -886,6 +909,11 @@ extern const wchar_t* rsOref0_Manifest_Socket_Timeout_Path;
 extern const wchar_t* rsOref0_Manifest_Socket_Port_Path;
 extern const wchar_t* rsOref0_Manifest_Default_Runner_Script;
 extern const wchar_t* rsOref0_Manifest_Default_Node_Command;
+
+extern const wchar_t* rsParameters;
+extern const wchar_t* rsFeedback_Name;
+extern const wchar_t* rsSynchronize_to_Signal;
+extern const wchar_t* rsSynchronization_Signal;
 
 //*******
 extern const wchar_t *rsCalculate_Past_New_Params;

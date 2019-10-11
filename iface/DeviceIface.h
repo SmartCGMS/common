@@ -135,8 +135,7 @@ namespace glucose {
 		Solve_Parameters,	//user can either request to recalculate, or we can request to recalculate it at the end of the segment - i.e., prior sending Time_Segment_Stop
 		Time_Segment_Start,
 		Time_Segment_Stop,
-		Warm_Reset,			//all incoming levels (and associated errors) are thrown away, calculated parameters are kept and DB/File input filters replays the data from begining, while CGMS input filter just ignores this message
-		Synchronization,	//to synchronize feedback filters; info holds feedback filter identifier, if used within feedback loop
+		Warm_Reset,			//all incoming levels (and associated errors) are thrown away, calculated parameters are kept and DB/File input filters replays the data from begining, while CGMS input filter just ignores this message		
 
 
 		//-------- codes intended for log parsers ------
@@ -182,7 +181,6 @@ namespace glucose {
 	typedef struct {
 		double Min, Max;
 	} TBounds;
-
 
 	class ISignal : public virtual refcnt::IReferenced {
 	public:

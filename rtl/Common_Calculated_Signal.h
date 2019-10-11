@@ -38,22 +38,45 @@
 
 #pragma once
 
-#include "../rtl/guid.h"
-#include "referencedIface.h"
 
-#include "FilterIface.h"
+#include "DeviceLib.h"
+#include "referencedImpl.h"
+#include "Buffer_Pool.h"
+#include "Eigen_Buffer_Pool.h"
 
-namespace glucose
-{
-	/*
-	 * Class representing a device (either simulated or real)
-	 * Note it has the same interface, as an asynchronous filter - this is due to fact, that it should behave like
-	 * an asynchronous entity, have input and output pipe and be managed by device filter (own its thread)
-	 */
-	class IDevice_Driver : public glucose::IFilter {
-	public:
-		virtual ~IDevice_Driver() = default;
-	};
 
-	using TCreate_Device_Driver = HRESULT(IfaceCalling *)(const GUID *id, glucose::IFilter* output, glucose::IDevice_Driver **device_driver);
-}
+#pragma warning( push )
+#pragma warning( disable : 4250 ) // C4250 - 'class1' : inherits 'class2::member' via dominance
+
+
+class CCommon_Calculed_Signal : public virtual glucose::ISignal, public virtual refcnt::CReferenced {
+protected:
+	template <typename T>
+	T& Convert_Parameters(glucose::IModel_Parameter_Vector *params, const double *default_parameters) const {
+		double *begin{ const_cast<double*>(default_parameters) };	//just in case that no parameters are set at all -> than we have to use the default ones
+		if (params) {
+			double *tmp_begin, *end;
+			if (params->get(&tmp_begin, &end) == S_OK) {
+				//not that params still could be empty
+				if (tmp_begin && (tmp_begin != end))  begin = tmp_begin;
+			}
+		}
+	
+		T &result = *(reinterpret_cast<T*>(begin));
+		return result;
+	}
+protected:
+	mutable CBuffer_Pool<TVector1D> mVector1D_Pool{Eigen_Buffer_Pool_Resize<TVector1D> };
+public:	
+	CCommon_Calculed_Signal() {};
+	CCommon_Calculed_Signal(glucose::WTime_Segment segment);
+	virtual ~CCommon_Calculed_Signal() {};
+
+	//glucose::ISignal iface
+	virtual HRESULT IfaceCalling Get_Discrete_Levels(double* const times, double* const levels, const size_t count, size_t *filled) const override;
+	virtual HRESULT IfaceCalling Get_Discrete_Bounds(glucose::TBounds* const time_bounds, glucose::TBounds* const level_bounds, size_t *level_count) const override;
+	virtual HRESULT IfaceCalling Add_Levels(const double *times, const double *levels, const size_t count) override;
+	
+};
+
+#pragma warning( pop )

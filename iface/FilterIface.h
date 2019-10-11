@@ -53,8 +53,8 @@ namespace glucose {
 
 	enum class NParameter_Type : size_t {
 		ptNull = 0,
-		ptWChar_Container,			//IParameter_Container<wchar_t>
-		ptSelect_Time_Segment_ID,	//alias for IParameter_Container<int64_t> that selects time segments id
+		ptWChar_Array,			//IParameter_Container<wchar_t>
+		ptInt64_Array,	//alias for IParameter_Container<int64_t> that selects time segments id
 		ptDouble,	
 		ptRatTime,					//double interperted as the rattime
 		ptInt64,
@@ -64,9 +64,8 @@ namespace glucose {
 		ptSolver_Id,
 		ptModel_Signal_Id,	// signal dependend on model selection
 		ptSignal_Id,		// any signal available (measured, calculated)
-		ptModel_Bounds,		// three parameter sets in one container - lower bound, default values, higher bound
-		ptSubject_Id,		// int64_t, but with additional functionality in GUI
-		ptDevice_Driver_Id,	// device driver GUID (pump, sensor, ..)
+		ptDouble_Array,		// three parameter sets in one container - lower bound, default values, higher bound
+		ptSubject_Id		// int64_t, but with additional functionality in GUI
 	};
 
 	class IFilter_Parameter : public virtual refcnt::IReferenced {

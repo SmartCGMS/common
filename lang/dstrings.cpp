@@ -610,6 +610,29 @@ const wchar_t *dsUse_Opened_Segments_Only_Tooltip = L"Use currently opened segme
 
 const wchar_t *dsParameter_Configuration_Failed_RC = L"Parameter (%1) configuration fail with HRESULT == %2";
 
+const wchar_t* dsBergman_Minimal_Model = L"Bergman extended minimal model device";
+const wchar_t* dsBergman_p1 = L"p1";
+const wchar_t* dsBergman_p2 = L"p2";
+const wchar_t* dsBergman_p3 = L"p3";
+const wchar_t* dsBergman_p4 = L"p4";
+const wchar_t* dsBergman_Vi = L"Vi";
+const wchar_t* dsBergman_BW = L"body weight";
+const wchar_t* dsBergman_VgDist = L"VgDist";
+const wchar_t* dsBergman_d1rate = L"d1rate";
+const wchar_t* dsBergman_d2rate = L"d2rate";
+const wchar_t* dsBergman_irate = L"irate";
+const wchar_t* dsBergman_Gb = L"Gb";
+const wchar_t* dsBergman_Ib = L"Ib";
+const wchar_t* dsBergman_G0 = L"G0";
+const wchar_t* dsBergman_diff2_p = L"p";
+const wchar_t* dsBergman_diff2_cg = L"cg";
+const wchar_t* dsBergman_diff2_c = L"c";
+
+const wchar_t* dsParameters = L"Parameters";
+const wchar_t* dsFeedback_Name = L"Feedback name";
+const wchar_t* dsSynchronize_to_Signal = L"Synchronize to signal";
+const wchar_t* dsSynchronization_Signal = L"Synchronization signal";
+
 //--------------------------------- do not translate any of the rs-prefixed texts --
 
 const char* rsAbout_Text = R"CLC(
@@ -935,3 +958,8 @@ const wchar_t *rsRecalculate_With_Every_Params = L"Recalc_Every_Params";
 const wchar_t *rsUse_Just_Opened_Segments = L"Use_Just_Opened_Segments";
 const wchar_t *rsHold_During_Solve = L"Hold_During_Solve";
 
+
+const wchar_t* rsParameters = L"Parameters";
+const wchar_t* rsFeedback_Name = L"Feedback_name";
+const wchar_t* rsSynchronize_to_Signal = L"Synchronize_to_signal";
+const wchar_t* rsSynchronization_Signal = L"Synchronization_signal";

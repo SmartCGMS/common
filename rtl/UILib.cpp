@@ -143,7 +143,6 @@ namespace glucose
 		L"Time_Segment_Start",
 		L"Time_Segment_Stop",
 		L"Warm_Reset",
-		L"Synchronization",
 		L"Information",
 		L"Warning",
 		L"Error"

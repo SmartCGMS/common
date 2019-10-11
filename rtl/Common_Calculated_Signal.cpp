@@ -10,8 +10,8 @@
  * Faculty of Applied Sciences, University of West Bohemia
  * Univerzitni 8
  * 301 00, Pilsen
- *
- *
+ * 
+ * 
  * Purpose of this software:
  * This software is intended to demonstrate work of the diabetes.zcu.cz research
  * group to other scientists, to complement our published papers. It is strictly
@@ -36,38 +36,19 @@
  *       monitoring", Procedia Computer Science, Volume 141C, pp. 279-286, 2018
  */
 
-#include "../iface/DeviceIface.h"
-#include "SensorLib.h"
-#include "FactoryLib.h"
-#include "FilterLib.h"
-#include "UILib.h"
+#include "Common_Calculated_Signal.h"
 
-namespace glucose
-{
-	namespace imported {
-		glucose::TGet_Device_Driver_Descriptors get_device_driver_descriptors = factory::resolve_symbol<glucose::TGet_Device_Driver_Descriptors>("get_device_driver_descriptors");
-		glucose::TCreate_Device_Driver create_device_driver = factory::resolve_symbol<glucose::TCreate_Device_Driver>("create_device_driver");
-	}
+CCommon_Calculed_Signal::CCommon_Calculed_Signal(glucose::WTime_Segment segment)  {
+}
 
-	std::vector<TDevice_Driver_Descriptor> get_device_driver_descriptors()
-	{
-		std::vector<TDevice_Driver_Descriptor> result;
-		TDevice_Driver_Descriptor *desc_begin, *desc_end;
+HRESULT IfaceCalling CCommon_Calculed_Signal::Get_Discrete_Levels(double* const times, double* const levels, const size_t count, size_t *filled) const {
+	return E_NOTIMPL;
+}
 
-		if (imported::get_device_driver_descriptors(&desc_begin, &desc_end) == S_OK) {
-			std::copy(desc_begin, desc_end, std::back_inserter(result));
-		}
+HRESULT IfaceCalling CCommon_Calculed_Signal::Get_Discrete_Bounds(glucose::TBounds* const time_bounds, glucose::TBounds* const level_bounds, size_t *level_count) const {
+	return E_NOTIMPL;
+}
 
-		return result;
-	}
-
-	SDevice_Driver create_device_driver(const GUID &id, glucose::SFilter& output) {
-		SDevice_Driver result;
-		IDevice_Driver *device_driver;
-
-		if (imported::create_device_driver(&id, output.get(), &device_driver) == S_OK)
-			result = refcnt::make_shared_reference_ext<SDevice_Driver, IDevice_Driver>(device_driver, false);
-
-		return result;
-	}
+HRESULT IfaceCalling CCommon_Calculed_Signal::Add_Levels(const double *times, const double *levels, const size_t count) {
+	return E_NOTIMPL;	//we calculate from a signal that can possibly add new levels
 }
