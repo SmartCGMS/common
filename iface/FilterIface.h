@@ -137,7 +137,7 @@ namespace glucose {
 	
 	class IFilter_Feedback : public virtual glucose::IFilter {
 	public:
-		virtual HRESULT IfaceCalling Name(wchar_t* const *name) = 0;
+		virtual HRESULT IfaceCalling Name(wchar_t** const name) = 0;
 	};
 
 	constexpr GUID IID_Filter_Feedback_Receiver = { 0xee9d9028, 0xb714, 0x4412, { 0x98, 0xd8, 0xe5, 0xf7, 0xe5, 0xf1, 0xcf, 0x7a } };
@@ -150,13 +150,19 @@ namespace glucose {
 		virtual HRESULT IfaceCalling Sink(glucose::IFilter_Feedback_Receiver *receiver) = 0;
 	};
 
+
+	class IDiscrete_Model : public virtual glucose::IFilter {
+	public:
+		virtual HRESULT Step(const double time_advance_delta) = 0;
+	};
+
 	using TCreate_Persistent_Filter_Chain_Configuration = HRESULT(IfaceCalling *)(IPersistent_Filter_Chain_Configuration **configuration);
 	using TCreate_Filter = HRESULT(IfaceCalling *)(const GUID *id, IFilter *next_filter, glucose::IFilter **filter);
 	using TOn_Filter_Created = HRESULT(IfaceCalling *)(glucose::IFilter *filter, const void* data);
 	using TExecute_Filter_Configuration = HRESULT(IfaceCalling*)(IFilter_Chain_Configuration *configuration, glucose::TOn_Filter_Created on_filter_created, const void* on_filter_created_data, glucose::IFilter_Executor **executor);
 	using TCreate_Filter_Parameter = HRESULT(IfaceCalling*)(const glucose::NParameter_Type type, const wchar_t *config_name, glucose::IFilter_Parameter **parameter);
 	using TCreate_Filter_Configuration_Link = HRESULT(IfaceCalling*)(const GUID *filter_id, glucose::IFilter_Configuration_Link **link);
-
+	using TCreate_Discrete_Model = HRESULT(IfaceCalling*)(const GUID *model_id, glucose::IModel_Parameter_Vector *parameters, glucose::IFilter *output, glucose::IDiscrete_Model **model);
 
 	//The following GUIDs advertise known filters 		
 	constexpr GUID IID_Drawing_Filter = { 0x850a122c, 0x8943, 0xa211,{ 0xc5, 0x14, 0x25, 0xba, 0xa9, 0x14, 0x35, 0x74 } };

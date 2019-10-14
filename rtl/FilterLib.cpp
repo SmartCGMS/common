@@ -53,6 +53,7 @@ namespace glucose {
 		glucose::TExecute_Filter_Configuration execute_filter_configuration = factory::resolve_symbol<glucose::TExecute_Filter_Configuration>("execute_filter_configuration");
 		glucose::TCreate_Filter_Parameter create_filter_parameter = factory::resolve_symbol<glucose::TCreate_Filter_Parameter>("create_filter_parameter");
 		glucose::TCreate_Filter_Configuration_Link create_filter_configuration_link = factory::resolve_symbol<glucose::TCreate_Filter_Configuration_Link>("create_filter_configuration_link");
+		glucose::TCreate_Discrete_Model create_discrete_model = factory::resolve_symbol<glucose::TCreate_Discrete_Model>("create_discrete_model");
 	}
 
 	NParameter_Type SFilter_Parameter::type() {
@@ -310,7 +311,15 @@ namespace glucose {
 		return Do_Execute(glucose::UDevice_Event{event});
 	}
 
+	SDiscrete_Model::SDiscrete_Model() : refcnt::SReferenced<glucose::IDiscrete_Model>(){
+		//
+	}
 
+	SDiscrete_Model::SDiscrete_Model(const GUID &id, glucose::SModel_Parameter_Vector parameters, glucose::SFilter output) {
+		glucose::IDiscrete_Model *model;
+		if (imported::create_discrete_model(&id, parameters.get(), output.get(), &model) == S_OK)
+			reset(model, [](glucose::IDiscrete_Model* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });
+	}
 
 
 

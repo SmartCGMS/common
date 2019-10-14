@@ -231,7 +231,7 @@ extern const wchar_t* dsRecalculate_Past_On_Params;
 //extern const wchar_t* dsRecalculate_Past_On_Segment_Stop;
 extern const wchar_t *dsUse_Just_Opened_Segments;
 
-extern const wchar_t *dsCalculation;
+extern const wchar_t *dsCalculated_Signal;
 extern const wchar_t* dsPrediction_Window;
 extern const wchar_t* dsSolving_Parameters_Separator;
 extern const wchar_t* dsSolve_Parameters;
@@ -782,10 +782,13 @@ extern const wchar_t* dsBergman_diff2_p;
 extern const wchar_t* dsBergman_diff2_cg;
 extern const wchar_t* dsBergman_diff2_c;
 
+extern const wchar_t* dsSignal_Generator;
 extern const wchar_t* dsParameters;
 extern const wchar_t* dsFeedback_Name;
 extern const wchar_t* dsSynchronize_to_Signal;
 extern const wchar_t* dsSynchronization_Signal;
+extern const wchar_t* dsStepping;
+extern const wchar_t* dsMaximum_Time;
 
 // ---- drawing-related constants
 
@@ -920,3 +923,5 @@ extern const wchar_t *rsCalculate_Past_New_Params;
 extern const wchar_t *rsRecalculate_With_Every_Params;
 extern const wchar_t *rsUse_Just_Opened_Segments;
 extern const wchar_t *rsHold_During_Solve;
+extern const wchar_t* rsStepping;
+extern const wchar_t* rsMaximum_Time;

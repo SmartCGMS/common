@@ -240,6 +240,12 @@ namespace glucose {
 
 	#pragma warning( pop )
 
+	class SDiscrete_Model : public virtual refcnt::SReferenced<glucose::IDiscrete_Model> {
+	public:
+		SDiscrete_Model();
+		SDiscrete_Model(const GUID &id, glucose::SModel_Parameter_Vector parameters, glucose::SFilter output);
+	};
+
 
 	class SError_Filter_Inspection : public std::shared_ptr<IError_Filter_Inspection> {
 	public:

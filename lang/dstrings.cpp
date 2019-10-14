@@ -225,11 +225,7 @@ const char* dsSave_Image_Default_Filename_Profile_Insulin = "mobile_insulin.svg"
 const char* dsSave_Image_Default_Filename_Profile_Carbs = "mobile_carbs.svg";
 
 
-//const wchar_t *dsCalculate_Past_New_Params = L"Calculate past with first parameter set";
-//const wchar_t *dsRecalculate_With_Every_Params = L"New parameters recalculate entire segment";
-//const wchar_t* dsRecalculate_Past_On_Params = L"Recalculate entire segment with new parameters";
-//const wchar_t* dsRecalculate_Past_On_Segment_Stop = L"Recalculate entire segment on its end";
-const wchar_t *dsCalculation = L"Calculation";
+const wchar_t *dsCalculated_Signal = L"Calculated Signal";
 const wchar_t* dsPrediction_Window = L"Prediction window";
 const wchar_t* dsSolving_Parameters_Separator = L"Solving";
 const wchar_t* dsSolve_Parameters = L"Solve parameters";
@@ -628,10 +624,13 @@ const wchar_t* dsBergman_diff2_p = L"p";
 const wchar_t* dsBergman_diff2_cg = L"cg";
 const wchar_t* dsBergman_diff2_c = L"c";
 
+const wchar_t* dsSignal_Generator = L"Signal generator";
 const wchar_t* dsParameters = L"Parameters";
 const wchar_t* dsFeedback_Name = L"Feedback name";
 const wchar_t* dsSynchronize_to_Signal = L"Synchronize to signal";
 const wchar_t* dsSynchronization_Signal = L"Synchronization signal";
+const wchar_t* dsStepping = L"Stepping";
+const wchar_t* dsMaximum_Time = L"Maximum time";
 
 //--------------------------------- do not translate any of the rs-prefixed texts --
 
@@ -963,3 +962,5 @@ const wchar_t* rsParameters = L"Parameters";
 const wchar_t* rsFeedback_Name = L"Feedback_name";
 const wchar_t* rsSynchronize_to_Signal = L"Synchronize_to_signal";
 const wchar_t* rsSynchronization_Signal = L"Synchronization_signal";
+const wchar_t* rsStepping = L"Stepping";
+const wchar_t* rsMaximum_Time = L"Maximum_time";
