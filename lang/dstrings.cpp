@@ -523,7 +523,6 @@ const wchar_t* dsDrawingLocaleRelativeError = L"Relative error [%]";
 const wchar_t* dsDrawingLocaleCummulativeProbability = L"Cummulative probability [%]";
 const wchar_t* dsDrawingLocaleElevatedGlucose = L"Elevated glucose";
 
-//xxxx
 
 const wchar_t *dsCalculate_Past_New_Params = L"Calculate past with first parameter set";
 const wchar_t *dsRecalculate_With_Every_Params = L"New parameters recalculate entire segment";
@@ -631,6 +630,10 @@ const wchar_t* dsSynchronize_to_Signal = L"Synchronize to signal";
 const wchar_t* dsSynchronization_Signal = L"Synchronization signal";
 const wchar_t* dsStepping = L"Stepping";
 const wchar_t* dsMaximum_Time = L"Maximum time";
+
+const wchar_t* dsSignal_Error = L"Signal error";
+const wchar_t* dsReference_Signal = L"Reference signal";
+const wchar_t* dsEvaluated_Signal = L"Evaluated signal";
 
 //--------------------------------- do not translate any of the rs-prefixed texts --
 
@@ -959,8 +962,11 @@ const wchar_t *rsHold_During_Solve = L"Hold_During_Solve";
 
 
 const wchar_t* rsParameters = L"Parameters";
-const wchar_t* rsFeedback_Name = L"Feedback_name";
-const wchar_t* rsSynchronize_to_Signal = L"Synchronize_to_signal";
-const wchar_t* rsSynchronization_Signal = L"Synchronization_signal";
+const wchar_t* rsFeedback_Name = L"Feedback_Name";
+const wchar_t* rsSynchronize_to_Signal = L"Synchronize_To_Signal";
+const wchar_t* rsSynchronization_Signal = L"Synchronization_Signal";
 const wchar_t* rsStepping = L"Stepping";
-const wchar_t* rsMaximum_Time = L"Maximum_time";
+const wchar_t* rsMaximum_Time = L"Maximum_Time";
+
+const wchar_t* rsReference_Signal = L"Reference_Signal";
+const wchar_t* rsEvaluated_Signal = L"Evaluated_Signal";

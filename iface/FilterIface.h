@@ -171,6 +171,7 @@ namespace glucose {
 
 	//The following interfaces can be access via refcnt::IUnknown::QueryInterface 
 
+
 	enum class NError_Marker : size_t {
 		Average = 0,
 		StdDev,
@@ -236,6 +237,21 @@ namespace glucose {
 				double r50;						// 50% range
 			};
 		};
+	};
+	
+	enum class NECDF : size_t {
+		min_value = 0,
+		p25 = 25,
+		median = 50,
+		p75 = 75,
+		p95 = 95,
+		p99 = 99,
+		max_value = 100
+	};
+
+	struct TSignal_Error {
+		double avg, stddev, sum;	//standard deviation with Bessel's correction
+		double ecdf[static_cast<size_t>(NECDF::max_value)];
 	};
 
 	// error types
