@@ -44,6 +44,21 @@
 
 namespace solver {
 	solver::TSolver_Setup Check_Default_Parameters(const solver::TSolver_Setup &setup, const size_t default_max_generations, const size_t default_population_size);
+
+	template <typename T>
+	T& Convert_Parameters(glucose::IModel_Parameter_Vector *params, const double *default_parameters) {
+		double *begin{ const_cast<double*>(default_parameters) };	//just in case that no parameters are set at all -> than we have to use the default ones
+		if (params) {
+			double *tmp_begin, *end;
+			if (params->get(&tmp_begin, &end) == S_OK) {
+				//not that params still could be empty
+				if (tmp_begin && (tmp_begin != end))  begin = tmp_begin;
+			}
+		}
+
+		T &result = *(reinterpret_cast<T*>(begin));
+		return result;
+	}
 }
 
 namespace glucose {

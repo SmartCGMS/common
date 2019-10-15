@@ -174,7 +174,7 @@ extern const wchar_t *dsErrors_Filter;
 extern const wchar_t *dsDrawing_Filter;
 extern const wchar_t *dsMapping_Filter;
 extern const wchar_t *dsMasking_Filter;
-extern const wchar_t *dsCalculate_Filter;
+extern const wchar_t *dsCalculated_Signal_Filter;
 
 extern const wchar_t *dsDrawing_Filter_Period;
 extern const wchar_t *dsDiagnosis_Is_Type2;

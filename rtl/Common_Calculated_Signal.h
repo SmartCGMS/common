@@ -49,22 +49,7 @@
 #pragma warning( disable : 4250 ) // C4250 - 'class1' : inherits 'class2::member' via dominance
 
 
-class CCommon_Calculed_Signal : public virtual glucose::ISignal, public virtual refcnt::CReferenced {
-protected:
-	template <typename T>
-	T& Convert_Parameters(glucose::IModel_Parameter_Vector *params, const double *default_parameters) const {
-		double *begin{ const_cast<double*>(default_parameters) };	//just in case that no parameters are set at all -> than we have to use the default ones
-		if (params) {
-			double *tmp_begin, *end;
-			if (params->get(&tmp_begin, &end) == S_OK) {
-				//not that params still could be empty
-				if (tmp_begin && (tmp_begin != end))  begin = tmp_begin;
-			}
-		}
-	
-		T &result = *(reinterpret_cast<T*>(begin));
-		return result;
-	}
+class CCommon_Calculed_Signal : public virtual glucose::ISignal, public virtual refcnt::CReferenced {	
 protected:
 	mutable CBuffer_Pool<TVector1D> mVector1D_Pool{Eigen_Buffer_Pool_Resize<TVector1D> };
 public:	
