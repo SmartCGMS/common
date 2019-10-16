@@ -241,17 +241,18 @@ namespace glucose {
 	
 	enum class NECDF : size_t {
 		min_value = 0,
-		p25 = 25,
-		median = 50,
-		p75 = 75,
-		p95 = 95,
-		p99 = 99,
-		max_value = 100
+		p25 = 24,
+		median = 49,
+		p75 = 74,
+		p95 = 94,
+		p99 = 98,
+		max_value = 99
 	};
 
 	struct TSignal_Error {
 		double avg, stddev, sum;	//standard deviation with Bessel's correction
-		double ecdf[static_cast<size_t>(NECDF::max_value)];
+		size_t count;				//number of elements on which we calculate the metrics
+		double ecdf[static_cast<size_t>(NECDF::max_value)+1];
 	};
 
 	// error types
@@ -287,6 +288,15 @@ namespace glucose {
 
 		count,
 		NotSpecified = Type1
+	};
+
+	constexpr GUID IID_Signal_Error = { 0xfb51bcab, 0x5c2b, 0x45af, { 0x98, 0x80, 0xe3, 0x4d, 0xde, 0xc4, 0x3c, 0x4c } };
+	class ISignal_Error : public virtual refcnt::IReferenced {
+	public:
+		virtual HRESULT IfaceCalling Promise_Metric(double* const metric_value, bool defer_to_dtor) = 0;
+		//return S_OK if there are new data available since object construction or last call of Peek_New_Data_Available
+		virtual HRESULT IfaceCalling Peek_New_Data_Available() = 0;
+		virtual HRESULT IfaceCalling Calculate_Signal_Error(const NError_Type error_type, TSignal_Error &signal_error) = 0;
 	};
 
 	constexpr GUID IID_Error_Filter_Inspection = { 0x13ebd008, 0x5284, 0x4520,{ 0xbc, 0x2a, 0xa9, 0x18, 0x25, 0x7e, 0x66, 0x8 } };

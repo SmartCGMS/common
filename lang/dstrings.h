@@ -603,7 +603,7 @@ extern const wchar_t *dsParameter_Configuration_Failed_RC;
 
 extern const wchar_t* dsSignal_Error;
 extern const wchar_t* dsReference_Signal;
-extern const wchar_t* dsEvaluated_Signal;
+extern const wchar_t* dsError_Signal;
 
 //--------------------------------- do not translate any of the rs-prefixed texts --
 
@@ -931,4 +931,4 @@ extern const wchar_t* rsStepping;
 extern const wchar_t* rsMaximum_Time;
 
 extern const wchar_t* rsReference_Signal;
-extern const wchar_t* rsEvaluated_Signal;
+extern const wchar_t* rsError_Signal;

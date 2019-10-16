@@ -633,7 +633,7 @@ const wchar_t* dsMaximum_Time = L"Maximum time";
 
 const wchar_t* dsSignal_Error = L"Signal error";
 const wchar_t* dsReference_Signal = L"Reference signal";
-const wchar_t* dsEvaluated_Signal = L"Evaluated signal";
+const wchar_t* dsError_Signal = L"Error signal";
 
 //--------------------------------- do not translate any of the rs-prefixed texts --
 
@@ -969,4 +969,4 @@ const wchar_t* rsStepping = L"Stepping";
 const wchar_t* rsMaximum_Time = L"Maximum_Time";
 
 const wchar_t* rsReference_Signal = L"Reference_Signal";
-const wchar_t* rsEvaluated_Signal = L"Evaluated_Signal";
+const wchar_t* rsError_Signal = L"Error_Signal";
