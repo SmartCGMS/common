@@ -290,13 +290,14 @@ namespace glucose {
 		NotSpecified = Type1
 	};
 
-	constexpr GUID IID_Signal_Error = { 0xfb51bcab, 0x5c2b, 0x45af, { 0x98, 0x80, 0xe3, 0x4d, 0xde, 0xc4, 0x3c, 0x4c } };
-	class ISignal_Error : public virtual refcnt::IReferenced {
+	constexpr GUID IID_Signal_Error_Inspection = { 0xfb51bcab, 0x5c2b, 0x45af, { 0x98, 0x80, 0xe3, 0x4d, 0xde, 0xc4, 0x3c, 0x4c } };
+	class ISignal_Error_Inspection : public virtual refcnt::IReferenced {
 	public:
 		virtual HRESULT IfaceCalling Promise_Metric(double* const metric_value, bool defer_to_dtor) = 0;
 		//return S_OK if there are new data available since object construction or last call of Peek_New_Data_Available
 		virtual HRESULT IfaceCalling Peek_New_Data_Available() = 0;
-		virtual HRESULT IfaceCalling Calculate_Signal_Error(const NError_Type error_type, TSignal_Error &signal_error) = 0;
+		virtual HRESULT IfaceCalling Calculate_Signal_Error(glucose::TSignal_Error &absolute_error, glucose::TSignal_Error &relative_error) = 0;
+			//should there be a zero reference level, then absolute_error.count != relative_error.count
 	};
 
 	constexpr GUID IID_Error_Filter_Inspection = { 0x13ebd008, 0x5284, 0x4520,{ 0xbc, 0x2a, 0xa9, 0x18, 0x25, 0x7e, 0x66, 0x8 } };
