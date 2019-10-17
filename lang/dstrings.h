@@ -604,6 +604,7 @@ extern const wchar_t *dsParameter_Configuration_Failed_RC;
 extern const wchar_t* dsSignal_Error;
 extern const wchar_t* dsReference_Signal;
 extern const wchar_t* dsError_Signal;
+extern const wchar_t* dsError;
 
 //--------------------------------- do not translate any of the rs-prefixed texts --
 

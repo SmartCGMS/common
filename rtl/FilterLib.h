@@ -272,6 +272,12 @@ namespace glucose {
 		SCalculate_Filter_Inspection(SFilter &calculate_filter);
 	};
 
+
+	class SSignal_Error_Inspection : public virtual refcnt::SReferenced<glucose::ISignal_Error_Inspection> {
+	public:
+		SSignal_Error_Inspection(SFilter &signal_error_filter);
+	};
+
 }
 
 

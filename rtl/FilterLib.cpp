@@ -357,6 +357,11 @@ namespace glucose {
 			refcnt::Query_Interface<glucose::IFilter, glucose::ICalculate_Filter_Inspection>(calculate_filter.get(), IID_Calculate_Filter_Inspection, *this);
 	}
 
+	SSignal_Error_Inspection::SSignal_Error_Inspection(SFilter &signal_error_filter) {
+		if (signal_error_filter)
+			refcnt::Query_Interface<glucose::IFilter, glucose::ISignal_Error_Inspection>(signal_error_filter.get(), IID_Signal_Error_Inspection, *this);
+	}
+
 }
 
 

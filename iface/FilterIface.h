@@ -296,7 +296,7 @@ namespace glucose {
 		virtual HRESULT IfaceCalling Promise_Metric(double* const metric_value, bool defer_to_dtor) = 0;
 		//return S_OK if there are new data available since object construction or last call of Peek_New_Data_Available
 		virtual HRESULT IfaceCalling Peek_New_Data_Available() = 0;
-		virtual HRESULT IfaceCalling Calculate_Signal_Error(glucose::TSignal_Error &absolute_error, glucose::TSignal_Error &relative_error) = 0;
+		virtual HRESULT IfaceCalling Calculate_Signal_Error(glucose::TSignal_Error *absolute_error, glucose::TSignal_Error *relative_error) = 0;
 			//should there be a zero reference level, then absolute_error.count != relative_error.count
 	};
 
