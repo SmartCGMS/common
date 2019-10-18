@@ -429,8 +429,8 @@ const wchar_t *dsSignal_GUI_Name_Physical_Activity = L"Physical activity";
 const wchar_t *dsSignal_GUI_Name_Unknown = L"Unknown signal";
 
 const wchar_t *dsSolver_Progress_Box_Title = L"Solver progress";
-const wchar_t *dsError_Absolute = L"absolute";
-const wchar_t *dsError_Relative = L"relative";
+//const wchar_t *dsError_Absolute = L"absolute";
+//const wchar_t *dsError_Relative = L"relative";
 
 const wchar_t *dsError_Column_Average = L"Average";
 const wchar_t *dsError_Column_StdDev = L"Std.Dev (Bessel)";
@@ -635,6 +635,9 @@ const wchar_t* dsSignal_Error = L"Signal error";
 const wchar_t* dsReference_Signal = L"Reference signal";
 const wchar_t* dsError_Signal = L"Error signal";
 const wchar_t* dsError = L"Error";
+const wchar_t* dsDescription = L"Description";
+const wchar_t* dsAbsolute = L"Absolute [mmmol/l]";
+const wchar_t* dsRelative = L"Relative [%]";
 
 //--------------------------------- do not translate any of the rs-prefixed texts --
 
@@ -971,3 +974,4 @@ const wchar_t* rsMaximum_Time = L"Maximum_Time";
 
 const wchar_t* rsReference_Signal = L"Reference_Signal";
 const wchar_t* rsError_Signal = L"Error_Signal";
+const wchar_t* rsDescription = L"Description";

@@ -298,6 +298,7 @@ namespace glucose {
 		virtual HRESULT IfaceCalling Peek_New_Data_Available() = 0;
 		virtual HRESULT IfaceCalling Calculate_Signal_Error(glucose::TSignal_Error *absolute_error, glucose::TSignal_Error *relative_error) = 0;
 			//should there be a zero reference level, then absolute_error.count != relative_error.count
+		virtual HRESULT IfaceCalling Get_Description(wchar_t** const desc) = 0;
 	};
 
 	constexpr GUID IID_Error_Filter_Inspection = { 0x13ebd008, 0x5284, 0x4520,{ 0xbc, 0x2a, 0xa9, 0x18, 0x25, 0x7e, 0x66, 0x8 } };

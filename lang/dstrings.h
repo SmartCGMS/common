@@ -432,8 +432,8 @@ extern const wchar_t *dsSignal_GUI_Name_Physical_Activity;
 extern const wchar_t *dsSignal_GUI_Name_Unknown;
 
 extern const wchar_t *dsSolver_Progress_Box_Title;
-extern const wchar_t *dsError_Absolute;
-extern const wchar_t *dsError_Relative;
+//extern const wchar_t *dsError_Absolute;
+//extern const wchar_t *dsError_Relative;
 
 extern const wchar_t *dsError_Column_Average;
 extern const wchar_t *dsError_Column_StdDev;
@@ -605,6 +605,9 @@ extern const wchar_t* dsSignal_Error;
 extern const wchar_t* dsReference_Signal;
 extern const wchar_t* dsError_Signal;
 extern const wchar_t* dsError;
+extern const wchar_t* dsDescription;
+extern const wchar_t* dsAbsolute;
+extern const wchar_t* dsRelative;
 
 //--------------------------------- do not translate any of the rs-prefixed texts --
 
@@ -933,3 +936,4 @@ extern const wchar_t* rsMaximum_Time;
 
 extern const wchar_t* rsReference_Signal;
 extern const wchar_t* rsError_Signal;
+extern const wchar_t* rsDescription;
