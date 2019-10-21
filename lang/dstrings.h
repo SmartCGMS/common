@@ -170,7 +170,6 @@ extern const wchar_t *dsSignal_Masked_Id;
 extern const wchar_t *dsSignal_Value_Bitmask;
 
 extern const wchar_t *dsHold_Filter;
-extern const wchar_t *dsErrors_Filter;
 extern const wchar_t *dsDrawing_Filter;
 extern const wchar_t *dsMapping_Filter;
 extern const wchar_t *dsMasking_Filter;
@@ -437,7 +436,7 @@ extern const wchar_t *dsSolver_Progress_Box_Title;
 
 extern const wchar_t *dsError_Column_Average;
 extern const wchar_t *dsError_Column_StdDev;
-extern const wchar_t *dsError_Column_AIC;
+extern const wchar_t *dsError_Column_Count;
 extern const wchar_t *dsError_Column_Sum;
 extern const wchar_t *dsError_Column_Minimum;
 extern const wchar_t *dsError_Column_First_Quantile;

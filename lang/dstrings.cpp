@@ -169,7 +169,6 @@ const wchar_t *dsSignal_Masked_Id = L"Signal ID";
 const wchar_t *dsSignal_Value_Bitmask = L"(bit)Mask<br>(8-64 bit, reads left-to-right)";
 
 const wchar_t *dsHold_Filter = L"Hold";
-const wchar_t *dsErrors_Filter = L"Error metrics";
 const wchar_t *dsDrawing_Filter = L"Drawing";
 const wchar_t *dsMapping_Filter = L"Signal mapping";
 const wchar_t *dsMasking_Filter = L"Signal value masking";
@@ -434,7 +433,7 @@ const wchar_t *dsSolver_Progress_Box_Title = L"Solver progress";
 
 const wchar_t *dsError_Column_Average = L"Average";
 const wchar_t *dsError_Column_StdDev = L"Std.Dev (Bessel)";
-const wchar_t *dsError_Column_AIC = L"AIC";
+const wchar_t *dsError_Column_Count = L"Count";
 const wchar_t *dsError_Column_Sum = L"Sum";
 const wchar_t *dsError_Column_Minimum = L"Minimum";
 const wchar_t *dsError_Column_First_Quantile = L"1. Quartile";

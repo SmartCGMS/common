@@ -275,6 +275,7 @@ namespace glucose {
 
 	class SSignal_Error_Inspection : public virtual refcnt::SReferenced<glucose::ISignal_Error_Inspection> {
 	public:
+		SSignal_Error_Inspection() noexcept {};
 		SSignal_Error_Inspection(SFilter &signal_error_filter);
 	};
 
