@@ -442,10 +442,10 @@ const wchar_t *dsError_Column_Third_Quantile = L"3. Quartile";
 const wchar_t *dsError_Column_95_Quantile = L"95% Quantile";
 const wchar_t *dsError_Column_99_Quantile = L"99% Quantile";
 const wchar_t *dsError_Column_Maximum = L"Maximum";
-const wchar_t *dsError_Column_Range_5pct = L"5% range";
-const wchar_t *dsError_Column_Range_10pct = L"10% range";
-const wchar_t *dsError_Column_Range_25pct = L"25% range";
-const wchar_t *dsError_Column_Range_50pct = L"50% range";
+const wchar_t *dsError_Column_Range_5pct = L"<=5% prob.";
+const wchar_t *dsError_Column_Range_10pct = L"<=10% prob.";
+const wchar_t *dsError_Column_Range_25pct = L"<=25% prob.";
+const wchar_t *dsError_Column_Range_50pct = L"<=50% prob.";
 
 const wchar_t* rsInsert_New_Measured_Value = L"INSERT INTO measuredvalue (measuredat, blood, ist, isig, insulin_bolus, insulin_basal_rate, carbohydrates, calibration, segmentid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 

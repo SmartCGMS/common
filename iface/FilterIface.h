@@ -251,7 +251,7 @@ namespace glucose {
 	struct TSignal_Error {
 		double avg, stddev, sum;	//standard deviation with Bessel's correction
 		size_t count;				//number of elements on which we calculate the metrics
-		double ecdf[static_cast<size_t>(NECDF::max_value)+1];
+		std::array<double, static_cast<size_t>(NECDF::max_value) + 1> ecdf;
 	};
 
 	// error types
