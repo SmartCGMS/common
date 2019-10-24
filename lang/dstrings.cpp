@@ -267,8 +267,7 @@ const wchar_t* dsAvg_Plus_Bessel_Std_Dev = L"average plus standard deviation wit
 const wchar_t* dsBlood = L"blood";
 const wchar_t* dsInterstitial = L"interstitial fluid";
 
-const wchar_t* dsConstant_Blood_Signal = L"Constant blood";
-const wchar_t* dsConstant_Insulin = L"Constant insulin";
+const wchar_t* dsConstant_Signal = L"Constant signal";
 
 const wchar_t* dsDiffusion_Model_v2 = L"Diffusion model v2";
 const wchar_t* dsSteil_Rebrin = L"Steil-Rebrin";
@@ -628,6 +627,13 @@ const wchar_t* dsBergman_BasalRate0 = L"BasalRate0";
 const wchar_t* dsBergman_diff2_p = L"p";
 const wchar_t* dsBergman_diff2_cg = L"cg";
 const wchar_t* dsBergman_diff2_c = L"c";
+
+const wchar_t *dsBergman_Signal_BG = L"Bergman - blood glucose";
+const wchar_t *dsBergman_Signal_IG = L"Bergman - interst. glucose";
+const wchar_t *dsBergman_Signal_IOB = L"Bergman - insulin on board";
+const wchar_t *dsBergman_Signal_COB = L"Bergman - CHO on board";
+const wchar_t *dsBergman_Signal_Basal_Insulin = L"Bergman - dosed basal insulin";
+const wchar_t *dsBergman_Signal_Insulin_Activity = L"Bergman - insulin activity";
 
 const wchar_t* dsSignal_Generator = L"Signal generator";
 const wchar_t* dsParameters = L"Parameters";

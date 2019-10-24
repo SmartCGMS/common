@@ -192,6 +192,20 @@ namespace refcnt {
 				return S_OK;
 			}
 
+			virtual HRESULT move(const size_t from_index, const size_t to_index) {
+				if ((from_index >= TAligned_Vector<T>::size()) ||
+					(to_index >= TAligned_Vector<T>::size()) ||
+					(from_index == to_index)) return E_INVALIDARG;
+
+				if (from_index < to_index)  
+					std::rotate(TAligned_Vector<T>::begin() + from_index, TAligned_Vector<T>::begin() + to_index, TAligned_Vector<T>::begin() + to_index + 1);
+				else  //to_index < from_index
+					std::rotate(TAligned_Vector<T>::begin() + to_index, TAligned_Vector<T>::begin() + from_index, TAligned_Vector<T>::begin() + from_index+1);
+				
+
+				return S_OK;
+			}
+
 			virtual HRESULT empty() const override final {
 				return TAligned_Vector<T>::empty() ? S_OK : S_FALSE;
 			}
@@ -210,6 +224,7 @@ namespace refcnt {
 			virtual HRESULT get(T **begin, T **end) const override final { *begin = const_cast<T*>(mBegin); *end = const_cast<T*>(mEnd); return S_OK; }
 			virtual HRESULT pop(T* value) override final { return E_NOTIMPL; }
 			virtual HRESULT remove(const size_t index) override final { return E_NOTIMPL; }
+			virtual HRESULT move(const size_t from_index, const size_t to_index) override final { return E_NOTIMPL; };
 			virtual HRESULT empty() const override final { return mEnd<=mBegin ? S_OK : S_FALSE; }
 		};
 

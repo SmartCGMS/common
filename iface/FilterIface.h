@@ -112,7 +112,7 @@ namespace glucose {
 			//both Load_From_ methods returns S_FALSE if incomplete configuration was constructed
 		virtual HRESULT IfaceCalling Load_From_File(const wchar_t *file_path) = 0;	//if nullptr, assumes default config file name
 		virtual HRESULT IfaceCalling Load_From_Memory(const char *memory, const size_t len) = 0;
-		virtual HRESULT IfaceCalling Save_To_File(const wchar_t *file_path) = 0; //if nullptr, saves to the file_name previously supplied to Load_From_File
+		virtual HRESULT IfaceCalling Save_To_File(const wchar_t *file_path) = 0; //if nullptr, saves to the file_name previously supplied to Load_From_File		
 	};	
 
 	class IFilter : public virtual refcnt::IReferenced {
@@ -153,7 +153,8 @@ namespace glucose {
 
 	class IDiscrete_Model : public virtual glucose::IFilter {
 	public:
-		virtual HRESULT Step(const double time_advance_delta) = 0;
+		virtual HRESULT IfaceCalling Set_Current_Time(const double new_current_time) = 0;
+		virtual HRESULT IfaceCalling Step(const double time_advance_delta) = 0;
 	};
 
 	using TCreate_Persistent_Filter_Chain_Configuration = HRESULT(IfaceCalling *)(IPersistent_Filter_Chain_Configuration **configuration);

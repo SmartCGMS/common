@@ -80,21 +80,13 @@ namespace refcnt {
 		S result;
 		result.reset(obj, [](I* obj_to_release) {if (obj_to_release != nullptr) obj_to_release->Release(); });
 		//shared_ptr will overtake the assignment operations and maintain its own counter
-		//when shared_ptr's counter will come to zero, referenced's relase will take action
+		//when shared_ptr's counter comes to zero, referenced's Release  takes action
 		return result;
 	}
 
 	template <typename I>
 	std::shared_ptr<I>  make_shared_reference(I *obj, bool add_reference) {
 		return make_shared_reference_ext<std::shared_ptr<I>, I>(obj, add_reference);
-
-		/*
-		if (add_reference) obj->AddRef();
-		std::shared_ptr<I> result(obj, [](I* obj_to_release) {obj_to_release->Release(); });
-			//shared_ptr will overtake the assignment operations and maintain its own counter
-			//when shared_ptr's counter will come to zero, referenced's relase will take action
-		return result;
-		*/
 	}
 
 	template <typename I, typename Q>
@@ -120,12 +112,14 @@ namespace refcnt {
 	template <typename T>
 	class IVector_Container : public virtual refcnt::IReferenced {
 	public:
-		virtual HRESULT set(T *begin, T *end) = 0;		//T may point to e.g., IReferenced, thus cannot be const
-		virtual HRESULT add(T *begin, T *end) = 0;
-		virtual HRESULT get(T **begin, T **end) const = 0;
-		virtual HRESULT pop(T* value) = 0;
-		virtual HRESULT remove(const size_t index) = 0;
-		virtual HRESULT empty() const = 0;
+		virtual HRESULT set(T *begin, T *end) = 0;			//sets new content to a given block for <begin, end)
+															//T may point to e.g., IReferenced, thus cannot be const
+		virtual HRESULT add(T *begin, T *end) = 0;			//appends new content
+		virtual HRESULT get(T **begin, T **end) const = 0;	//receives boundaries of existing content <*begin, *end)
+		virtual HRESULT pop(T* value) = 0;					//removes and returns exactly one item from the existing content
+		virtual HRESULT remove(const size_t index) = 0;		//removes exactly one item from the existing content, identified by its ordinal number/position from begin
+		virtual HRESULT move(const size_t from_index, const size_t to_index) = 0;	//moves exactly one item from to
+		virtual HRESULT empty() const = 0;					//tests whether there is at least one item
 	};
 
 	using str_container = IVector_Container<char>;

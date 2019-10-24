@@ -271,8 +271,7 @@ extern const wchar_t* dsAvg_Plus_Bessel_Std_Dev;
 extern const wchar_t* dsBlood;
 extern const wchar_t* dsInterstitial;
 
-extern const wchar_t* dsConstant_Blood_Signal;
-extern const wchar_t* dsConstant_Insulin;
+extern const wchar_t* dsConstant_Signal;
 
 extern const wchar_t* dsDiffusion_Model_v2;
 extern const wchar_t* dsSteil_Rebrin;
@@ -795,6 +794,13 @@ extern const wchar_t* dsBergman_BasalRate0;
 extern const wchar_t* dsBergman_diff2_p;
 extern const wchar_t* dsBergman_diff2_cg;
 extern const wchar_t* dsBergman_diff2_c;
+
+extern const wchar_t *dsBergman_Signal_BG;
+extern const wchar_t *dsBergman_Signal_IG;
+extern const wchar_t *dsBergman_Signal_IOB;
+extern const wchar_t *dsBergman_Signal_COB;
+extern const wchar_t *dsBergman_Signal_Basal_Insulin;
+extern const wchar_t *dsBergman_Signal_Insulin_Activity;
 
 extern const wchar_t* dsSignal_Generator;
 extern const wchar_t* dsParameters;
