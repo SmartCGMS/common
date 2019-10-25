@@ -203,12 +203,41 @@ namespace glucose {
 		SFilter_Parameter Add_Parameter(const glucose::NParameter_Type type, const wchar_t *conf_name);
 	};
 
-	class SPersistent_Filter_Chain_Configuration : public virtual refcnt::SReferenced<glucose::IPersistent_Filter_Chain_Configuration> {
-	public:
-		SPersistent_Filter_Chain_Configuration();
+	namespace internal {
 
-		void for_each(std::function<void(glucose::SFilter_Configuration_Link)> callback);
-		SFilter_Configuration_Link Add_Link(const GUID &id);
+		glucose::SFilter_Configuration_Link Create_Configuration_Link(const GUID &id);
+
+		template <typename IChain_Configuration>
+		class CInternal_Filter_Chain_Configuration : public virtual refcnt::SReferenced<IChain_Configuration> {
+		public:
+			SFilter_Configuration_Link Add_Link(const GUID &id) {
+				glucose::SFilter_Configuration_Link link = Create_Configuration_Link(id);				
+				if (link) {
+					glucose::IFilter_Configuration_Link *raw_link = link.get();
+					refcnt::SReferenced<IChain_Configuration>::get()->add(&raw_link, &raw_link + 1);
+				}
+
+				return link;
+			}
+
+
+			void for_each(std::function<void(glucose::SFilter_Configuration_Link)> callback) {
+				glucose::IFilter_Configuration_Link **link_begin, **link_end;
+				HRESULT rc = refcnt::SReferenced<IChain_Configuration>::get()->get(&link_begin, &link_end);
+				if (rc != S_OK) return;
+
+
+				for (; link_begin != link_end; link_begin++)
+					callback(refcnt::make_shared_reference_ext<SFilter_Configuration_Link, IFilter_Configuration_Link>(*link_begin, true));
+			}
+		};
+	}
+
+	using SFilter_Chain_Configuration = internal::CInternal_Filter_Chain_Configuration<glucose::IFilter_Chain_Configuration>;
+
+	class SPersistent_Filter_Chain_Configuration : public virtual internal::CInternal_Filter_Chain_Configuration<glucose::IPersistent_Filter_Chain_Configuration> {
+	public:
+		SPersistent_Filter_Chain_Configuration();				
 	};
 
 	class SFilter_Executor : public virtual refcnt::SReferenced<glucose::IFilter_Executor> {

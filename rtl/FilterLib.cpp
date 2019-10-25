@@ -207,34 +207,22 @@ namespace glucose {
 		return result;
 	}
 
+	glucose::SFilter_Configuration_Link internal::Create_Configuration_Link(const GUID &id) {
+		glucose::SFilter_Configuration_Link result;
+		glucose::IFilter_Configuration_Link *link;
+		if (imported::create_filter_configuration_link(&id, &link) == S_OK) {
+			result = refcnt::make_shared_reference_ext<glucose::SFilter_Configuration_Link, glucose::IFilter_Configuration_Link>(link, false);
+		}
+
+		return result;
+	}	
+
 	SPersistent_Filter_Chain_Configuration::SPersistent_Filter_Chain_Configuration() {
 		IPersistent_Filter_Chain_Configuration *configuration;
 		if (imported::create_persistent_filter_chain_configuration(&configuration) == S_OK)
 			reset(configuration, [](IPersistent_Filter_Chain_Configuration* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });							
 	}
 
-
-	void SPersistent_Filter_Chain_Configuration::for_each(std::function<void(glucose::SFilter_Configuration_Link)> callback) {
-		glucose::IFilter_Configuration_Link **link_begin, **link_end;
-		HRESULT rc = get()->get(&link_begin, &link_end);
-		if (rc != S_OK) return;
-
-
-		for (; link_begin != link_end; link_begin++)
-			callback(refcnt::make_shared_reference_ext<SFilter_Configuration_Link, IFilter_Configuration_Link>(*link_begin, true));
-	}
-	
-
-	SFilter_Configuration_Link SPersistent_Filter_Chain_Configuration::Add_Link(const GUID &id) {		
-		glucose::SFilter_Configuration_Link result;
-		glucose::IFilter_Configuration_Link *link;
-		if (imported::create_filter_configuration_link(&id, &link) == S_OK) {
-			if (get()->add(&link, &link+1) == S_OK) result = refcnt::make_shared_reference_ext<glucose::SFilter_Configuration_Link, glucose::IFilter_Configuration_Link>(link, false);
-			else link->Release();
-		}
-			
-		return result;
-	}
 
 	SFilter_Executor::SFilter_Executor(refcnt::SReferenced<glucose::IFilter_Chain_Configuration> configuration, glucose::TOn_Filter_Created on_filter_created, const void* on_filter_created_data) {
 		glucose::IFilter_Executor *executor;
