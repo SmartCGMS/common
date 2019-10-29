@@ -113,7 +113,6 @@ namespace glucose {
 				return Read_Parameter<std::vector<int64_t>>(name, &SFilter_Parameter::as_int_array, std::vector<int64_t>{});
 			}
 
-
 			GUID Read_GUID(const wchar_t* name, const GUID &default_value = Invalid_GUID) const {
 				return Read_Parameter<GUID>(name, &SFilter_Parameter::as_guid, default_value);
 			}
@@ -126,7 +125,13 @@ namespace glucose {
 				return Read_Parameter<double>(name, &SFilter_Parameter::as_double, default_value);
 			}
 
+			std::vector<double> Read_Double_Array(const wchar_t* name) const {
+				return Read_Parameter<std::vector<double>>(name, &SFilter_Parameter::as_double_array, std::vector<double>{});
+			}
+
+
 			void Read_Parameters(const wchar_t* name, glucose::SModel_Parameter_Vector &lower_bound, glucose::SModel_Parameter_Vector &default_parameters, glucose::SModel_Parameter_Vector &upper_bound) const {
+
 				const auto parameter = Resolve_Parameter(name);
 
 				bool success = parameter.operator bool();
@@ -273,13 +278,6 @@ namespace glucose {
 	public:
 		SDiscrete_Model();
 		SDiscrete_Model(const GUID &id, glucose::SModel_Parameter_Vector parameters, glucose::SFilter output);
-	};
-
-
-	class SError_Filter_Inspection : public std::shared_ptr<IError_Filter_Inspection> {
-	public:
-		SError_Filter_Inspection() noexcept {};
-		SError_Filter_Inspection(SFilter &error_filter);
 	};
 
 	class SDrawing_Filter_Inspection : public std::shared_ptr<IDrawing_Filter_Inspection> {

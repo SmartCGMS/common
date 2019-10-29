@@ -301,14 +301,6 @@ namespace glucose {
 		virtual HRESULT IfaceCalling Get_Description(wchar_t** const desc) = 0;
 	};
 
-	constexpr GUID IID_Error_Filter_Inspection = { 0x13ebd008, 0x5284, 0x4520,{ 0xbc, 0x2a, 0xa9, 0x18, 0x25, 0x7e, 0x66, 0x8 } };
-	class IError_Filter_Inspection : public virtual refcnt::IReferenced {
-	public:		
-		virtual HRESULT IfaceCalling New_Data_Available() = 0;
-		// retrieves error markers for a given signal and error type
-		virtual HRESULT IfaceCalling Get_Errors(const GUID *signal_id, const glucose::NError_Type type, glucose::TError_Markers *markers) = 0;
-	};
-
 	constexpr GUID IID_Drawing_Filter_Inspection = { 0xd0c81596, 0xdea0, 0x4edf,{ 0x8b, 0x97, 0xe1, 0xd3, 0x78, 0xda, 0xfe, 0x3d } };
 	class IDrawing_Filter_Inspection : public virtual refcnt::IReferenced {
 	public:

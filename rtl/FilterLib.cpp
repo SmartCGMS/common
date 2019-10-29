@@ -308,14 +308,7 @@ namespace glucose {
 		if (imported::create_discrete_model(&id, parameters.get(), output.get(), &model) == S_OK)
 			reset(model, [](glucose::IDiscrete_Model* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });
 	}
-
-
-
-	SError_Filter_Inspection::SError_Filter_Inspection(SFilter &error_filter) {
-		if (error_filter)
-			refcnt::Query_Interface<glucose::IFilter, glucose::IError_Filter_Inspection>(error_filter.get(), IID_Error_Filter_Inspection, *this);
-	}
-
+	
 	SDrawing_Filter_Inspection::SDrawing_Filter_Inspection(SFilter &drawing_filter) {
 		if (drawing_filter)
 			refcnt::Query_Interface<glucose::IFilter, glucose::IDrawing_Filter_Inspection>(drawing_filter.get(), IID_Drawing_Filter_Inspection, *this);

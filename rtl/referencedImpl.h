@@ -269,6 +269,17 @@ namespace refcnt {
 		return refcnt::make_shared_reference_ext <S, IVector_Container<T>>(obj, false);
 	}
 
+	template <typename T, typename I = IVector_Container<T>>
+	I* Copy_Container(I* src) {
+		I* result = nullptr;
+		// copy parameter hint to internal vector
+		T *begin, *end;
+		if (src->get(&begin, &end) == S_OK)
+			result = Create_Container<T>(begin, end);
+
+		return result;
+	}
+
 	template <typename T, typename S = SVector_Container<T>>
 	S Copy_Container(SVector_Container<T> src) {
 		S result;
