@@ -72,6 +72,13 @@ namespace glucose {
 		SMetric Clone();
 	};
 
+	class SCalculate_Filter_Inspection : public std::shared_ptr<ICalculate_Filter_Inspection> {
+	public:
+		SCalculate_Filter_Inspection() noexcept {};
+		SCalculate_Filter_Inspection(SFilter &calculate_filter);
+	};
+
+
 	HRESULT Solve_Model_Parameters(const TSolver_Setup &setup);
 
 }

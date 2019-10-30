@@ -43,7 +43,6 @@
 #include <vector>
 
 #include "DeviceIface.h"
-#include "SolverIface.h"
 #include "referencedIface.h"
 
 
@@ -316,18 +315,6 @@ namespace glucose {
 		   returns S_OK if there was at least one log record, S_FALSE if none, E_FAIL otherwise
 		*/
 		virtual HRESULT IfaceCalling Pop(refcnt::wstr_list **str) = 0;
-	};
-
-
-	constexpr GUID IID_Calculate_Filter_Inspection = { 0xec44cd18, 0x8d08, 0x46d1, { 0xa6, 0xcb, 0xc2, 0x43, 0x8e, 0x4, 0x19, 0x88 } };	
-	class ICalculate_Filter_Inspection : public virtual refcnt::IReferenced {
-	public:
-		// makes a deep copy of the entire progress
-		virtual HRESULT IfaceCalling Get_Solver_Progress(solver::TSolver_Progress* const progress) = 0;
-		// retrieves solver information
-		virtual HRESULT IfaceCalling Get_Solver_Information(GUID* const calculated_signal_id, glucose::TSolver_Status* const status) const = 0;
-		// explicitly cancels solver
-		virtual HRESULT IfaceCalling Cancel_Solver() = 0;
 	};
 	
 }

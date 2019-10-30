@@ -335,13 +335,6 @@ namespace glucose {
 		bool pop(std::shared_ptr<refcnt::wstr_list> &list);
 	};
 
-	class SCalculate_Filter_Inspection : public std::shared_ptr<ICalculate_Filter_Inspection> {
-	public:
-		SCalculate_Filter_Inspection() noexcept {};
-		SCalculate_Filter_Inspection(SFilter &calculate_filter);
-	};
-
-
 	class SSignal_Error_Inspection : public virtual refcnt::SReferenced<glucose::ISignal_Error_Inspection> {
 	public:
 		SSignal_Error_Inspection() noexcept {};

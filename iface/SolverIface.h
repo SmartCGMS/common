@@ -38,7 +38,7 @@
 
 #pragma once
 
-#include "FilterIface.h"
+#include "DeviceIface.h"
 
 #undef min
 
@@ -128,6 +128,17 @@ namespace glucose {
 		IModel_Parameter_Vector **solution_hints; const size_t hint_count;
 		IModel_Parameter_Vector *solved_parameters;		//obtained result
 		solver::TSolver_Progress *progress;
+	};
+
+	constexpr GUID IID_Calculate_Filter_Inspection = { 0xec44cd18, 0x8d08, 0x46d1, { 0xa6, 0xcb, 0xc2, 0x43, 0x8e, 0x4, 0x19, 0x88 } };
+	class ICalculate_Filter_Inspection : public virtual refcnt::IReferenced {
+	public:
+		// makes a deep copy of the entire progress
+		virtual HRESULT IfaceCalling Get_Solver_Progress(solver::TSolver_Progress* const progress) = 0;
+		// retrieves solver information
+		virtual HRESULT IfaceCalling Get_Solver_Information(GUID* const calculated_signal_id, glucose::TSolver_Status* const status) const = 0;
+		// explicitly cancels solver
+		virtual HRESULT IfaceCalling Cancel_Solver() = 0;
 	};
 
 	using TCreate_Metric = HRESULT(IfaceCalling*)(const TMetric_Parameters *parameters, IMetric **metric);

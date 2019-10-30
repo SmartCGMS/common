@@ -98,6 +98,11 @@ glucose::SMetric glucose::SMetric::Clone()
 	return result;
 }
 
+glucose::SCalculate_Filter_Inspection::SCalculate_Filter_Inspection(gluocose::SFilter &calculate_filter) {
+	if (calculate_filter)
+		refcnt::Query_Interface<glucose::IFilter, glucose::ICalculate_Filter_Inspection>(calculate_filter.get(), IID_Calculate_Filter_Inspection, *this);
+}
+
 HRESULT glucose::Solve_Model_Parameters(const glucose::TSolver_Setup &setup) {
 	return imported::solve_model_parameters(&setup);
 }
