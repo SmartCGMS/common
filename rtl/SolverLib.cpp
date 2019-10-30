@@ -44,6 +44,7 @@
 namespace imported {
 	glucose::TSolve_Model_Parameters solve_model_parameters = factory::resolve_symbol<glucose::TSolve_Model_Parameters>("solve_model_parameters");
 	glucose::TCreate_Metric create_metric = factory::resolve_symbol<glucose::TCreate_Metric>("create_metric");
+	glucose::TOptimize_Parameters = optimize_parameters = factory::resolve_symbol<glucose::TOptimize_Parameters>("optimize_parameters");
 }
 
 solver::TSolver_Setup solver::Check_Default_Parameters(const solver::TSolver_Setup &setup, const size_t default_max_generations, const size_t default_population_size) {

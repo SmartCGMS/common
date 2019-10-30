@@ -38,7 +38,7 @@
 
 #pragma once
 
-#include "DeviceIface.h"
+#include "FilterIface.h"
 
 #undef min
 
@@ -71,8 +71,7 @@ namespace solver {
 
 
 	const TSolver_Setup Default_Solver_Setup = { 0, nullptr, nullptr, nullptr, 0, nullptr, nullptr, nullptr, 0, 0, std::numeric_limits<double>::min() };
-	using TGeneric_Solver = HRESULT(IfaceCalling*)(const GUID *solver_id, const TSolver_Setup *setup, TSolver_Progress *progress);
-	
+	using TGeneric_Solver = HRESULT(IfaceCalling*)(const GUID *solver_id, const TSolver_Setup *setup, TSolver_Progress *progress);		
 }
 
 namespace glucose {
@@ -131,11 +130,14 @@ namespace glucose {
 		solver::TSolver_Progress *progress;
 	};
 
-
 	using TCreate_Metric = HRESULT(IfaceCalling*)(const TMetric_Parameters *parameters, IMetric **metric);
 	using TSolve_Model_Parameters = HRESULT(IfaceCalling*)(const TSolver_Setup *setup);
 		//generic, e.g., evolutionary, solver uses signal_id to calculate its metric function on the given list of segments
 		//specialized solver has the signal ids encoded - i.e., specialized inside
 		//the very first hint, if provided, has to be the best one
+
+	using TOptimize_Parameters = HRESULT(IfaceCalling*)(glucose::IFilter_Chain_Configuration *configuration, const size_t filter_index, const wchar_t *parameters_configuration_name,
+		glucose::TOn_Filter_Created on_filter_created, const void* on_filter_created_data,
+		const GUID solver_id, const size_t population_size, const size_t max_generations, solver::TSolver_Progress *progress);
 
 }

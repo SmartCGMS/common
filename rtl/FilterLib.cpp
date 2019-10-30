@@ -62,6 +62,14 @@ namespace glucose {
 		return result;
 	}
 
+
+	const wchar_t* SFilter_Parameter::configuration_name() {
+		wchar_t* result = nullptr;
+		get()->Get_Config_Name(&result);	
+		return result;
+	}
+
+
 	std::wstring SFilter_Parameter::as_wstring(HRESULT &rc) {
 		std::wstring result;
 
@@ -207,6 +215,14 @@ namespace glucose {
 		return result;
 	}
 
+	glucose::SFilter_Parameter glucose::internal::Create_Filter_Parameter(const glucose::NParameter_Type type, const wchar_t *config_name) {
+		glucose::SFilter_Parameter result;
+		glucose::IFilter_Parameter *new_parameter;
+		if (imported::create_filter_parameter(type, config_name, &new_parameter) == S_OK)
+			result = refcnt::make_shared_reference_ext<glucose::SFilter_Parameter, glucose::IFilter_Parameter>(new_parameter, false);
+		return result;
+	}
+
 	glucose::SFilter_Configuration_Link internal::Create_Configuration_Link(const GUID &id) {
 		glucose::SFilter_Configuration_Link result;
 		glucose::IFilter_Configuration_Link *link;
@@ -303,9 +319,11 @@ namespace glucose {
 		//
 	}
 
-	SDiscrete_Model::SDiscrete_Model(const GUID &id, glucose::SModel_Parameter_Vector parameters, glucose::SFilter output) {
+	SDiscrete_Model::SDiscrete_Model(const GUID &id, const std::vector<double> &parameters, glucose::SFilter output) {
+		glucose::SModel_Parameter_Vector parameters_shared = refcnt::Create_Container_shared<double, glucose::SModel_Parameter_Vector>(const_cast<double*>(parameters.data()), const_cast<double*>(parameters.data()+parameters.size()));			
+
 		glucose::IDiscrete_Model *model;
-		if (imported::create_discrete_model(&id, parameters.get(), output.get(), &model) == S_OK)
+		if (imported::create_discrete_model(&id, parameters_shared.get(), output.get(), &model) == S_OK)
 			reset(model, [](glucose::IDiscrete_Model* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });
 	}
 	

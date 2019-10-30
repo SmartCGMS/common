@@ -53,6 +53,7 @@ namespace glucose {
 	class SFilter_Parameter : public virtual refcnt::SReferenced<glucose::IFilter_Parameter> {
 	public:
 		NParameter_Type type();
+		const wchar_t* configuration_name();
 
 		std::wstring as_wstring(HRESULT &rc);
 		HRESULT set_wstring(const wchar_t *str);		
@@ -83,6 +84,8 @@ namespace glucose {
 
 	//class SFilter_Configuration : public std::shared_ptr<glucose::IFilter_Configuration> {
 	namespace internal {
+
+		SFilter_Parameter Create_Filter_Parameter(const glucose::NParameter_Type type, const wchar_t *config_name);
 
 		template <typename IConfiguration>
 		class CInternal_Filter_Configuration : public virtual refcnt::SReferenced<IConfiguration> {
@@ -130,25 +133,24 @@ namespace glucose {
 			}
 
 
-			void Read_Parameters(const wchar_t* name, glucose::SModel_Parameter_Vector &lower_bound, glucose::SModel_Parameter_Vector &default_parameters, glucose::SModel_Parameter_Vector &upper_bound) const {
+			bool Read_Parameters(const wchar_t* name, std::vector<double> &lower_bound, std::vector<double> &default_parameters, std::vector<double> &upper_bound) const {
+
+				bool success = false;
 
 				const auto parameter = Resolve_Parameter(name);
-
-				bool success = parameter.operator bool();
-
-				if (success) {
+				if (parameter) {					
 					glucose::IModel_Parameter_Vector *raw_parameters;
 					if (parameter->Get_Model_Parameters(&raw_parameters) == S_OK) {
-
+						
 						double *begin, *end;
 						if (raw_parameters->get(&begin, &end) == S_OK) {
 							if ((begin != nullptr) && (begin != end)) {
 								const size_t distance = std::distance(begin, end);
 								if (distance % 3 == 0) {
 									const size_t paramcnt = distance / 3; // lower, default, upper
-									lower_bound = refcnt::Create_Container_shared<double, glucose::SModel_Parameter_Vector>(begin, &begin[paramcnt]);
-									default_parameters = refcnt::Create_Container_shared<double, glucose::SModel_Parameter_Vector>(&begin[paramcnt], &begin[2 * paramcnt]);
-									upper_bound = refcnt::Create_Container_shared<double, glucose::SModel_Parameter_Vector>(&begin[2 * paramcnt], &begin[3 * paramcnt]);
+									lower_bound = std::move(std::vector<double>{ begin,  &begin[paramcnt] });
+									default_parameters = std::move(std::vector<double>{ &begin[paramcnt], &begin[2 * paramcnt] });
+									upper_bound = std::move(std::vector<double>{ &begin[2 * paramcnt], &begin[3 * paramcnt] });										
 									success = true;
 								}
 							}
@@ -157,12 +159,37 @@ namespace glucose {
 					raw_parameters->Release();
 				}
 
-				if (!success) {
-					lower_bound = glucose::SModel_Parameter_Vector{};
-					default_parameters = glucose::SModel_Parameter_Vector{};
-					upper_bound = glucose::SModel_Parameter_Vector{};
+				return success;
+			}
+
+			bool Write_Parameters(const wchar_t* name, const std::vector<double> &lower_bound, const std::vector<double> &default_parameters, const std::vector<double>& upper_bound) {
+				bool success = (lower_bound.size() == default_parameters.size()) && (default_parameters.size() == upper_bound.size());
+				
+				if (success) {
+					auto parameter = Resolve_Parameter(name);
+					if (!parameter) {
+						parameter = Create_Filter_Parameter(glucose::NParameter_Type::ptDouble_Array, name);
+						success = parameter.operator bool();
+
+						if (success) {
+							glucose::IFilter_Parameter *raw_parameter = parameter.get();
+							success = refcnt::SReferenced<IConfiguration>::get()->add(&raw_parameter, &raw_parameter + 1) == S_OK;
+						}
+					}
+
+					
+
+					if (success) {
+						std::vector<double> aggregated;
+						aggregated.assign(lower_bound.begin(), lower_bound.end());
+						aggregated.assign(default_parameters.begin(), default_parameters.end());
+						aggregated.assign(upper_bound.begin(), upper_bound.end());
+
+						success = parameter.set_double_array(aggregated) == S_OK;
+					}
 				}
 
+				return success;				
 			}
 
 			SFilter_Parameter Resolve_Parameter(const wchar_t* name) const {
@@ -196,7 +223,6 @@ namespace glucose {
 				for (; begin != end; begin++)
 					callback(refcnt::make_shared_reference_ext<SFilter_Parameter, IFilter_Parameter>(*begin, true));
 			}
-
 		};
 	}
 
@@ -235,6 +261,22 @@ namespace glucose {
 				for (; link_begin != link_end; link_begin++)
 					callback(refcnt::make_shared_reference_ext<SFilter_Configuration_Link, IFilter_Configuration_Link>(*link_begin, true));
 			}
+
+
+			glucose::SFilter_Configuration_Link operator[](const size_t index) {
+				glucose::SFilter_Configuration_Link result;
+				glucose::IFilter_Configuration_Link **begin, **end;
+
+		
+				if (refcnt::SReferenced<IChain_Configuration>::get()->get(&begin, &end) == S_OK) {
+					if (*begin + index < *end) {	//check the bounds
+						result = refcnt::make_shared_reference_ext<glucose::SFilter_Configuration_Link, glucose::IFilter_Configuration_Link>(*begin + index, true);
+					}
+				}
+
+				return result;
+			}
+
 		};
 	}
 
@@ -277,7 +319,7 @@ namespace glucose {
 	class SDiscrete_Model : public virtual refcnt::SReferenced<glucose::IDiscrete_Model> {
 	public:
 		SDiscrete_Model();
-		SDiscrete_Model(const GUID &id, glucose::SModel_Parameter_Vector parameters, glucose::SFilter output);
+		SDiscrete_Model(const GUID &id, const std::vector<double> &parameters, glucose::SFilter output);
 	};
 
 	class SDrawing_Filter_Inspection : public std::shared_ptr<IDrawing_Filter_Inspection> {
