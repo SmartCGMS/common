@@ -38,7 +38,7 @@
 
 #pragma once
 
-#include "DeviceIface.h"
+#include "FilterIface.h"
 
 #undef min
 

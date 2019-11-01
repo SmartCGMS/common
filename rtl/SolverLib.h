@@ -39,6 +39,7 @@
 #pragma once
 
 #include "../iface/SolverIface.h"
+#include "../rtl/FilterLib.h"
 
 #include <memory>
 
