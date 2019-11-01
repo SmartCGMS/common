@@ -44,6 +44,7 @@ const char* dsQuit = "Quit";
 const char* dsTools = "Tools";
 const char* dsFilters = "Filters";
 const char* dsSimulation = "Simulation";
+const char* dsOptimize_Parameters = "Optimize Parameters";
 
 const char* dsLog_Tab = "Log";
 const char* dsErrors_Tab = "Errors";

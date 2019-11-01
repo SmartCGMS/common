@@ -46,6 +46,7 @@ extern const char* dsQuit;
 extern const char* dsTools;
 extern const char* dsFilters;
 extern const char* dsSimulation;
+extern const char* dsOptimize_Parameters;
 
 extern const char* dsLog_Tab;
 extern const char* dsErrors_Tab;
