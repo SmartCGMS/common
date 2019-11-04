@@ -370,6 +370,8 @@ const wchar_t* dsSimplex = L"Simplex";
 const wchar_t* dsSubplex = L"Subplex";
 const wchar_t* dsPraxis = L"Praxis";
 
+const char* dsMax_Generations = "Maximum generations";
+const char* dsPopulation_Size = "Population size";
 
 
 const wchar_t *dsLine_Approx = L"Line";

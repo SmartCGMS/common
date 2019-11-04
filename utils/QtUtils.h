@@ -39,9 +39,13 @@
 #pragma once
 
 #include <QtCore/QString>
+#include <QtCore/QUuid>
 
 std::wstring QStringToStdWString(const QString &str);
 QString StdWStringToQString(const std::wstring &str);
+
+QUuid GUID_To_QUuid(const GUID& guid);
+GUID QUuid_To_GUID(const QUuid& uuid);
 
 // we may want to define NOGUI macro for non-graphical environments which still needs some of Qt utils
 #ifndef NOGUI

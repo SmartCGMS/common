@@ -374,6 +374,10 @@ extern const wchar_t* dsSimplex;
 extern const wchar_t* dsSubplex;
 extern const wchar_t* dsPraxis;
 
+extern const char* dsMax_Generations;
+extern const char* dsPopulation_Size;
+
+
 extern const wchar_t *dsLine_Approx;
 extern const wchar_t *dsAkima;
 
