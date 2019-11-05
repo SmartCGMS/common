@@ -123,7 +123,7 @@ namespace glucose {
 		HRESULT rc = E_FAIL;
 		glucose::IModel_Parameter_Vector *parameters = WString_To_Model_Parameters(str_value);
 		if (parameters) {
-			rc = get()->Set_Model_Parameters(parameters);;
+			rc = get()->Set_Model_Parameters(parameters);
 			parameters->Release();
 		}
 

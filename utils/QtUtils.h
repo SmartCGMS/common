@@ -44,6 +44,10 @@
 std::wstring QStringToStdWString(const QString &str);
 QString StdWStringToQString(const std::wstring &str);
 
+//works with non-locale installed languages
+std::string Narrow_WChar(const wchar_t *wstr);
+std::wstring Widen_Char(const char *str);
+
 QUuid GUID_To_QUuid(const GUID& guid);
 GUID QUuid_To_GUID(const QUuid& uuid);
 

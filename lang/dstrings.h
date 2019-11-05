@@ -63,6 +63,7 @@ extern const char* dsSolver_Status_In_Progress;
 extern const char* dsSolver_Status_Completed_Improved;
 extern const char* dsSolver_Status_Completed_Not_Improved;
 extern const char* dsSolver_Status_Failed;
+extern const char* dsSolver_Status_Stopped;
 
 extern const char* dsClose;
 extern const char* dsClose_All;

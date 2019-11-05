@@ -38,6 +38,8 @@
 
 #include "QtUtils.h"
 
+#include <sstream>
+
 /*! Convert a QString to an std::wstring */
 std::wstring QStringToStdWString(const QString &str) {
 #ifdef _MSC_VER
@@ -55,6 +57,25 @@ QString StdWStringToQString(const std::wstring &str) {
 #else
     return QString::fromStdWString(str);
 #endif
+}
+
+std::string Narrow_WChar(const wchar_t *wstr) {
+	std::ostringstream stm;
+	const std::ctype<char>& ctfacet = std::use_facet< std::ctype<char> >(stm.getloc());
+
+	const size_t len = wcslen(wstr);
+	for (size_t i = 0; i < len; ++i)
+		stm << ctfacet.narrow(wstr[i], 0);
+	return stm.str();
+}
+
+std::wstring Widen_Char(const char *str) {
+	std::wostringstream wstm;
+	const std::ctype<wchar_t>& ctfacet = std::use_facet<std::ctype<wchar_t> >(wstm.getloc());
+	const size_t len = strlen(str);
+	for (size_t i = 0; i < len; ++i)
+		wstm << ctfacet.widen(str[i]);
+	return wstm.str();
 }
 
 

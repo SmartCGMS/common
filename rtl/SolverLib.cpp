@@ -106,3 +106,12 @@ glucose::SCalculate_Filter_Inspection::SCalculate_Filter_Inspection(glucose::SFi
 HRESULT glucose::Solve_Model_Parameters(const glucose::TSolver_Setup &setup) {
 	return imported::solve_model_parameters(&setup);
 }
+
+
+HRESULT glucose::Optimize_Parameters(glucose::SFilter_Chain_Configuration configuration, const size_t filter_index, const wchar_t *parameters_configuration_name,
+									 glucose::TOn_Filter_Created on_filter_created, const void* on_filter_created_data,
+									 const GUID &solver_id, const size_t population_size, const size_t max_generations, solver::TSolver_Progress &progress) {
+	
+	return imported::optimize_parameters(configuration.get(), filter_index, parameters_configuration_name,
+									 	on_filter_created, on_filter_created_data, &solver_id, population_size, max_generations, &progress);
+}

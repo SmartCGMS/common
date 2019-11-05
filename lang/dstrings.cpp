@@ -61,6 +61,7 @@ const char* dsSolver_Status_In_Progress = "In progress";
 const char* dsSolver_Status_Completed_Improved = "Completed and improved";
 const char* dsSolver_Status_Completed_Not_Improved = "Completed, but not improved";
 const char* dsSolver_Status_Failed = "Failed";
+const char* dsSolver_Status_Stopped = "Stopped";
 
 const char* dsClose = "Close";
 const char* dsClose_All = "Close All";
