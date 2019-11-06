@@ -316,5 +316,18 @@ namespace glucose {
 		*/
 		virtual HRESULT IfaceCalling Pop(refcnt::wstr_list **str) = 0;
 	};
-	
+
+
+	constexpr GUID IID_Log_Replay_Inspection = { 0x9e116b83, 0xb86f, 0x41e1, { 0xba, 0xfd, 0x5d, 0x77, 0x25, 0xd, 0x65, 0x53 } };
+	class IID_Log_Replay_Inspection : public virtual refcnt::IReferenced {
+	public:
+		// returns S_OK if we can call Step subsequently
+		virtual HRESULT IfaceCalling Enforce_Stepping() = 0;
+
+		// returns S_OK if replayed one event
+		// returns S_FALSE if there is no more event to replay
+		// different error code means stop the replay anyway
+		virtual HRESULT IfaceCalling Step() = 0;
+	};
+
 }

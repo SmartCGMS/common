@@ -182,8 +182,8 @@ namespace glucose {
 					if (success) {
 						std::vector<double> aggregated;
 						aggregated.assign(lower_bound.begin(), lower_bound.end());
-						aggregated.assign(default_parameters.begin(), default_parameters.end());
-						aggregated.assign(upper_bound.begin(), upper_bound.end());
+						aggregated.insert(aggregated.end(), default_parameters.begin(), default_parameters.end());
+						aggregated.insert(aggregated.end(), upper_bound.begin(), upper_bound.end());
 
 						success = parameter.set_double_array(aggregated) == S_OK;
 					}

@@ -64,10 +64,11 @@ public:
 
 class CDb_Connection : public virtual db::IDb_Connection, public virtual refcnt::CReferenced {
 protected:
-	QString mConnection_Name;
+	QSqlDatabase mDb;
+	const QString mConnection_Name;
 public:
 	CDb_Connection(const wchar_t *host, const wchar_t *provider, uint16_t port, const wchar_t *name, const wchar_t *user_name, const wchar_t *password);
-	virtual ~CDb_Connection() {}
+	virtual ~CDb_Connection();
 
 	virtual HRESULT IfaceCalling Query(const wchar_t *statement, db::IDb_Query **query) override final;
 };

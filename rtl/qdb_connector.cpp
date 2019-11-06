@@ -147,23 +147,29 @@ HRESULT IfaceCalling CDb_Query::Cancel() {
 	return S_OK;
 }
 
+CDb_Connection::CDb_Connection(const wchar_t *host, const wchar_t *provider, uint16_t port, const wchar_t *name, const wchar_t *user_name, const wchar_t *password) : 
+	mConnection_Name("QDB_Connection_" + QUuid::createUuid().toString()) {
+	
+	mDb = QSqlDatabase::addDatabase(QString::fromWCharArray(provider), mConnection_Name);
+	
+	mDb.setHostName(QString::fromWCharArray(host));
+	if (port != 0) mDb.setPort(port);
+	mDb.setDatabaseName(QString::fromWCharArray(name));
+	mDb.setUserName(QString::fromWCharArray(user_name));
+	mDb.setPassword(QString::fromWCharArray(password));
 
-CDb_Connection::CDb_Connection(const wchar_t *host, const wchar_t *provider, uint16_t port, const wchar_t *name, const wchar_t *user_name, const wchar_t *password) {
-	mConnection_Name = "QDB_Connection_" + QUuid::createUuid().toString();
-	QSqlDatabase db = QSqlDatabase::addDatabase(QString::fromWCharArray(provider), mConnection_Name);
-	db.setHostName(QString::fromWCharArray(host));
-	if (port != 0) db.setPort(port);
-	db.setDatabaseName(QString::fromWCharArray(name));
-	db.setUserName(QString::fromWCharArray(user_name));
-	db.setPassword(QString::fromWCharArray(password));
-
-	if (!db.open()) {
-		dprintf(db.lastError().driverText().toStdString().c_str());
+	if (!mDb.open()) {
+		dprintf(mDb.lastError().driverText().toStdString().c_str());
 		dprintf("\n");
-		dprintf(db.lastError().databaseText().toStdString().c_str());
+		dprintf(mDb.lastError().databaseText().toStdString().c_str());
 		dprintf("\n");
 		throw "Cannot open database";
 	}
+}
+
+CDb_Connection::~CDb_Connection() {
+	mDb.close();
+	QSqlDatabase::removeDatabase(mConnection_Name);
 }
 
 
