@@ -153,7 +153,7 @@ namespace glucose {
 	class IDiscrete_Model : public virtual glucose::IFilter {
 	public:
 		virtual HRESULT IfaceCalling Set_Current_Time(const double new_current_time) = 0;
-		virtual HRESULT IfaceCalling Step(const double time_advance_delta) = 0;
+		virtual HRESULT IfaceCalling Step(const double time_advance_delta) = 0;	//time_advance_delta == 0.0 means to emit the current state
 	};
 
 	using TCreate_Persistent_Filter_Chain_Configuration = HRESULT(IfaceCalling *)(IPersistent_Filter_Chain_Configuration **configuration);

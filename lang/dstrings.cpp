@@ -652,7 +652,7 @@ const wchar_t* dsReference_Signal = L"Reference signal";
 const wchar_t* dsError_Signal = L"Error signal";
 const wchar_t* dsError = L"Error";
 const wchar_t* dsDescription = L"Description";
-const wchar_t* dsAbsolute = L"Absolute [mmmol/l]";
+const wchar_t* dsAbsolute = L"Absolute [mmol/l]";
 const wchar_t* dsRelative = L"Relative [%]";
 
 //--------------------------------- do not translate any of the rs-prefixed texts --
