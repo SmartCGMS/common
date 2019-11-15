@@ -51,7 +51,23 @@ namespace solver {
 	}
 
 
+	template <typename T>
 	class CConcurrent_Stack {
+	protected:
+		constexpr TLink<T>* mBusy_Item = static_cast<TLink<T>*>(-1);
+
+		std::atomic<TLink<T>*> mAvailable_List = nullptr;		
 	public:
+		~CConcurrent_Stack() {
+			//we need to walk the available list and free it
+		}
+
+		void push(T&& element) {
+
+		}
+
+		bool try_pop(T &&dst) {
+
+		}
 	};
 }
