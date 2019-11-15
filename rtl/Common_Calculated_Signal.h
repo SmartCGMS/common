@@ -49,13 +49,13 @@
 #pragma warning( disable : 4250 ) // C4250 - 'class1' : inherits 'class2::member' via dominance
 
 
-class CCommon_Calculed_Signal : public virtual glucose::ISignal, public virtual refcnt::CReferenced {	
+class CCommon_Calculated_Signal : public virtual glucose::ISignal, public virtual refcnt::CReferenced {	
 protected:
 	mutable CBuffer_Pool<TVector1D> mVector1D_Pool{Eigen_Buffer_Pool_Resize<TVector1D> };
 public:	
-	CCommon_Calculed_Signal() {};
-	CCommon_Calculed_Signal(glucose::WTime_Segment segment);
-	virtual ~CCommon_Calculed_Signal() {};
+	CCommon_Calculated_Signal() {};
+	CCommon_Calculated_Signal(glucose::WTime_Segment segment);
+	virtual ~CCommon_Calculated_Signal() {};
 
 	//glucose::ISignal iface
 	virtual HRESULT IfaceCalling Get_Discrete_Levels(double* const times, double* const levels, const size_t count, size_t *filled) const override;

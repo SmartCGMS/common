@@ -39,7 +39,7 @@
 #pragma once
 
 #include <functional>
-#include <tbb/concurrent_queue.h>
+#include "Concurrent_Stack.h"
 
 namespace internal {
 	template <typename T>
@@ -72,10 +72,10 @@ template <typename T>
 class CBuffer_Pool {
 	friend CPooled_Buffer<T>;
 protected:
-	tbb::concurrent_queue<T> mPool;
+	solver::CConcurrent_Stack<T> mPool;
 	internal::TResize_Lambda<T> mResize_Func;
 
-	void push(T&& elem) {
+	void push(T& elem) {
 		mPool.push(elem);
 	}
 
