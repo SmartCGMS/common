@@ -298,6 +298,14 @@ extern const wchar_t* dsConstant_Model;
 
 extern const wchar_t* dsOref0_Solver;
 
+extern const wchar_t* dsIOB_Model;
+extern const wchar_t* dsCOB_Model;
+extern const wchar_t* dsInsulin_Activity_Bilinear;
+extern const wchar_t* dsInsulin_Activity_Exponential;
+extern const wchar_t* dsIOB_Bilinear;
+extern const wchar_t* dsIOB_Exponential;
+extern const wchar_t* dsCOB_Bilinear;
+
 extern const wchar_t* dsP;
 extern const wchar_t* dsCg;
 extern const wchar_t* dsC;
@@ -327,12 +335,14 @@ extern const wchar_t* dsPredictiveDt;
 extern const wchar_t* dsInsulin_TwoTerm_Regulation;
 extern const wchar_t* dsInsulin_PID_Regulation;
 extern const wchar_t* dsBetaPID;
+extern const wchar_t* dsBetaPID3;
 extern const wchar_t* dsInsulin_TwoTerm_OnOff_Rate;
 extern const wchar_t* dsInsulin_TwoTerm_OnNeturalOff_Rate;
 extern const wchar_t* dsInsulin_TwoTerm_OnOff_Hysteresis_Rate;
 extern const wchar_t* dsInsulin_PID_Regulation_Rate;
 extern const wchar_t* dsInsulin_BetaPID_Rate;
 extern const wchar_t* dsInsulin_BetaPID2_Rate;
+extern const wchar_t* dsInsulin_BetaPID3_Rate;
 extern const wchar_t* dsKp;
 extern const wchar_t* dsKi;
 extern const wchar_t* dsKd;
@@ -474,6 +484,7 @@ extern const wchar_t* rsT1DMS_Sender_Filter;
 extern const wchar_t* rsInsulin_Regulation;
 extern const wchar_t* rsInsulin_PID_Regulation;
 extern const wchar_t* rsBetaPID;
+extern const wchar_t* rsBetaPID3;
 extern const wchar_t* rsKp;
 extern const wchar_t* rsKi;
 extern const wchar_t* rsKd;
@@ -612,6 +623,53 @@ extern const wchar_t* dsError;
 extern const wchar_t* dsDescription;
 extern const wchar_t* dsAbsolute;
 extern const wchar_t* dsRelative;
+
+extern const wchar_t* dsBergman_Minimal_Model;
+extern const wchar_t* dsBergman_p1;
+extern const wchar_t* dsBergman_p2;
+extern const wchar_t* dsBergman_p3;
+extern const wchar_t* dsBergman_p4;
+extern const wchar_t* dsBergman_Vi;
+extern const wchar_t* dsBergman_BW;
+extern const wchar_t* dsBergman_VgDist;
+extern const wchar_t* dsBergman_d1rate;
+extern const wchar_t* dsBergman_d2rate;
+extern const wchar_t* dsBergman_irate;
+extern const wchar_t* dsBergman_Gb;
+extern const wchar_t* dsBergman_Ib;
+extern const wchar_t* dsBergman_G0;
+extern const wchar_t* dsBergman_X0;
+extern const wchar_t* dsBergman_I0;
+extern const wchar_t* dsBergman_D10;
+extern const wchar_t* dsBergman_D20;
+extern const wchar_t* dsBergman_Isc0;
+extern const wchar_t* dsBergman_Gsc0;
+extern const wchar_t* dsBergman_BasalRate0;
+extern const wchar_t* dsBergman_diff2_p;
+extern const wchar_t* dsBergman_diff2_cg;
+extern const wchar_t* dsBergman_diff2_c;
+
+extern const wchar_t *dsBergman_Signal_BG;
+extern const wchar_t *dsBergman_Signal_IG;
+extern const wchar_t *dsBergman_Signal_IOB;
+extern const wchar_t *dsBergman_Signal_COB;
+extern const wchar_t *dsBergman_Signal_Basal_Insulin;
+extern const wchar_t *dsBergman_Signal_Insulin_Activity;
+
+extern const wchar_t* dsSignal_Generator;
+extern const wchar_t* dsParameters;
+extern const wchar_t* dsFeedback_Name;
+extern const wchar_t* dsSynchronize_to_Signal;
+extern const wchar_t* dsSynchronization_Signal;
+extern const wchar_t* dsStepping;
+extern const wchar_t* dsMaximum_Time;
+
+extern const wchar_t* dsParam_K;
+extern const wchar_t* dsKp;
+extern const wchar_t* dsKi;
+extern const wchar_t* dsKd;
+extern const wchar_t* dsBIN;
+extern const wchar_t* dsKiDecay;
 
 //--------------------------------- do not translate any of the rs-prefixed texts --
 
@@ -776,45 +834,6 @@ extern const wchar_t* rsSelect_Params_Base;
 extern const wchar_t* rsSelect_Params_From;
 extern const wchar_t* rsSelect_Params_Condition;
 
-extern const wchar_t* dsBergman_Minimal_Model;
-extern const wchar_t* dsBergman_p1;
-extern const wchar_t* dsBergman_p2;
-extern const wchar_t* dsBergman_p3;
-extern const wchar_t* dsBergman_p4;
-extern const wchar_t* dsBergman_Vi;
-extern const wchar_t* dsBergman_BW;
-extern const wchar_t* dsBergman_VgDist;
-extern const wchar_t* dsBergman_d1rate;
-extern const wchar_t* dsBergman_d2rate;
-extern const wchar_t* dsBergman_irate;
-extern const wchar_t* dsBergman_Gb;
-extern const wchar_t* dsBergman_Ib;
-extern const wchar_t* dsBergman_G0;
-extern const wchar_t* dsBergman_X0;
-extern const wchar_t* dsBergman_I0;
-extern const wchar_t* dsBergman_D10;
-extern const wchar_t* dsBergman_D20;
-extern const wchar_t* dsBergman_Isc0;
-extern const wchar_t* dsBergman_Gsc0;
-extern const wchar_t* dsBergman_BasalRate0;
-extern const wchar_t* dsBergman_diff2_p;
-extern const wchar_t* dsBergman_diff2_cg;
-extern const wchar_t* dsBergman_diff2_c;
-
-extern const wchar_t *dsBergman_Signal_BG;
-extern const wchar_t *dsBergman_Signal_IG;
-extern const wchar_t *dsBergman_Signal_IOB;
-extern const wchar_t *dsBergman_Signal_COB;
-extern const wchar_t *dsBergman_Signal_Basal_Insulin;
-extern const wchar_t *dsBergman_Signal_Insulin_Activity;
-
-extern const wchar_t* dsSignal_Generator;
-extern const wchar_t* dsParameters;
-extern const wchar_t* dsFeedback_Name;
-extern const wchar_t* dsSynchronize_to_Signal;
-extern const wchar_t* dsSynchronization_Signal;
-extern const wchar_t* dsStepping;
-extern const wchar_t* dsMaximum_Time;
 
 // ---- drawing-related constants
 
@@ -955,3 +974,13 @@ extern const wchar_t* rsMaximum_Time;
 extern const wchar_t* rsReference_Signal;
 extern const wchar_t* rsError_Signal;
 extern const wchar_t* rsDescription;
+
+extern const wchar_t* rsIOB_Model;
+extern const wchar_t* rsCOB_Model;
+
+extern const wchar_t* rsParam_K;
+extern const wchar_t* rsKp;
+extern const wchar_t* rsKi;
+extern const wchar_t* rsKd;
+extern const wchar_t* rsBIN;
+extern const wchar_t* rsKiDecay;

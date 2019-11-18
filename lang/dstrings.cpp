@@ -294,6 +294,14 @@ const wchar_t* dsConstant_Model = L"Constant model";
 
 const wchar_t* dsOref0_Solver = L"oref0 solver";
 
+const wchar_t* dsIOB_Model = L"IOB";
+const wchar_t* dsCOB_Model = L"COB";
+const wchar_t* dsInsulin_Activity_Bilinear = L"Insulin activity bilinear";
+const wchar_t* dsInsulin_Activity_Exponential = L"Insulin activity exponential";
+const wchar_t* dsIOB_Bilinear = L"IOB bilinear";
+const wchar_t* dsIOB_Exponential = L"IOB exponential";
+const wchar_t* dsCOB_Bilinear = L"COB bilinear";
+
 const wchar_t* dsP = L"p";
 const wchar_t* dsCg = L"cg";
 const wchar_t* dsC = L"c";
@@ -323,16 +331,20 @@ const wchar_t* dsPredictiveDt = L"&Delta;t<sub>pred</sub>";
 const wchar_t* dsInsulin_TwoTerm_Regulation = L"Insulin two-term regulation";
 const wchar_t* dsInsulin_PID_Regulation = L"Insulin PID regulation";
 const wchar_t* dsBetaPID = L"BetaPID";
+const wchar_t* dsBetaPID3 = L"BetaPID3";
 const wchar_t* dsInsulin_TwoTerm_OnOff_Rate = L"Two-term on-off regulator insulin rate";
 const wchar_t* dsInsulin_TwoTerm_OnNeturalOff_Rate = L"Two-term on-neutral-off regulator insulin rate";
 const wchar_t* dsInsulin_TwoTerm_OnOff_Hysteresis_Rate = L"Two-term on-off regulator with hysteresis insulin rate";
 const wchar_t* dsInsulin_PID_Regulation_Rate = L"PID regulator insulin rate";
 const wchar_t* dsInsulin_BetaPID_Rate = L"BetaPID regulator insulin rate";
 const wchar_t* dsInsulin_BetaPID2_Rate = L"BetaPID2 regulator insulin rate";
+const wchar_t* dsInsulin_BetaPID3_Rate = L"BetaPID3 regulator insulin rate";
+const wchar_t* dsParam_K = L"K";
 const wchar_t* dsKp = L"Kp";
 const wchar_t* dsKi = L"Ki";
 const wchar_t* dsKd = L"Kd";
 const wchar_t* dsBIN = L"BIN";
+const wchar_t* dsKiDecay = L"KiDecay";
 
 const wchar_t* dsBolus_Calculator = L"Bolus calculator";
 const wchar_t* dsCalculated_Bolus_Insulin = L"Calculated bolus insulin";
@@ -469,6 +481,7 @@ const wchar_t* rsT1DMS_Sender_Filter = L"T1DMS Sender filter";
 const wchar_t* rsInsulin_Regulation = L"insulin-regulation";
 const wchar_t* rsInsulin_PID_Regulation = L"insulin-pid-regulation";
 const wchar_t* rsBetaPID = L"betapid";
+const wchar_t* rsBetaPID3 = L"betapid3";
 const wchar_t* rsKp = L"kp";
 const wchar_t* rsKi = L"ki";
 const wchar_t* rsKd = L"kd";
@@ -991,3 +1004,10 @@ const wchar_t* rsMaximum_Time = L"Maximum_Time";
 const wchar_t* rsReference_Signal = L"Reference_Signal";
 const wchar_t* rsError_Signal = L"Error_Signal";
 const wchar_t* rsDescription = L"Description";
+
+const wchar_t* rsIOB_Model = L"iob";
+const wchar_t* rsCOB_Model = L"cob";
+
+
+const wchar_t* rsParam_K = L"k";
+const wchar_t* rsKiDecay = L"kidecay";
