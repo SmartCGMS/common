@@ -41,6 +41,7 @@
 #include <string>
 #include <memory>
 
+
 #include "referencedImpl.h"
 #include "../utils/winapi_mapping.h"
 

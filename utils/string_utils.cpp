@@ -36,63 +36,31 @@
  *       monitoring", Procedia Computer Science, Volume 141C, pp. 279-286, 2018
  */
 
-#include "QtUtils.h"
+#include "string_utils.h"
 
 #include <sstream>
 
-/*! Convert a QString to an std::wstring */
-std::wstring QStringToStdWString(const QString &str) {
-#ifdef _MSC_VER
-    return std::wstring((const wchar_t *)str.utf16());
-#else
-    return str.toStdWString();
-#endif
+std::string Narrow_WString(const std::wstring& wstr) {
+	return Narrow_WChar(wstr.c_str());
 }
 
-/*! Convert an std::wstring to a QString */
-QString StdWStringToQString(const std::wstring &str) {
+std::string Narrow_WChar(const wchar_t *wstr) {
+	std::ostringstream stm;
+	const std::ctype<wchar_t>& ctfacet = std::use_facet< std::ctype<wchar_t> >(stm.getloc());
 
-#ifdef _MSC_VER
-    return QString::fromUtf16((const ushort *)str.c_str());
-#else
-    return QString::fromStdWString(str);
-#endif
+	const size_t len = wcslen(wstr);
+	for (size_t i = 0; i < len; ++i) 		
+		stm << ctfacet.narrow(wstr[i], 0);
+	
+	return stm.str();
 }
 
-
-QUuid GUID_To_QUuid(const GUID& guid) {
-	return QUuid(guid.Data1, guid.Data2, guid.Data3, guid.Data4[0], guid.Data4[1], guid.Data4[2],
-		guid.Data4[3], guid.Data4[4], guid.Data4[5], guid.Data4[6], guid.Data4[7]);
+std::wstring Widen_Char(const char *str) {
+	std::wostringstream wstm;
+	const std::ctype<wchar_t>& ctfacet = std::use_facet<std::ctype<wchar_t> >(wstm.getloc());
+	const size_t len = strlen(str);
+	for (size_t i = 0; i < len; ++i)
+		wstm << ctfacet.widen(str[i]);
+	return wstm.str();
 }
 
-GUID QUuid_To_GUID(const QUuid& uuid) {
-	return { uuid.data1, uuid.data2, uuid.data3,
-		uuid.data4[0], uuid.data4[1], uuid.data4[2], uuid.data4[3], uuid.data4[4], uuid.data4[5],
-		uuid.data4[6], uuid.data4[7]
-	};
-}
-
-
-#ifndef NOGUI
-
-#include <QtWidgets/QHeaderView>
-
-int HideDbColByName(const QSqlTableModel &model, QTableView &view, const char* dbcolname) {
-	int idx = model.fieldIndex(dbcolname);
-	if (idx >= 0) view.hideColumn(idx);
-	return idx;
-};
-
-int SetupDbColUI(QSqlTableModel &model, QTableView &view, const char* dbcolname, const char* uicolname, const int width, const int moveto){
-	int idx = model.fieldIndex(dbcolname);
-	if (idx >= 0) {
-		model.setHeaderData(idx, Qt::Horizontal, QWidget::tr(uicolname));
-		view.setColumnWidth(idx, width);
-
-		QHeaderView *hdr = view.horizontalHeader();
-		hdr->moveSection(hdr->visualIndex(idx), moveto);
-	}
-	return idx;
-};
-
-#endif

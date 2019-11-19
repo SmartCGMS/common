@@ -40,13 +40,13 @@
 
 // feature check for C++17/TS support state - filesystem is supported on both MSVS2017 and GCC8, but
 // on MSVS it's still in experimental namespace, contrary to GCC8, where it's considered stable
-#if __has_include(<experimental/filesystem>)
-	#include <experimental/filesystem>
-	namespace filesystem = std::experimental::filesystem;
-	#define DHAS_FILESYSTEM
-#elif __has_include(<filesystem>)
+#if __has_include(<filesystem>)
 	#include <filesystem>
 	namespace filesystem = std::filesystem;
+	#define DHAS_FILESYSTEM
+#elif __has_include(<experimental/filesystem>)
+	#include <experimental/filesystem>
+	namespace filesystem = std::experimental::filesystem;
 	#define DHAS_FILESYSTEM
 #else
 	#include <dirent.h>

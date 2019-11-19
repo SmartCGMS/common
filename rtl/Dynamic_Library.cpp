@@ -39,6 +39,7 @@
 #include "Dynamic_Library.h"
 
 #include <algorithm>
+#include <cwchar>
 
 std::unique_ptr<std::wstring> CDynamic_Library::mLibrary_Base{  };
 
