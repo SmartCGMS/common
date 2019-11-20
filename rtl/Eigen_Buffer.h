@@ -38,56 +38,25 @@
 
 #pragma once
 
-#include <functional>
-#include "Concurrent_Stack.h"
+#include <Eigen/Dense>
+#include <utility>
 
-namespace internal {
-	template <typename T>
-	using TResize_Lambda = std::function<void(T& container, const size_t minimum_size)>;
+using TVector1D = Eigen::Array<double, 1, Eigen::Dynamic, Eigen::RowMajor>;
+using TBlock1D = decltype(std::declval<TVector1D>().head(0));
+
+template <typename T>
+TBlock1D Reserve_Eigen_Buffer(T &vector, const size_t effective_size) {
+	if (vector.cols() < static_cast<int>(effective_size)) vector.resize(Eigen::NoChange, static_cast<int>(effective_size));
+
+	return vector.head(static_cast<int>(effective_size));
 }
 
 template <typename T>
-class CBuffer_Pool;
+Eigen::Map<T> Map_Double_To_Eigen(const double* vector, const size_t count) {
+	return Eigen::Map<T> { const_cast<double*>(vector), T::RowsAtCompileTime, static_cast<Eigen::Index>(count) };
+}
 
 template <typename T>
-class CPooled_Buffer {
-	//cannot inherit due to Eigen => T element
-protected:
-	CBuffer_Pool<T> &mPool;
-	T mElement;
-public:
-	CPooled_Buffer(CBuffer_Pool<T> &pool, T& element) : mPool(pool), mElement(std::move(element)) {
-	}
-
-	~CPooled_Buffer() {
-		mPool.push(std::move(mElement));
-	}
-
-	T& element() {
-		return mElement;
-	};
-};
-
-template <typename T>
-class CBuffer_Pool {
-	friend CPooled_Buffer<T>;
-protected:
-	solver::CConcurrent_Stack<T> mPool;
-	internal::TResize_Lambda<T> mResize_Func;
-
-	void push(T& elem) {
-		mPool.push(elem);
-	}
-
-public:
-	CBuffer_Pool(internal::TResize_Lambda<T> resize_func) : mResize_Func(resize_func) {};
-
-	CPooled_Buffer<T> pop(const size_t minimum_size) {
-		T buffer;
-		mPool.try_pop(buffer);
-		mResize_Func(buffer, minimum_size);
-		
-		return CPooled_Buffer<T> (*this, buffer);
-	}
-
-};
+Eigen::Map<T> Map_Double_To_Eigen(double* const vector, const size_t count) {
+	return Eigen::Map<T> { vector, T::RowsAtCompileTime, static_cast<Eigen::Index>(count) };
+}
