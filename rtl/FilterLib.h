@@ -269,7 +269,7 @@ namespace glucose {
 
 		
 				if (refcnt::SReferenced<IChain_Configuration>::get()->get(&begin, &end) == S_OK) {
-					if (*begin + index < *end) {	//check the bounds
+					if (begin + index < end) {	//check the bounds
 						result = refcnt::make_shared_reference_ext<glucose::SFilter_Configuration_Link, glucose::IFilter_Configuration_Link>(*(begin + index), true);
 					}
 				}

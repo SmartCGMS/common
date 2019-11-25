@@ -4,8 +4,8 @@
         <tr><th>Library     <td>SimpleIni
         <tr><th>File        <td>SimpleIni.h
         <tr><th>Author      <td>Brodie Thiesfield [code at jellycan dot com]
-        <tr><th>Source      <td>http://code.jellycan.com/simpleini/
-        <tr><th>Version     <td>4.15
+        <tr><th>Source      <td>https://github.com/brofield/simpleini
+        <tr><th>Version     <td>4.17
     </table>
 
     Jump to the @link CSimpleIniTempl CSimpleIni @endlink interface documentation.
@@ -161,6 +161,7 @@
       SI_STRLESS class, or by sorting the strings external to this library.
     - Usage of the <mbstring.h> header on Windows can be disabled by defining
       SI_NO_MBCS. This is defined automatically on Windows CE platforms.
+    - Not thread-safe so manage your own locking
 
     @section contrib CONTRIBUTIONS
     
@@ -213,12 +214,12 @@
 #endif
 
 #include <cstring>
+#include <cstdlib>
 #include <string>
 #include <map>
 #include <list>
 #include <algorithm>
 #include <stdio.h>
-#include <cstdlib>
 
 #ifdef SI_SUPPORT_IOSTREAMS
 # include <iostream>
@@ -294,6 +295,8 @@ template<class SI_CHAR, class SI_STRLESS, class SI_CONVERTER>
 class CSimpleIniTempl
 {
 public:
+    typedef SI_CHAR SI_CHAR_T;
+
     /** key entry */
     struct Entry {
         const SI_CHAR * pItem;
@@ -325,7 +328,7 @@ public:
 #endif
 
         /** Strict less ordering by name of key only */
-        struct KeyOrder {
+        struct KeyOrder  {
             bool operator()(const Entry & lhs, const Entry & rhs) const {
                 const static SI_STRLESS isLess = SI_STRLESS();
                 return isLess(lhs.pItem, rhs.pItem);
@@ -1063,8 +1066,8 @@ public:
         data returned by GetSection is invalid and must not be used after
         anything has been deleted from that section using this method.
         Note when multiple keys is enabled, this will delete all keys with
-        that name; there is no way to selectively delete individual key/values
-        in this situation.
+        that name; to selectively delete individual key/values, use
+        DeleteValue.
 
         @param a_pSection       Section to delete key from, or if
                                 a_pKey is NULL, the section to remove.
@@ -1080,6 +1083,33 @@ public:
     bool Delete(
         const SI_CHAR * a_pSection,
         const SI_CHAR * a_pKey,
+        bool            a_bRemoveEmpty = false
+        );
+
+    /** Delete an entire section, or a key from a section. If value is
+        provided, only remove keys with the value. Note that the data
+        returned by GetSection is invalid and must not be used after
+        anything has been deleted from that section using this method.
+        Note when multiple keys is enabled, all keys with the value will
+        be deleted.
+
+        @param a_pSection       Section to delete key from, or if
+                                a_pKey is NULL, the section to remove.
+        @param a_pKey           Key to remove from the section. Set to
+                                NULL to remove the entire section.
+        @param a_pValue         Value of key to remove from the section.
+                                Set to NULL to remove all keys.
+        @param a_bRemoveEmpty   If the section is empty after this key has
+                                been deleted, should the empty section be
+                                removed?
+
+        @return true            Key/value or section was deleted.
+        @return false           Key/value or section was not found.
+     */
+    bool DeleteValue(
+        const SI_CHAR * a_pSection,
+        const SI_CHAR * a_pKey,
+        const SI_CHAR * a_pValue,
         bool            a_bRemoveEmpty = false
         );
 
@@ -1355,10 +1385,15 @@ CSimpleIniTempl<SI_CHAR,SI_STRLESS,SI_CONVERTER>::LoadFile(
     if (lSize == 0) {
         return SI_OK;
     }
-    char * pData = new char[lSize];
+    
+    // allocate and ensure NULL terminated
+    char * pData = new(std::nothrow) char[lSize+1];
     if (!pData) {
         return SI_NOMEM;
     }
+    pData[lSize] = 0;
+    
+    // load data into buffer
     fseek(a_fpFile, 0, SEEK_SET);
     size_t uRead = fread(pData, sizeof(char), lSize, a_fpFile);
     if (uRead != (size_t) lSize) {
@@ -1381,16 +1416,16 @@ CSimpleIniTempl<SI_CHAR,SI_STRLESS,SI_CONVERTER>::LoadData(
 {
     SI_CONVERTER converter(m_bStoreIsUtf8);
 
-    if (a_uDataLen == 0) {
-        return SI_OK;
-    }
-
     // consume the UTF-8 BOM if it exists
     if (m_bStoreIsUtf8 && a_uDataLen >= 3) {
         if (memcmp(a_pData, SI_UTF8_SIGNATURE, 3) == 0) {
             a_pData    += 3;
             a_uDataLen -= 3;
         }
+    }
+
+    if (a_uDataLen == 0) {
+        return SI_OK;
     }
 
     // determine the length of the converted data
@@ -1401,7 +1436,7 @@ CSimpleIniTempl<SI_CHAR,SI_STRLESS,SI_CONVERTER>::LoadData(
 
     // allocate memory for the data, ensure that there is a NULL
     // terminator wherever the converted data ends
-    SI_CHAR * pData = new SI_CHAR[uLen+1];
+    SI_CHAR * pData = new(std::nothrow) SI_CHAR[uLen+1];
     if (!pData) {
         return SI_NOMEM;
     }
@@ -1826,7 +1861,7 @@ CSimpleIniTempl<SI_CHAR,SI_STRLESS,SI_CONVERTER>::CopyString(
         for ( ; a_pString[uLen]; ++uLen) /*loop*/ ;
     }
     ++uLen; // NULL character
-    SI_CHAR * pCopy = new SI_CHAR[uLen];
+    SI_CHAR * pCopy = new(std::nothrow) SI_CHAR[uLen];
     if (!pCopy) {
         return SI_NOMEM;
     }
@@ -2522,6 +2557,18 @@ CSimpleIniTempl<SI_CHAR,SI_STRLESS,SI_CONVERTER>::Delete(
     bool            a_bRemoveEmpty
     )
 {
+    return DeleteValue(a_pSection, a_pKey, NULL, a_bRemoveEmpty);
+}
+
+template<class SI_CHAR, class SI_STRLESS, class SI_CONVERTER>
+bool
+CSimpleIniTempl<SI_CHAR,SI_STRLESS,SI_CONVERTER>::DeleteValue(
+    const SI_CHAR * a_pSection,
+    const SI_CHAR * a_pKey,
+    const SI_CHAR * a_pValue,
+    bool            a_bRemoveEmpty
+    )
+{
     if (!a_pSection) {
         return false;
     }
@@ -2538,17 +2585,29 @@ CSimpleIniTempl<SI_CHAR,SI_STRLESS,SI_CONVERTER>::Delete(
             return false;
         }
 
+        const static SI_STRLESS isLess = SI_STRLESS();
+
         // remove any copied strings and then the key
         typename TKeyVal::iterator iDelete;
+        bool bDeleted = false;
         do {
             iDelete = iKeyVal++;
 
-            DeleteString(iDelete->first.pItem);
-            DeleteString(iDelete->second);
-            iSection->second.erase(iDelete);
+            if(a_pValue == NULL ||
+            (isLess(a_pValue, iDelete->second) == false &&
+            isLess(iDelete->second, a_pValue) == false)) {
+                DeleteString(iDelete->first.pItem);
+                DeleteString(iDelete->second);
+                iSection->second.erase(iDelete);
+                bDeleted = true;
+            }
         }
         while (iKeyVal != iSection->second.end()
             && !IsLess(a_pKey, iKeyVal->first.pItem));
+
+        if(!bDeleted) {
+            return false;
+        }
 
         // done now if the section is not empty or we are not pruning away
         // the empty sections. Otherwise let it fall through into the section
@@ -2831,9 +2890,16 @@ public:
             // the source text.
             return a_uInputDataLen;
         }
-        else {
-            return mbstowcs(NULL, a_pInputData, a_uInputDataLen);
-        }
+
+#if defined(SI_NO_MBSTOWCS_NULL) || (!defined(_MSC_VER) && !defined(_linux))
+        // fall back processing for platforms that don't support a NULL dest to mbstowcs
+        // worst case scenario is 1:1, this will be a sufficient buffer size
+        (void)a_pInputData;
+        return a_uInputDataLen;
+#else
+        // get the actual required buffer size
+        return mbstowcs(NULL, a_pInputData, a_uInputDataLen);
+#endif
     }
 
     /** Convert the input string from the storage format to SI_CHAR.
@@ -2862,16 +2928,16 @@ public:
             // the distribution but are publically available from unicode.org
             // at http://www.unicode.org/Public/PROGRAMS/CVTUTF/
             ConversionResult retval;
-            const UTF8_t * pUtf8 = (const UTF8_t *) a_pInputData;
-            if (sizeof(wchar_t) == sizeof(UTF32_t)) {
-                UTF32_t * pUtf32 = (UTF32_t *) a_pOutputData;
+            const UTF8 * pUtf8 = (const UTF8 *) a_pInputData;
+            if (sizeof(wchar_t) == sizeof(UTF32)) {
+                UTF32 * pUtf32 = (UTF32 *) a_pOutputData;
                 retval = ConvertUTF8toUTF32(
                     &pUtf8, pUtf8 + a_uInputDataLen,
                     &pUtf32, pUtf32 + a_uOutputDataSize,
                     lenientConversion);
             }
-            else if (sizeof(wchar_t) == sizeof(UTF16_t)) {
-                UTF16_t * pUtf16 = (UTF16_t *) a_pOutputData;
+            else if (sizeof(wchar_t) == sizeof(UTF16)) {
+                UTF16 * pUtf16 = (UTF16 *) a_pOutputData;
                 retval = ConvertUTF8toUTF16(
                     &pUtf8, pUtf8 + a_uInputDataLen,
                     &pUtf16, pUtf16 + a_uOutputDataSize,
@@ -2879,11 +2945,11 @@ public:
             }
             return retval == conversionOK;
         }
-        else {
-            size_t retval = mbstowcs(a_pOutputData,
-                a_pInputData, a_uOutputDataSize);
-            return retval != (size_t)(-1);
-        }
+
+        // convert to wchar_t
+        size_t retval = mbstowcs(a_pOutputData,
+            a_pInputData, a_uOutputDataSize);
+        return retval != (size_t)(-1);
     }
 
     /** Calculate the number of char required by the storage format of this
@@ -2949,16 +3015,16 @@ public:
             // the distribution but are publically available from unicode.org
             // at http://www.unicode.org/Public/PROGRAMS/CVTUTF/
             ConversionResult retval;
-            UTF8_t * pUtf8 = (UTF8_t *) a_pOutputData;
-            if (sizeof(wchar_t) == sizeof(UTF32_t)) {
-                const UTF32_t * pUtf32 = (const UTF32_t *) a_pInputData;
+            UTF8 * pUtf8 = (UTF8 *) a_pOutputData;
+            if (sizeof(wchar_t) == sizeof(UTF32)) {
+                const UTF32 * pUtf32 = (const UTF32 *) a_pInputData;
                 retval = ConvertUTF32toUTF8(
                     &pUtf32, pUtf32 + uInputLen,
                     &pUtf8, pUtf8 + a_uOutputDataSize,
                     lenientConversion);
             }
-            else if (sizeof(wchar_t) == sizeof(UTF16_t)) {
-                const UTF16_t * pUtf16 = (const UTF16_t *) a_pInputData;
+            else if (sizeof(wchar_t) == sizeof(UTF16)) {
+                const UTF16 * pUtf16 = (const UTF16 *) a_pInputData;
                 retval = ConvertUTF16toUTF8(
                     &pUtf16, pUtf16 + uInputLen,
                     &pUtf8, pUtf8 + a_uOutputDataSize,
