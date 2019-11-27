@@ -39,6 +39,8 @@
 #include "string_utils.h"
 
 #include <sstream>
+#include <algorithm>
+#include <cwctype>
 
 std::string Narrow_WString(const std::wstring& wstr) {
 	return Narrow_WChar(wstr.c_str());
@@ -64,3 +66,11 @@ std::wstring Widen_Char(const char *str) {
 	return wstm.str();
 }
 
+
+std::wstring WString_To_Lower(const std::wstring& wstr) {
+	std::wstring result;
+
+	std::transform(wstr.begin(), wstr.end(), std::back_inserter(result), std::towlower);
+
+	return result;
+}

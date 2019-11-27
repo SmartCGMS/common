@@ -5,7 +5,7 @@
         <tr><th>File        <td>SimpleIni.h
         <tr><th>Author      <td>Brodie Thiesfield [code at jellycan dot com]
         <tr><th>Source      <td>https://github.com/brofield/simpleini
-        <tr><th>Version     <td>4.17
+        <tr><th>Version     <td>4.17, with modifications for the SmartCGMS project - https:://diabetes.zcu.cz
     </table>
 
     Jump to the @link CSimpleIniTempl CSimpleIni @endlink interface documentation.
@@ -234,7 +234,7 @@
 # define SI_ASSERT(x)
 #endif
 
-enum SI_Error {
+enum class SI_Error : int {
     SI_OK       =  0,   //!< No error
     SI_UPDATED  =  1,   //!< An existing value was updated
     SI_INSERTED =  2,   //!< A new value was inserted
@@ -242,8 +242,15 @@ enum SI_Error {
     // note: test for any error with (retval < 0)
     SI_FAIL     = -1,   //!< Generic failure
     SI_NOMEM    = -2,   //!< Out of memory error
-    SI_FILE     = -3    //!< File error (see errno for detail error)
+    SI_FILE     = -3,    //!< File error (see errno for detail error)	
 };
+
+template<typename T>
+bool operator<(const T& er, const int ref) {	
+	return static_cast<int> (er) < ref;
+}
+
+
 
 #define SI_UTF8_SIGNATURE     "\xEF\xBB\xBF"
 
@@ -1425,27 +1432,27 @@ CSimpleIniTempl<SI_CHAR,SI_STRLESS,SI_CONVERTER>::LoadData(
     }
 
     if (a_uDataLen == 0) {
-        return SI_OK;
+        return SI_Error::SI_OK;
     }
 
     // determine the length of the converted data
     size_t uLen = converter.SizeFromStore(a_pData, a_uDataLen);
     if (uLen == (size_t)(-1)) {
-        return SI_FAIL;
+        return SI_Error::SI_FAIL;
     }
 
     // allocate memory for the data, ensure that there is a NULL
     // terminator wherever the converted data ends
     SI_CHAR * pData = new(std::nothrow) SI_CHAR[uLen+1];
     if (!pData) {
-        return SI_NOMEM;
+        return SI_Error::SI_NOMEM;
     }
     memset(pData, 0, sizeof(SI_CHAR)*(uLen+1));
 
     // convert the data
     if (!converter.ConvertFromStore(a_pData, a_uDataLen, pData, uLen)) {
         delete[] pData;
-        return SI_FAIL;
+        return SI_Error::SI_FAIL;
     }
 
     // parse it
@@ -1480,7 +1487,7 @@ CSimpleIniTempl<SI_CHAR,SI_STRLESS,SI_CONVERTER>::LoadData(
         m_uDataLen = uLen+1;
     }
 
-    return SI_OK;
+    return SI_Error::SI_OK;
 }
 
 #ifdef SI_SUPPORT_IOSTREAMS
@@ -1510,13 +1517,13 @@ CSimpleIniTempl<SI_CHAR,SI_STRLESS,SI_CONVERTER>::FindFileComment(
 {
     // there can only be a single file comment
     if (m_pFileComment) {
-        return SI_OK;
+        return SI_Error::SI_OK;
     }
 
     // Load the file comment as multi-line text, this will modify all of
     // the newline characters to be single \n chars
     if (!LoadMultiLineText(a_pData, m_pFileComment, NULL, false)) {
-        return SI_OK;
+        return SI_Error::SI_OK;
     }
 
     // copy the string if necessary
@@ -1525,7 +1532,7 @@ CSimpleIniTempl<SI_CHAR,SI_STRLESS,SI_CONVERTER>::FindFileComment(
         if (rc < 0) return rc;
     }
 
-    return SI_OK;
+    return SI_Error::SI_OK;
 }
 
 template<class SI_CHAR, class SI_STRLESS, class SI_CONVERTER>
@@ -1863,12 +1870,12 @@ CSimpleIniTempl<SI_CHAR,SI_STRLESS,SI_CONVERTER>::CopyString(
     ++uLen; // NULL character
     SI_CHAR * pCopy = new(std::nothrow) SI_CHAR[uLen];
     if (!pCopy) {
-        return SI_NOMEM;
+        return SI_Error::SI_NOMEM;
     }
     memcpy(pCopy, a_pString, sizeof(SI_CHAR)*uLen);
     m_strings.push_back(pCopy);
     a_pString = pCopy;
-    return SI_OK;
+    return SI_Error::SI_OK;
 }
 
 template<class SI_CHAR, class SI_STRLESS, class SI_CONVERTER>
@@ -1918,7 +1925,7 @@ CSimpleIniTempl<SI_CHAR,SI_STRLESS,SI_CONVERTER>::AddEntry(
     }
     if (!a_pKey || !a_pValue) {
         // section only entries are specified with pItem and pVal as NULL
-        return bInserted ? SI_INSERTED : SI_UPDATED;
+        return bInserted ? SI_Error::SI_INSERTED : SI_Error::SI_UPDATED;
     }
 
     // check for existence of the key
@@ -1973,7 +1980,7 @@ CSimpleIniTempl<SI_CHAR,SI_STRLESS,SI_CONVERTER>::AddEntry(
         bInserted = true;
     }
     iKey->second = a_pValue;
-    return bInserted ? SI_INSERTED : SI_UPDATED;
+    return bInserted ? SI_Error::SI_INSERTED : SI_Error::SI_UPDATED;
 }
 
 template<class SI_CHAR, class SI_STRLESS, class SI_CONVERTER>
