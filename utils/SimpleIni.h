@@ -1341,7 +1341,7 @@ CSimpleIniTempl<SI_CHAR,SI_STRLESS,SI_CONVERTER>::LoadFile(
     fp = fopen(a_pszFile, "rb");
 #endif // __STDC_WANT_SECURE_LIB__
     if (!fp) {
-        return SI_FILE;
+        return SI_Error::SI_FILE;
     }
     SI_Error rc = LoadFile(fp);
     fclose(fp);
@@ -1362,7 +1362,7 @@ CSimpleIniTempl<SI_CHAR,SI_STRLESS,SI_CONVERTER>::LoadFile(
 #else // !__STDC_WANT_SECURE_LIB__
     fp = _wfopen(a_pwszFile, L"rb");
 #endif // __STDC_WANT_SECURE_LIB__
-    if (!fp) return SI_FILE;
+    if (!fp) return SI_Error::SI_FILE;
     SI_Error rc = LoadFile(fp);
     fclose(fp);
     return rc;
@@ -1383,20 +1383,20 @@ CSimpleIniTempl<SI_CHAR,SI_STRLESS,SI_CONVERTER>::LoadFile(
     // load the raw file data
     int retval = fseek(a_fpFile, 0, SEEK_END);
     if (retval != 0) {
-        return SI_FILE;
+        return SI_Error::SI_FILE;
     }
     long lSize = ftell(a_fpFile);
     if (lSize < 0) {
-        return SI_FILE;
+        return SI_Error::SI_FILE;
     }
     if (lSize == 0) {
-        return SI_OK;
+        return SI_Error::SI_OK;
     }
     
     // allocate and ensure NULL terminated
     char * pData = new(std::nothrow) char[lSize+1];
     if (!pData) {
-        return SI_NOMEM;
+        return SI_Error::SI_NOMEM;
     }
     pData[lSize] = 0;
     
@@ -1405,7 +1405,7 @@ CSimpleIniTempl<SI_CHAR,SI_STRLESS,SI_CONVERTER>::LoadFile(
     size_t uRead = fread(pData, sizeof(char), lSize, a_fpFile);
     if (uRead != (size_t) lSize) {
         delete[] pData;
-        return SI_FILE;
+        return SI_Error::SI_FILE;
     }
 
     // convert the raw data to unicode
@@ -2356,7 +2356,7 @@ CSimpleIniTempl<SI_CHAR,SI_STRLESS,SI_CONVERTER>::SaveFile(
 #else // !__STDC_WANT_SECURE_LIB__
     fp = fopen(a_pszFile, "wb");
 #endif // __STDC_WANT_SECURE_LIB__
-    if (!fp) return SI_FILE;
+    if (!fp) return SI_Error::SI_FILE;
     SI_Error rc = SaveFile(fp, a_bAddSignature);
     fclose(fp);
     return rc;
@@ -2377,7 +2377,7 @@ CSimpleIniTempl<SI_CHAR,SI_STRLESS,SI_CONVERTER>::SaveFile(
 #else // !__STDC_WANT_SECURE_LIB__
     fp = _wfopen(a_pwszFile, L"wb");
 #endif // __STDC_WANT_SECURE_LIB__
-    if (!fp) return SI_FILE;
+    if (!fp) return SI_Error::SI_FILE;
     SI_Error rc = SaveFile(fp, a_bAddSignature);
     fclose(fp);
     return rc;

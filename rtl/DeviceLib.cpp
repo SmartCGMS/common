@@ -158,11 +158,13 @@ glucose::UDevice_Event::UDevice_Event(IDevice_Event *event) : std::unique_ptr<ID
 	}
 }
 
-
 glucose::UDevice_Event_internal::NDevice_Event_Major_Type glucose::UDevice_Event::major_type() const {
 	if (mRaw == nullptr) return glucose::UDevice_Event_internal::NDevice_Event_Major_Type::null;
+	return UDevice_Event_internal::major_type(mRaw->event_code);
+}
 
-	switch (mRaw->event_code) {
+glucose::UDevice_Event_internal::NDevice_Event_Major_Type glucose::UDevice_Event_internal::major_type(const glucose::NDevice_Event_Code code) {
+	switch (code) {
 		case glucose::NDevice_Event_Code::Level:
 		case glucose::NDevice_Event_Code::Masked_Level:		return glucose::UDevice_Event_internal::NDevice_Event_Major_Type::level;
 

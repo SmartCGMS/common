@@ -140,11 +140,11 @@ namespace glucose {
 	};
 
 	constexpr GUID IID_Filter_Feedback_Receiver = { 0xee9d9028, 0xb714, 0x4412, { 0x98, 0xd8, 0xe5, 0xf7, 0xe5, 0xf1, 0xcf, 0x7a } };
-	class IFilter_Feedback_Receiver : public virtual glucose::IFilter_Feedback, public virtual glucose::IFilter {
+	class IFilter_Feedback_Receiver : public glucose::IFilter_Feedback {
 	};
 
 	constexpr GUID IID_Filter_Feedback_Sender = { 0x19d21259, 0x7358, 0x4533, { 0x8c, 0x18, 0x85, 0x65, 0x25, 0xc2, 0x35, 0x9 } };
-	class IFilter_Feedback_Sender : public virtual glucose::IFilter_Feedback {
+	class IFilter_Feedback_Sender : public glucose::IFilter_Feedback {
 	public:
 		virtual HRESULT IfaceCalling Sink(glucose::IFilter_Feedback_Receiver *receiver) = 0;
 	};

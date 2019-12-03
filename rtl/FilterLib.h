@@ -295,11 +295,17 @@ namespace glucose {
 		HRESULT Execute(glucose::UDevice_Event &event);
 	};
 
+	class SFilter_Feedback_Receiver : public virtual refcnt::SReferenced<glucose::IFilter_Feedback_Receiver> {
+	public:
+		using refcnt::SReferenced<glucose::IFilter_Feedback_Receiver>::SReferenced;
+
+		HRESULT Execute(glucose::UDevice_Event &event);
+	};
 
 	#pragma warning( push )
 	#pragma warning( disable : 4250 ) // C4250 - 'class1' : inherits 'class2::member' via dominance
 
-	class CBase_Filter : public virtual glucose::IFilter, public virtual refcnt::CReferenced {
+	class CBase_Filter : public virtual glucose::IFilter, public refcnt::CReferenced {
 	protected:
 		glucose::SFilter mOutput;	//aka the next_filter
 		HRESULT Send(glucose::UDevice_Event &event);

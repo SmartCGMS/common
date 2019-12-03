@@ -102,6 +102,8 @@ namespace glucose {
 			info,
 			parameters
 		};
+
+		UDevice_Event_internal::NDevice_Event_Major_Type major_type(const glucose::NDevice_Event_Code code);
 	}
 
 	class UDevice_Event : public std::unique_ptr<IDevice_Event, UDevice_Event_Deleter> {
@@ -109,7 +111,7 @@ namespace glucose {
 		TDevice_Event * mRaw;		//mRaw must be initialized in the constructor exactly once
 									//therefore, the implementation defines two helper functions,
 									//which returns pointers only
-		UDevice_Event_internal::NDevice_Event_Major_Type major_type() const;
+		glucose::UDevice_Event_internal::NDevice_Event_Major_Type major_type() const;
 	public:
 		explicit UDevice_Event(const NDevice_Event_Code code = NDevice_Event_Code::Nothing)  noexcept;
 		UDevice_Event(UDevice_Event&& event) noexcept;	
