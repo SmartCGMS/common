@@ -2071,7 +2071,7 @@ CSimpleIniTempl<SI_CHAR,SI_STRLESS,SI_CONVERTER>::SetLongValue(
     )
 {
     // use SetValue to create sections
-    if (!a_pSection || !a_pKey) return SI_FAIL;
+    if (!a_pSection || !a_pKey) return SI_Error::SI_FAIL;
 
     // convert to an ASCII string
     char szInput[64];
@@ -2133,7 +2133,7 @@ CSimpleIniTempl<SI_CHAR,SI_STRLESS,SI_CONVERTER>::SetDoubleValue(
 	)
 {
 	// use SetValue to create sections
-	if (!a_pSection || !a_pKey) return SI_FAIL;
+	if (!a_pSection || !a_pKey) return SI_Error::SI_FAIL;
 
 	// convert to an ASCII string
 	char szInput[64];
@@ -2199,7 +2199,7 @@ CSimpleIniTempl<SI_CHAR,SI_STRLESS,SI_CONVERTER>::SetBoolValue(
     )
 {
     // use SetValue to create sections
-    if (!a_pSection || !a_pKey) return SI_FAIL;
+    if (!a_pSection || !a_pKey) return SI_Error::SI_FAIL;
 
     // convert to an ASCII string
     const char * pszInput = a_bValue ? "true" : "false";
@@ -2429,7 +2429,7 @@ CSimpleIniTempl<SI_CHAR,SI_STRLESS,SI_CONVERTER>::Save(
     bool bNeedNewLine = false;
     if (m_pFileComment) {
         if (!OutputMultiLineText(a_oOutput, convert, m_pFileComment)) {
-            return SI_FAIL;
+            return SI_Error::SI_FAIL;
         }
         bNeedNewLine = true;
     }
@@ -2444,7 +2444,7 @@ CSimpleIniTempl<SI_CHAR,SI_STRLESS,SI_CONVERTER>::Save(
                 a_oOutput.Write(SI_NEWLINE_A);
             }
             if (!OutputMultiLineText(a_oOutput, convert, iSection->pComment)) {
-                return SI_FAIL;
+                return SI_Error::SI_FAIL;
             }
             bNeedNewLine = false;
         }
@@ -2458,7 +2458,7 @@ CSimpleIniTempl<SI_CHAR,SI_STRLESS,SI_CONVERTER>::Save(
         // write the section (unless there is no section name)
         if (*iSection->pItem) {
             if (!convert.ConvertToStore(iSection->pItem)) {
-                return SI_FAIL;
+                return SI_Error::SI_FAIL;
             }
             a_oOutput.Write("[");
             a_oOutput.Write(convert.Data());
@@ -2490,19 +2490,19 @@ CSimpleIniTempl<SI_CHAR,SI_STRLESS,SI_CONVERTER>::Save(
                 if (iValue->pComment) {
                     a_oOutput.Write(SI_NEWLINE_A);
                     if (!OutputMultiLineText(a_oOutput, convert, iValue->pComment)) {
-                        return SI_FAIL;
+                        return SI_Error::SI_FAIL;
                     }
                 }
 
                 // write the key
                 if (!convert.ConvertToStore(iKey->pItem)) {
-                    return SI_FAIL;
+                    return SI_Error::SI_FAIL;
                 }
                 a_oOutput.Write(convert.Data());
 
                 // write the value
                 if (!convert.ConvertToStore(iValue->pItem)) {
-                    return SI_FAIL;
+                    return SI_Error::SI_FAIL;
                 }
                 a_oOutput.Write(m_bSpaces ? " = " : "=");
                 if (m_bAllowMultiLine && IsMultiLineData(iValue->pItem)) {
@@ -2510,7 +2510,7 @@ CSimpleIniTempl<SI_CHAR,SI_STRLESS,SI_CONVERTER>::Save(
                     // that we use the correct newline format for the current system
                     a_oOutput.Write("<<<END_OF_TEXT" SI_NEWLINE_A);
                     if (!OutputMultiLineText(a_oOutput, convert, iValue->pItem)) {
-                        return SI_FAIL;
+                        return SI_Error::SI_FAIL;
                     }
                     a_oOutput.Write("END_OF_TEXT");
                 }
@@ -2524,7 +2524,7 @@ CSimpleIniTempl<SI_CHAR,SI_STRLESS,SI_CONVERTER>::Save(
         bNeedNewLine = true;
     }
 
-    return SI_OK;
+    return SI_Error::SI_OK;
 }
 
 template<class SI_CHAR, class SI_STRLESS, class SI_CONVERTER>
