@@ -346,10 +346,14 @@ const wchar_t* dsKd = L"Kd";
 const wchar_t* dsBIN = L"BIN";
 const wchar_t* dsKiDecay = L"KiDecay";
 
+const wchar_t* dsLGS_Basal_Insulin_Model = L"LGS Basal Insulin Rate";
 const wchar_t* dsBolus_Calculator = L"Bolus calculator";
 const wchar_t* dsCalculated_Bolus_Insulin = L"Calculated bolus insulin";
 const wchar_t* dsConst_Basal_Insulin = L"Constant basal insulin rate";
 const wchar_t* dsConst_Basal_Low_Suspend_Insulin = L"Constant basal insulin rate with low glucose suspend";
+
+const wchar_t* dsLGS_Lower_Threshold = L"Lower threshold";
+const wchar_t* dsLGS_Suspend_Duration = L"Suspend duration";
 
 const wchar_t* dsISF = L"ISF";
 const wchar_t* dsCSR = L"CSR";
@@ -421,6 +425,8 @@ const wchar_t *dsSignal_Measured_IOB = L"insulin on board (IOB)";
 const wchar_t *dsSignal_Measured_COB = L"carbohydrates on board (COB)";
 const wchar_t *dsSignal_Measured_Carb_Intake = L"carbohydrates intake";
 const wchar_t *dsSignal_Measured_Health_Physical_Activity = L"physical activity";
+const wchar_t* dsSignal_Measured_Insulin_Sensitivity = L"insulin sensitivity factor";
+const wchar_t* dsSignal_Measured_Carb_Ratio = L"carb-to-insulin ratio";
 const wchar_t *dsSignal_Suffix_Measured = L"measured";
 const wchar_t *dsSignal_Suffix_Calculated = L"calculated";
 const wchar_t *dsSignal_Unknown = L"Unknown";
@@ -618,22 +624,25 @@ const wchar_t *dsRecalculate_On_Calibration_Tooltip = L"Run solver on every cali
 const wchar_t *dsRecalculate_On_Parameters_Tooltip = L"Request signal recalculation on every parameter set";
 const wchar_t *dsUse_Opened_Segments_Only_Tooltip = L"Use currently opened segments only";
 
-const wchar_t *dsParameter_Configuration_Failed_RC = L"Parameter (%1) configuration fail with HRESULT == %2";
+const wchar_t *dsParameter_Configuration_Failed_RC = L"Parameter (%1) configuration failed with HRESULT == %2";
 
 const wchar_t* dsBergman_Minimal_Model = L"Bergman extended minimal model device";
 const wchar_t* dsBergman_p1 = L"p1";
 const wchar_t* dsBergman_p2 = L"p2";
 const wchar_t* dsBergman_p3 = L"p3";
 const wchar_t* dsBergman_p4 = L"p4";
+const wchar_t* dsBergman_k12 = L"k12";
+const wchar_t* dsBergman_k21 = L"k21";
 const wchar_t* dsBergman_Vi = L"Vi";
 const wchar_t* dsBergman_BW = L"body weight";
 const wchar_t* dsBergman_VgDist = L"VgDist";
 const wchar_t* dsBergman_d1rate = L"d1rate";
 const wchar_t* dsBergman_d2rate = L"d2rate";
 const wchar_t* dsBergman_irate = L"irate";
-const wchar_t* dsBergman_Gb = L"Gb";
+const wchar_t* dsBergman_Qb = L"Qb";
 const wchar_t* dsBergman_Ib = L"Ib";
-const wchar_t* dsBergman_G0 = L"G0";
+const wchar_t* dsBergman_Q10 = L"Q10";
+const wchar_t* dsBergman_Q20 = L"Q20";
 const wchar_t* dsBergman_X0 = L"X0";
 const wchar_t* dsBergman_I0 = L"I0";
 const wchar_t* dsBergman_D10 = L"D10";
@@ -667,6 +676,16 @@ const wchar_t* dsError = L"Error";
 const wchar_t* dsDescription = L"Description";
 const wchar_t* dsAbsolute = L"Absolute [mmol/l]";
 const wchar_t* dsRelative = L"Relative [%]";
+
+const wchar_t* dsInsulin_LGS_Rate = L"LGS Basal Insulin Rate";
+
+const wchar_t* dsConst_ISF = L"insulin sensitivity factor";
+const wchar_t* dsConst_ISF_Model = L"Constant insulin sensitivity factor";
+const wchar_t* dsConst_CR = L"carb-to-insulin ratio";
+const wchar_t* dsConst_CR_Model = L"Constant carb-to-insulin ratio";
+
+const wchar_t* dsSignal_Feedback = L"Signal feedback";
+const wchar_t* dsForward_Clone = L"Forward a clone";
 
 //--------------------------------- do not translate any of the rs-prefixed texts --
 
@@ -1011,3 +1030,12 @@ const wchar_t* rsCOB_Model = L"cob";
 
 const wchar_t* rsParam_K = L"k";
 const wchar_t* rsKiDecay = L"kidecay";
+
+const wchar_t* rsLGS_Basal_Insulin_Model = L"lgs_basal_insulin_rate";
+const wchar_t* rsLGS_Lower_Threshold = L"Lower_Threshold";
+const wchar_t* rsLGS_Suspend_Duration = L"Suspend_Duration";
+
+const wchar_t* rsConst_ISF = L"const_insulin_sensitivity_factor";
+const wchar_t* rsConst_CR = L"const_carb_to_insulin_ratio";
+
+const wchar_t* rsForward_Clone = L"Forward_a_clone";

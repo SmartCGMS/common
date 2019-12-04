@@ -295,12 +295,7 @@ namespace glucose {
 		HRESULT Execute(glucose::UDevice_Event &event);
 	};
 
-	class SFilter_Feedback_Receiver : public virtual refcnt::SReferenced<glucose::IFilter_Feedback_Receiver> {
-	public:
-		using refcnt::SReferenced<glucose::IFilter_Feedback_Receiver>::SReferenced;
-
-		HRESULT Execute(glucose::UDevice_Event &event);
-	};
+	using SFilter_Feedback_Receiver = refcnt::SReferenced<glucose::IFilter_Feedback_Receiver>;
 
 	#pragma warning( push )
 	#pragma warning( disable : 4250 ) // C4250 - 'class1' : inherits 'class2::member' via dominance

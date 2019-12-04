@@ -423,6 +423,8 @@ extern const wchar_t *dsSignal_Measured_IOB;
 extern const wchar_t *dsSignal_Measured_COB;
 extern const wchar_t *dsSignal_Measured_Carb_Intake;
 extern const wchar_t *dsSignal_Measured_Health_Physical_Activity;
+extern const wchar_t* dsSignal_Measured_Insulin_Sensitivity;
+extern const wchar_t* dsSignal_Measured_Carb_Ratio;
 extern const wchar_t *dsSignal_Suffix_Measured;
 extern const wchar_t *dsSignal_Suffix_Calculated;
 extern const wchar_t *dsSignal_Unknown;
@@ -492,6 +494,16 @@ extern const wchar_t* rsBIN;
 
 extern const wchar_t* rsBolus_Calculator;
 extern const wchar_t* rsConst_Basal_Insulin;
+
+extern const wchar_t* dsLGS_Basal_Insulin_Model;
+extern const wchar_t* dsLGS_Lower_Threshold;
+extern const wchar_t* dsLGS_Suspend_Duration;
+extern const wchar_t* dsInsulin_LGS_Rate;
+
+extern const wchar_t* dsConst_ISF;
+extern const wchar_t* dsConst_ISF_Model;
+extern const wchar_t* dsConst_CR;
+extern const wchar_t* dsConst_CR_Model;
 
 // ---- drawing-related constants
 
@@ -629,15 +641,18 @@ extern const wchar_t* dsBergman_p1;
 extern const wchar_t* dsBergman_p2;
 extern const wchar_t* dsBergman_p3;
 extern const wchar_t* dsBergman_p4;
+extern const wchar_t* dsBergman_k12;
+extern const wchar_t* dsBergman_k21;
 extern const wchar_t* dsBergman_Vi;
 extern const wchar_t* dsBergman_BW;
 extern const wchar_t* dsBergman_VgDist;
 extern const wchar_t* dsBergman_d1rate;
 extern const wchar_t* dsBergman_d2rate;
 extern const wchar_t* dsBergman_irate;
-extern const wchar_t* dsBergman_Gb;
+extern const wchar_t* dsBergman_Qb;
 extern const wchar_t* dsBergman_Ib;
-extern const wchar_t* dsBergman_G0;
+extern const wchar_t* dsBergman_Q10;
+extern const wchar_t* dsBergman_Q20;
 extern const wchar_t* dsBergman_X0;
 extern const wchar_t* dsBergman_I0;
 extern const wchar_t* dsBergman_D10;
@@ -647,7 +662,7 @@ extern const wchar_t* dsBergman_Gsc0;
 extern const wchar_t* dsBergman_BasalRate0;
 extern const wchar_t* dsBergman_diff2_p;
 extern const wchar_t* dsBergman_diff2_cg;
-extern const wchar_t* dsBergman_diff2_c;
+extern const wchar_t* dsBergman_diff2_c; 
 
 extern const wchar_t *dsBergman_Signal_BG;
 extern const wchar_t *dsBergman_Signal_IG;
@@ -670,6 +685,9 @@ extern const wchar_t* dsKi;
 extern const wchar_t* dsKd;
 extern const wchar_t* dsBIN;
 extern const wchar_t* dsKiDecay;
+
+extern const wchar_t* dsSignal_Feedback;
+extern const wchar_t* dsForward_Clone;
 
 //--------------------------------- do not translate any of the rs-prefixed texts --
 
@@ -984,3 +1002,12 @@ extern const wchar_t* rsKi;
 extern const wchar_t* rsKd;
 extern const wchar_t* rsBIN;
 extern const wchar_t* rsKiDecay;
+
+extern const wchar_t* rsLGS_Basal_Insulin_Model;
+extern const wchar_t* rsLGS_Lower_Threshold;
+extern const wchar_t* rsLGS_Suspend_Duration;
+
+extern const wchar_t* rsConst_ISF;
+extern const wchar_t* rsConst_CR;
+
+extern const wchar_t* rsForward_Clone;

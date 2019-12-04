@@ -195,6 +195,15 @@ void glucose::UDevice_Event::reset(IDevice_Event *event) {
 	
 }
 
+glucose::UDevice_Event glucose::UDevice_Event::Clone() {	
+	glucose::IDevice_Event* clone;
+	if (operator bool() && (get()->Clone(&clone) == S_OK)) {
+		return glucose::UDevice_Event{ clone };
+	}
+	else
+		return glucose::UDevice_Event{};
+}
+
 const glucose::NDevice_Event_Code& glucose::UDevice_Event::event_code() const {
 	return mRaw->event_code;
 }

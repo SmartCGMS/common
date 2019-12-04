@@ -116,7 +116,9 @@ namespace glucose {
 		explicit UDevice_Event(const NDevice_Event_Code code = NDevice_Event_Code::Nothing)  noexcept;
 		UDevice_Event(UDevice_Event&& event) noexcept;	
 		UDevice_Event(IDevice_Event *event);			
-		void reset(IDevice_Event *event);		
+		void reset(IDevice_Event *event);	
+
+		UDevice_Event Clone();
 
 														//this must be const, because level, parameters and info shared the same data space!!!
 														//it is 100% fool proof, but programmer should still easily discover the error when overwriting e.g., info with level and then reading info
