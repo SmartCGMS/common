@@ -169,7 +169,7 @@ CDb_Connection::CDb_Connection(const wchar_t *host, const wchar_t *provider, uin
 
 CDb_Connection::~CDb_Connection() {
 	mDb.close();
-	QSqlDatabase::removeDatabase(mConnection_Name);
+	//QSqlDatabase::removeDatabase(mConnection_Name);
 }
 
 
