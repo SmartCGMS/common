@@ -158,8 +158,8 @@ namespace glucose
 		mSignal_Names[glucose::signal_ISIG] = dsSignal_GUI_Name_ISIG;
 		mSignal_Names[glucose::signal_Calibration] = dsSignal_GUI_Name_Calibration;
 		mSignal_Names[glucose::signal_Delivered_Insulin_Bolus] = dsSignal_GUI_Name_Delivered_Insulin_Bolus;
-		mSignal_Names[glucose::signal_Delivered_Insulin_Basal] = dsSignal_GUI_Name_Delivered_Insulin_Basal;
-		mSignal_Names[glucose::signal_Requested_Basal_Insulin_Rate] = dsSignal_GUI_Name_Requested_Basal_Insulin_Rate;
+		mSignal_Names[glucose::signal_Delivered_Insulin_Basal_Rate] = dsSignal_GUI_Name_Delivered_Insulin_Basal;
+		mSignal_Names[glucose::signal_Requested_Insulin_Basal_Rate] = dsSignal_GUI_Name_Requested_Basal_Insulin_Rate;
 		mSignal_Names[glucose::signal_Insulin_Activity] = dsSignal_GUI_Name_Insulin_Activity;
 		mSignal_Names[glucose::signal_IOB] = dsSignal_GUI_Name_IOB;
 		mSignal_Names[glucose::signal_COB] = dsSignal_GUI_Name_COB;
