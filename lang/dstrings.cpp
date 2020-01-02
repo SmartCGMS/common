@@ -370,12 +370,14 @@ const wchar_t* dsRnd_MetaDE = L"RND MetaDE";
 const wchar_t* dsMetaDE = L"MetaDE";
 const wchar_t* dsBOBYQA = L"BOBYQA";
 const wchar_t* dsHalton_Zooming = L"Halton Zooming";
-const wchar_t* dsPathfinder = L"Pathfinder";
+/*const wchar_t* dsPathfinder = L"Pathfinder";
 const wchar_t* dsPathfinder_LD_Directions = L"Pathfinder, LD Dir";
 const wchar_t* dsPathfinder_LD_Population = L"Pathfinder, LD Pop";
 const wchar_t* dsPathfinder_LD_Directions_Population = L"Pathfinder, LD Dir Pop";
+*/
 const wchar_t* dsPathfinder_Fast = L"Pathfinder, fast";
 const wchar_t* dsPathfinder_Spiral = L"Pathfinder, spiral";
+const wchar_t* dsPathfinder_Landscape = L"Pathfinder, landscape";
 const wchar_t* dsPSO = L"PSO";
 const wchar_t* dsSADE = L"SADE";
 const wchar_t* dsDE1220 = L"DE1220";

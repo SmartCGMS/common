@@ -368,11 +368,13 @@ extern const wchar_t* dsHalton_MetaDE;
 extern const wchar_t* dsRnd_MetaDE;
 extern const wchar_t* dsBOBYQA;
 extern const wchar_t* dsHalton_Zooming;
-extern const wchar_t* dsPathfinder;
+//extern const wchar_t* dsPathfinder;
 extern const wchar_t* dsPathfinder_Spiral;
-extern const wchar_t* dsPathfinder_LD_Directions;
+extern const wchar_t* dsPathfinder_Landscape;
+/*extern const wchar_t* dsPathfinder_LD_Directions;
 extern const wchar_t* dsPathfinder_LD_Population;
 extern const wchar_t* dsPathfinder_LD_Directions_Population;
+*/
 extern const wchar_t* dsPathfinder_Fast;
 extern const wchar_t* dsPSO;
 extern const wchar_t* dsSADE;
