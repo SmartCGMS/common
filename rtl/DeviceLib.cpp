@@ -43,114 +43,114 @@
 #include "FactoryLib.h"
 
 namespace imported {
-	glucose::TCreate_Signal create_signal = factory::resolve_symbol<glucose::TCreate_Signal>("create_signal");
-	glucose::TCreate_Device_Event create_device_event = factory::resolve_symbol<glucose::TCreate_Device_Event>("create_device_event");
+	scgms::TCreate_Signal create_signal = factory::resolve_symbol<scgms::TCreate_Signal>("create_signal");
+	scgms::TCreate_Device_Event create_device_event = factory::resolve_symbol<scgms::TCreate_Device_Event>("create_device_event");
 }
 
 
-bool glucose::SModel_Parameter_Vector::set(const std::vector<double> &params) {
+bool scgms::SModel_Parameter_Vector::set(const std::vector<double> &params) {
 	double *data_ptr = const_cast<double*>(params.data());
 	if (!operator bool()) {
-		glucose::IModel_Parameter_Vector *new_vector = refcnt::Create_Container<double>(data_ptr, data_ptr + params.size());
-		reset(new_vector, [](glucose::IModel_Parameter_Vector* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });
+		scgms::IModel_Parameter_Vector *new_vector = refcnt::Create_Container<double>(data_ptr, data_ptr + params.size());
+		reset(new_vector, [](scgms::IModel_Parameter_Vector* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });
 		return operator bool();
 	} else
 		return get()->set(data_ptr, data_ptr + params.size()) == S_OK;
 }
 
 
-bool glucose::SModel_Parameter_Vector::set(const glucose::SModel_Parameter_Vector &params) {
+bool scgms::SModel_Parameter_Vector::set(const scgms::SModel_Parameter_Vector &params) {
 	if (!params) return false;
 
 	double *begin, *end;
 	if (params->get(&begin, &end) != S_OK) return false;
 
 	if (!operator bool()) {
-		glucose::IModel_Parameter_Vector *new_vector = refcnt::Create_Container<double>(begin, end);
-		reset(new_vector, [](glucose::IModel_Parameter_Vector* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });
+		scgms::IModel_Parameter_Vector *new_vector = refcnt::Create_Container<double>(begin, end);
+		reset(new_vector, [](scgms::IModel_Parameter_Vector* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });
 		return operator bool();
 	} else
 		return get()->set(begin, end) == S_OK;
 }
 
-bool glucose::SModel_Parameter_Vector::empty() const {
+bool scgms::SModel_Parameter_Vector::empty() const {
 	if (!operator bool()) return true;
 	return get()->empty() == S_OK;
 }
 
-glucose::SSignal::SSignal(glucose::STime_Segment segment, const GUID &signal_id) {
-	glucose::ISignal *signal;
+scgms::SSignal::SSignal(scgms::STime_Segment segment, const GUID &signal_id) {
+	scgms::ISignal *signal;
 	if (imported::create_signal(&signal_id, segment.get(), &signal) == S_OK) {
-		reset(signal, [](glucose::ISignal* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });
+		reset(signal, [](scgms::ISignal* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });
 	}
 }
 
-glucose::WSignal::WSignal(ISignal *signal) : mSignal(signal) {};
+scgms::WSignal::WSignal(ISignal *signal) : mSignal(signal) {};
 
-HRESULT glucose::WSignal::Get_Discrete_Levels(double* const times, double* const levels, const size_t count, size_t *filled) const {
+HRESULT scgms::WSignal::Get_Discrete_Levels(double* const times, double* const levels, const size_t count, size_t *filled) const {
 	return mSignal ? mSignal->Get_Discrete_Levels(times, levels, count, filled) : E_FAIL;
 }
 
-HRESULT glucose::WSignal::Get_Discrete_Bounds(glucose::TBounds* const time_bounds, glucose::TBounds* const level_bounds, size_t *level_count) const {
+HRESULT scgms::WSignal::Get_Discrete_Bounds(scgms::TBounds* const time_bounds, scgms::TBounds* const level_bounds, size_t *level_count) const {
 	return mSignal ? mSignal->Get_Discrete_Bounds(time_bounds, level_bounds, level_count) : E_FAIL;
 }
 
 
-glucose::WTime_Segment::WTime_Segment(ITime_Segment *segment) : mSegment(segment) {
+scgms::WTime_Segment::WTime_Segment(ITime_Segment *segment) : mSegment(segment) {
 
 }
 
-glucose::SSignal glucose::WTime_Segment::Get_Signal(const GUID &signal_id) {
-	glucose::SSignal result;
+scgms::SSignal scgms::WTime_Segment::Get_Signal(const GUID &signal_id) {
+	scgms::SSignal result;
 	ISignal *obj = nullptr;
 
 	if (mSegment)
 		if (mSegment->Get_Signal(&signal_id, &obj) == S_OK)
-			result = refcnt::make_shared_reference_ext<glucose::SSignal, glucose::ISignal>(obj, false);
+			result = refcnt::make_shared_reference_ext<scgms::SSignal, scgms::ISignal>(obj, false);
 
 	return result;
 }
 
-glucose::SSignal glucose::STime_Segment::Get_Signal(const GUID &signal_id) {
-	glucose::SSignal result;
+scgms::SSignal scgms::STime_Segment::Get_Signal(const GUID &signal_id) {
+	scgms::SSignal result;
 	ISignal *obj = nullptr;
-	glucose::ITime_Segment *segment = get();
+	scgms::ITime_Segment *segment = get();
 
 	if (segment)
 		if (segment->Get_Signal(&signal_id, &obj) == S_OK)
-			result = refcnt::make_shared_reference_ext<glucose::SSignal, glucose::ISignal>(obj, false);
+			result = refcnt::make_shared_reference_ext<scgms::SSignal, scgms::ISignal>(obj, false);
 
 	return result;
 }
 
-glucose::TDevice_Event* Get_Raw_Event(glucose::IDevice_Event *event) {
-	glucose::TDevice_Event* result;
+scgms::TDevice_Event* Get_Raw_Event(scgms::IDevice_Event *event) {
+	scgms::TDevice_Event* result;
 	if ((event == nullptr) || (event->Raw(&result) != S_OK)) result = nullptr;
 
 	return result;
 }
 
-glucose::IDevice_Event* Create_Event(const glucose::NDevice_Event_Code code) {
-	glucose::IDevice_Event *result;
+scgms::IDevice_Event* Create_Event(const scgms::NDevice_Event_Code code) {
+	scgms::IDevice_Event *result;
 	if (imported::create_device_event(code, &result) != S_OK) result = nullptr;
 	return result;
 }
 
-glucose::UDevice_Event::UDevice_Event(const glucose::NDevice_Event_Code code) noexcept : UDevice_Event(Create_Event(code)) {
+scgms::UDevice_Event::UDevice_Event(const scgms::NDevice_Event_Code code) noexcept : UDevice_Event(Create_Event(code)) {
 }
 
-glucose::UDevice_Event::UDevice_Event(glucose::UDevice_Event&& event) noexcept: mRaw(event.mRaw) {
+scgms::UDevice_Event::UDevice_Event(scgms::UDevice_Event&& event) noexcept: mRaw(event.mRaw) {
 	event.release();
 }
 
-glucose::UDevice_Event::UDevice_Event(IDevice_Event *event) : std::unique_ptr<IDevice_Event, UDevice_Event_Deleter>(event), mRaw(Get_Raw_Event(event)){
+scgms::UDevice_Event::UDevice_Event(IDevice_Event *event) : std::unique_ptr<IDevice_Event, UDevice_Event_Deleter>(event), mRaw(Get_Raw_Event(event)){
 	switch (major_type()) {
-		case glucose::UDevice_Event_internal::NDevice_Event_Major_Type::info:
+		case scgms::UDevice_Event_internal::NDevice_Event_Major_Type::info:
 			if (mRaw->info) info = refcnt::make_shared_reference_ext<refcnt::Swstr_container, refcnt::wstr_container>(mRaw->info, true);
 			break;
 
-		case glucose::UDevice_Event_internal::NDevice_Event_Major_Type::parameters:
-			if (mRaw->parameters) parameters = refcnt::make_shared_reference_ext<glucose::SModel_Parameter_Vector, glucose::IModel_Parameter_Vector>(mRaw->parameters, true);
+		case scgms::UDevice_Event_internal::NDevice_Event_Major_Type::parameters:
+			if (mRaw->parameters) parameters = refcnt::make_shared_reference_ext<scgms::SModel_Parameter_Vector, scgms::IModel_Parameter_Vector>(mRaw->parameters, true);
 			break;
 
 		default:
@@ -158,30 +158,30 @@ glucose::UDevice_Event::UDevice_Event(IDevice_Event *event) : std::unique_ptr<ID
 	}
 }
 
-glucose::UDevice_Event_internal::NDevice_Event_Major_Type glucose::UDevice_Event::major_type() const {
-	if (mRaw == nullptr) return glucose::UDevice_Event_internal::NDevice_Event_Major_Type::null;
+scgms::UDevice_Event_internal::NDevice_Event_Major_Type scgms::UDevice_Event::major_type() const {
+	if (mRaw == nullptr) return scgms::UDevice_Event_internal::NDevice_Event_Major_Type::null;
 	return UDevice_Event_internal::major_type(mRaw->event_code);
 }
 
-glucose::UDevice_Event_internal::NDevice_Event_Major_Type glucose::UDevice_Event_internal::major_type(const glucose::NDevice_Event_Code code) {
+scgms::UDevice_Event_internal::NDevice_Event_Major_Type scgms::UDevice_Event_internal::major_type(const scgms::NDevice_Event_Code code) {
 	switch (code) {
-		case glucose::NDevice_Event_Code::Level:
-		case glucose::NDevice_Event_Code::Masked_Level:		return glucose::UDevice_Event_internal::NDevice_Event_Major_Type::level;
+		case scgms::NDevice_Event_Code::Level:
+		case scgms::NDevice_Event_Code::Masked_Level:		return scgms::UDevice_Event_internal::NDevice_Event_Major_Type::level;
 
-		case glucose::NDevice_Event_Code::Parameters:
-		case glucose::NDevice_Event_Code::Parameters_Hint:	return glucose::UDevice_Event_internal::NDevice_Event_Major_Type::parameters;
+		case scgms::NDevice_Event_Code::Parameters:
+		case scgms::NDevice_Event_Code::Parameters_Hint:	return scgms::UDevice_Event_internal::NDevice_Event_Major_Type::parameters;
 
-		case glucose::NDevice_Event_Code::Information:
-		case glucose::NDevice_Event_Code::Warning:
-		case glucose::NDevice_Event_Code::Error:			return glucose::UDevice_Event_internal::NDevice_Event_Major_Type::info;
+		case scgms::NDevice_Event_Code::Information:
+		case scgms::NDevice_Event_Code::Warning:
+		case scgms::NDevice_Event_Code::Error:			return scgms::UDevice_Event_internal::NDevice_Event_Major_Type::info;
 
 		default:	break;
 	}
 
-	return glucose::UDevice_Event_internal::NDevice_Event_Major_Type::null;
+	return scgms::UDevice_Event_internal::NDevice_Event_Major_Type::null;
 }
 
-void glucose::UDevice_Event::reset(IDevice_Event *event) {
+void scgms::UDevice_Event::reset(IDevice_Event *event) {
 	if (operator bool()) {
 		auto deleter = get_deleter();
 		auto obj = get();
@@ -195,63 +195,63 @@ void glucose::UDevice_Event::reset(IDevice_Event *event) {
 	
 }
 
-glucose::UDevice_Event glucose::UDevice_Event::Clone() {	
-	glucose::IDevice_Event* clone;
+scgms::UDevice_Event scgms::UDevice_Event::Clone() {	
+	scgms::IDevice_Event* clone;
 	if (operator bool() && (get()->Clone(&clone) == S_OK)) {
-		return glucose::UDevice_Event{ clone };
+		return scgms::UDevice_Event{ clone };
 	}
 	else
-		return glucose::UDevice_Event{};
+		return scgms::UDevice_Event{};
 }
 
-const glucose::NDevice_Event_Code& glucose::UDevice_Event::event_code() const {
+const scgms::NDevice_Event_Code& scgms::UDevice_Event::event_code() const {
 	return mRaw->event_code;
 }
 
-const int64_t& glucose::UDevice_Event::logical_time() const {
+const int64_t& scgms::UDevice_Event::logical_time() const {
 	return mRaw->logical_time;
 }
 
-GUID& glucose::UDevice_Event::device_id() const {
+GUID& scgms::UDevice_Event::device_id() const {
 	return mRaw->device_id;
 }
 
-GUID& glucose::UDevice_Event::signal_id() const {
+GUID& scgms::UDevice_Event::signal_id() const {
 	return mRaw->signal_id;
 }
 
-double& glucose::UDevice_Event::device_time() const {
+double& scgms::UDevice_Event::device_time() const {
 	return mRaw->device_time;
 }
 	
-uint64_t& glucose::UDevice_Event::segment_id() const {
+uint64_t& scgms::UDevice_Event::segment_id() const {
 	return mRaw->segment_id;
 }
 
-double& glucose::UDevice_Event::level() const {
+double& scgms::UDevice_Event::level() const {
 	return mRaw->level;
 }
 
 
-bool glucose::UDevice_Event::is_level_event() const {
-	return major_type() == glucose::UDevice_Event_internal::NDevice_Event_Major_Type::level;
+bool scgms::UDevice_Event::is_level_event() const {
+	return major_type() == scgms::UDevice_Event_internal::NDevice_Event_Major_Type::level;
 }
 
-bool glucose::UDevice_Event::is_parameters_event() const {
-	return major_type() == glucose::UDevice_Event_internal::NDevice_Event_Major_Type::parameters;
+bool scgms::UDevice_Event::is_parameters_event() const {
+	return major_type() == scgms::UDevice_Event_internal::NDevice_Event_Major_Type::parameters;
 }
 
-bool glucose::UDevice_Event::is_info_event() const {
-	return major_type() == glucose::UDevice_Event_internal::NDevice_Event_Major_Type::info;
+bool scgms::UDevice_Event::is_info_event() const {
+	return major_type() == scgms::UDevice_Event_internal::NDevice_Event_Major_Type::info;
 }
 
 
-glucose::CTime_Segment::~CTime_Segment()
+scgms::CTime_Segment::~CTime_Segment()
 {
 	//
 }
 
-HRESULT IfaceCalling glucose::CTime_Segment::Get_Signal(const GUID *signal_id, glucose::ISignal **signal)
+HRESULT IfaceCalling scgms::CTime_Segment::Get_Signal(const GUID *signal_id, scgms::ISignal **signal)
 {
 	auto itr = mSignals.find(*signal_id);
 	if (itr != mSignals.end())
@@ -265,20 +265,20 @@ HRESULT IfaceCalling glucose::CTime_Segment::Get_Signal(const GUID *signal_id, g
 	if (imported::create_signal(signal_id, this, signal) != S_OK) {
 		return E_NOTIMPL;
 	}
-	mSignals[*signal_id] = refcnt::make_shared_reference_ext<glucose::SSignal, glucose::ISignal>(*signal, true);  // true due to creating "clone" of pointer with custom reference counter
+	mSignals[*signal_id] = refcnt::make_shared_reference_ext<scgms::SSignal, scgms::ISignal>(*signal, true);  // true due to creating "clone" of pointer with custom reference counter
 
 	return S_OK;
 }
 
-glucose::STime_Segment glucose::CTime_Segment::Clone()
+scgms::STime_Segment scgms::CTime_Segment::Clone()
 {
 	// manufacture new segment
-	glucose::CTime_Segment* cloned;
-	if (Manufacture_Object<glucose::CTime_Segment>(&cloned) != S_OK)
+	scgms::CTime_Segment* cloned;
+	if (Manufacture_Object<scgms::CTime_Segment>(&cloned) != S_OK)
 		return {};
 
 	size_t count;
-	glucose::ISignal* target;
+	scgms::ISignal* target;
 
 	std::vector<double> tmpTimes, tmpLevels;
 
@@ -310,5 +310,5 @@ glucose::STime_Segment glucose::CTime_Segment::Clone()
 		target->Add_Levels(tmpTimes.data(), tmpLevels.data(), filled);
 	}
 
-	return refcnt::make_shared_reference_ext<glucose::STime_Segment, glucose::ITime_Segment>(cloned, false);
+	return refcnt::make_shared_reference_ext<scgms::STime_Segment, scgms::ITime_Segment>(cloned, false);
 }

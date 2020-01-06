@@ -43,17 +43,17 @@
 #include <sstream>
 #include "manufactory.h"
 
-namespace glucose {
+namespace scgms {
 
 
 	namespace imported {
-		glucose::TGet_Filter_Descriptors get_filter_descriptors = factory::resolve_symbol<glucose::TGet_Filter_Descriptors>("get_filter_descriptors");
-		glucose::TAdd_Filters add_filters = factory::resolve_symbol<glucose::TAdd_Filters>("add_filters");
-		glucose::TCreate_Persistent_Filter_Chain_Configuration create_persistent_filter_chain_configuration = factory::resolve_symbol<glucose::TCreate_Persistent_Filter_Chain_Configuration>("create_persistent_filter_chain_configuration");		
-		glucose::TExecute_Filter_Configuration execute_filter_configuration = factory::resolve_symbol<glucose::TExecute_Filter_Configuration>("execute_filter_configuration");
-		glucose::TCreate_Filter_Parameter create_filter_parameter = factory::resolve_symbol<glucose::TCreate_Filter_Parameter>("create_filter_parameter");
-		glucose::TCreate_Filter_Configuration_Link create_filter_configuration_link = factory::resolve_symbol<glucose::TCreate_Filter_Configuration_Link>("create_filter_configuration_link");
-		glucose::TCreate_Discrete_Model create_discrete_model = factory::resolve_symbol<glucose::TCreate_Discrete_Model>("create_discrete_model");
+		scgms::TGet_Filter_Descriptors get_filter_descriptors = factory::resolve_symbol<scgms::TGet_Filter_Descriptors>("get_filter_descriptors");
+		scgms::TAdd_Filters add_filters = factory::resolve_symbol<scgms::TAdd_Filters>("add_filters");
+		scgms::TCreate_Persistent_Filter_Chain_Configuration create_persistent_filter_chain_configuration = factory::resolve_symbol<scgms::TCreate_Persistent_Filter_Chain_Configuration>("create_persistent_filter_chain_configuration");		
+		scgms::TExecute_Filter_Configuration execute_filter_configuration = factory::resolve_symbol<scgms::TExecute_Filter_Configuration>("execute_filter_configuration");
+		scgms::TCreate_Filter_Parameter create_filter_parameter = factory::resolve_symbol<scgms::TCreate_Filter_Parameter>("create_filter_parameter");
+		scgms::TCreate_Filter_Configuration_Link create_filter_configuration_link = factory::resolve_symbol<scgms::TCreate_Filter_Configuration_Link>("create_filter_configuration_link");
+		scgms::TCreate_Discrete_Model create_discrete_model = factory::resolve_symbol<scgms::TCreate_Discrete_Model>("create_discrete_model");
 	}
 
 	NParameter_Type SFilter_Parameter::type() {
@@ -108,7 +108,7 @@ namespace glucose {
 
 	std::vector<double> SFilter_Parameter::as_double_array(HRESULT &rc) {
 		std::vector<double> result;
-		glucose::IModel_Parameter_Vector *container;
+		scgms::IModel_Parameter_Vector *container;
 		rc = get()->Get_Model_Parameters(&container);
 		if (rc == S_OK) {
 			result = refcnt::Container_To_Vector<double>(container);
@@ -121,7 +121,7 @@ namespace glucose {
 
 	HRESULT SFilter_Parameter::double_array_from_wstring(const wchar_t *str_value) {
 		HRESULT rc = E_FAIL;
-		glucose::IModel_Parameter_Vector *parameters = WString_To_Model_Parameters(str_value);
+		scgms::IModel_Parameter_Vector *parameters = WString_To_Model_Parameters(str_value);
 		if (parameters) {
 			rc = get()->Set_Model_Parameters(parameters);
 			parameters->Release();
@@ -150,7 +150,7 @@ namespace glucose {
 	std::vector<int64_t> SFilter_Parameter::as_int_array(HRESULT &rc) {
 		std::vector<int64_t> result;
 
-		glucose::time_segment_id_container *container;
+		scgms::time_segment_id_container *container;
 		rc = get()->Get_Time_Segment_Id_Container(&container);
 		if (rc == S_OK) {
 			result = refcnt::Container_To_Vector<int64_t>(container);
@@ -170,7 +170,7 @@ namespace glucose {
 
 	HRESULT SFilter_Parameter::int_array_from_wstring(const wchar_t *str_value) {
 		HRESULT rc = E_FAIL;
-		glucose::time_segment_id_container *container = WString_To_Select_Time_Segments_Id(str_value);
+		scgms::time_segment_id_container *container = WString_To_Select_Time_Segments_Id(str_value);
 		if (container) {
 			rc = get()->Set_Time_Segment_Id_Container(container);
 			container->Release();
@@ -193,20 +193,20 @@ namespace glucose {
 
 
 	TFilter_Descriptor SFilter_Configuration_Link::descriptor() {
-		glucose::TFilter_Descriptor filter_desc = glucose::Null_Filter_Descriptor;
+		scgms::TFilter_Descriptor filter_desc = scgms::Null_Filter_Descriptor;
 
 		GUID filter_id;
 		if (operator bool())
 			if (get()->Get_Filter_Id(&filter_id) == S_OK)
-				glucose::get_filter_descriptor_by_id(filter_id, filter_desc);			
+				scgms::get_filter_descriptor_by_id(filter_id, filter_desc);			
 
 		return filter_desc;
 	}	
 
 
-	SFilter_Parameter SFilter_Configuration_Link::Add_Parameter(const glucose::NParameter_Type type, const wchar_t *conf_name) {
+	SFilter_Parameter SFilter_Configuration_Link::Add_Parameter(const scgms::NParameter_Type type, const wchar_t *conf_name) {
 		SFilter_Parameter result;
-		glucose::IFilter_Parameter *parameter;
+		scgms::IFilter_Parameter *parameter;
 		if (imported::create_filter_parameter(type, conf_name, &parameter) == S_OK) {
 			if (get()->add(&parameter, &parameter + 1) == S_OK)
 				result = refcnt::make_shared_reference_ext< SFilter_Parameter, IFilter_Parameter>(parameter, false);
@@ -215,19 +215,19 @@ namespace glucose {
 		return result;
 	}
 
-	glucose::SFilter_Parameter glucose::internal::Create_Filter_Parameter(const glucose::NParameter_Type type, const wchar_t *config_name) {
-		glucose::SFilter_Parameter result;
-		glucose::IFilter_Parameter *new_parameter;
+	scgms::SFilter_Parameter scgms::internal::Create_Filter_Parameter(const scgms::NParameter_Type type, const wchar_t *config_name) {
+		scgms::SFilter_Parameter result;
+		scgms::IFilter_Parameter *new_parameter;
 		if (imported::create_filter_parameter(type, config_name, &new_parameter) == S_OK)
-			result = refcnt::make_shared_reference_ext<glucose::SFilter_Parameter, glucose::IFilter_Parameter>(new_parameter, false);
+			result = refcnt::make_shared_reference_ext<scgms::SFilter_Parameter, scgms::IFilter_Parameter>(new_parameter, false);
 		return result;
 	}
 
-	glucose::SFilter_Configuration_Link internal::Create_Configuration_Link(const GUID &id) {
-		glucose::SFilter_Configuration_Link result;
-		glucose::IFilter_Configuration_Link *link;
+	scgms::SFilter_Configuration_Link internal::Create_Configuration_Link(const GUID &id) {
+		scgms::SFilter_Configuration_Link result;
+		scgms::IFilter_Configuration_Link *link;
 		if (imported::create_filter_configuration_link(&id, &link) == S_OK) {
-			result = refcnt::make_shared_reference_ext<glucose::SFilter_Configuration_Link, glucose::IFilter_Configuration_Link>(link, false);
+			result = refcnt::make_shared_reference_ext<scgms::SFilter_Configuration_Link, scgms::IFilter_Configuration_Link>(link, false);
 		}
 
 		return result;
@@ -240,20 +240,20 @@ namespace glucose {
 	}
 
 
-	SFilter_Executor::SFilter_Executor(refcnt::SReferenced<glucose::IFilter_Chain_Configuration> configuration, glucose::TOn_Filter_Created on_filter_created, const void* on_filter_created_data) {
-		glucose::IFilter_Executor *executor;
+	SFilter_Executor::SFilter_Executor(refcnt::SReferenced<scgms::IFilter_Chain_Configuration> configuration, scgms::TOn_Filter_Created on_filter_created, const void* on_filter_created_data) {
+		scgms::IFilter_Executor *executor;
 		if (imported::execute_filter_configuration(configuration.get(), on_filter_created, on_filter_created_data, &executor) == S_OK)
-			reset(executor, [](glucose::IFilter_Executor* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });
+			reset(executor, [](scgms::IFilter_Executor* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });
 	}
 
 
-	HRESULT SFilter_Executor::Execute(glucose::UDevice_Event &event) {
-		glucose::IDevice_Event *raw_event = event.get();
+	HRESULT SFilter_Executor::Execute(scgms::UDevice_Event &event) {
+		scgms::IDevice_Event *raw_event = event.get();
 		event.release();
 		return get()->Execute(raw_event);		
 	}
 
-	bool add_filters(const std::vector<glucose::TFilter_Descriptor> &descriptors, glucose::TCreate_Filter create_filter) {
+	bool add_filters(const std::vector<scgms::TFilter_Descriptor> &descriptors, scgms::TCreate_Filter create_filter) {
 		return imported::add_filters(descriptors.data(), descriptors.data() + descriptors.size(), create_filter) == S_OK;
 	}
 
@@ -287,7 +287,7 @@ namespace glucose {
 	}
 
 	
-	CBase_Filter::CBase_Filter(glucose::IFilter *output) : mOutput(output) {
+	CBase_Filter::CBase_Filter(scgms::IFilter *output) : mOutput(output) {
 		//
 	}
 
@@ -296,10 +296,10 @@ namespace glucose {
 
 	}
 
-	HRESULT CBase_Filter::Send(glucose::UDevice_Event &event) {
+	HRESULT CBase_Filter::Send(scgms::UDevice_Event &event) {
 		if (!event) return E_INVALIDARG;
 
-		glucose::IDevice_Event *raw_event = event.get();
+		scgms::IDevice_Event *raw_event = event.get();
 		event.release();
 		return mOutput->Execute(raw_event);
 	}
@@ -310,31 +310,31 @@ namespace glucose {
 		return Do_Configure(shared_configuration);
 	}
 
-	HRESULT IfaceCalling CBase_Filter::Execute(glucose::IDevice_Event *event) {
+	HRESULT IfaceCalling CBase_Filter::Execute(scgms::IDevice_Event *event) {
 		if (!event) return E_INVALIDARG;
-		return Do_Execute(glucose::UDevice_Event{event});
+		return Do_Execute(scgms::UDevice_Event{event});
 	}
 
-	SDiscrete_Model::SDiscrete_Model() : refcnt::SReferenced<glucose::IDiscrete_Model>(){
+	SDiscrete_Model::SDiscrete_Model() : refcnt::SReferenced<scgms::IDiscrete_Model>(){
 		//
 	}
 
-	SDiscrete_Model::SDiscrete_Model(const GUID &id, const std::vector<double> &parameters, glucose::SFilter output) {
-		glucose::SModel_Parameter_Vector parameters_shared = refcnt::Create_Container_shared<double, glucose::SModel_Parameter_Vector>(const_cast<double*>(parameters.data()), const_cast<double*>(parameters.data()+parameters.size()));			
+	SDiscrete_Model::SDiscrete_Model(const GUID &id, const std::vector<double> &parameters, scgms::SFilter output) {
+		scgms::SModel_Parameter_Vector parameters_shared = refcnt::Create_Container_shared<double, scgms::SModel_Parameter_Vector>(const_cast<double*>(parameters.data()), const_cast<double*>(parameters.data()+parameters.size()));			
 
-		glucose::IDiscrete_Model *model;
+		scgms::IDiscrete_Model *model;
 		if (imported::create_discrete_model(&id, parameters_shared.get(), output.get(), &model) == S_OK)
-			reset(model, [](glucose::IDiscrete_Model* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });
+			reset(model, [](scgms::IDiscrete_Model* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });
 	}
 	
 	SDrawing_Filter_Inspection::SDrawing_Filter_Inspection(SFilter &drawing_filter) {
 		if (drawing_filter)
-			refcnt::Query_Interface<glucose::IFilter, glucose::IDrawing_Filter_Inspection>(drawing_filter.get(), IID_Drawing_Filter_Inspection, *this);
+			refcnt::Query_Interface<scgms::IFilter, scgms::IDrawing_Filter_Inspection>(drawing_filter.get(), IID_Drawing_Filter_Inspection, *this);
 	}
 
 	SLog_Filter_Inspection::SLog_Filter_Inspection(SFilter &log_filter) {
 		if (log_filter)
-			refcnt::Query_Interface<glucose::IFilter, glucose::ILog_Filter_Inspection>(log_filter.get(), IID_Log_Filter_Inspection, *this);
+			refcnt::Query_Interface<scgms::IFilter, scgms::ILog_Filter_Inspection>(log_filter.get(), IID_Log_Filter_Inspection, *this);
 	}
 
 	bool SLog_Filter_Inspection::pop(std::shared_ptr<refcnt::wstr_list> &list) {
@@ -353,14 +353,14 @@ namespace glucose {
 
 	SSignal_Error_Inspection::SSignal_Error_Inspection(SFilter &signal_error_filter) {
 		if (signal_error_filter)
-			refcnt::Query_Interface<glucose::IFilter, glucose::ISignal_Error_Inspection>(signal_error_filter.get(), IID_Signal_Error_Inspection, *this);
+			refcnt::Query_Interface<scgms::IFilter, scgms::ISignal_Error_Inspection>(signal_error_filter.get(), IID_Signal_Error_Inspection, *this);
 	}
 
 }
 
 
 
-std::wstring Select_Time_Segments_Id_To_WString(glucose::time_segment_id_container *container) {
+std::wstring Select_Time_Segments_Id_To_WString(scgms::time_segment_id_container *container) {
 	int64_t *begin, *end;
 	if (container->get(&begin, &end) == S_OK) {
 		std::wstring result;
@@ -375,9 +375,9 @@ std::wstring Select_Time_Segments_Id_To_WString(glucose::time_segment_id_contain
 		return std::wstring{};
 }
 
-glucose::time_segment_id_container* WString_To_Select_Time_Segments_Id(const wchar_t *str) {
-	glucose::time_segment_id_container *obj = nullptr;
-	if (Manufacture_Object<refcnt::internal::CVector_Container<int64_t>, glucose::time_segment_id_container>(&obj) == S_OK) {
+scgms::time_segment_id_container* WString_To_Select_Time_Segments_Id(const wchar_t *str) {
+	scgms::time_segment_id_container *obj = nullptr;
+	if (Manufacture_Object<refcnt::internal::CVector_Container<int64_t>, scgms::time_segment_id_container>(&obj) == S_OK) {
 		std::vector<int64_t> ids;
 
 		std::wstringstream value_str(str);
@@ -392,7 +392,7 @@ glucose::time_segment_id_container* WString_To_Select_Time_Segments_Id(const wch
 		return nullptr;
 }
 
-std::wstring Model_Parameters_To_WString(glucose::IModel_Parameter_Vector *container)
+std::wstring Model_Parameters_To_WString(scgms::IModel_Parameter_Vector *container)
 {
 	std::wstring result;
 
@@ -411,10 +411,10 @@ std::wstring Model_Parameters_To_WString(glucose::IModel_Parameter_Vector *conta
 	return result;
 }
 
-glucose::IModel_Parameter_Vector* WString_To_Model_Parameters(const wchar_t *str)
+scgms::IModel_Parameter_Vector* WString_To_Model_Parameters(const wchar_t *str)
 {
-	glucose::IModel_Parameter_Vector *obj = nullptr;
-	if (Manufacture_Object<refcnt::internal::CVector_Container<double>, glucose::IModel_Parameter_Vector>(&obj) == S_OK)
+	scgms::IModel_Parameter_Vector *obj = nullptr;
+	if (Manufacture_Object<refcnt::internal::CVector_Container<double>, scgms::IModel_Parameter_Vector>(&obj) == S_OK)
 	{
 		std::vector<double> params;
 

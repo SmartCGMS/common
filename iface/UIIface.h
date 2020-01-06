@@ -41,7 +41,7 @@
 #include "FilterIface.h"
 #include "../rtl/guid.h"
 
-namespace glucose {
+namespace scgms {
 
 	//Units used for glucose levels 
 	enum class TUnits : int8_t {
@@ -155,5 +155,5 @@ namespace glucose {
 	using TGet_Approx_Descriptors = HRESULT(IfaceCalling*)(TApprox_Descriptor **begin, TApprox_Descriptor **end);
 	using TGet_Device_Driver_Descriptors = HRESULT(IfaceCalling*)(TDevice_Driver_Descriptor **begin, TDevice_Driver_Descriptor **end);
 
-	using TAdd_Filters = HRESULT(IfaceCalling *)(const glucose::TFilter_Descriptor *begin, const glucose::TFilter_Descriptor *end, const glucose::TCreate_Filter create_filter);
+	using TAdd_Filters = HRESULT(IfaceCalling *)(const scgms::TFilter_Descriptor *begin, const scgms::TFilter_Descriptor *end, const scgms::TCreate_Filter create_filter);
 }

@@ -51,8 +51,8 @@ HRESULT do_get_descriptors(const V &descriptors, T **begin, T **end) {
 	return begin != nullptr ? S_OK : S_FALSE;
 }
 
-constexpr glucose::TSolver_Descriptor Describe_Non_Specialized_Solver(const GUID id, const wchar_t* desc) {
-	return glucose::TSolver_Descriptor{
+constexpr scgms::TSolver_Descriptor Describe_Non_Specialized_Solver(const GUID id, const wchar_t* desc) {
+	return scgms::TSolver_Descriptor{
 		id,
 		desc,
 		false,

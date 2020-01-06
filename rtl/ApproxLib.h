@@ -45,7 +45,7 @@
 #include "referencedImpl.h"
 #include <vector>
 
-namespace glucose {
+namespace scgms {
 	std::vector<TApprox_Descriptor> get_approx_descriptors();
 
 	using SApproximator = std::shared_ptr<IApproximator>;

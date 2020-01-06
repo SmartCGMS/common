@@ -42,8 +42,7 @@
 #include "referencedIface.h"
 #include "DeviceIface.h"
 
-namespace glucose
-{
+namespace scgms {
 	using IApprox_Parameters_Vector = refcnt::double_container;
 
 	class IApproximator : public virtual refcnt::IReferenced

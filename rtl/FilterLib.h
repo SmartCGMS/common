@@ -46,11 +46,11 @@
 #include <string>
 #include <functional>
 
-namespace glucose {
+namespace scgms {
 
 	using SFilter = refcnt::SReferenced<IFilter>;
 
-	class SFilter_Parameter : public virtual refcnt::SReferenced<glucose::IFilter_Parameter> {
+	class SFilter_Parameter : public virtual refcnt::SReferenced<scgms::IFilter_Parameter> {
 	public:
 		NParameter_Type type();
 		const wchar_t* configuration_name();
@@ -76,16 +76,16 @@ namespace glucose {
 		HRESULT int_array_from_wstring(const wchar_t *str_value);	
 	};
 
-	bool add_filters(const std::vector<glucose::TFilter_Descriptor> &descriptors, glucose::TCreate_Filter create_filter);
+	bool add_filters(const std::vector<scgms::TFilter_Descriptor> &descriptors, scgms::TCreate_Filter create_filter);
 
 	std::vector<TFilter_Descriptor> get_filter_descriptors();
 	bool get_filter_descriptor_by_id(const GUID &id, TFilter_Descriptor &desc);
 
 
-	//class SFilter_Configuration : public std::shared_ptr<glucose::IFilter_Configuration> {
+	//class SFilter_Configuration : public std::shared_ptr<scgms::IFilter_Configuration> {
 	namespace internal {
 
-		SFilter_Parameter Create_Filter_Parameter(const glucose::NParameter_Type type, const wchar_t *config_name);
+		SFilter_Parameter Create_Filter_Parameter(const scgms::NParameter_Type type, const wchar_t *config_name);
 
 		template <typename IConfiguration>
 		class CInternal_Filter_Configuration : public virtual refcnt::SReferenced<IConfiguration> {
@@ -139,7 +139,7 @@ namespace glucose {
 
 				const auto parameter = Resolve_Parameter(name);
 				if (parameter) {					
-					glucose::IModel_Parameter_Vector *raw_parameters;
+					scgms::IModel_Parameter_Vector *raw_parameters;
 					if (parameter->Get_Model_Parameters(&raw_parameters) == S_OK) {
 						
 						double *begin, *end;
@@ -168,11 +168,11 @@ namespace glucose {
 				if (success) {
 					auto parameter = Resolve_Parameter(name);
 					if (!parameter) {
-						parameter = Create_Filter_Parameter(glucose::NParameter_Type::ptDouble_Array, name);
+						parameter = Create_Filter_Parameter(scgms::NParameter_Type::ptDouble_Array, name);
 						success = parameter.operator bool();
 
 						if (success) {
-							glucose::IFilter_Parameter *raw_parameter = parameter.get();
+							scgms::IFilter_Parameter *raw_parameter = parameter.get();
 							success = refcnt::SReferenced<IConfiguration>::get()->add(&raw_parameter, &raw_parameter + 1) == S_OK;
 						}
 					}
@@ -197,14 +197,14 @@ namespace glucose {
 
 				if (name) {
 					if (refcnt::SReferenced<IConfiguration>::operator bool()) {
-						glucose::IFilter_Parameter **cbegin, **cend;
+						scgms::IFilter_Parameter **cbegin, **cend;
 						if (refcnt::SReferenced<IConfiguration>::get()->get(&cbegin, &cend) == S_OK)
 
-							for (glucose::IFilter_Parameter** cur = cbegin; cur != cend; cur++) {
+							for (scgms::IFilter_Parameter** cur = cbegin; cur != cend; cur++) {
 								wchar_t* conf_name;
 								if ((*cur)->Get_Config_Name(&conf_name) == S_OK) {
 									if (wcscmp(conf_name, name) == 0) {
-										result = refcnt::make_shared_reference_ext<SFilter_Parameter, glucose::IFilter_Parameter>(*cur, true);
+										result = refcnt::make_shared_reference_ext<SFilter_Parameter, scgms::IFilter_Parameter>(*cur, true);
 									}
 								}
 							}
@@ -214,8 +214,8 @@ namespace glucose {
 				return result;	//not found
 			}
 
-			void for_each(std::function<void(glucose::SFilter_Parameter)> callback) {
-				glucose::IFilter_Parameter **begin, **end;
+			void for_each(std::function<void(scgms::SFilter_Parameter)> callback) {
+				scgms::IFilter_Parameter **begin, **end;
 				HRESULT rc = refcnt::SReferenced<IConfiguration>::get()->get(&begin, &end);
 				if (rc != S_OK) return;
 
@@ -231,20 +231,20 @@ namespace glucose {
 	class SFilter_Configuration_Link : public virtual internal::CInternal_Filter_Configuration<IFilter_Configuration_Link> {
 	public:
 		TFilter_Descriptor descriptor();
-		SFilter_Parameter Add_Parameter(const glucose::NParameter_Type type, const wchar_t *conf_name);
+		SFilter_Parameter Add_Parameter(const scgms::NParameter_Type type, const wchar_t *conf_name);
 	};
 
 	namespace internal {
 
-		glucose::SFilter_Configuration_Link Create_Configuration_Link(const GUID &id);
+		scgms::SFilter_Configuration_Link Create_Configuration_Link(const GUID &id);
 
 		template <typename IChain_Configuration>
 		class CInternal_Filter_Chain_Configuration : public virtual refcnt::SReferenced<IChain_Configuration> {
 		public:
 			SFilter_Configuration_Link Add_Link(const GUID &id) {
-				glucose::SFilter_Configuration_Link link = Create_Configuration_Link(id);				
+				scgms::SFilter_Configuration_Link link = Create_Configuration_Link(id);				
 				if (link) {
-					glucose::IFilter_Configuration_Link *raw_link = link.get();
+					scgms::IFilter_Configuration_Link *raw_link = link.get();
 					refcnt::SReferenced<IChain_Configuration>::get()->add(&raw_link, &raw_link + 1);
 				}
 
@@ -252,8 +252,8 @@ namespace glucose {
 			}
 
 
-			void for_each(std::function<void(glucose::SFilter_Configuration_Link)> callback) {
-				glucose::IFilter_Configuration_Link **link_begin, **link_end;
+			void for_each(std::function<void(scgms::SFilter_Configuration_Link)> callback) {
+				scgms::IFilter_Configuration_Link **link_begin, **link_end;
 				HRESULT rc = refcnt::SReferenced<IChain_Configuration>::get()->get(&link_begin, &link_end);
 				if (rc != S_OK) return;
 
@@ -263,14 +263,14 @@ namespace glucose {
 			}
 
 
-			glucose::SFilter_Configuration_Link operator[](const size_t index) {
-				glucose::SFilter_Configuration_Link result;
-				glucose::IFilter_Configuration_Link **begin, **end;
+			scgms::SFilter_Configuration_Link operator[](const size_t index) {
+				scgms::SFilter_Configuration_Link result;
+				scgms::IFilter_Configuration_Link **begin, **end;
 
 		
 				if (refcnt::SReferenced<IChain_Configuration>::get()->get(&begin, &end) == S_OK) {
 					if (begin + index < end) {	//check the bounds
-						result = refcnt::make_shared_reference_ext<glucose::SFilter_Configuration_Link, glucose::IFilter_Configuration_Link>(*(begin + index), true);
+						result = refcnt::make_shared_reference_ext<scgms::SFilter_Configuration_Link, scgms::IFilter_Configuration_Link>(*(begin + index), true);
 					}
 				}
 
@@ -280,47 +280,47 @@ namespace glucose {
 		};
 	}
 
-	using SFilter_Chain_Configuration = internal::CInternal_Filter_Chain_Configuration<glucose::IFilter_Chain_Configuration>;
+	using SFilter_Chain_Configuration = internal::CInternal_Filter_Chain_Configuration<scgms::IFilter_Chain_Configuration>;
 
-	class SPersistent_Filter_Chain_Configuration : public virtual internal::CInternal_Filter_Chain_Configuration<glucose::IPersistent_Filter_Chain_Configuration> {
+	class SPersistent_Filter_Chain_Configuration : public virtual internal::CInternal_Filter_Chain_Configuration<scgms::IPersistent_Filter_Chain_Configuration> {
 	public:
 		SPersistent_Filter_Chain_Configuration();				
 	};
 
-	class SFilter_Executor : public virtual refcnt::SReferenced<glucose::IFilter_Executor> {
+	class SFilter_Executor : public virtual refcnt::SReferenced<scgms::IFilter_Executor> {
 	public:
-		SFilter_Executor() : refcnt::SReferenced<glucose::IFilter_Executor>() {};
-		SFilter_Executor(refcnt::SReferenced<glucose::IFilter_Chain_Configuration> configuration, glucose::TOn_Filter_Created on_filter_created, const void* on_filter_created_data);
+		SFilter_Executor() : refcnt::SReferenced<scgms::IFilter_Executor>() {};
+		SFilter_Executor(refcnt::SReferenced<scgms::IFilter_Chain_Configuration> configuration, scgms::TOn_Filter_Created on_filter_created, const void* on_filter_created_data);
 
-		HRESULT Execute(glucose::UDevice_Event &event);
+		HRESULT Execute(scgms::UDevice_Event &event);
 	};
 
-	using SFilter_Feedback_Receiver = refcnt::SReferenced<glucose::IFilter_Feedback_Receiver>;
+	using SFilter_Feedback_Receiver = refcnt::SReferenced<scgms::IFilter_Feedback_Receiver>;
 
 	#pragma warning( push )
 	#pragma warning( disable : 4250 ) // C4250 - 'class1' : inherits 'class2::member' via dominance
 
-	class CBase_Filter : public virtual glucose::IFilter, public refcnt::CReferenced {
+	class CBase_Filter : public virtual scgms::IFilter, public refcnt::CReferenced {
 	protected:
-		glucose::SFilter mOutput;	//aka the next_filter
-		HRESULT Send(glucose::UDevice_Event &event);
+		scgms::SFilter mOutput;	//aka the next_filter
+		HRESULT Send(scgms::UDevice_Event &event);
 	protected:
 		//Descending class is supposed to implement these two methods only
-		virtual HRESULT Do_Execute(glucose::UDevice_Event event) = 0;
-		virtual HRESULT Do_Configure(glucose::SFilter_Configuration configuration) = 0;
+		virtual HRESULT Do_Execute(scgms::UDevice_Event event) = 0;
+		virtual HRESULT Do_Configure(scgms::SFilter_Configuration configuration) = 0;
 	public:
-		CBase_Filter(glucose::IFilter *output);
+		CBase_Filter(scgms::IFilter *output);
 		virtual ~CBase_Filter();
 		virtual HRESULT IfaceCalling Configure(IFilter_Configuration* configuration) override final;
-		virtual HRESULT IfaceCalling Execute(glucose::IDevice_Event *event) override final;
+		virtual HRESULT IfaceCalling Execute(scgms::IDevice_Event *event) override final;
 	};
 
 	#pragma warning( pop )
 
-	class SDiscrete_Model : public virtual refcnt::SReferenced<glucose::IDiscrete_Model> {
+	class SDiscrete_Model : public virtual refcnt::SReferenced<scgms::IDiscrete_Model> {
 	public:
 		SDiscrete_Model();
-		SDiscrete_Model(const GUID &id, const std::vector<double> &parameters, glucose::SFilter output);
+		SDiscrete_Model(const GUID &id, const std::vector<double> &parameters, scgms::SFilter output);
 	};
 
 	class SDrawing_Filter_Inspection : public std::shared_ptr<IDrawing_Filter_Inspection> {
@@ -336,7 +336,7 @@ namespace glucose {
 		bool pop(std::shared_ptr<refcnt::wstr_list> &list);
 	};
 
-	class SSignal_Error_Inspection : public virtual refcnt::SReferenced<glucose::ISignal_Error_Inspection> {
+	class SSignal_Error_Inspection : public virtual refcnt::SReferenced<scgms::ISignal_Error_Inspection> {
 	public:
 		SSignal_Error_Inspection() noexcept {};
 		SSignal_Error_Inspection(SFilter &signal_error_filter);
@@ -345,7 +345,7 @@ namespace glucose {
 }
 
 
-std::wstring Select_Time_Segments_Id_To_WString(glucose::time_segment_id_container *container);
-glucose::time_segment_id_container* WString_To_Select_Time_Segments_Id(const wchar_t *str);
-std::wstring Model_Parameters_To_WString(glucose::IModel_Parameter_Vector *container);
-glucose::IModel_Parameter_Vector* WString_To_Model_Parameters(const wchar_t *str);
+std::wstring Select_Time_Segments_Id_To_WString(scgms::time_segment_id_container *container);
+scgms::time_segment_id_container* WString_To_Select_Time_Segments_Id(const wchar_t *str);
+std::wstring Model_Parameters_To_WString(scgms::IModel_Parameter_Vector *container);
+scgms::IModel_Parameter_Vector* WString_To_Model_Parameters(const wchar_t *str);

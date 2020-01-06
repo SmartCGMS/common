@@ -44,12 +44,11 @@
 #include <wchar.h>
 #include "../lang/dstrings.h"
 
-namespace glucose
-{
+namespace scgms {
 	namespace imported {
-		glucose::TGet_Metric_Descriptors get_metric_descriptors = factory::resolve_symbol<glucose::TGet_Metric_Descriptors>("get_metric_descriptors");
-		glucose::TGet_Model_Descriptors get_model_descriptors = factory::resolve_symbol<glucose::TGet_Model_Descriptors>("get_model_descriptors");
-		glucose::TGet_Solver_Descriptors get_solver_descriptors = factory::resolve_symbol<glucose::TGet_Solver_Descriptors>("get_solver_descriptors");
+		scgms::TGet_Metric_Descriptors get_metric_descriptors = factory::resolve_symbol<scgms::TGet_Metric_Descriptors>("get_metric_descriptors");
+		scgms::TGet_Model_Descriptors get_model_descriptors = factory::resolve_symbol<scgms::TGet_Model_Descriptors>("get_model_descriptors");
+		scgms::TGet_Solver_Descriptors get_solver_descriptors = factory::resolve_symbol<scgms::TGet_Solver_Descriptors>("get_solver_descriptors");
 	}
 
 	std::vector<TModel_Descriptor> get_model_descriptors()
@@ -130,7 +129,7 @@ namespace glucose
 	}
 
 
-	const std::array<const wchar_t*, static_cast<size_t>(glucose::NDevice_Event_Code::count)> event_code_text = { {
+	const std::array<const wchar_t*, static_cast<size_t>(scgms::NDevice_Event_Code::count)> event_code_text = { {
 		L"Nothing",
 		L"Shut_Down",
 		L"Level",
@@ -152,29 +151,29 @@ namespace glucose
 	CSignal_Names::CSignal_Names() {
 		mSignal_Names.clear();
 
-		mSignal_Names[glucose::signal_All] = dsSignal_GUI_Name_All;
-		mSignal_Names[glucose::signal_BG] = dsSignal_GUI_Name_BG;
-		mSignal_Names[glucose::signal_IG] = dsSignal_GUI_Name_IG;
-		mSignal_Names[glucose::signal_ISIG] = dsSignal_GUI_Name_ISIG;
-		mSignal_Names[glucose::signal_Calibration] = dsSignal_GUI_Name_Calibration;
-		mSignal_Names[glucose::signal_Delivered_Insulin_Bolus] = dsSignal_GUI_Name_Delivered_Insulin_Bolus;
-		mSignal_Names[glucose::signal_Delivered_Insulin_Basal_Rate] = dsSignal_GUI_Name_Delivered_Insulin_Basal;
-		mSignal_Names[glucose::signal_Requested_Insulin_Basal_Rate] = dsSignal_GUI_Name_Requested_Basal_Insulin_Rate;
-		mSignal_Names[glucose::signal_Insulin_Activity] = dsSignal_GUI_Name_Insulin_Activity;
-		mSignal_Names[glucose::signal_IOB] = dsSignal_GUI_Name_IOB;
-		mSignal_Names[glucose::signal_COB] = dsSignal_GUI_Name_COB;
-		mSignal_Names[glucose::signal_Carb_Intake] = dsSignal_GUI_Name_Carbs;
-		mSignal_Names[glucose::signal_Physical_Activity] = dsSignal_GUI_Name_Physical_Activity;
+		mSignal_Names[scgms::signal_All] = dsSignal_GUI_Name_All;
+		mSignal_Names[scgms::signal_BG] = dsSignal_GUI_Name_BG;
+		mSignal_Names[scgms::signal_IG] = dsSignal_GUI_Name_IG;
+		mSignal_Names[scgms::signal_ISIG] = dsSignal_GUI_Name_ISIG;
+		mSignal_Names[scgms::signal_Calibration] = dsSignal_GUI_Name_Calibration;
+		mSignal_Names[scgms::signal_Delivered_Insulin_Bolus] = dsSignal_GUI_Name_Delivered_Insulin_Bolus;
+		mSignal_Names[scgms::signal_Delivered_Insulin_Basal_Rate] = dsSignal_GUI_Name_Delivered_Insulin_Basal;
+		mSignal_Names[scgms::signal_Requested_Insulin_Basal_Rate] = dsSignal_GUI_Name_Requested_Basal_Insulin_Rate;
+		mSignal_Names[scgms::signal_Insulin_Activity] = dsSignal_GUI_Name_Insulin_Activity;
+		mSignal_Names[scgms::signal_IOB] = dsSignal_GUI_Name_IOB;
+		mSignal_Names[scgms::signal_COB] = dsSignal_GUI_Name_COB;
+		mSignal_Names[scgms::signal_Carb_Intake] = dsSignal_GUI_Name_Carbs;
+		mSignal_Names[scgms::signal_Physical_Activity] = dsSignal_GUI_Name_Physical_Activity;
 
-		auto models = glucose::get_model_descriptors();
+		auto models = scgms::get_model_descriptors();
 		for (auto& model : models)
 		{
 			for (size_t i = 0; i < model.number_of_calculated_signals; i++)
 				mSignal_Names[model.calculated_signal_ids[i]] = std::wstring{ model.description } +std::wstring{ L" - " } +model.calculated_signal_names[i];
 		}
 
-		for (size_t i = 0; i < glucose::signal_Virtual.size(); i++)
-			mSignal_Names[glucose::signal_Virtual[i]] = dsSignal_Prefix_Virtual + std::wstring(L" ") + std::to_wstring(i);
+		for (size_t i = 0; i < scgms::signal_Virtual.size(); i++)
+			mSignal_Names[scgms::signal_Virtual[i]] = dsSignal_Prefix_Virtual + std::wstring(L" ") + std::to_wstring(i);
 	}
 
 	std::wstring CSignal_Names::Get_Name(const GUID &signal_id) {

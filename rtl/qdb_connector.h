@@ -82,4 +82,4 @@ public:
 
 #pragma warning( pop )
 
-HRESULT IfaceCalling Setup_Filter_DB_Access(glucose::IFilter *filter, const void* data);
+HRESULT IfaceCalling Setup_Filter_DB_Access(scgms::IFilter *filter, const void* data);

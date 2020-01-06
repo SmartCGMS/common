@@ -74,7 +74,7 @@ namespace solver {
 	using TGeneric_Solver = HRESULT(IfaceCalling*)(const GUID *solver_id, const TSolver_Setup *setup, TSolver_Progress *progress);		
 }
 
-namespace glucose {
+namespace scgms {
 
 	struct TMetric_Parameters {
 		const GUID metric_id;
@@ -136,7 +136,7 @@ namespace glucose {
 		// makes a deep copy of the entire progress
 		virtual HRESULT IfaceCalling Get_Solver_Progress(solver::TSolver_Progress* const progress) = 0;
 		// retrieves solver information
-		virtual HRESULT IfaceCalling Get_Solver_Information(GUID* const calculated_signal_id, glucose::TSolver_Status* const status) const = 0;
+		virtual HRESULT IfaceCalling Get_Solver_Information(GUID* const calculated_signal_id, scgms::TSolver_Status* const status) const = 0;
 		// explicitly cancels solver
 		virtual HRESULT IfaceCalling Cancel_Solver() = 0;
 	};
@@ -147,8 +147,8 @@ namespace glucose {
 		//specialized solver has the signal ids encoded - i.e., specialized inside
 		//the very first hint, if provided, has to be the best one
 
-	using TOptimize_Parameters = HRESULT(IfaceCalling*)(glucose::IFilter_Chain_Configuration *configuration, const size_t filter_index, const wchar_t *parameters_configuration_name,
-		glucose::TOn_Filter_Created on_filter_created, const void* on_filter_created_data,
+	using TOptimize_Parameters = HRESULT(IfaceCalling*)(scgms::IFilter_Chain_Configuration *configuration, const size_t filter_index, const wchar_t *parameters_configuration_name,
+		scgms::TOn_Filter_Created on_filter_created, const void* on_filter_created_data,
 		const GUID *solver_id, const size_t population_size, const size_t max_generations, solver::TSolver_Progress *progress);
 
 }

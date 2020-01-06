@@ -46,7 +46,7 @@
 #include "referencedIface.h"
 
 
-namespace glucose {
+namespace scgms {
 
 	using time_segment_id_container = refcnt::IVector_Container<int64_t>;
 
@@ -92,12 +92,12 @@ namespace glucose {
 		virtual HRESULT IfaceCalling Get_GUID(GUID *id) = 0;
 		virtual HRESULT IfaceCalling Set_GUID(const GUID *id) = 0;
 
-		virtual HRESULT IfaceCalling Get_Model_Parameters(glucose::IModel_Parameter_Vector **parameters) = 0;
-		virtual HRESULT IfaceCalling Set_Model_Parameters(glucose::IModel_Parameter_Vector *parameters) = 0;
+		virtual HRESULT IfaceCalling Get_Model_Parameters(scgms::IModel_Parameter_Vector **parameters) = 0;
+		virtual HRESULT IfaceCalling Set_Model_Parameters(scgms::IModel_Parameter_Vector *parameters) = 0;
 	};
 	
 
-	using IFilter_Configuration = refcnt::IVector_Container<glucose::IFilter_Parameter*>;
+	using IFilter_Configuration = refcnt::IVector_Container<scgms::IFilter_Parameter*>;
 	
 	class IFilter_Configuration_Link : public virtual IFilter_Configuration {
 	public:
@@ -123,46 +123,46 @@ namespace glucose {
 		//when called, the filter owns the event - the filter has to either forward the event, 
 		//or call Release on it to discard it
 		//Filter forwards existing/sends new event using IFilter_Communicator * supplied to its constructor
-		virtual HRESULT IfaceCalling Execute(glucose::IDevice_Event *event) = 0;	
+		virtual HRESULT IfaceCalling Execute(scgms::IDevice_Event *event) = 0;	
 	};
 
 	class IFilter_Executor : public virtual refcnt::IReferenced {	//IEvent_Sender sends the event to the first filter
 	public:
 			//whatever Filter_Executor swallows it never releases back => Execute always consumes the event
-		virtual HRESULT IfaceCalling Execute(glucose::IDevice_Event *event) = 0;
+		virtual HRESULT IfaceCalling Execute(scgms::IDevice_Event *event) = 0;
 		virtual HRESULT IfaceCalling Wait_For_Shutdown_and_Terminate() = 0;	//returns once all filters have terminated and joined
 		virtual HRESULT IfaceCalling Terminate() = 0;	//returns once all filters are executing		
 	};
 	
-	class IFilter_Feedback : public virtual glucose::IFilter {
+	class IFilter_Feedback : public virtual scgms::IFilter {
 	public:
 		virtual HRESULT IfaceCalling Name(wchar_t** const name) = 0;
 	};
 
 	constexpr GUID IID_Filter_Feedback_Receiver = { 0xee9d9028, 0xb714, 0x4412, { 0x98, 0xd8, 0xe5, 0xf7, 0xe5, 0xf1, 0xcf, 0x7a } };
-	class IFilter_Feedback_Receiver : public virtual glucose::IFilter_Feedback {
+	class IFilter_Feedback_Receiver : public virtual scgms::IFilter_Feedback {
 	};
 
 	constexpr GUID IID_Filter_Feedback_Sender = { 0x19d21259, 0x7358, 0x4533, { 0x8c, 0x18, 0x85, 0x65, 0x25, 0xc2, 0x35, 0x9 } };
-	class IFilter_Feedback_Sender : public glucose::IFilter_Feedback {
+	class IFilter_Feedback_Sender : public scgms::IFilter_Feedback {
 	public:
-		virtual HRESULT IfaceCalling Sink(glucose::IFilter_Feedback_Receiver *receiver) = 0;
+		virtual HRESULT IfaceCalling Sink(scgms::IFilter_Feedback_Receiver *receiver) = 0;
 	};
 
 
-	class IDiscrete_Model : public virtual glucose::IFilter {
+	class IDiscrete_Model : public virtual scgms::IFilter {
 	public:
 		virtual HRESULT IfaceCalling Set_Current_Time(const double new_current_time) = 0;
 		virtual HRESULT IfaceCalling Step(const double time_advance_delta) = 0;	//time_advance_delta == 0.0 means to emit the current state
 	};
 
 	using TCreate_Persistent_Filter_Chain_Configuration = HRESULT(IfaceCalling *)(IPersistent_Filter_Chain_Configuration **configuration);
-	using TCreate_Filter = HRESULT(IfaceCalling *)(const GUID *id, IFilter *next_filter, glucose::IFilter **filter);
-	using TOn_Filter_Created = HRESULT(IfaceCalling *)(glucose::IFilter *filter, const void* data);
-	using TExecute_Filter_Configuration = HRESULT(IfaceCalling*)(IFilter_Chain_Configuration *configuration, glucose::TOn_Filter_Created on_filter_created, const void* on_filter_created_data, glucose::IFilter_Executor **executor);
-	using TCreate_Filter_Parameter = HRESULT(IfaceCalling*)(const glucose::NParameter_Type type, const wchar_t *config_name, glucose::IFilter_Parameter **parameter);
-	using TCreate_Filter_Configuration_Link = HRESULT(IfaceCalling*)(const GUID *filter_id, glucose::IFilter_Configuration_Link **link);
-	using TCreate_Discrete_Model = HRESULT(IfaceCalling*)(const GUID *model_id, glucose::IModel_Parameter_Vector *parameters, glucose::IFilter *output, glucose::IDiscrete_Model **model);
+	using TCreate_Filter = HRESULT(IfaceCalling *)(const GUID *id, IFilter *next_filter, scgms::IFilter **filter);
+	using TOn_Filter_Created = HRESULT(IfaceCalling *)(scgms::IFilter *filter, const void* data);
+	using TExecute_Filter_Configuration = HRESULT(IfaceCalling*)(IFilter_Chain_Configuration *configuration, scgms::TOn_Filter_Created on_filter_created, const void* on_filter_created_data, scgms::IFilter_Executor **executor);
+	using TCreate_Filter_Parameter = HRESULT(IfaceCalling*)(const scgms::NParameter_Type type, const wchar_t *config_name, scgms::IFilter_Parameter **parameter);
+	using TCreate_Filter_Configuration_Link = HRESULT(IfaceCalling*)(const GUID *filter_id, scgms::IFilter_Configuration_Link **link);
+	using TCreate_Discrete_Model = HRESULT(IfaceCalling*)(const GUID *model_id, scgms::IModel_Parameter_Vector *parameters, scgms::IFilter *output, scgms::IDiscrete_Model **model);
 
 	//The following GUIDs advertise known filters 		
 	constexpr GUID IID_Drawing_Filter = { 0x850a122c, 0x8943, 0xa211,{ 0xc5, 0x14, 0x25, 0xba, 0xa9, 0x14, 0x35, 0x74 } };
@@ -295,7 +295,7 @@ namespace glucose {
 		virtual HRESULT IfaceCalling Promise_Metric(double* const metric_value, bool defer_to_dtor) = 0;
 		//return S_OK if there are new data available since object construction or last call of Peek_New_Data_Available
 		virtual HRESULT IfaceCalling Peek_New_Data_Available() = 0;
-		virtual HRESULT IfaceCalling Calculate_Signal_Error(glucose::TSignal_Error *absolute_error, glucose::TSignal_Error *relative_error) = 0;
+		virtual HRESULT IfaceCalling Calculate_Signal_Error(scgms::TSignal_Error *absolute_error, scgms::TSignal_Error *relative_error) = 0;
 			//should there be a zero reference level, then absolute_error.count != relative_error.count
 		virtual HRESULT IfaceCalling Get_Description(wchar_t** const desc) = 0;
 	};

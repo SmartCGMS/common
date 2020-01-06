@@ -42,9 +42,9 @@
 #include "FactoryLib.h"
 
 namespace imported {
-	glucose::TSolve_Model_Parameters solve_model_parameters = factory::resolve_symbol<glucose::TSolve_Model_Parameters>("solve_model_parameters");
-	glucose::TCreate_Metric create_metric = factory::resolve_symbol<glucose::TCreate_Metric>("create_metric");
-	glucose::TOptimize_Parameters optimize_parameters = factory::resolve_symbol<glucose::TOptimize_Parameters>("optimize_parameters");
+	scgms::TSolve_Model_Parameters solve_model_parameters = factory::resolve_symbol<scgms::TSolve_Model_Parameters>("solve_model_parameters");
+	scgms::TCreate_Metric create_metric = factory::resolve_symbol<scgms::TCreate_Metric>("create_metric");
+	scgms::TOptimize_Parameters optimize_parameters = factory::resolve_symbol<scgms::TOptimize_Parameters>("optimize_parameters");
 }
 
 solver::TSolver_Setup solver::Check_Default_Parameters(const solver::TSolver_Setup &setup, const size_t default_max_generations, const size_t default_population_size) {
@@ -65,51 +65,51 @@ solver::TSolver_Setup solver::Check_Default_Parameters(const solver::TSolver_Set
 	return result;
 }
 
-glucose::SMetric::SMetric() : std::shared_ptr<glucose::IMetric>() {
-	glucose::TMetric_Parameters params = glucose::Null_Metric_Parameters;
+scgms::SMetric::SMetric() : std::shared_ptr<scgms::IMetric>() {
+	scgms::TMetric_Parameters params = scgms::Null_Metric_Parameters;
 	Init(params);
 }
 
-glucose::SMetric::SMetric(const glucose::TMetric_Parameters &params) : std::shared_ptr<glucose::IMetric>() {
+scgms::SMetric::SMetric(const scgms::TMetric_Parameters &params) : std::shared_ptr<scgms::IMetric>() {
 	Init(params);
 }
 
-void glucose::SMetric::Init(const glucose::TMetric_Parameters &params)
+void scgms::SMetric::Init(const scgms::TMetric_Parameters &params)
 {
-	glucose::IMetric* metric;
+	scgms::IMetric* metric;
 	if (imported::create_metric(&params, &metric) == S_OK) {
-		reset(metric, [](glucose::IMetric* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });
+		reset(metric, [](scgms::IMetric* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });
 	}
 }
 
-glucose::SMetric glucose::SMetric::Clone()
+scgms::SMetric scgms::SMetric::Clone()
 {
-	glucose::SMetric result;
+	scgms::SMetric result;
 	auto self = get();
-	glucose::TMetric_Parameters params = glucose::Null_Metric_Parameters;
+	scgms::TMetric_Parameters params = scgms::Null_Metric_Parameters;
 
 	if (self && self->Get_Parameters(&params) == S_OK)
 	{
-		glucose::IMetric *obj = nullptr;
+		scgms::IMetric *obj = nullptr;
 		if (imported::create_metric(&params, &obj) == S_OK)
-			result = refcnt::make_shared_reference_ext<glucose::SMetric, glucose::IMetric>(obj, false);
+			result = refcnt::make_shared_reference_ext<scgms::SMetric, scgms::IMetric>(obj, false);
 	}
 
 	return result;
 }
 
-glucose::SCalculate_Filter_Inspection::SCalculate_Filter_Inspection(glucose::SFilter &calculate_filter) {
+scgms::SCalculate_Filter_Inspection::SCalculate_Filter_Inspection(scgms::SFilter &calculate_filter) {
 	if (calculate_filter)
-		refcnt::Query_Interface<glucose::IFilter, glucose::ICalculate_Filter_Inspection>(calculate_filter.get(), IID_Calculate_Filter_Inspection, *this);
+		refcnt::Query_Interface<scgms::IFilter, scgms::ICalculate_Filter_Inspection>(calculate_filter.get(), IID_Calculate_Filter_Inspection, *this);
 }
 
-HRESULT glucose::Solve_Model_Parameters(const glucose::TSolver_Setup &setup) {
+HRESULT scgms::Solve_Model_Parameters(const scgms::TSolver_Setup &setup) {
 	return imported::solve_model_parameters(&setup);
 }
 
 
-HRESULT glucose::Optimize_Parameters(glucose::SFilter_Chain_Configuration configuration, const size_t filter_index, const wchar_t *parameters_configuration_name,
-									 glucose::TOn_Filter_Created on_filter_created, const void* on_filter_created_data,
+HRESULT scgms::Optimize_Parameters(scgms::SFilter_Chain_Configuration configuration, const size_t filter_index, const wchar_t *parameters_configuration_name,
+									 scgms::TOn_Filter_Created on_filter_created, const void* on_filter_created_data,
 									 const GUID &solver_id, const size_t population_size, const size_t max_generations, solver::TSolver_Progress &progress) {
 	
 	return imported::optimize_parameters(configuration.get(), filter_index, parameters_configuration_name,

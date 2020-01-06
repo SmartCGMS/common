@@ -42,8 +42,7 @@
 
 #include <map>
 
-namespace glucose
-{
+namespace scgms {
 	std::vector<TModel_Descriptor> get_model_descriptors();
 	std::vector<TMetric_Descriptor> get_metric_descriptors();
 	std::vector<TSolver_Descriptor> get_solver_descriptors();
@@ -51,7 +50,7 @@ namespace glucose
 	bool get_model_descriptor_by_id(const GUID &id, TModel_Descriptor &desc);
 	bool get_model_descriptor_by_signal_id(const GUID &signal_id, TModel_Descriptor &desc);
 
-	extern const std::array<const wchar_t*, static_cast<size_t>(glucose::NDevice_Event_Code::count)> event_code_text;
+	extern const std::array<const wchar_t*, static_cast<size_t>(scgms::NDevice_Event_Code::count)> event_code_text;
 	
 	class CSignal_Names {
 			//should we replace this conversion class with a simple function, the map would have to use TBB allocator to avoid memory leaks

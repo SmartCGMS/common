@@ -38,14 +38,14 @@
 
 #include "Common_Calculated_Signal.h"
 
-CCommon_Calculated_Signal::CCommon_Calculated_Signal(glucose::WTime_Segment segment)  {
+CCommon_Calculated_Signal::CCommon_Calculated_Signal(scgms::WTime_Segment segment)  {
 }
 
 HRESULT IfaceCalling CCommon_Calculated_Signal::Get_Discrete_Levels(double* const times, double* const levels, const size_t count, size_t *filled) const {
 	return E_NOTIMPL;
 }
 
-HRESULT IfaceCalling CCommon_Calculated_Signal::Get_Discrete_Bounds(glucose::TBounds* const time_bounds, glucose::TBounds* const level_bounds, size_t *level_count) const {
+HRESULT IfaceCalling CCommon_Calculated_Signal::Get_Discrete_Bounds(scgms::TBounds* const time_bounds, scgms::TBounds* const level_bounds, size_t *level_count) const {
 	return E_NOTIMPL;
 }
 

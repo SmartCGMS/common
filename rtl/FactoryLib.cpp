@@ -109,7 +109,7 @@ namespace factory {
 		HRESULT IfaceCalling get_desc_not_impl(void *begin, void *end) { return E_NOTIMPL; }
 		//specialized stubs
 		HRESULT IfaceCalling create_signal_not_impl(void *signal_id, void* *segment, void *signal) { return E_NOTIMPL; }
-		HRESULT IfaceCalling create_device_event_not_impl(void *event, glucose::NDevice_Event_Code code) { return E_NOTIMPL; }
+		HRESULT IfaceCalling create_device_event_not_impl(void *event, scgms::NDevice_Event_Code code) { return E_NOTIMPL; }
 		HRESULT IfaceCalling create_filter_pipe_not_impl(void* pipe) { return E_NOTIMPL; }
 		HRESULT IfaceCalling create_filter_not_impl(void* id, void* input, void* output, void* filter) { return E_NOTIMPL; }
 		HRESULT IfaceCalling create_device_driver_not_impl(void* id, void* pump_driver) { return E_NOTIMPL; }
@@ -135,7 +135,7 @@ namespace factory {
 		HRESULT IfaceCalling get_approximator_desc_lazy(void *begin, void *end) { return factory_lazy_load(rsGet_Approximator_Descriptors, begin, end); }
 		HRESULT IfaceCalling get_device_driver_desc_lazy(void *begin, void *end) { return factory_lazy_load(rsGet_Device_Driver_Descriptors, begin, end); }
 		HRESULT IfaceCalling create_signal_lazy(void *signal_id, void* *segment, void *signal) { return factory_lazy_load(rsCreate_Signal, signal_id, segment, signal); }
-		HRESULT IfaceCalling create_device_event_lazy(void *event, glucose::NDevice_Event_Code code) { return factory_lazy_load(rsCreate_Device_Event, event, code); }
+		HRESULT IfaceCalling create_device_event_lazy(void *event, scgms::NDevice_Event_Code code) { return factory_lazy_load(rsCreate_Device_Event, event, code); }
 		HRESULT IfaceCalling create_filter_pipe_lazy(void* pipe) { return factory_lazy_load(rsCreate_Filter_Asynchronous_Pipe, pipe); }
 		HRESULT IfaceCalling create_filter_lazy(void* id, void* input, void* output, void* filter) { return factory_lazy_load(rsCreate_Filter, id, input, output, filter); }		
 		HRESULT IfaceCalling create_device_driver_lazy(void* id, void* pump_driver) { return factory_lazy_load(rsCreate_Device_Driver, id, pump_driver); }

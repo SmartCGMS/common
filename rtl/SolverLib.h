@@ -47,9 +47,9 @@ namespace solver {
 	solver::TSolver_Setup Check_Default_Parameters(const solver::TSolver_Setup &setup, const size_t default_max_generations, const size_t default_population_size);	
 }
 
-namespace glucose {
+namespace scgms {
 	template <typename T>
-	T& Convert_Parameters(glucose::IModel_Parameter_Vector *params, const double *default_parameters) {
+	T& Convert_Parameters(scgms::IModel_Parameter_Vector *params, const double *default_parameters) {
 		double *begin{ const_cast<double*>(default_parameters) };	//just in case that no parameters are set at all -> than we have to use the default ones
 		if (params) {
 			double *tmp_begin, *end;
@@ -66,7 +66,7 @@ namespace glucose {
 	
 	class SMetric : public std::shared_ptr<IMetric> {
 	private:
-		void Init(const glucose::TMetric_Parameters &params);
+		void Init(const scgms::TMetric_Parameters &params);
 	public:
 		SMetric();
 		SMetric(const TMetric_Parameters &params);
@@ -80,10 +80,10 @@ namespace glucose {
 	};
 
 
-	HRESULT Solve_Model_Parameters(const glucose::TSolver_Setup &setup);
+	HRESULT Solve_Model_Parameters(const scgms::TSolver_Setup &setup);
 
-	HRESULT Optimize_Parameters(glucose::SFilter_Chain_Configuration configuration, const size_t filter_index, const wchar_t *parameters_configuration_name,								
-								glucose::TOn_Filter_Created on_filter_created, const void* on_filter_created_data,
+	HRESULT Optimize_Parameters(scgms::SFilter_Chain_Configuration configuration, const size_t filter_index, const wchar_t *parameters_configuration_name,								
+								scgms::TOn_Filter_Created on_filter_created, const void* on_filter_created_data,
 								const GUID &solver_id, const size_t population_size, const size_t max_generations, solver::TSolver_Progress &progress);
 
 }

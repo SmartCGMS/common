@@ -46,7 +46,7 @@
 
 #undef max
 
-namespace glucose {
+namespace scgms {
 
 	//constant to convert mg/dl to mmol/l
 	extern const double mgdl_2_mmoll;	//we assume mmol/l, so to make a conversion possible
@@ -217,5 +217,5 @@ namespace glucose {
 	// only ITime_Segment::Get_Signal is supposed to call this function to avoid (although not probihit) creating of over-complex segment-graphs
 	using TCreate_Signal = HRESULT(IfaceCalling *)(const GUID *calc_id, ITime_Segment *segment, ISignal **signal);
 
-	using TCreate_Device_Event = HRESULT(IfaceCalling *)(glucose::NDevice_Event_Code code, glucose::IDevice_Event **event);
+	using TCreate_Device_Event = HRESULT(IfaceCalling *)(scgms::NDevice_Event_Code code, scgms::IDevice_Event **event);
 }

@@ -46,7 +46,7 @@
 #include <map>
 #include <vector>
 
-namespace glucose {
+namespace scgms {
 
 	class SModel_Parameter_Vector : public std::shared_ptr<IModel_Parameter_Vector> {
 	public:
@@ -70,7 +70,7 @@ namespace glucose {
 		WSignal(ISignal *signal);
 
 		HRESULT Get_Discrete_Levels(double* const times, double* const levels, const size_t count, size_t *filled) const;
-		HRESULT Get_Discrete_Bounds(glucose::TBounds* const time_bounds, glucose::TBounds* const level_bounds, size_t *level_count) const;
+		HRESULT Get_Discrete_Bounds(scgms::TBounds* const time_bounds, scgms::TBounds* const level_bounds, size_t *level_count) const;
 	};
 
 	class WTime_Segment { //: public std::weak_ptr<ITime_Segment> { --cannot inherit because shared-weak relationshop cannot live across COM interface
@@ -103,7 +103,7 @@ namespace glucose {
 			parameters
 		};
 
-		UDevice_Event_internal::NDevice_Event_Major_Type major_type(const glucose::NDevice_Event_Code code);
+		UDevice_Event_internal::NDevice_Event_Major_Type major_type(const scgms::NDevice_Event_Code code);
 	}
 
 	class UDevice_Event : public std::unique_ptr<IDevice_Event, UDevice_Event_Deleter> {
@@ -111,7 +111,7 @@ namespace glucose {
 		TDevice_Event * mRaw;		//mRaw must be initialized in the constructor exactly once
 									//therefore, the implementation defines two helper functions,
 									//which returns pointers only
-		glucose::UDevice_Event_internal::NDevice_Event_Major_Type major_type() const;
+		scgms::UDevice_Event_internal::NDevice_Event_Major_Type major_type() const;
 	public:
 		explicit UDevice_Event(const NDevice_Event_Code code = NDevice_Event_Code::Nothing)  noexcept;
 		UDevice_Event(UDevice_Event&& event) noexcept;	
@@ -148,7 +148,7 @@ namespace glucose {
 	{
 	private:
 		// managed signals; created by calling Get_Signal
-		std::map<GUID, glucose::SSignal> mSignals;
+		std::map<GUID, scgms::SSignal> mSignals;
 
 	public:
 		// default constructor
@@ -157,7 +157,7 @@ namespace glucose {
 		CTime_Segment(const CTime_Segment& b) = delete;
 		virtual ~CTime_Segment();
 
-		virtual HRESULT IfaceCalling Get_Signal(const GUID *signal_id, glucose::ISignal **signal) override;
+		virtual HRESULT IfaceCalling Get_Signal(const GUID *signal_id, scgms::ISignal **signal) override;
 
 		// clones this segment into another; calls AddRef (passes ownership to caller)
 		STime_Segment Clone();

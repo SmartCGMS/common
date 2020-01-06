@@ -46,7 +46,7 @@
 namespace opencl {		//note that opencl does not clash with the official cl namespace
 
 	enum class NFunction_Id : uint16_t {
-		Metric_Calculate_Accumulated = 0,		//equivalent to calling glucose::IMetric->Reset, Accumulate and Calculate
+		Metric_Calculate_Accumulated = 0,		//equivalent to calling scgms::IMetric->Reset, Accumulate and Calculate
 												//parameters[0].integer gives the number of elements in calculated and expected arrays respectively
 												//parameters[1].integer gives the number of required levels
 												//returns a function source with the following signature
@@ -76,7 +76,7 @@ namespace opencl {		//note that opencl does not clash with the official cl names
 			into the function's source code to increase performance.
 		*/
 		HRESULT IfaceCalling Generate_Source(const NFunction_Id function_id, 
-									 	     glucose::ITime_Segment *segment, const db::TParameter *parameters, const size_t parameter_count, 
+									 	     scgms::ITime_Segment *segment, const db::TParameter *parameters, const size_t parameter_count, 
 											 refcnt::str_container *function_source,
 											 refcnt::byte_container *constant_memory) = 0;
 	};
