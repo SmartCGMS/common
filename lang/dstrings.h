@@ -40,6 +40,8 @@
 
 //UI strings used by the entire application
 
+extern const wchar_t* dsNaN;
+
 extern const char* dsFile;
 extern const char* dsSave_Configuration;
 extern const char* dsQuit;

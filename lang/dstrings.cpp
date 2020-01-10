@@ -38,6 +38,8 @@
 
 #include "dstrings.h"
 
+const wchar_t* dsNaN = L"NaN";
+
 const char* dsFile = "File";
 const char* dsSave_Configuration = "Save Configruation";
 const char* dsQuit = "Quit";
