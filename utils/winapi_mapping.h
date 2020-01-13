@@ -88,7 +88,5 @@
 
 	int wcstombs_s(size_t* converted, char* dst, size_t dstSizeBytes, const wchar_t* src, size_t maxSizeBytes);
 
-	int closesocket(SOCKET skt);
-
 	#define SD_BOTH SHUT_RDWR
 #endif

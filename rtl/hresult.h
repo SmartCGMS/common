@@ -41,7 +41,7 @@
 #ifdef _WIN32
   #include <WTypes.h>
 #else
-  typedef int HRESULT;
+  using HRESULT = long;
 
   typedef unsigned long	DWORD;
   typedef long			LONG;
@@ -60,6 +60,9 @@
   const HRESULT E_FAIL = 0x80004005L;
   const HRESULT E_NOINTERFACE = 0x80004002L;
   const HRESULT E_ABORT = 0x80004004L;
+  const HRESULT E_ILLEGAL_METHOD_CALL = 0x8000000EL;
+  const HRESULT E_ILLEGAL_STATE_CHANGE = 0x8000000DL;
+  const HRESULT ERROR_DS_DRA_EXTN_CONNECTION_FAILED = 8466L;
 
   #define SUCCEEDED(hr) (((HRESULT)(hr)) >= 0)
   #define FAILED(hr) (((HRESULT)(hr)) < 0)

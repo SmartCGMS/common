@@ -339,7 +339,7 @@ namespace scgms {
 	class SSignal_Error_Inspection : public virtual refcnt::SReferenced<scgms::ISignal_Error_Inspection> {
 	public:
 		SSignal_Error_Inspection() noexcept {};
-		SSignal_Error_Inspection(SFilter &signal_error_filter);
+		SSignal_Error_Inspection(const SFilter &signal_error_filter);
 	};
 
 }

@@ -38,6 +38,8 @@
 
 #pragma once
 
+#include "../rtl/guid.h"
+
 #include <QtCore/QString>
 #include <QtCore/QUuid>
 

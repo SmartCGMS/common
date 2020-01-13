@@ -45,6 +45,7 @@
 #include <atomic>
 #include <string>
 #include <vector>
+#include <algorithm>
 
 namespace refcnt {
 
@@ -250,7 +251,7 @@ namespace refcnt {
 			T* b = nullptr;
 			T* e = nullptr;
 
-			if (operator bool()) {
+			if (this->operator bool()) {
 				if (std::shared_ptr<IVector_Container<T>>::get()->get(&b, &e) != S_OK)
 					return nullptr;
 			}

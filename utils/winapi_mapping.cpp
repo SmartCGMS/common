@@ -56,10 +56,6 @@ void *GetProcAddress(void *libhandle, const char *symbolname) {
 void FreeLibrary(void* libhandle) {
 	dlclose(libhandle);
 }
-	
-int closesocket(int fd) {
-	return close(fd);
-}
 
 #include <ctime>
 
@@ -98,7 +94,7 @@ int wcstombs_s(size_t* converted, char* dst, size_t dstSizeBytes, const wchar_t*
 #if not defined(__ARM_ARCH_7A__) && not defined(__aarch64__)
 int closesocket(SOCKET skt)
 {
-	close(skt);
+	return close(skt);
 }
 #endif
 

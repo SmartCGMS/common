@@ -41,6 +41,7 @@
 #include <sstream>
 #include <algorithm>
 #include <cwctype>
+#include <cstring>
 
 std::string Narrow_WString(const std::wstring& wstr) {
 	return Narrow_WChar(wstr.c_str());
