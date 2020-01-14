@@ -195,7 +195,8 @@ const wchar_t *dsInterop_Export_Filter = L"Interop export filter";
 
 const wchar_t *dsLog_Filter = L"CSV File Log";
 const wchar_t *dsLog_Output_File = L"Log file";
-const wchar_t *dsIgnore_Shutdown_Msg = L"Ignore the shutdown message";
+const wchar_t* dsLog_Input_File_Or_Dir = L"Log file or dir with log files";
+const wchar_t *dsEmit_Shutdown_Msg = L"Emit the shutdown message";
 const wchar_t *dsLog_Header = L"Logical Clock; Device Time; Event Code; Signal; Info; Segment Id; Event Code Id; Device Id; Signal Id;";
 const wchar_t *dsLog_Filter_Replay = L"CSV File Log Replay";
 
@@ -834,7 +835,7 @@ const wchar_t *rsRecalculate_On_Segment_End = L"Recalculate_At_Segment_End";
 const wchar_t *rsRecalculate_On_Calibration = L"Recalculate_On_Calibration";
 
 const wchar_t *rsLog_Output_File = L"Log_File";
-const wchar_t *rsIgnore_Shutdown_Msg = L"Ignore_Shutdown";
+const wchar_t *rsEmit_Shutdown_Msg = L"Emit_Shutdown";
 
 const wchar_t *rsPump_Interval = L"Pump_Interval";
 const wchar_t *rsFeedback_Channel_Identifier = L"Feedback_Channel_Identifier";

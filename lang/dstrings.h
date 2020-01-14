@@ -196,7 +196,8 @@ extern const wchar_t *dsInterop_Export_Filter;
 
 extern const wchar_t *dsLog_Filter;
 extern const wchar_t *dsLog_Output_File;
-extern const wchar_t *dsIgnore_Shutdown_Msg;
+extern const wchar_t* dsLog_Input_File_Or_Dir;
+extern const wchar_t *dsEmit_Shutdown_Msg;
 extern const wchar_t *dsLog_Header;
 extern const wchar_t *dsLog_Filter_Replay;
 
@@ -802,7 +803,7 @@ extern const wchar_t *rsRecalculate_On_Segment_End;
 extern const wchar_t *rsRecalculate_On_Calibration;
 
 extern const wchar_t *rsLog_Output_File;
-extern const wchar_t *rsIgnore_Shutdown_Msg;
+extern const wchar_t *rsEmit_Shutdown_Msg;
 
 extern const wchar_t *rsPump_Interval;
 extern const wchar_t *rsFeedback_Channel_Identifier;
