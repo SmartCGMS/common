@@ -696,6 +696,9 @@ extern const wchar_t* dsKiDecay;
 extern const wchar_t* dsSignal_Feedback;
 extern const wchar_t* dsForward_Clone;
 
+extern const wchar_t* dsSignal_Stats;
+extern const wchar_t* dsOutput_CSV_File;
+
 //--------------------------------- do not translate any of the rs-prefixed texts --
 
 extern const char* rsAbout_Text;
@@ -1018,3 +1021,6 @@ extern const wchar_t* rsConst_ISF;
 extern const wchar_t* rsConst_CR;
 
 extern const wchar_t* rsForward_Clone;
+
+extern const wchar_t* rsOutput_CSV_File;
+extern const wchar_t* rsSignal_Stats_Header;

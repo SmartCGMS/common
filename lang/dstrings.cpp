@@ -694,6 +694,10 @@ const wchar_t* dsConst_CR_Model = L"Constant carb-to-insulin ratio";
 const wchar_t* dsSignal_Feedback = L"Signal feedback";
 const wchar_t* dsForward_Clone = L"Forward a clone";
 
+const wchar_t* dsSignal_Stats = L"Signal statistics";
+const wchar_t* dsOutput_CSV_File = L"Output CSV file";
+
+
 //--------------------------------- do not translate any of the rs-prefixed texts --
 
 const char* rsAbout_Text = R"CLC(
@@ -1046,3 +1050,6 @@ const wchar_t* rsConst_ISF = L"const_insulin_sensitivity_factor";
 const wchar_t* rsConst_CR = L"const_carb_to_insulin_ratio";
 
 const wchar_t* rsForward_Clone = L"Forward_a_clone";
+
+const wchar_t* rsOutput_CSV_File = L"Output_CSV_file";
+const wchar_t* rsSignal_Stats_Header = L"Signal Name; Signal id;; avg; stddev;; min; 25th; median; 75; max";
