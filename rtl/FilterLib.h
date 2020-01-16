@@ -148,9 +148,9 @@ namespace scgms {
 								const size_t distance = std::distance(begin, end);
 								if (distance % 3 == 0) {
 									const size_t paramcnt = distance / 3; // lower, default, upper
-									lower_bound = std::move(std::vector<double>{ begin,  &begin[paramcnt] });
-									default_parameters = std::move(std::vector<double>{ &begin[paramcnt], &begin[2 * paramcnt] });
-									upper_bound = std::move(std::vector<double>{ &begin[2 * paramcnt], &begin[3 * paramcnt] });										
+									lower_bound.assign(begin, begin+paramcnt);
+									default_parameters.assign(begin+paramcnt, begin + 2*paramcnt);
+									upper_bound.assign(begin + 2*paramcnt, begin + 3*paramcnt);
 									success = true;
 								}
 							}

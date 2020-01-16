@@ -68,6 +68,12 @@ class CDynamic_Library final {
 		// resolves symbol from loaded module; returns nullptr if no such symbol found or no module loaded
 		void* Resolve(const char* symbolName);
 
+		template<typename T>
+		T Resolve(const char* symbolName)
+		{
+			return reinterpret_cast<T>(Resolve(symbolName));
+		}
+
 		// is module (properly) loaded?
 		bool Is_Loaded() const;
 

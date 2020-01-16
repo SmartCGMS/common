@@ -184,7 +184,7 @@ namespace refcnt {
 				return S_OK;
 			}
 
-			virtual HRESULT remove(const size_t index) {
+			virtual HRESULT remove(const size_t index) override {
 				if (TAligned_Vector<T>::empty()) return S_FALSE;
 								
 				Release_Item(TAligned_Vector<T>::operator [](index) );
@@ -193,7 +193,7 @@ namespace refcnt {
 				return S_OK;
 			}
 
-			virtual HRESULT move(const size_t from_index, const size_t to_index) {
+			virtual HRESULT move(const size_t from_index, const size_t to_index) override {
 				if ((from_index >= TAligned_Vector<T>::size()) ||
 					(to_index >= TAligned_Vector<T>::size()) ||
 					(from_index == to_index)) return E_INVALIDARG;

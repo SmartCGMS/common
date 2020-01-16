@@ -67,8 +67,8 @@ QUuid GUID_To_QUuid(const GUID& guid) {
 
 GUID QUuid_To_GUID(const QUuid& uuid) {
 	return { uuid.data1, uuid.data2, uuid.data3,
-		uuid.data4[0], uuid.data4[1], uuid.data4[2], uuid.data4[3], uuid.data4[4], uuid.data4[5],
-		uuid.data4[6], uuid.data4[7]
+		{ uuid.data4[0], uuid.data4[1], uuid.data4[2], uuid.data4[3], uuid.data4[4], uuid.data4[5],
+		uuid.data4[6], uuid.data4[7] }
 	};
 }
 
