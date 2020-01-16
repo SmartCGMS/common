@@ -696,6 +696,8 @@ const wchar_t* dsForward_Clone = L"Forward a clone";
 
 const wchar_t* dsSignal_Stats = L"Signal statistics";
 const wchar_t* dsOutput_CSV_File = L"Output CSV file";
+const wchar_t* dsLevel = L"level";
+const wchar_t* dsPeriod = L"period";
 
 
 //--------------------------------- do not translate any of the rs-prefixed texts --
@@ -1052,4 +1054,4 @@ const wchar_t* rsConst_CR = L"const_carb_to_insulin_ratio";
 const wchar_t* rsForward_Clone = L"Forward_a_clone";
 
 const wchar_t* rsOutput_CSV_File = L"Output_CSV_file";
-const wchar_t* rsSignal_Stats_Header = L"Signal Name; Signal id;; avg; stddev;; min; 25th; median; 75; max";
+const wchar_t* rsSignal_Stats_Header = L"Segment id; marker;; avg; stddev;count;; min; 25th; median; 75; max";

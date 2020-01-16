@@ -698,6 +698,8 @@ extern const wchar_t* dsForward_Clone;
 
 extern const wchar_t* dsSignal_Stats;
 extern const wchar_t* dsOutput_CSV_File;
+extern const wchar_t* dsLevel;
+extern const wchar_t* dsPeriod;
 
 //--------------------------------- do not translate any of the rs-prefixed texts --
 

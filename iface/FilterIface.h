@@ -248,7 +248,7 @@ namespace scgms {
 		max_value = 99
 	};
 
-	struct TSignal_Error {
+	struct TSignal_Stats {
 		double avg, stddev, sum;	//standard deviation with Bessel's correction
 		size_t count;				//number of elements on which we calculate the metrics
 		std::array<double, static_cast<size_t>(NECDF::max_value) + 1> ecdf;
@@ -295,7 +295,7 @@ namespace scgms {
 		virtual HRESULT IfaceCalling Promise_Metric(double* const metric_value, bool defer_to_dtor) = 0;
 		//return S_OK if there are new data available since object construction or last call of Peek_New_Data_Available
 		virtual HRESULT IfaceCalling Peek_New_Data_Available() = 0;
-		virtual HRESULT IfaceCalling Calculate_Signal_Error(scgms::TSignal_Error *absolute_error, scgms::TSignal_Error *relative_error) = 0;
+		virtual HRESULT IfaceCalling Calculate_Signal_Error(scgms::TSignal_Stats *absolute_error, scgms::TSignal_Stats *relative_error) = 0;
 			//should there be a zero reference level, then absolute_error.count != relative_error.count
 		virtual HRESULT IfaceCalling Get_Description(wchar_t** const desc) = 0;
 	};
