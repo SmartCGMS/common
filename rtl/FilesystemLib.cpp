@@ -124,7 +124,7 @@ bool Is_Directory(const std::wstring& path)
 
 bool Is_Regular_File_Or_Symlink(const std::wstring& path)
 {
-#ifdef fDHAS_FILESYSTEM
+#ifdef DHAS_FILESYSTEM
 	return filesystem::is_regular_file(path) || filesystem::is_symlink(path);
 #elif defined(_WIN32)
 	return !Is_Directory(path); // good enough
