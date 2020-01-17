@@ -247,10 +247,10 @@ namespace scgms {
 	}
 
 
-	HRESULT SFilter_Executor::Execute(scgms::UDevice_Event &event) {
+	HRESULT SFilter_Executor::Execute(scgms::UDevice_Event &&event) {
 		scgms::IDevice_Event *raw_event = event.get();
 		event.release();
-		return get()->Execute(raw_event);		
+		return get()->Execute(raw_event);
 	}
 
 	bool add_filters(const std::vector<scgms::TFilter_Descriptor> &descriptors, scgms::TCreate_Filter create_filter) {
@@ -327,12 +327,12 @@ namespace scgms {
 			reset(model, [](scgms::IDiscrete_Model* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });
 	}
 	
-	SDrawing_Filter_Inspection::SDrawing_Filter_Inspection(SFilter &drawing_filter) {
+	SDrawing_Filter_Inspection::SDrawing_Filter_Inspection(const SFilter &drawing_filter) {
 		if (drawing_filter)
 			refcnt::Query_Interface<scgms::IFilter, scgms::IDrawing_Filter_Inspection>(drawing_filter.get(), IID_Drawing_Filter_Inspection, *this);
 	}
 
-	SLog_Filter_Inspection::SLog_Filter_Inspection(SFilter &log_filter) {
+	SLog_Filter_Inspection::SLog_Filter_Inspection(const SFilter &log_filter) {
 		if (log_filter)
 			refcnt::Query_Interface<scgms::IFilter, scgms::ILog_Filter_Inspection>(log_filter.get(), IID_Log_Filter_Inspection, *this);
 	}

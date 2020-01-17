@@ -98,7 +98,7 @@ scgms::SMetric scgms::SMetric::Clone()
 	return result;
 }
 
-scgms::SCalculate_Filter_Inspection::SCalculate_Filter_Inspection(scgms::SFilter &calculate_filter) {
+scgms::SCalculate_Filter_Inspection::SCalculate_Filter_Inspection(const scgms::SFilter &calculate_filter) {
 	if (calculate_filter)
 		refcnt::Query_Interface<scgms::IFilter, scgms::ICalculate_Filter_Inspection>(calculate_filter.get(), IID_Calculate_Filter_Inspection, *this);
 }

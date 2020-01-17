@@ -165,6 +165,9 @@ const wchar_t *dsHold_Values_Delay = L"Hold delay [ms] (0 for real-time)";
 
 const wchar_t *dsSignal_Source_Id = L"Source ID";
 const wchar_t *dsSignal_Destination_Id = L"Map to ID";
+const wchar_t* dsRemove_From_Source = L"Remove from source";
+const wchar_t* dsCondition = L"Condition";
+
 
 const wchar_t *rsSignal_Masked_Id = L"Signal";
 const wchar_t *rsSignal_Value_Bitmask = L"Bitmask";
@@ -177,6 +180,7 @@ const wchar_t *dsDrawing_Filter = L"Drawing";
 const wchar_t *dsMapping_Filter = L"Signal mapping";
 const wchar_t *dsMasking_Filter = L"Signal value masking";
 const wchar_t *dsCalculated_Signal_Filter = L"Calculated signal";
+const wchar_t *dsDecoupling_Filter = L"Signal decoupling";
 
 const wchar_t *dsDrawing_Filter_Period = L"Redraw period [ms]";
 const wchar_t *dsDiagnosis_Is_Type2 = L"Diabetes type 2? (1 = off)";
@@ -199,6 +203,7 @@ const wchar_t* dsLog_Input_File_Or_Dir = L"Log file or dir with log files";
 const wchar_t *dsEmit_Shutdown_Msg = L"Emit the shutdown message";
 const wchar_t *dsLog_Header = L"Logical Clock; Device Time; Event Code; Signal; Info; Segment Id; Event Code Id; Device Id; Signal Id;";
 const wchar_t *dsLog_Filter_Replay = L"CSV File Log Replay";
+const wchar_t* dsInterpret_Filename_As_Segment_Id = L"Interpret filename as segment id";
 
 const wchar_t *dsDevice_Feedback_Filter = L"Device feedback";
 const wchar_t *dsDevice_Filter = L"Device";
@@ -430,7 +435,7 @@ const wchar_t *dsSignal_Requested_Insulin_Basal_Rate = L"requested insulin basal
 const wchar_t *dsSignal_Measured_Insulin_Activity = L"insulin activity";
 const wchar_t *dsSignal_Measured_IOB = L"insulin on board (IOB)";
 const wchar_t *dsSignal_Measured_COB = L"carbohydrates on board (COB)";
-const wchar_t *dsSignal_Measured_Carb_Intake = L"carbohydrates intake";
+const wchar_t *dsSignal_Measured_Carb_Intake = L"carbohydrate intake";
 const wchar_t *dsSignal_Measured_Health_Physical_Activity = L"physical activity";
 const wchar_t* dsSignal_Measured_Insulin_Sensitivity = L"insulin sensitivity factor";
 const wchar_t* dsSignal_Measured_Carb_Ratio = L"carb-to-insulin ratio";
@@ -450,14 +455,13 @@ const wchar_t *dsSignal_GUI_Name_Requested_Basal_Insulin_Rate = L"Basal Insulin 
 const wchar_t *dsSignal_GUI_Name_Insulin_Activity = L"Insulin activity";
 const wchar_t *dsSignal_GUI_Name_IOB = L"IOB";
 const wchar_t *dsSignal_GUI_Name_COB = L"COB";
-const wchar_t *dsSignal_GUI_Name_Carbs = L"Carbohydrates intake";
+const wchar_t *dsSignal_GUI_Name_Carbs = L"Carbohydrate intake";
+const wchar_t* dsSignal_GUI_Name_Carb_Rescue = L"Carbohydrate rescue";
 const wchar_t *dsSignal_GUI_Name_Physical_Activity = L"Physical activity";
 
 const wchar_t *dsSignal_GUI_Name_Unknown = L"Unknown signal";
 
 const wchar_t *dsSolver_Progress_Box_Title = L"Solver progress";
-//const wchar_t *dsError_Absolute = L"absolute";
-//const wchar_t *dsError_Relative = L"relative";
 
 const wchar_t *dsError_Column_Average = L"Average";
 const wchar_t *dsError_Column_StdDev = L"Std.Dev (Bessel)";
@@ -806,6 +810,8 @@ const wchar_t *rsHold_Values_Delay = L"Hold_Delay";
 
 const wchar_t *rsSignal_Source_Id = L"Signal_Src_Id";
 const wchar_t *rsSignal_Destination_Id = L"Signal_Dst_Id";
+const wchar_t* rsRemove_From_Source = L"Remove_from_source";
+const wchar_t* rsCondition = L"Condition";
 
 const wchar_t *rsRecalculate_Past_On_Params = L"Recalculate_Past_On_Params";
 //const wchar_t *rsRecalculate_Past_On_Segment_Stop = L"Recalculate_Past_On_Segment_Stop";
@@ -842,6 +848,7 @@ const wchar_t *rsRecalculate_On_Calibration = L"Recalculate_On_Calibration";
 
 const wchar_t *rsLog_Output_File = L"Log_File";
 const wchar_t *rsEmit_Shutdown_Msg = L"Emit_Shutdown";
+const wchar_t *rsInterpret_Filename_As_Segment_Id = L"Filename_as_segment_id";
 
 const wchar_t *rsPump_Interval = L"Pump_Interval";
 const wchar_t *rsFeedback_Channel_Identifier = L"Feedback_Channel_Identifier";

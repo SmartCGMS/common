@@ -292,7 +292,7 @@ namespace scgms {
 		SFilter_Executor() : refcnt::SReferenced<scgms::IFilter_Executor>() {};
 		SFilter_Executor(refcnt::SReferenced<scgms::IFilter_Chain_Configuration> configuration, scgms::TOn_Filter_Created on_filter_created, const void* on_filter_created_data);
 
-		HRESULT Execute(scgms::UDevice_Event &event);
+		HRESULT Execute(scgms::UDevice_Event &&event);
 	};
 
 	using SFilter_Feedback_Receiver = refcnt::SReferenced<scgms::IFilter_Feedback_Receiver>;
@@ -326,13 +326,13 @@ namespace scgms {
 	class SDrawing_Filter_Inspection : public std::shared_ptr<IDrawing_Filter_Inspection> {
 	public:
 		SDrawing_Filter_Inspection() noexcept {};
-		SDrawing_Filter_Inspection(SFilter &drawing_filter);
+		SDrawing_Filter_Inspection(const SFilter &drawing_filter);
 	};
 
 	class SLog_Filter_Inspection : public std::shared_ptr<ILog_Filter_Inspection> {
 	public:
 		SLog_Filter_Inspection() noexcept {};
-		SLog_Filter_Inspection(SFilter &log_filter);
+		SLog_Filter_Inspection(const SFilter &log_filter);
 		bool pop(std::shared_ptr<refcnt::wstr_list> &list);
 	};
 

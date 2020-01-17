@@ -76,13 +76,12 @@ namespace scgms {
 	class SCalculate_Filter_Inspection : public std::shared_ptr<ICalculate_Filter_Inspection> {
 	public:
 		SCalculate_Filter_Inspection() noexcept {};
-		SCalculate_Filter_Inspection(SFilter &calculate_filter);
+		SCalculate_Filter_Inspection(const SFilter &calculate_filter);
 	};
-
 
 	HRESULT Solve_Model_Parameters(const scgms::TSolver_Setup &setup);
 
-	HRESULT Optimize_Parameters(scgms::SFilter_Chain_Configuration configuration, const size_t filter_index, const wchar_t *parameters_configuration_name,								
+	HRESULT Optimize_Parameters(scgms::SFilter_Chain_Configuration configuration, const size_t filter_index, const wchar_t *parameters_configuration_name,
 								scgms::TOn_Filter_Created on_filter_created, const void* on_filter_created_data,
 								const GUID &solver_id, const size_t population_size, const size_t max_generations, solver::TSolver_Progress &progress);
 

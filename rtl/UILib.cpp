@@ -163,7 +163,8 @@ namespace scgms {
 		mSignal_Names[scgms::signal_IOB] = dsSignal_GUI_Name_IOB;
 		mSignal_Names[scgms::signal_COB] = dsSignal_GUI_Name_COB;
 		mSignal_Names[scgms::signal_Carb_Intake] = dsSignal_GUI_Name_Carbs;
-		mSignal_Names[scgms::signal_Physical_Activity] = dsSignal_GUI_Name_Physical_Activity;
+		mSignal_Names[scgms::signal_Carb_Rescue] = dsSignal_GUI_Name_Carb_Rescue;
+		mSignal_Names[scgms::signal_Physical_Activity] = dsSignal_GUI_Name_Physical_Activity;		
 
 		auto models = scgms::get_model_descriptors();
 		for (auto& model : models)

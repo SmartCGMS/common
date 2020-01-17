@@ -169,6 +169,8 @@ extern const wchar_t *dsHold_Values_Delay;
 
 extern const wchar_t *dsSignal_Source_Id;
 extern const wchar_t *dsSignal_Destination_Id;
+extern const wchar_t* dsRemove_From_Source;
+extern const wchar_t* dsCondition;
 
 extern const wchar_t *dsSignal_Masked_Id;
 extern const wchar_t *dsSignal_Value_Bitmask;
@@ -177,7 +179,8 @@ extern const wchar_t *dsHold_Filter;
 extern const wchar_t *dsDrawing_Filter;
 extern const wchar_t *dsMapping_Filter;
 extern const wchar_t *dsMasking_Filter;
-extern const wchar_t *dsCalculated_Signal_Filter;
+extern const wchar_t* dsCalculated_Signal_Filter;
+extern const wchar_t* dsDecoupling_Filter;
 
 extern const wchar_t *dsDrawing_Filter_Period;
 extern const wchar_t *dsDiagnosis_Is_Type2;
@@ -200,6 +203,7 @@ extern const wchar_t* dsLog_Input_File_Or_Dir;
 extern const wchar_t *dsEmit_Shutdown_Msg;
 extern const wchar_t *dsLog_Header;
 extern const wchar_t *dsLog_Filter_Replay;
+extern const wchar_t* dsInterpret_Filename_As_Segment_Id;
 
 extern const wchar_t *dsDevice_Feedback_Filter;
 extern const wchar_t *dsDevice_Filter;
@@ -449,6 +453,7 @@ extern const wchar_t *dsSignal_GUI_Name_Insulin_Activity;
 extern const wchar_t *dsSignal_GUI_Name_IOB;
 extern const wchar_t *dsSignal_GUI_Name_COB;
 extern const wchar_t *dsSignal_GUI_Name_Carbs;
+extern const wchar_t* dsSignal_GUI_Name_Carb_Rescue;
 extern const wchar_t *dsSignal_GUI_Name_Physical_Activity;
 
 
@@ -771,6 +776,8 @@ extern const wchar_t *rsHold_Values_Delay;
 
 extern const wchar_t *rsSignal_Source_Id;
 extern const wchar_t *rsSignal_Destination_Id;
+extern const wchar_t* rsRemove_From_Source;
+extern const wchar_t* rsCondition;
 
 extern const wchar_t *rsSignal_Masked_Id;
 extern const wchar_t *rsSignal_Value_Bitmask;
@@ -809,6 +816,7 @@ extern const wchar_t *rsRecalculate_On_Calibration;
 
 extern const wchar_t *rsLog_Output_File;
 extern const wchar_t *rsEmit_Shutdown_Msg;
+extern const wchar_t* rsInterpret_Filename_As_Segment_Id;
 
 extern const wchar_t *rsPump_Interval;
 extern const wchar_t *rsFeedback_Channel_Identifier;
