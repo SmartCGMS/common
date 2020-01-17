@@ -49,6 +49,8 @@
 	namespace filesystem = std::experimental::filesystem;
 	#define DHAS_FILESYSTEM
 #else
+	#include <sys/types.h>
+	#include <sys/stat.h>
 	#include <dirent.h>
 	#include <unistd.h>
 #endif
@@ -63,6 +65,12 @@ std::wstring Get_Application_Dir();
 
 // appends next level to supplied path using preferred separator
 std::wstring& Path_Append(std::wstring& path, const wchar_t* level);
+
+// does given path point to a directory?
+bool Is_Directory(const std::wstring& path);
+
+// does given path point to a directory or is a symbolic link?
+bool Is_Regular_File_Or_Symlink(const std::wstring& path);
 
 // lists directory at supplied path; fills target list with absolute paths
 template <typename A = std::allocator<std::wstring>>
