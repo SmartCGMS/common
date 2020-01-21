@@ -165,7 +165,7 @@ const wchar_t *dsHold_Values_Delay = L"Hold delay [ms] (0 for real-time)";
 
 const wchar_t *dsSignal_Source_Id = L"Source ID";
 const wchar_t *dsSignal_Destination_Id = L"Map to ID";
-const wchar_t* dsRemove_From_Source = L"Remove from source";
+const wchar_t* dsClone_From_Source = L"Clone from source";
 const wchar_t* dsCondition = L"Condition";
 
 
@@ -696,7 +696,7 @@ const wchar_t* dsConst_CR = L"carb-to-insulin ratio";
 const wchar_t* dsConst_CR_Model = L"Constant carb-to-insulin ratio";
 
 const wchar_t* dsSignal_Feedback = L"Signal feedback";
-const wchar_t* dsForward_Clone = L"Forward a clone";
+const wchar_t* dsRemove_From_Source = L"Remove from source";
 
 const wchar_t* dsSignal_Stats = L"Signal statistics";
 const wchar_t* dsOutput_CSV_File = L"Output CSV file";
@@ -810,7 +810,7 @@ const wchar_t *rsHold_Values_Delay = L"Hold_Delay";
 
 const wchar_t *rsSignal_Source_Id = L"Signal_Src_Id";
 const wchar_t *rsSignal_Destination_Id = L"Signal_Dst_Id";
-const wchar_t* rsRemove_From_Source = L"Remove_from_source";
+const wchar_t* rsClone_From_Source = L"Clone_from_source";
 const wchar_t* rsCondition = L"Condition";
 
 const wchar_t *rsRecalculate_Past_On_Params = L"Recalculate_Past_On_Params";
@@ -1058,7 +1058,7 @@ const wchar_t* rsLGS_Suspend_Duration = L"Suspend_Duration";
 const wchar_t* rsConst_ISF = L"const_insulin_sensitivity_factor";
 const wchar_t* rsConst_CR = L"const_carb_to_insulin_ratio";
 
-const wchar_t* rsForward_Clone = L"Forward_a_clone";
+const wchar_t* rsRemove_From_Source = L"Remove_from_source";
 
 const wchar_t* rsOutput_CSV_File = L"Output_CSV_file";
 const wchar_t* rsSignal_Stats_Header = L"Segment id; marker;; avg; stddev;count;; min; 25th; median; 75; max";
