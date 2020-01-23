@@ -50,6 +50,7 @@
 
 #include "hresult.h"
 #include "../utils/winapi_mapping.h"
+#include "../utils/string_utils.h"
 
 #include <cstring>
 
@@ -105,3 +106,33 @@ std::wstring& Path_Append(std::wstring& path, const wchar_t* level) {
 	return path;
 }
 
+bool Is_Directory(const std::wstring& path)
+{
+#ifdef DHAS_FILESYSTEM
+	return filesystem::is_directory(path);
+#elif defined(_WIN32)
+	DWORD dwAttrib = GetFileAttributes(Narrow_WString(path).c_str());
+
+	return (dwAttrib != INVALID_FILE_ATTRIBUTES && (dwAttrib & FILE_ATTRIBUTE_DIRECTORY));
+#else
+	struct stat statbuf;
+	if (stat(Narrow_WString(path).c_str(), &statbuf) != 0)
+		return false;
+	return S_ISDIR(statbuf.st_mode);
+#endif
+}
+
+bool Is_Regular_File_Or_Symlink(const std::wstring& path)
+{
+#ifdef DHAS_FILESYSTEM
+	return filesystem::is_regular_file(path) || filesystem::is_symlink(path);
+#elif defined(_WIN32)
+	return !Is_Directory(path); // good enough
+#else
+	// no need to check for symlink, stat follows symbolic links
+	struct stat statbuf;
+	if (stat(Narrow_WString(path).c_str(), &statbuf) != 0)
+		return false;
+	return S_ISREG(statbuf.st_mode);
+#endif
+}
