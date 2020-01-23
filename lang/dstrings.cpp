@@ -810,7 +810,7 @@ const wchar_t *rsHold_Values_Delay = L"Hold_Delay";
 
 const wchar_t *rsSignal_Source_Id = L"Signal_Src_Id";
 const wchar_t *rsSignal_Destination_Id = L"Signal_Dst_Id";
-const wchar_t* rsClone_From_Source = L"Clone_from_source";
+const wchar_t* rsRemove_From_Source = L"Remove_from_source";
 const wchar_t* rsCondition = L"Condition";
 
 const wchar_t *rsRecalculate_Past_On_Params = L"Recalculate_Past_On_Params";
@@ -1058,7 +1058,6 @@ const wchar_t* rsLGS_Suspend_Duration = L"Suspend_Duration";
 const wchar_t* rsConst_ISF = L"const_insulin_sensitivity_factor";
 const wchar_t* rsConst_CR = L"const_carb_to_insulin_ratio";
 
-const wchar_t* rsRemove_From_Source = L"Remove_from_source";
 
 const wchar_t* rsOutput_CSV_File = L"Output_CSV_file";
 const wchar_t* rsSignal_Stats_Header = L"Segment id; marker;; avg; stddev;count;; min; 25th; median; 75; max";

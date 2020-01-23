@@ -776,7 +776,7 @@ extern const wchar_t *rsHold_Values_Delay;
 
 extern const wchar_t *rsSignal_Source_Id;
 extern const wchar_t *rsSignal_Destination_Id;
-extern const wchar_t* rsClone_From_Source;
+extern const wchar_t* rsRemove_From_Source;
 extern const wchar_t* rsCondition;
 
 extern const wchar_t *rsSignal_Masked_Id;
@@ -1029,8 +1029,6 @@ extern const wchar_t* rsLGS_Suspend_Duration;
 
 extern const wchar_t* rsConst_ISF;
 extern const wchar_t* rsConst_CR;
-
-extern const wchar_t* rsRemove_From_Source;
 
 extern const wchar_t* rsOutput_CSV_File;
 extern const wchar_t* rsSignal_Stats_Header;
