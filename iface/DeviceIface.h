@@ -76,6 +76,8 @@ namespace scgms {
 
 	// special GUID value that means "all signal ids" - it is used especially in modules, which are able to work with a set of signals
 	constexpr GUID signal_All = { 0xffffffff, 0xffff, 0xffff, { 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff } };	// {FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF}
+	constexpr GUID signal_Null = { 0x706e7fdb, 0x8f22, 0x486f, { 0xbf, 0xa5, 0x6a, 0x56, 0xd3, 0x51, 0x42, 0x9 } }; // {706E7FDB-8F22-486F-BFA5-6A56D3514209}
+
 
 	//Measured signals
 	constexpr GUID signal_BG = { 0xf666f6c2, 0xd7c0, 0x43e8,{ 0x8e, 0xe1, 0xc8, 0xca, 0xa8, 0xf8, 0x60, 0xe5 } };	// {F666F6C2-D7C0-43E8-8EE1-C8CAA8F860E5}

@@ -240,9 +240,9 @@ namespace scgms {
 	}
 
 
-	SFilter_Executor::SFilter_Executor(refcnt::SReferenced<scgms::IFilter_Chain_Configuration> configuration, scgms::TOn_Filter_Created on_filter_created, const void* on_filter_created_data) {
+	SFilter_Executor::SFilter_Executor(refcnt::SReferenced<scgms::IFilter_Chain_Configuration> configuration, scgms::TOn_Filter_Created on_filter_created, const void* on_filter_created_data, refcnt::Swstr_list error_description) {
 		scgms::IFilter_Executor *executor;
-		if (imported::execute_filter_configuration(configuration.get(), on_filter_created, on_filter_created_data, &executor) == S_OK)
+		if (SUCCEEDED(imported::execute_filter_configuration(configuration.get(), on_filter_created, on_filter_created_data, &executor, error_description.get())))
 			reset(executor, [](scgms::IFilter_Executor* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });
 	}
 
@@ -305,9 +305,10 @@ namespace scgms {
 	}
 
 	
-	HRESULT IfaceCalling CBase_Filter::Configure(IFilter_Configuration* configuration) {
-		SFilter_Configuration shared_configuration = refcnt::make_shared_reference_ext<SFilter_Configuration, IFilter_Configuration> ( configuration, true);
-		return Do_Configure(shared_configuration);
+	HRESULT IfaceCalling CBase_Filter::Configure(IFilter_Configuration* configuration, refcnt::wstr_list* error_description) {
+		SFilter_Configuration shared_configuration = refcnt::make_shared_reference_ext<SFilter_Configuration, IFilter_Configuration> ( configuration, true);		
+		refcnt::Swstr_list shared_error_description = refcnt::make_shared_reference_ext<refcnt::Swstr_list, refcnt::wstr_list>(error_description, true);
+		return Do_Configure(shared_configuration, shared_error_description);
 	}
 
 	HRESULT IfaceCalling CBase_Filter::Execute(scgms::IDevice_Event *event) {

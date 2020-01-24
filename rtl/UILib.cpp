@@ -165,6 +165,7 @@ namespace scgms {
 		mSignal_Names[scgms::signal_Carb_Intake] = dsSignal_GUI_Name_Carbs;
 		mSignal_Names[scgms::signal_Carb_Rescue] = dsSignal_GUI_Name_Carb_Rescue;
 		mSignal_Names[scgms::signal_Physical_Activity] = dsSignal_GUI_Name_Physical_Activity;		
+		mSignal_Names[scgms::signal_Null] = dsSignal_Null;
 
 		auto models = scgms::get_model_descriptors();
 		for (auto& model : models)
@@ -188,11 +189,15 @@ namespace scgms {
 GUID WString_To_GUID(const std::wstring& str) {
 	GUID guid;
 
-	swscanf_s(str.c_str(), 
+	constexpr int element_count = 11;
+
+	const int converted_count = swscanf_s(str.c_str(), 
 		L"{%8x-%4hx-%4hx-%2hhx%2hhx-%2hhx%2hhx%2hhx%2hhx%2hhx%2hhx}",
 		&guid.Data1, &guid.Data2, &guid.Data3,
 		&guid.Data4[0], &guid.Data4[1], &guid.Data4[2], &guid.Data4[3],
 		&guid.Data4[4], &guid.Data4[5], &guid.Data4[6], &guid.Data4[7]);
+
+	if (converted_count != element_count) guid = Invalid_GUID;
 
 	return guid;
 }

@@ -123,4 +123,18 @@ namespace refcnt {
 		return WChar_Container_Equals_WString(get(), other);
 	}
 
+	Swstr_list::Swstr_list() : SReferenced<refcnt::wstr_list>{ Create_Container<refcnt::wstr_container*>(nullptr, nullptr) } {
+		get()->Release();	//both ctor and Create_Container called AddRef => one AddRef is excessive
+	}
+
+
+	void Swstr_list::push(const wchar_t* wstr) {
+		if (operator bool()) {
+			auto container = WString_To_WChar_Container_shared(wstr);
+			auto container_raw = container.get();
+			if (container) get()->add(&container_raw, &container_raw + 1);
+		}
+
+	}
+
 }

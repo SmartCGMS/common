@@ -329,5 +329,11 @@ namespace refcnt {
 		void set(const wchar_t *str);
 		bool operator==(const wchar_t *other) const;
 	};
+
+	class Swstr_list : public virtual refcnt::SReferenced<refcnt::wstr_list> {
+	public:
+		Swstr_list();
+		void push(const wchar_t* wstr);
+	};
 	
 }

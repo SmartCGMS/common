@@ -109,15 +109,15 @@ namespace scgms {
 	class IPersistent_Filter_Chain_Configuration : public virtual IFilter_Chain_Configuration {
 	public:
 			//both Load_From_ methods returns S_FALSE if incomplete configuration was constructed
-		virtual HRESULT IfaceCalling Load_From_File(const wchar_t *file_path) = 0;	//if nullptr, assumes default config file name
-		virtual HRESULT IfaceCalling Load_From_Memory(const char *memory, const size_t len) = 0;
+		virtual HRESULT IfaceCalling Load_From_File(const wchar_t *file_path, refcnt::wstr_list* error_description) = 0;	//if nullptr, assumes default config file name
+		virtual HRESULT IfaceCalling Load_From_Memory(const char *memory, const size_t len, refcnt::wstr_list* error_description) = 0;
 		virtual HRESULT IfaceCalling Save_To_File(const wchar_t *file_path) = 0; //if nullptr, saves to the file_name previously supplied to Load_From_File		
 	};	
 
 	class IFilter : public virtual refcnt::IReferenced {
 	public:
 		//Set up filter configuration, possibly during its execution
-		virtual HRESULT IfaceCalling Configure(IFilter_Configuration* configuration) = 0;
+		virtual HRESULT IfaceCalling Configure(IFilter_Configuration* configuration, refcnt::wstr_list *error_description) = 0;
 
 		//Executes the filter's control loop
 		//when called, the filter owns the event - the filter has to either forward the event, 
@@ -159,7 +159,7 @@ namespace scgms {
 	using TCreate_Persistent_Filter_Chain_Configuration = HRESULT(IfaceCalling *)(IPersistent_Filter_Chain_Configuration **configuration);
 	using TCreate_Filter = HRESULT(IfaceCalling *)(const GUID *id, IFilter *next_filter, scgms::IFilter **filter);
 	using TOn_Filter_Created = HRESULT(IfaceCalling *)(scgms::IFilter *filter, const void* data);
-	using TExecute_Filter_Configuration = HRESULT(IfaceCalling*)(IFilter_Chain_Configuration *configuration, scgms::TOn_Filter_Created on_filter_created, const void* on_filter_created_data, scgms::IFilter_Executor **executor);
+	using TExecute_Filter_Configuration = HRESULT(IfaceCalling*)(IFilter_Chain_Configuration *configuration, scgms::TOn_Filter_Created on_filter_created, const void* on_filter_created_data, scgms::IFilter_Executor **executor, refcnt::wstr_list *error_description);
 	using TCreate_Filter_Parameter = HRESULT(IfaceCalling*)(const scgms::NParameter_Type type, const wchar_t *config_name, scgms::IFilter_Parameter **parameter);
 	using TCreate_Filter_Configuration_Link = HRESULT(IfaceCalling*)(const GUID *filter_id, scgms::IFilter_Configuration_Link **link);
 	using TCreate_Discrete_Model = HRESULT(IfaceCalling*)(const GUID *model_id, scgms::IModel_Parameter_Vector *parameters, scgms::IFilter *output, scgms::IDiscrete_Model **model);

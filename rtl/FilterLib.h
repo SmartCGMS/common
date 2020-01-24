@@ -290,7 +290,7 @@ namespace scgms {
 	class SFilter_Executor : public virtual refcnt::SReferenced<scgms::IFilter_Executor> {
 	public:
 		SFilter_Executor() : refcnt::SReferenced<scgms::IFilter_Executor>() {};
-		SFilter_Executor(refcnt::SReferenced<scgms::IFilter_Chain_Configuration> configuration, scgms::TOn_Filter_Created on_filter_created, const void* on_filter_created_data);
+		SFilter_Executor(refcnt::SReferenced<scgms::IFilter_Chain_Configuration> configuration, scgms::TOn_Filter_Created on_filter_created, const void* on_filter_created_data, refcnt::Swstr_list error_description);
 
 		HRESULT Execute(scgms::UDevice_Event &&event);
 	};
@@ -307,11 +307,11 @@ namespace scgms {
 	protected:
 		//Descending class is supposed to implement these two methods only
 		virtual HRESULT Do_Execute(scgms::UDevice_Event event) = 0;
-		virtual HRESULT Do_Configure(scgms::SFilter_Configuration configuration) = 0;
+		virtual HRESULT Do_Configure(scgms::SFilter_Configuration configuration, refcnt::Swstr_list &error_description) = 0;
 	public:
 		CBase_Filter(scgms::IFilter *output);
 		virtual ~CBase_Filter();
-		virtual HRESULT IfaceCalling Configure(IFilter_Configuration* configuration) override final;
+		virtual HRESULT IfaceCalling Configure(IFilter_Configuration* configuration, refcnt::wstr_list* error_description) override final;
 		virtual HRESULT IfaceCalling Execute(scgms::IDevice_Event *event) override final;
 	};
 
