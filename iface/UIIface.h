@@ -43,11 +43,26 @@
 
 namespace scgms {
 
-	//Units used for glucose levels 
-	enum class TUnits : int8_t {
-		MmolPerL = 0, //mmol/l
-		MgPerDl,	//mg/dl
-		DgPerDl,	//dg/dl
+	//Units used for displayed signals
+	enum class NPhysical_Unit : uint16_t {
+		Unitless = 0,		
+		Percent,
+		time_only,		//The time is encoded as the number of days since January 0, 1900 00:00 UTC, see http://en.wikipedia.org/wiki/January_0
+		date_only,		
+		date_and_time,
+		mmol_per_L, //mmol/l
+		mg_per_dL,	//mg/dl
+		dg_per_dL,	//dg/dl
+		U_insulin,	//insulin units, not UI nor IU
+		U_per_Hr,
+		Celsius,
+		BPM,		//beats per minute, e.g.; heart rate
+		uS,			//micro Siemens e.g.; for galvanic skin response aka electrodermal activity
+		nA,			//nano ampers
+		m_per_s2,	//acceleration
+		g,			//grams
+
+		Other		//a unit not described here, but its description is given in the signal descriptor
 	};
 
 	enum class NFilter_Flags : uint8_t {
@@ -109,11 +124,10 @@ namespace scgms {
 		//signals which can be calculated using this model
 		const size_t number_of_calculated_signals;	//cannot be zero
 		const GUID* calculated_signal_ids;
-		const wchar_t **calculated_signal_names;
 		const GUID* reference_signal_ids;
 	};
 
-	constexpr TModel_Descriptor Null_Model_Descriptor = { Invalid_GUID, nullptr, nullptr, 0, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, 0, nullptr, nullptr, nullptr };
+	constexpr TModel_Descriptor Null_Model_Descriptor = { Invalid_GUID, nullptr, nullptr, 0, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, 0, nullptr, nullptr };
 
 	struct TSolver_Descriptor {
 		const GUID id;
@@ -137,23 +151,29 @@ namespace scgms {
 
 	constexpr TApprox_Descriptor Null_Approx_Descriptor = { Invalid_GUID, nullptr, 0, nullptr, nullptr };
 
-	struct TDevice_Driver_Descriptor {
-		const GUID id;
-		const wchar_t *description;
-		const size_t parameters_count;	//can be zero
-		const NParameter_Type* parameter_type;
-		const wchar_t** ui_parameter_name;
-		const wchar_t** config_parameter_name;
+	enum class NSignal_Visualization : uint8_t {
+		smooth = 0,		//e.g.; spline interpolation between two sampled values
+		step,			//step function
+		mark			//display marks only at each sampled value
 	};
 
-	constexpr TDevice_Driver_Descriptor Null_Device_Driver_Descriptor = { Invalid_GUID, nullptr, 0, nullptr, nullptr, nullptr };
+	struct TSignal_Descriptor {
+		const GUID id;
+		const wchar_t* signal_description;
+		const wchar_t* unit_description;
+		const NPhysical_Unit unit_id;
+		const uint32_t preferred_color;	//ARGB
+		const NSignal_Visualization visualization;
+	};
+
+	constexpr TSignal_Descriptor Null_Signal_Descriptor = { Invalid_GUID, nullptr, nullptr, NPhysical_Unit::Unitless, 0, NSignal_Visualization::smooth};
 
 	using TGet_Filter_Descriptors = HRESULT(IfaceCalling*)(TFilter_Descriptor **begin, TFilter_Descriptor **end);
 	using TGet_Metric_Descriptors = HRESULT(IfaceCalling*)(TMetric_Descriptor **begin, TMetric_Descriptor **end);
 	using TGet_Model_Descriptors = HRESULT(IfaceCalling*)(TModel_Descriptor **begin, TModel_Descriptor **end);
 	using TGet_Solver_Descriptors = HRESULT(IfaceCalling*)(TSolver_Descriptor **begin, TSolver_Descriptor **end);
 	using TGet_Approx_Descriptors = HRESULT(IfaceCalling*)(TApprox_Descriptor **begin, TApprox_Descriptor **end);
-	using TGet_Device_Driver_Descriptors = HRESULT(IfaceCalling*)(TDevice_Driver_Descriptor **begin, TDevice_Driver_Descriptor **end);
+	using TGet_Signal_Descriptors = HRESULT(IfaceCalling*)(TSignal_Descriptor **begin, TSignal_Descriptor **end);
 
 	using TAdd_Filters = HRESULT(IfaceCalling *)(const scgms::TFilter_Descriptor *begin, const scgms::TFilter_Descriptor *end, const scgms::TCreate_Filter create_filter);
 }

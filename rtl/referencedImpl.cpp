@@ -137,4 +137,8 @@ namespace refcnt {
 
 	}
 
+	void Swstr_list::push(const std::wstring& wstr) {
+		push(wstr.c_str());
+	}
+
 }

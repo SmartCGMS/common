@@ -41,6 +41,8 @@
 #include "../iface/UIIface.h"
 
 #include <map>
+#include <vector>
+#include <functional>
 
 namespace scgms {
 	std::vector<TModel_Descriptor> get_model_descriptors();
@@ -48,19 +50,24 @@ namespace scgms {
 	std::vector<TSolver_Descriptor> get_solver_descriptors();
 
 	bool get_model_descriptor_by_id(const GUID &id, TModel_Descriptor &desc);
-	bool get_model_descriptor_by_signal_id(const GUID &signal_id, TModel_Descriptor &desc);
+	bool get_model_descriptor_by_signal_id(const GUID &signal_id, TModel_Descriptor &desc);    
+    bool get_signal_descriptor_by_id(const GUID& signal_id, TSignal_Descriptor& desc);
 
 	extern const std::array<const wchar_t*, static_cast<size_t>(scgms::NDevice_Event_Code::count)> event_code_text;
 	
-	class CSignal_Names {
+	class CSignal_Description {
 			//should we replace this conversion class with a simple function, the map would have to use TBB allocator to avoid memory leaks
 			//and because we don't want TBB to be a required component to compile all filters, we rather ask the programmer to instantitate
 			//this class and disposes once unneeded to prevent memory leaks
 	protected:
-		std::map<GUID, std::wstring> mSignal_Names;
+		std::map<GUID, TSignal_Descriptor> mSignal_Descriptors;
+        std::vector<std::wstring> mVirtual_Signal_Names;
 	public:
-		CSignal_Names();
-		std::wstring Get_Name(const GUID &signal_id);
+		CSignal_Description();
+		std::wstring Get_Name(const GUID &signal_id) const;
+        bool Get_Descriptor(const GUID& signal_id, TSignal_Descriptor &desc) const;
+
+        void for_each(std::function<void(scgms::TSignal_Descriptor)> callback) const;
 	};
 	
 }

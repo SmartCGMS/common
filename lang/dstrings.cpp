@@ -40,6 +40,10 @@
 
 const wchar_t* dsNaN = L"NaN";
 
+const wchar_t* dsmmol_per_L = L"mmol/L";
+const wchar_t* dsU = L"U";
+const wchar_t* dsU_per_Hr = L"U/Hr";
+
 const char* dsFile = "File";
 const char* dsSave_Configuration = "Save Configruation";
 const char* dsQuit = "Quit";
@@ -454,6 +458,7 @@ const wchar_t *dsSignal_GUI_Name_Delivered_Insulin_Bolus = L"Bolus Insulin intak
 const wchar_t *dsSignal_GUI_Name_Delivered_Insulin_Basal = L"Basal Insulin intake";
 const wchar_t *dsSignal_GUI_Name_Requested_Basal_Insulin_Rate = L"Basal Insulin rate";
 const wchar_t *dsSignal_GUI_Name_Insulin_Activity = L"Insulin activity";
+const wchar_t* dsSignal_GUI_Name_Basal_Insulin = L"basal insulin";
 const wchar_t *dsSignal_GUI_Name_IOB = L"IOB";
 const wchar_t *dsSignal_GUI_Name_COB = L"COB";
 const wchar_t *dsSignal_GUI_Name_Carbs = L"Carbohydrate intake";
@@ -703,6 +708,23 @@ const wchar_t* dsSignal_Stats = L"Signal statistics";
 const wchar_t* dsOutput_CSV_File = L"Output CSV file";
 const wchar_t* dsLevel = L"level";
 const wchar_t* dsPeriod = L"period";
+
+const wchar_t* dsInvalid_Section_Name = L"Configuration, invalid section name: ";
+const wchar_t* dsCannot_Resolve_Filter_Descriptor = L"Cannot resolve filter descriptor by id: ";
+const wchar_t* dsMalformed_Filter_Parameter_Value = L"Malformed filter(1)-parameter(2) value(3): (1)";
+const wchar_t* dsFilter_Parameter_Not_Configured = L"Filter(1)-parameter(2) is not configured, default value will be used. Save the configuration to fix it.";
+
+const wchar_t* dsParameters_to_optimize_not_found = L"Parameters to optimize were not found.";
+const wchar_t* dsParameters_to_optimize_could_not_be_read_bounds_including = L"Parameters to optimize could not be read, bounds including.";
+const wchar_t* dsFailed_to_clone_configuration = L"Failed to clone configuration";
+const wchar_t* dsSolver_Failed = L"Solver failed";
+const wchar_t* dsFailed_to_write_parameters = L"Failed to write parameters";
+const wchar_t* dsFailed_to_execute_first_filters = L"Failed to execute first filters.";
+const wchar_t* dsCannot_read_configuration = L"Cannot read configuration";
+const wchar_t* dsCannot_read_filter_id = L"Cannot read filter id.";
+const wchar_t* dsFailed_to_configure_filter = L"Failed to configure filter with id: ";
+const wchar_t* dsFeedback_sender_not_connected = L"Feedback-sender not connected, sender's name: ";
+const wchar_t* dsFilter_configuration_param_value_error = L"Filter(1)-parameter(2) value(3) error: (1)";
 
 
 //--------------------------------- do not translate any of the rs-prefixed texts --

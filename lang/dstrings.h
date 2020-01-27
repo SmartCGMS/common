@@ -42,6 +42,10 @@
 
 extern const wchar_t* dsNaN;
 
+extern const wchar_t* dsmmol_per_L;
+extern const wchar_t* dsU;
+extern const wchar_t* dsU_per_Hr;
+
 extern const char* dsFile;
 extern const char* dsSave_Configuration;
 extern const char* dsQuit;
@@ -451,6 +455,7 @@ extern const wchar_t *dsSignal_GUI_Name_Delivered_Insulin_Bolus;
 extern const wchar_t *dsSignal_GUI_Name_Delivered_Insulin_Basal;
 extern const wchar_t *dsSignal_GUI_Name_Requested_Basal_Insulin_Rate;
 extern const wchar_t *dsSignal_GUI_Name_Insulin_Activity;
+extern const wchar_t* dsSignal_GUI_Name_Basal_Insulin;
 extern const wchar_t *dsSignal_GUI_Name_IOB;
 extern const wchar_t *dsSignal_GUI_Name_COB;
 extern const wchar_t *dsSignal_GUI_Name_Carbs;
@@ -706,6 +711,24 @@ extern const wchar_t* dsSignal_Stats;
 extern const wchar_t* dsOutput_CSV_File;
 extern const wchar_t* dsLevel;
 extern const wchar_t* dsPeriod;
+
+extern const wchar_t* dsInvalid_Section_Name;
+extern const wchar_t* dsCannot_Resolve_Filter_Descriptor;
+extern const wchar_t* dsMalformed_Filter_Parameter_Value;
+extern const wchar_t* dsFilter_Parameter_Not_Configured;
+
+extern const wchar_t* dsParameters_to_optimize_not_found;
+extern const wchar_t* dsParameters_to_optimize_could_not_be_read_bounds_including;
+extern const wchar_t* dsFailed_to_clone_configuration;
+extern const wchar_t* dsSolver_Failed;
+extern const wchar_t* dsFailed_to_write_parameters;
+extern const wchar_t* dsFailed_to_execute_first_filters;
+extern const wchar_t* dsCannot_read_configuration;
+extern const wchar_t* dsCannot_read_filter_id;
+extern const wchar_t* dsFailed_to_configure_filter;
+extern const wchar_t* dsFeedback_sender_not_connected;
+extern const wchar_t* dsFilter_configuration_param_value_error;
+;
 
 //--------------------------------- do not translate any of the rs-prefixed texts --
 

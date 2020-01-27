@@ -334,6 +334,7 @@ namespace refcnt {
 	public:
 		Swstr_list();
 		void push(const wchar_t* wstr);
+		void push(const std::wstring &wstr);
 	};
 	
 }

@@ -49,6 +49,7 @@ namespace scgms {
 		scgms::TGet_Metric_Descriptors get_metric_descriptors = factory::resolve_symbol<scgms::TGet_Metric_Descriptors>("get_metric_descriptors");
 		scgms::TGet_Model_Descriptors get_model_descriptors = factory::resolve_symbol<scgms::TGet_Model_Descriptors>("get_model_descriptors");
 		scgms::TGet_Solver_Descriptors get_solver_descriptors = factory::resolve_symbol<scgms::TGet_Solver_Descriptors>("get_solver_descriptors");
+		scgms::TGet_Signal_Descriptors get_signal_descriptors = factory::resolve_symbol<scgms::TGet_Signal_Descriptors>("get_signal_descriptors");
 	}
 
 	std::vector<TModel_Descriptor> get_model_descriptors()
@@ -87,10 +88,11 @@ namespace scgms {
 		return result;
 	}
 
-	bool get_model_descriptor_by_id(const GUID &id, TModel_Descriptor &desc) {
-		TModel_Descriptor *desc_begin, *desc_end;
+	template <typename TGet_Descriptors, typename TDescriptor>
+	bool get_descriptor_by_id(const GUID& id, TDescriptor& desc, TGet_Descriptors get_descriptors) {
+		TDescriptor* desc_begin, * desc_end;
 
-		bool result = imported::get_model_descriptors(&desc_begin, &desc_end) == S_OK;
+		bool result = get_descriptors(&desc_begin, &desc_end) == S_OK;
 		if (result) {
 			result = false;	//we have to find the filter yet
 			for (auto iter = desc_begin; iter != desc_end; iter++)
@@ -104,6 +106,11 @@ namespace scgms {
 
 		return result;
 	}
+
+	bool get_model_descriptor_by_id(const GUID& id, TModel_Descriptor& desc) {
+		return get_descriptor_by_id<TGet_Model_Descriptors, TModel_Descriptor>(id, desc, imported::get_model_descriptors);
+	}
+
 
 	bool get_model_descriptor_by_signal_id(const GUID &signal_id, TModel_Descriptor &desc) {
 		TModel_Descriptor *desc_begin, *desc_end;
@@ -129,6 +136,10 @@ namespace scgms {
 	}
 
 
+	bool get_signal_descriptor_by_id(const GUID& signal_id, TSignal_Descriptor& desc) {
+		return get_descriptor_by_id<TGet_Signal_Descriptors, TSignal_Descriptor>(signal_id, desc, imported::get_signal_descriptors);
+	}
+
 	const std::array<const wchar_t*, static_cast<size_t>(scgms::NDevice_Event_Code::count)> event_code_text = { {
 		L"Nothing",
 		L"Shut_Down",
@@ -148,40 +159,68 @@ namespace scgms {
 	} };
 
 
-	CSignal_Names::CSignal_Names() {
-		mSignal_Names.clear();
+	CSignal_Description::CSignal_Description() {
+		mSignal_Descriptors.clear();
 
-		mSignal_Names[scgms::signal_All] = dsSignal_GUI_Name_All;
-		mSignal_Names[scgms::signal_BG] = dsSignal_GUI_Name_BG;
-		mSignal_Names[scgms::signal_IG] = dsSignal_GUI_Name_IG;
-		mSignal_Names[scgms::signal_ISIG] = dsSignal_GUI_Name_ISIG;
-		mSignal_Names[scgms::signal_Calibration] = dsSignal_GUI_Name_Calibration;
-		mSignal_Names[scgms::signal_Delivered_Insulin_Bolus] = dsSignal_GUI_Name_Delivered_Insulin_Bolus;
-		mSignal_Names[scgms::signal_Delivered_Insulin_Basal_Rate] = dsSignal_GUI_Name_Delivered_Insulin_Basal;
-		mSignal_Names[scgms::signal_Requested_Insulin_Basal_Rate] = dsSignal_GUI_Name_Requested_Basal_Insulin_Rate;
-		mSignal_Names[scgms::signal_Insulin_Activity] = dsSignal_GUI_Name_Insulin_Activity;
-		mSignal_Names[scgms::signal_IOB] = dsSignal_GUI_Name_IOB;
-		mSignal_Names[scgms::signal_COB] = dsSignal_GUI_Name_COB;
-		mSignal_Names[scgms::signal_Carb_Intake] = dsSignal_GUI_Name_Carbs;
-		mSignal_Names[scgms::signal_Carb_Rescue] = dsSignal_GUI_Name_Carb_Rescue;
-		mSignal_Names[scgms::signal_Physical_Activity] = dsSignal_GUI_Name_Physical_Activity;		
-		mSignal_Names[scgms::signal_Null] = dsSignal_Null;
-
-		auto models = scgms::get_model_descriptors();
-		for (auto& model : models)
-		{
-			for (size_t i = 0; i < model.number_of_calculated_signals; i++)
-				mSignal_Names[model.calculated_signal_ids[i]] = std::wstring{ model.description } +std::wstring{ L" - " } +model.calculated_signal_names[i];
+		TSignal_Descriptor *desc_begin, *desc_end;
+		if (imported::get_signal_descriptors(&desc_begin, &desc_end) == S_OK) {
+			std::transform(desc_begin, desc_end, std::inserter(mSignal_Descriptors, mSignal_Descriptors.end()), [](const TSignal_Descriptor& desc) {return std::make_pair(desc.id, desc); });
 		}
 
-		for (size_t i = 0; i < scgms::signal_Virtual.size(); i++)
-			mSignal_Names[scgms::signal_Virtual[i]] = dsSignal_Prefix_Virtual + std::wstring(L" ") + std::to_wstring(i);
+		for (size_t i = 0; i < scgms::signal_Virtual.size(); i++) {
+			std::wstring desc_str = dsSignal_Prefix_Virtual + std::wstring(L" ") + std::to_wstring(i);
+
+			TSignal_Descriptor desc{ scgms::signal_Virtual[i],
+									desc_str.c_str(),
+									L"",
+									NPhysical_Unit::Other,
+									0,
+									NSignal_Visualization::smooth
+			};
+						
+			std::transform(&desc, (&desc) + 1, std::inserter(mSignal_Descriptors, mSignal_Descriptors.end()), [](const TSignal_Descriptor& desc) {return std::make_pair(desc.id, desc); });
+			mVirtual_Signal_Names.push_back(std::move(desc_str));	//move to retain valid pointer
+		}
+
+
+		auto describe_special_signal = [this](const GUID id, const wchar_t* desc_str)
+		{
+			TSignal_Descriptor desc{
+				id,
+				desc_str,
+				L"",
+				NPhysical_Unit::Other,
+				0,
+				NSignal_Visualization::mark
+			};
+
+			std::transform(&desc, (&desc) + 1, std::inserter(mSignal_Descriptors, mSignal_Descriptors.end()), [](const TSignal_Descriptor& desc) {return std::make_pair(desc.id, desc); });
+		};
+		
+		describe_special_signal(scgms::signal_All, dsSignal_GUI_Name_All);
+		describe_special_signal(scgms::signal_Null, dsSignal_Null);
+	
 	}
 
-	std::wstring CSignal_Names::Get_Name(const GUID &signal_id) {
-		const auto result = mSignal_Names.find(signal_id);
-		if (result != mSignal_Names.end()) return result->second;
+	std::wstring CSignal_Description::Get_Name(const GUID &signal_id) const {
+		const auto result = mSignal_Descriptors.find(signal_id);
+		if (result != mSignal_Descriptors.end()) return result->second.signal_description;
 			else return GUID_To_WString(signal_id);
+	}
+
+	bool CSignal_Description::Get_Descriptor(const GUID& signal_id, TSignal_Descriptor& desc) const {
+		const auto result = mSignal_Descriptors.find(signal_id);
+		if (result != mSignal_Descriptors.end()) {
+			memcpy(&desc, &(result->second), sizeof(decltype(desc)));
+			return true;
+		} else 
+			return false;
+	}
+
+	void CSignal_Description::for_each(std::function<void(scgms::TSignal_Descriptor)> callback) const {
+		for (const auto& elem : mSignal_Descriptors) {
+			callback(elem.second);
+		}
 	}
 
 }
