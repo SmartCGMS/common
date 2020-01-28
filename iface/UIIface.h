@@ -43,28 +43,6 @@
 
 namespace scgms {
 
-	//Units used for displayed signals
-	enum class NPhysical_Unit : uint16_t {
-		Unitless = 0,		
-		Percent,
-		time_only,		//The time is encoded as the number of days since January 0, 1900 00:00 UTC, see http://en.wikipedia.org/wiki/January_0
-		date_only,		
-		date_and_time,
-		mmol_per_L, //mmol/l
-		mg_per_dL,	//mg/dl
-		dg_per_dL,	//dg/dl
-		U_insulin,	//insulin units, not UI nor IU
-		U_per_Hr,
-		Celsius,
-		BPM,		//beats per minute, e.g.; heart rate
-		uS,			//micro Siemens e.g.; for galvanic skin response aka electrodermal activity
-		nA,			//nano ampers
-		m_per_s2,	//acceleration
-		g,			//grams
-
-		Other		//a unit not described here, but its description is given in the signal descriptor
-	};
-
 	enum class NFilter_Flags : uint8_t {
 		None = 0
 	};
@@ -151,22 +129,59 @@ namespace scgms {
 
 	constexpr TApprox_Descriptor Null_Approx_Descriptor = { Invalid_GUID, nullptr, 0, nullptr, nullptr };
 
+	//Units used for displayed signals
+	enum class NSignal_Unit : uint16_t {
+		Unitless = 0,
+		Percent,
+		datetime,	//The time is encoded as the number of days since January 0, 1900 00:00 UTC, see http://en.wikipedia.org/wiki/January_0
+		mmol_per_L, //mmol/l - instead of mol/L due to historical reasons
+		U_insulin,	//insulin units, not UI nor IU
+		U_per_Hr,
+		Celsius,
+		BPM,		//beats per minute, e.g.; heart rate
+		S,			//Siemens e.g.; for galvanic skin response aka electrodermal activity
+		A,			//nano ampers
+		m_per_s2,	//acceleration
+		g,			//grams - - instead of SI kg due to historical reasons
+
+		Other		//a unit not described here, but its description is given in the signal descriptor
+	};
+
+
 	enum class NSignal_Visualization : uint8_t {
 		smooth = 0,		//e.g.; spline interpolation between two sampled values
 		step,			//step function
-		mark			//display marks only at each sampled value
+		mark,			//display marks only at each sampled value
+		step_with_mark,
+		smooth_with_mark
 	};
 
-	struct TSignal_Descriptor {
+	enum class NSignal_Mark : char {
+		none = 0,		
+		space = ' ',		//for setting up a stroke pattern
+		dot = '.',
+		plus = '+',
+		minus = '-',
+		star = '*',
+		rectangle = 'r',
+		diamond = 'd',
+		cross = 'x',
+		circle = 'o',
+		triangle = 't'
+	};
+
+	struct TSignal_Descriptor {		//designates preferred choices to display/desribe the signal
 		const GUID id;
 		const wchar_t* signal_description;
 		const wchar_t* unit_description;
-		const NPhysical_Unit unit_id;
-		const uint32_t preferred_color;	//ARGB
+		const NSignal_Unit unit_id;
+		const uint32_t fill_color, stroke_color;	//ARGB
 		const NSignal_Visualization visualization;
+		const NSignal_Mark mark;
+		const NSignal_Mark *stroke_pattern;	//NSignal_Mark::none terminated stroke pattern, nullptr means solid line
 	};
 
-	constexpr TSignal_Descriptor Null_Signal_Descriptor = { Invalid_GUID, nullptr, nullptr, NPhysical_Unit::Unitless, 0, NSignal_Visualization::smooth};
+	constexpr TSignal_Descriptor Null_Signal_Descriptor = { Invalid_GUID, nullptr, nullptr, NSignal_Unit::Unitless, 0, 0, NSignal_Visualization::smooth, NSignal_Mark::none, nullptr};
 
 	using TGet_Filter_Descriptors = HRESULT(IfaceCalling*)(TFilter_Descriptor **begin, TFilter_Descriptor **end);
 	using TGet_Metric_Descriptors = HRESULT(IfaceCalling*)(TMetric_Descriptor **begin, TMetric_Descriptor **end);
