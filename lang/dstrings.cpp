@@ -43,6 +43,10 @@ const wchar_t* dsNaN = L"NaN";
 const wchar_t* dsmmol_per_L = L"mmol/L";
 const wchar_t* dsU = L"U";
 const wchar_t* dsU_per_Hr = L"U/Hr";
+const wchar_t* dsA = L"A";
+const wchar_t* dsS = L"S";
+const wchar_t* dsm_per_s2 = L"m/s2";
+
 
 const char* dsFile = "File";
 const char* dsSave_Configuration = "Save Configruation";
@@ -464,6 +468,11 @@ const wchar_t *dsSignal_GUI_Name_COB = L"COB";
 const wchar_t *dsSignal_GUI_Name_Carbs = L"Carbohydrate intake";
 const wchar_t* dsSignal_GUI_Name_Carb_Rescue = L"Carbohydrate rescue";
 const wchar_t *dsSignal_GUI_Name_Physical_Activity = L"Physical activity";
+const wchar_t* dsSignal_GUI_Name_Skin_Temperature = L"Skin temperature";
+const wchar_t* dsSignal_GUI_Name_Heartbeat = L"Heartbaet";
+const wchar_t* dsSignal_GUI_Name_Electrodermal_Activity = L"Electrodermal activity";
+const wchar_t* dsSignal_GUI_Name_Steps = L"Steps";
+const wchar_t* dsSignal_GUI_Name_Acceleration = L"Acceleration";
 
 const wchar_t *dsSignal_GUI_Name_Unknown = L"Unknown signal";
 

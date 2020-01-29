@@ -45,6 +45,9 @@ extern const wchar_t* dsNaN;
 extern const wchar_t* dsmmol_per_L;
 extern const wchar_t* dsU;
 extern const wchar_t* dsU_per_Hr;
+extern const wchar_t* dsA;
+extern const wchar_t* dsS;
+extern const wchar_t* dsm_per_s2;
 
 extern const char* dsFile;
 extern const char* dsSave_Configuration;
@@ -446,22 +449,27 @@ extern const wchar_t *dsSignal_Unknown;
 extern const wchar_t *dsSignal_Prefix_Virtual;
 extern const wchar_t* dsSignal_Null;
 
-extern const wchar_t *dsSignal_GUI_Name_All;
-extern const wchar_t *dsSignal_GUI_Name_BG;
-extern const wchar_t *dsSignal_GUI_Name_IG;
-extern const wchar_t *dsSignal_GUI_Name_ISIG;
-extern const wchar_t *dsSignal_GUI_Name_Calibration;
-extern const wchar_t *dsSignal_GUI_Name_Delivered_Insulin_Bolus;
-extern const wchar_t *dsSignal_GUI_Name_Delivered_Insulin_Basal;
-extern const wchar_t *dsSignal_GUI_Name_Requested_Basal_Insulin_Rate;
-extern const wchar_t *dsSignal_GUI_Name_Insulin_Activity;
+extern const wchar_t* dsSignal_GUI_Name_All;
+extern const wchar_t* dsSignal_GUI_Name_BG;
+extern const wchar_t* dsSignal_GUI_Name_IG;
+extern const wchar_t* dsSignal_GUI_Name_ISIG;
+extern const wchar_t* dsSignal_GUI_Name_Calibration;
+extern const wchar_t* dsSignal_GUI_Name_Delivered_Insulin_Bolus;
+extern const wchar_t* dsSignal_GUI_Name_Delivered_Insulin_Basal;
+extern const wchar_t* dsSignal_GUI_Name_Requested_Basal_Insulin_Rate;
+extern const wchar_t* dsSignal_GUI_Name_Insulin_Activity;
 extern const wchar_t* dsSignal_GUI_Name_Basal_Insulin;
-extern const wchar_t *dsSignal_GUI_Name_IOB;
-extern const wchar_t *dsSignal_GUI_Name_COB;
-extern const wchar_t *dsSignal_GUI_Name_Carbs;
+extern const wchar_t* dsSignal_GUI_Name_IOB;
+extern const wchar_t* dsSignal_GUI_Name_COB;
+extern const wchar_t* dsSignal_GUI_Name_Carbs;
 extern const wchar_t* dsSignal_GUI_Name_Carb_Rescue;
-extern const wchar_t *dsSignal_GUI_Name_Physical_Activity;
+extern const wchar_t* dsSignal_GUI_Name_Physical_Activity;
 
+extern const wchar_t* dsSignal_GUI_Name_Skin_Temperature;
+extern const wchar_t* dsSignal_GUI_Name_Heartbeat;
+extern const wchar_t* dsSignal_GUI_Name_Electrodermal_Activity;
+extern const wchar_t* dsSignal_GUI_Name_Steps;
+extern const wchar_t* dsSignal_GUI_Name_Acceleration;
 
 extern const wchar_t *dsSignal_GUI_Name_Unknown;
 
