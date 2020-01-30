@@ -178,6 +178,8 @@ extern const wchar_t *dsSignal_Source_Id;
 extern const wchar_t *dsSignal_Destination_Id;
 extern const wchar_t* dsRemove_From_Source;
 extern const wchar_t* dsCondition;
+extern const wchar_t* dsExpression_Parse_Error;
+extern const char* dsInvalid_expression_character;
 
 extern const wchar_t *dsSignal_Masked_Id;
 extern const wchar_t *dsSignal_Value_Bitmask;

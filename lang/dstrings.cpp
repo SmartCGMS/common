@@ -175,6 +175,8 @@ const wchar_t *dsSignal_Source_Id = L"Source ID";
 const wchar_t *dsSignal_Destination_Id = L"Map to ID";
 const wchar_t* dsClone_From_Source = L"Clone from source";
 const wchar_t* dsCondition = L"Condition";
+const wchar_t* dsExpression_Parse_Error = L"Error parsing the expression: ";
+const char* dsInvalid_expression_character = "Invalid character in the expression: ";
 
 
 const wchar_t *rsSignal_Masked_Id = L"Signal";
