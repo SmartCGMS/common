@@ -292,10 +292,10 @@ namespace scgms {
 	constexpr GUID IID_Signal_Error_Inspection = { 0xfb51bcab, 0x5c2b, 0x45af, { 0x98, 0x80, 0xe3, 0x4d, 0xde, 0xc4, 0x3c, 0x4c } };
 	class ISignal_Error_Inspection : public virtual refcnt::IReferenced {
 	public:
-		virtual HRESULT IfaceCalling Promise_Metric(double* const metric_value, bool defer_to_dtor) = 0;
+		virtual HRESULT IfaceCalling Promise_Metric(const uint64_t segment_id, double* const metric_value, bool defer_to_dtor) = 0;
 		//return S_OK if there are new data available since object construction or last call of Peek_New_Data_Available
 		virtual HRESULT IfaceCalling Peek_New_Data_Available() = 0;
-		virtual HRESULT IfaceCalling Calculate_Signal_Error(scgms::TSignal_Stats *absolute_error, scgms::TSignal_Stats *relative_error) = 0;
+		virtual HRESULT IfaceCalling Calculate_Signal_Error(const uint64_t segment_id, scgms::TSignal_Stats *absolute_error, scgms::TSignal_Stats *relative_error) = 0;
 			//should there be a zero reference level, then absolute_error.count != relative_error.count
 		virtual HRESULT IfaceCalling Get_Description(wchar_t** const desc) = 0;
 	};

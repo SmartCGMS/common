@@ -159,6 +159,9 @@ const wchar_t *dsUse_Prefer_More_Levels = L"Prefer more levels";
 const wchar_t *dsMetric_Threshold = L"Metric threshold";
 const wchar_t *dsMetric_Levels_Required = L"Levels required";
 const wchar_t *dsUse_Measured_Levels = L"Use measured levels";
+const wchar_t* dsEmit_metric_as_signal = L"Emit metric as a signal";
+const wchar_t* dsEmit_last_value_only = L"Emit last value only";
+
 const wchar_t *dsRecalculate_On_Levels_Count = L"Recalculate on reference level count (0 = off)";
 const wchar_t *dsRecalculate_On_Segment_End = L"Recalculate on segment end";
 const wchar_t *dsRecalculate_On_Calibration = L"Recalculate on calibration";
@@ -475,6 +478,7 @@ const wchar_t* dsSignal_GUI_Name_Heartbeat = L"Heartbaet";
 const wchar_t* dsSignal_GUI_Name_Electrodermal_Activity = L"Electrodermal activity";
 const wchar_t* dsSignal_GUI_Name_Steps = L"Steps";
 const wchar_t* dsSignal_GUI_Name_Acceleration = L"Acceleration";
+const wchar_t* dsSignal_GUI_Name_Error_Metric = L"error metric";
 
 const wchar_t *dsSignal_GUI_Name_Unknown = L"Unknown signal";
 
@@ -723,7 +727,7 @@ const wchar_t* dsPeriod = L"period";
 const wchar_t* dsInvalid_Section_Name = L"Configuration, invalid section name: ";
 const wchar_t* dsCannot_Resolve_Filter_Descriptor = L"Cannot resolve filter descriptor by id: ";
 const wchar_t* dsMalformed_Filter_Parameter_Value = L"Malformed filter(1)-parameter(2) value(3): (1)";
-const wchar_t* dsFilter_Parameter_Not_Configured = L"Filter(1)-parameter(2) is not configured, default value will be used. Save the configuration to fix it.";
+const wchar_t* dsFilter_Parameter_Not_Configured = L"Filter(1)-parameter(2) is not configured, default value will be used. Save the configuration to fix it.   (1)";
 
 const wchar_t* dsParameters_to_optimize_not_found = L"Parameters to optimize were not found.";
 const wchar_t* dsParameters_to_optimize_could_not_be_read_bounds_including = L"Parameters to optimize could not be read, bounds including.";
@@ -875,6 +879,8 @@ const wchar_t *rsUse_Prefer_More_Levels = L"Prefer_More_Levels";
 const wchar_t *rsMetric_Threshold = L"Metric_Threshold";
 const wchar_t *rsMetric_Levels_Required = L"Levels_Required";
 const wchar_t *rsUse_Measured_Levels = L"Measured_Levels";
+const wchar_t* rsEmit_metric_as_signal = L"Emit_Metric_As_Signal";
+const wchar_t* rsEmit_last_value_only = L"Emit_Last_Value_Only";
 
 const wchar_t *rsRecalculate_On_Levels_Count = L"Recalculate_Levels_Count";
 const wchar_t *rsRecalculate_On_Segment_End = L"Recalculate_At_Segment_End";

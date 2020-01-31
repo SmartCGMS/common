@@ -161,6 +161,8 @@ extern const wchar_t *dsUse_Prefer_More_Levels;
 extern const wchar_t *dsMetric_Threshold;
 extern const wchar_t *dsMetric_Levels_Required;
 extern const wchar_t *dsUse_Measured_Levels;
+extern const wchar_t* dsEmit_metric_as_signal;
+extern const wchar_t* dsEmit_last_value_only;
 
 extern const wchar_t *dsRecalculate_On_Levels_Count;
 extern const wchar_t *dsRecalculate_On_Segment_End;
@@ -472,6 +474,7 @@ extern const wchar_t* dsSignal_GUI_Name_Heartbeat;
 extern const wchar_t* dsSignal_GUI_Name_Electrodermal_Activity;
 extern const wchar_t* dsSignal_GUI_Name_Steps;
 extern const wchar_t* dsSignal_GUI_Name_Acceleration;
+extern const wchar_t* dsSignal_GUI_Name_Error_Metric;
 
 extern const wchar_t *dsSignal_GUI_Name_Unknown;
 
@@ -844,6 +847,9 @@ extern const wchar_t *rsUse_Prefer_More_Levels;
 extern const wchar_t *rsMetric_Threshold;
 extern const wchar_t *rsMetric_Levels_Required;
 extern const wchar_t *rsUse_Measured_Levels;
+extern const wchar_t* rsEmit_metric_as_signal;
+extern const wchar_t* rsEmit_last_value_only;
+
 extern const wchar_t *rsRecalculate_On_Levels_Count;
 extern const wchar_t *rsRecalculate_On_Segment_End;
 extern const wchar_t *rsRecalculate_On_Calibration;
