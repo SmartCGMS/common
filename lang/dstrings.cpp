@@ -161,6 +161,7 @@ const wchar_t *dsMetric_Levels_Required = L"Levels required";
 const wchar_t *dsUse_Measured_Levels = L"Use measured levels";
 const wchar_t* dsEmit_metric_as_signal = L"Emit metric as a signal";
 const wchar_t* dsEmit_last_value_only = L"Emit last value only";
+const wchar_t* dsDiscard_Repeating_Level = L"Discard repeating level";
 
 const wchar_t *dsRecalculate_On_Levels_Count = L"Recalculate on reference level count (0 = off)";
 const wchar_t *dsRecalculate_On_Segment_End = L"Recalculate on segment end";
@@ -881,6 +882,7 @@ const wchar_t *rsMetric_Levels_Required = L"Levels_Required";
 const wchar_t *rsUse_Measured_Levels = L"Measured_Levels";
 const wchar_t* rsEmit_metric_as_signal = L"Emit_Metric_As_Signal";
 const wchar_t* rsEmit_last_value_only = L"Emit_Last_Value_Only";
+const wchar_t* rsDiscard_Repeating_Level = L"Discard_Repeating_Level";
 
 const wchar_t *rsRecalculate_On_Levels_Count = L"Recalculate_Levels_Count";
 const wchar_t *rsRecalculate_On_Segment_End = L"Recalculate_At_Segment_End";

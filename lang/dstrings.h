@@ -163,6 +163,7 @@ extern const wchar_t *dsMetric_Levels_Required;
 extern const wchar_t *dsUse_Measured_Levels;
 extern const wchar_t* dsEmit_metric_as_signal;
 extern const wchar_t* dsEmit_last_value_only;
+extern const wchar_t* dsDiscard_Repeating_Level;
 
 extern const wchar_t *dsRecalculate_On_Levels_Count;
 extern const wchar_t *dsRecalculate_On_Segment_End;
@@ -849,6 +850,7 @@ extern const wchar_t *rsMetric_Levels_Required;
 extern const wchar_t *rsUse_Measured_Levels;
 extern const wchar_t* rsEmit_metric_as_signal;
 extern const wchar_t* rsEmit_last_value_only;
+extern const wchar_t* rsDiscard_Repeating_Level;
 
 extern const wchar_t *rsRecalculate_On_Levels_Count;
 extern const wchar_t *rsRecalculate_On_Segment_End;
