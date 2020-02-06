@@ -85,3 +85,12 @@ static_assert(sizeof(GUID::Data1) == 4, "GUID Data1 (unsigned long) is not 4 byt
 static_assert(sizeof(GUID::Data2) == 2, "GUID Data2 (unsigned short) is not 2 bytes long");
 static_assert(sizeof(GUID::Data3) == 2, "GUID Data3 is not 2 bytes long");
 static_assert(sizeof(GUID::Data4) == 8, "GUID Data4 is not 8 bytes long");
+
+inline bool Is_Invalid_GUID(const GUID& id) {
+    return id == Invalid_GUID;
+}
+
+template <typename... Args>
+bool Is_Invalid_GUID(const GUID& id, const Args&... args) {
+    return Is_Invalid_GUID(id) || Is_Invalid_GUID(args...);
+}

@@ -183,6 +183,10 @@ extern const wchar_t* dsRemove_From_Source;
 extern const wchar_t* dsCondition;
 extern const wchar_t* dsExpression_Parse_Error;
 extern const char* dsInvalid_expression_character;
+extern const wchar_t* dsCollect_Statistics;
+extern const wchar_t* dsOutput_to_file_enabled_but_no_filename_given;
+extern const wchar_t* dsInvalid_Argument_Value_per_Parameter;
+extern const wchar_t* dsCannot_Open_File;
 
 extern const wchar_t *dsSignal_Masked_Id;
 extern const wchar_t *dsSignal_Value_Bitmask;
@@ -816,6 +820,7 @@ extern const wchar_t *rsSignal_Source_Id;
 extern const wchar_t *rsSignal_Destination_Id;
 extern const wchar_t* rsRemove_From_Source;
 extern const wchar_t* rsCondition;
+extern const wchar_t* rsCollect_Statistics;
 
 extern const wchar_t *rsSignal_Masked_Id;
 extern const wchar_t *rsSignal_Value_Bitmask;
@@ -829,9 +834,6 @@ extern const wchar_t *rsGen_BG_Amplitude;
 extern const wchar_t *rsGen_BG_Cos_Period;
 extern const wchar_t *rsGen_BG_Sampling_Period;
 extern const wchar_t *rsGen_Total_Time;
-
-//extern const wchar_t *rsRecalculate_Past_On_Params;
-//extern const wchar_t *rsRecalculate_Past_On_Segment_Stop;
 
 extern const wchar_t *rsParameters_Reset;
 extern const wchar_t *rsParameters_Reset_Request;
@@ -1074,3 +1076,4 @@ extern const wchar_t* rsConst_CR;
 
 extern const wchar_t* rsOutput_CSV_File;
 extern const wchar_t* rsSignal_Stats_Header;
+extern const wchar_t* rsDecoupling_Stats_Header;

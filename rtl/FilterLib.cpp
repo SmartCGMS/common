@@ -287,14 +287,16 @@ namespace scgms {
 	}
 
 	
-	CBase_Filter::CBase_Filter(scgms::IFilter *output) : mOutput(output) {
-		//
+	CBase_Filter::CBase_Filter(scgms::IFilter* output, const GUID& device_id) : mOutput(output), mDevice_ID(device_id) {
+		if (!mOutput) 
+			throw std::runtime_error{ "Attempted to construct a filter without valid output!" };
 	}
 
 	CBase_Filter::~CBase_Filter() {
 		//
 
 	}
+
 
 	HRESULT CBase_Filter::Send(scgms::UDevice_Event &event) {
 		if (!event) return E_INVALIDARG;
@@ -305,6 +307,14 @@ namespace scgms {
 	}
 
 	
+	void CBase_Filter::Emit_Info(const scgms::NDevice_Event_Code code, const std::wstring& msg, const uint64_t segment_id) {
+		scgms::UDevice_Event event{ code };
+		event.device_id() = mDevice_ID;
+		event.info.set(msg.c_str());
+		event.segment_id() = segment_id;
+		Send(event);
+	}
+
 	HRESULT IfaceCalling CBase_Filter::Configure(IFilter_Configuration* configuration, refcnt::wstr_list* error_description) {
 		SFilter_Configuration shared_configuration = refcnt::make_shared_reference_ext<SFilter_Configuration, IFilter_Configuration> ( configuration, true);		
 		refcnt::Swstr_list shared_error_description = refcnt::make_shared_reference_ext<refcnt::Swstr_list, refcnt::wstr_list>(error_description, true);

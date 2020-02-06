@@ -38,20 +38,21 @@
 
 #pragma once
 
-#include <string>
+#include "../iface/FilterIface.h"
 
-//works with non-locale installed languages
-std::string Narrow_WString(const std::wstring &wstr);
-std::string Narrow_WChar(const wchar_t *wstr);
-std::wstring Widen_Char(const char *str);
+#include <cmath>
+#include <vector>
 
-std::wstring WString_To_Lower(const std::wstring& wstr);
-
-inline bool Is_Empty(const std::wstring& wstr) {
-    return wstr.empty();
+template <typename T>
+bool Is_NaN(const T value) {
+    return std::isnan(value);
 }
 
-template <typename... Args>
-bool Is_Empty(const std::wstring& wstr, const Args&... args) {
-    return Is_Empty(wstr) || IsEmpIs_Empty(args...);
+template <typename T, typename... Args>
+bool Is_NaN(const T value, const Args&... args) {
+    return Is_NaN(value) || Is_NaN(args...);
 }
+
+
+//does not check whether series contains NaN, destroys series content
+bool Calculate_Signal_Stats(std::vector<double>& series, scgms::TSignal_Stats& signal_error);

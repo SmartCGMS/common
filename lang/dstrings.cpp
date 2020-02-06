@@ -181,6 +181,10 @@ const wchar_t* dsClone_From_Source = L"Clone from source";
 const wchar_t* dsCondition = L"Condition";
 const wchar_t* dsExpression_Parse_Error = L"Error parsing the expression: ";
 const char* dsInvalid_expression_character = "Invalid character in the expression: ";
+const wchar_t* dsCollect_Statistics = L"Collect statistics";
+const wchar_t* dsOutput_to_file_enabled_but_no_filename_given = L"Ouput to file enabled, but not filename given.";
+const wchar_t* dsInvalid_Argument_Value_per_Parameter = L"Invalid argument value, parameter name: ";
+const wchar_t* dsCannot_Open_File = L"Cannot open file: ";
 
 
 const wchar_t *rsSignal_Masked_Id = L"Signal";
@@ -851,9 +855,9 @@ const wchar_t *rsSignal_Source_Id = L"Signal_Src_Id";
 const wchar_t *rsSignal_Destination_Id = L"Signal_Dst_Id";
 const wchar_t* rsRemove_From_Source = L"Remove_from_source";
 const wchar_t* rsCondition = L"Condition";
+const wchar_t* rsCollect_Statistics = L"Collect_statistics";
 
 const wchar_t *rsRecalculate_Past_On_Params = L"Recalculate_Past_On_Params";
-//const wchar_t *rsRecalculate_Past_On_Segment_Stop = L"Recalculate_Past_On_Segment_Stop";
 
 const wchar_t *rsGen_IG_Offset = L"IG_Level_Offset";
 const wchar_t *rsGen_IG_Amplitude = L"IG_Amplitude";
@@ -1103,3 +1107,4 @@ const wchar_t* rsConst_CR = L"const_carb_to_insulin_ratio";
 
 const wchar_t* rsOutput_CSV_File = L"Output_CSV_file";
 const wchar_t* rsSignal_Stats_Header = L"Segment id; marker;; avg; stddev;count;; min; 25th; median; 75; max";
+const wchar_t* rsDecoupling_Stats_Header = L"Segment id; marker;; avg; stddev;count;; min; 25th; median; 75; max;; matched_events; total_events; matched_levels; total_levels";
