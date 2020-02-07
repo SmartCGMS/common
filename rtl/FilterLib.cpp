@@ -39,7 +39,10 @@
 #include "FilterLib.h"
 #include "FactoryLib.h"
 #include "UILib.h"
+#include "../utils/string_utils.h"
 
+
+#include <wchar.h>
 #include <sstream>
 #include "manufactory.h"
 
@@ -186,9 +189,8 @@ namespace scgms {
 		return result;
 	}
 
-	HRESULT SFilter_Parameter::guid_from_wstring(const wchar_t *str_value) {
-		const GUID tmp_guid = WString_To_GUID(str_value);
-		return get()->Set_GUID(&tmp_guid);
+	HRESULT SFilter_Parameter::set_GUID(const GUID& guid) {
+		return get()->Set_GUID(&guid);
 	}
 
 
@@ -387,20 +389,32 @@ std::wstring Select_Time_Segments_Id_To_WString(scgms::time_segment_id_container
 }
 
 scgms::time_segment_id_container* WString_To_Select_Time_Segments_Id(const wchar_t *str) {
-	scgms::time_segment_id_container *obj = nullptr;
-	if (Manufacture_Object<refcnt::internal::CVector_Container<int64_t>, scgms::time_segment_id_container>(&obj) == S_OK) {
-		std::vector<int64_t> ids;
+	if (!str) return nullptr;
 
-		std::wstringstream value_str(str);
-		int64_t value;
-		while (value_str >> value)
-			ids.push_back(value);
-		
-		obj->set(ids.data(), ids.data()+ ids.size());
-		return obj;
+	std::vector<int64_t> ids;
+	std::wstring str_copy{ str };	//wcstok modifies the input string
+	const wchar_t* delimiters = L" ";	//string of chars, which designate individual delimiters
+	wchar_t* buffer = nullptr;
+	wchar_t* str_val = wcstok_s(str_copy.data(), delimiters, &buffer);
+	while (str_val != nullptr) {
+		bool ok;
+		const int64_t value = wstr_2_int(str_val, ok);
+		if (!ok) return nullptr;
+		ids.push_back(value);
+
+		str_val = wcstok_s(nullptr, delimiters, &buffer);
 	}
-	else
-		return nullptr;
+
+
+	scgms::time_segment_id_container *obj = nullptr;
+	if (Manufacture_Object<refcnt::internal::CVector_Container<int64_t>, scgms::time_segment_id_container>(&obj) == S_OK) {		
+		if (obj->set(ids.data(), ids.data() + ids.size()) != S_OK) {
+			obj->Release();
+			obj = nullptr;
+		};		
+	}
+	
+	return obj;
 }
 
 std::wstring Model_Parameters_To_WString(scgms::IModel_Parameter_Vector *container)
@@ -422,21 +436,32 @@ std::wstring Model_Parameters_To_WString(scgms::IModel_Parameter_Vector *contain
 	return result;
 }
 
-scgms::IModel_Parameter_Vector* WString_To_Model_Parameters(const wchar_t *str)
-{
-	scgms::IModel_Parameter_Vector *obj = nullptr;
-	if (Manufacture_Object<refcnt::internal::CVector_Container<double>, scgms::IModel_Parameter_Vector>(&obj) == S_OK)
-	{
-		std::vector<double> params;
+scgms::IModel_Parameter_Vector* WString_To_Model_Parameters(const wchar_t *str) {
+	if (!str) return nullptr;
 
-		std::wstringstream value_str(str);
-		double value;
-		while (value_str >> value)
-			params.push_back(value);
+	std::vector<double> params;
+	std::wstring str_copy{ str };	//wcstok modifies the input string
+	const wchar_t* delimiters = L" ";	//string of chars, which designate individual delimiters
+	wchar_t* buffer = nullptr;
+	wchar_t* str_val = wcstok_s(str_copy.data(), delimiters, &buffer);
+	while (str_val != nullptr) {
+		bool ok;
+		const double value = wstr_2_dbl(str_val, ok);
+		if (!ok) return nullptr;
+		params.push_back(value);
 
-		obj->set(params.data(), params.data() + params.size());
-		return obj;
+		str_val = wcstok_s(nullptr, delimiters, &buffer);
 	}
-	else
-		return nullptr;
+
+
+
+	scgms::IModel_Parameter_Vector* obj = nullptr;
+	if (Manufacture_Object<refcnt::internal::CVector_Container<double>, scgms::IModel_Parameter_Vector>(&obj) == S_OK) {
+		if (obj->set(params.data(), params.data() + params.size()) != S_OK) {
+			obj->Release();
+			obj = nullptr;
+		};
+	}
+
+	return obj;
 }

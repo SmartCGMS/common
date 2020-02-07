@@ -75,3 +75,103 @@ std::wstring WString_To_Lower(const std::wstring& wstr) {
 
 	return result;
 }
+
+double str_2_dbl(const char* str) {
+    bool tmp;
+    return str_2_dbl(str, tmp);
+}
+
+double str_2_dbl(const char *str, bool &ok) {
+    char* end_char;
+    double value = std::strtod(str, &end_char);
+    ok = *end_char == 0;
+
+    if (!ok) 
+        value = std::numeric_limits<double>::quiet_NaN(); //sanity
+        
+    return value;
+}
+
+
+double wstr_2_dbl(const wchar_t* wstr) {
+    bool tmp;
+    return wstr_2_dbl(wstr, tmp);
+}
+
+double wstr_2_dbl(const wchar_t* wstr, bool& ok) {
+    wchar_t* end_char;
+    double value = std::wcstod(wstr, &end_char);
+
+    ok = *end_char == 0;
+
+    if (!ok)
+        value = std::numeric_limits<double>::quiet_NaN(); //sanity
+
+    return value;
+}
+
+
+template <typename T>
+int get_base(T* str) {
+    int base = 10;
+
+    constexpr T lc = static_cast<T>('x');
+    constexpr T up = static_cast<T>('X');
+    constexpr T zr = static_cast<T>('0');
+
+    if (str) {
+        switch (str[0]) {
+            case lc:
+            case up:   base = 16;  
+                        break;
+
+            case zr:   switch (str[1]) {
+                            case lc:
+                            case up:   base = 16;
+                                        break;
+                            default: break;
+                        }
+
+            default: break;
+        }
+    }
+
+    return base;
+}
+
+
+int64_t str_2_int(const char* str) {
+    bool tmp;
+    return str_2_int(str, tmp);
+}
+
+
+int64_t str_2_int(const char* str, bool &ok) {
+    char* end_char;
+    int64_t value = std::strtol(str, &end_char, get_base(str));
+    ok = *end_char == 0;
+
+    if (!ok)
+        value = std::numeric_limits<int64_t>::max(); //sanity
+
+    return value;
+}
+
+
+
+int64_t wstr_2_int(const wchar_t* wstr) {
+    bool tmp;
+    return wstr_2_int(wstr, tmp);
+}
+
+
+int64_t wstr_2_int(const wchar_t* wstr, bool& ok) {
+    wchar_t* end_char;
+    int64_t value = std::wcstol(wstr, &end_char, get_base(wstr));
+    ok = *end_char == 0;
+
+    if (!ok)
+        value = std::numeric_limits<int64_t>::max(); //sanity
+
+    return value;
+}

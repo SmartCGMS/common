@@ -69,7 +69,7 @@ namespace scgms {
 		HRESULT set_bool(const bool value);
 
 		GUID as_guid(HRESULT &rc);		
-		HRESULT guid_from_wstring(const wchar_t *str_value);
+		HRESULT set_GUID(const GUID &guid);
 
 		std::vector<int64_t> as_int_array(HRESULT &rc);
 		HRESULT set_int_array(const std::vector<int64_t> &values);

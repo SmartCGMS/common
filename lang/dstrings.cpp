@@ -731,7 +731,7 @@ const wchar_t* dsPeriod = L"period";
 
 const wchar_t* dsInvalid_Section_Name = L"Configuration, invalid section name: ";
 const wchar_t* dsCannot_Resolve_Filter_Descriptor = L"Cannot resolve filter descriptor by id: ";
-const wchar_t* dsMalformed_Filter_Parameter_Value = L"Malformed filter(1)-parameter(2) value(3): (1)";
+const wchar_t* dsMalformed_Filter_Parameter_Value = L"Malformed filter(1)-parameter(2)'s value(3): (1)";
 const wchar_t* dsFilter_Parameter_Not_Configured = L"Filter(1)-parameter(2) is not configured, default value will be used. Save the configuration to fix it.   (1)";
 
 const wchar_t* dsParameters_to_optimize_not_found = L"Parameters to optimize were not found.";
