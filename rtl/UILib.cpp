@@ -231,7 +231,7 @@ namespace scgms {
 
 }
 
-GUID WString_To_GUID(const std::wstring& str) {
+GUID WString_To_GUID(const std::wstring& str, bool &ok) {
 	GUID guid;
 
 	constexpr int element_count = 11;
@@ -242,7 +242,9 @@ GUID WString_To_GUID(const std::wstring& str) {
 		&guid.Data4[0], &guid.Data4[1], &guid.Data4[2], &guid.Data4[3],
 		&guid.Data4[4], &guid.Data4[5], &guid.Data4[6], &guid.Data4[7]);
 
-	if (converted_count != element_count) guid = Invalid_GUID;
+	ok = converted_count == element_count;
+
+	if (!ok) guid = Invalid_GUID;	//sanity
 
 	return guid;
 }

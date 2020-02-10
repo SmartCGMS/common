@@ -225,6 +225,7 @@ extern const wchar_t* dsUnexpected_Error_While_Parsing;
 extern const wchar_t* dsUnknown_Date_Time_Format;
 extern const wchar_t* dsLine_No;
 extern const wchar_t* dsError_In_Number_Format;
+extern const wchar_t* dsInvalid_GUID;
 
 extern const wchar_t *dsDevice_Feedback_Filter;
 extern const wchar_t *dsDevice_Filter;

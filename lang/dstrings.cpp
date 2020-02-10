@@ -227,6 +227,7 @@ const wchar_t* dsUnexpected_Error_While_Parsing = L"Unexpected error while parsi
 const wchar_t* dsUnknown_Date_Time_Format = L"Unknown date time format: ";
 const wchar_t* dsLine_No = L", line no.: ";
 const wchar_t* dsError_In_Number_Format = L"Error in number format: ";
+const wchar_t* dsInvalid_GUID = L"Invalid GUID";
 
 const wchar_t *dsDevice_Feedback_Filter = L"Device feedback";
 const wchar_t *dsDevice_Filter = L"Device";
