@@ -220,6 +220,11 @@ extern const wchar_t *dsEmit_Shutdown_Msg;
 extern const wchar_t *dsLog_Header;
 extern const wchar_t *dsLog_Filter_Replay;
 extern const wchar_t* dsInterpret_Filename_As_Segment_Id;
+extern const wchar_t* dsFile_Has_Not_Expected_Header;
+extern const wchar_t* dsUnexpected_Error_While_Parsing;
+extern const wchar_t* dsUnknown_Date_Time_Format;
+extern const wchar_t* dsLine_No;
+extern const wchar_t* dsError_In_Number_Format;
 
 extern const wchar_t *dsDevice_Feedback_Filter;
 extern const wchar_t *dsDevice_Filter;

@@ -215,13 +215,18 @@ const wchar_t *dsDevice_Interop_Filter = L"Real device interface";
 
 const wchar_t *dsInterop_Export_Filter = L"Interop export filter";
 
-const wchar_t *dsLog_Filter = L"CSV File Log";
-const wchar_t *dsLog_Output_File = L"Log file";
+const wchar_t *dsLog_Filter = L"Log";
+const wchar_t *dsLog_Output_File = L"Save log to CSV file";
 const wchar_t* dsLog_Input_File_Or_Dir = L"Log file or dir with log files";
 const wchar_t *dsEmit_Shutdown_Msg = L"Emit the shutdown message";
 const wchar_t *dsLog_Header = L"Logical Clock; Device Time; Event Code; Signal; Info; Segment Id; Event Code Id; Device Id; Signal Id;";
 const wchar_t *dsLog_Filter_Replay = L"CSV File Log Replay";
 const wchar_t* dsInterpret_Filename_As_Segment_Id = L"Interpret filename as segment id";
+const wchar_t* dsFile_Has_Not_Expected_Header = L"Expected header not found, will assume standard one. Filename: ";
+const wchar_t* dsUnexpected_Error_While_Parsing = L"Unexpected error while parsing file: ";
+const wchar_t* dsUnknown_Date_Time_Format = L"Unknown date time format: ";
+const wchar_t* dsLine_No = L", line no.: ";
+const wchar_t* dsError_In_Number_Format = L"Error in number format: ";
 
 const wchar_t *dsDevice_Feedback_Filter = L"Device feedback";
 const wchar_t *dsDevice_Filter = L"Device";

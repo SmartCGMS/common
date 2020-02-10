@@ -113,5 +113,5 @@ double Local_Time_WStr_To_Rat_Time(const std::wstring& str, const wchar_t* fmt) 
 
 	time_t ltim = mktime(&ptm);
 
-	return Unix_Time_To_Rat_Time(ltim);
+	return ltim != -1 ? Unix_Time_To_Rat_Time(ltim) : std::numeric_limits<double>::quiet_NaN();
 }
