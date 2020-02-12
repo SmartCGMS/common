@@ -463,6 +463,7 @@ extern const wchar_t *dsSignal_Suffix_Calculated;
 extern const wchar_t *dsSignal_Unknown;
 extern const wchar_t *dsSignal_Prefix_Virtual;
 extern const wchar_t* dsSignal_Null;
+extern const wchar_t* dsInvalid_ID;
 
 extern const wchar_t* dsSignal_GUI_Name_All;
 extern const wchar_t* dsSignal_GUI_Name_BG;

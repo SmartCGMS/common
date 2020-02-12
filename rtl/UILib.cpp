@@ -205,6 +205,7 @@ namespace scgms {
 		
 		describe_special_signal(scgms::signal_All, dsSignal_GUI_Name_All);
 		describe_special_signal(scgms::signal_Null, dsSignal_Null);
+		describe_special_signal(Invalid_GUID, dsInvalid_ID);
 	
 	}
 

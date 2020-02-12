@@ -468,6 +468,7 @@ const wchar_t *dsSignal_Suffix_Calculated = L"calculated";
 const wchar_t *dsSignal_Unknown = L"Unknown";
 const wchar_t *dsSignal_Prefix_Virtual = L"virtual";
 const wchar_t* dsSignal_Null = L"Null (discards the events)";
+const wchar_t* dsInvalid_ID = L"Invalid ID";
 
 const wchar_t *dsSignal_GUI_Name_All = L"All signals";
 const wchar_t *dsSignal_GUI_Name_BG = L"Blood glucose";
