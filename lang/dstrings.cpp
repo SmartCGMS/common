@@ -728,6 +728,22 @@ const wchar_t* dsConst_ISF_Model = L"Constant insulin sensitivity factor";
 const wchar_t* dsConst_CR = L"carb-to-insulin ratio";
 const wchar_t* dsConst_CR_Model = L"Constant carb-to-insulin ratio";
 
+const wchar_t* dsExtModel_Unknown_Opcode = L"Unknown opcode received";
+const wchar_t* dsExtModel_Invalid_Opcode_Direction = L"Received an opcode in unexpected direction";
+const wchar_t* dsExtModel_Invalid_State_Handshake_Reply = L"Handshake reply received in invalid state";
+const wchar_t* dsExtModel_Remote_Fatal_Error = L"Fatal error occurred on the remote side, unable to restore state";
+const wchar_t* dsExtModel_Protocol_Version_Mismatch = L"Protocol version mismatch";
+const wchar_t* dsExtModel_Unknown_Handshake_Error = L"An unknown error occurred during handshake";
+const wchar_t* dsExtModel_Unknown_Model_Requested = L"Unknown model requested";
+const wchar_t* dsExtModel_Invalid_State_Data = L"Data packet received in invalid state";
+const wchar_t* dsExtModel_Invalid_State_Teardown_Request = L"Tear down request received in invalid state";
+const wchar_t* dsExtModel_Invalid_State_Teardown_Reply = L"Tear down reply received in invalid state";
+const wchar_t* dsExtModel_Could_Not_Connect = L"Could not connect to the remote end";
+const wchar_t* dsExtModel_Invalid_Remote_Protocol_Magic = L"Invalid protocol magic reported by remote end";
+const wchar_t* dsExtModel_Invalid_Remote_Protocol_Packet_Length = L"Invalid length received in packet header";
+const wchar_t* dsExtModel_Invalid_Packet_State = L"Packet received in invalid state";
+const wchar_t* dsExtModel_Local_Network_Subsystem_Error = L"Local network subsystem error";
+
 const wchar_t* dsSignal_Feedback = L"Signal feedback";
 const wchar_t* dsRemove_From_Source = L"Remove from source";
 

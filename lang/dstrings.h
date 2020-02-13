@@ -548,6 +548,22 @@ extern const wchar_t* dsConst_ISF_Model;
 extern const wchar_t* dsConst_CR;
 extern const wchar_t* dsConst_CR_Model;
 
+extern const wchar_t* dsExtModel_Unknown_Opcode;
+extern const wchar_t* dsExtModel_Invalid_Opcode_Direction;
+extern const wchar_t* dsExtModel_Invalid_State_Handshake_Reply;
+extern const wchar_t* dsExtModel_Remote_Fatal_Error;
+extern const wchar_t* dsExtModel_Protocol_Version_Mismatch;
+extern const wchar_t* dsExtModel_Unknown_Handshake_Error;
+extern const wchar_t* dsExtModel_Unknown_Model_Requested;
+extern const wchar_t* dsExtModel_Invalid_State_Data;
+extern const wchar_t* dsExtModel_Invalid_State_Teardown_Request;
+extern const wchar_t* dsExtModel_Invalid_State_Teardown_Reply;
+extern const wchar_t* dsExtModel_Could_Not_Connect;
+extern const wchar_t* dsExtModel_Invalid_Remote_Protocol_Magic;
+extern const wchar_t* dsExtModel_Invalid_Remote_Protocol_Packet_Length;
+extern const wchar_t* dsExtModel_Invalid_Packet_State;
+extern const wchar_t* dsExtModel_Local_Network_Subsystem_Error;
+
 // ---- drawing-related constants
 
 extern const wchar_t* dsDrawingLocaleTitle;

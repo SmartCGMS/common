@@ -10,8 +10,8 @@
  * Faculty of Applied Sciences, University of West Bohemia
  * Univerzitni 8
  * 301 00, Pilsen
- * 
- * 
+ *
+ *
  * Purpose of this software:
  * This software is intended to demonstrate work of the diabetes.zcu.cz research
  * group to other scientists, to complement our published papers. It is strictly
@@ -36,70 +36,59 @@
  *       monitoring", Procedia Computer Science, Volume 141C, pp. 279-286, 2018
  */
 
-#pragma once
-
 #ifdef _WIN32
-	#include <Windows.h>
-
-	extern "C" char __ImageBase;
-
-	using socklen_t = int;
-
-	#define MainCalling __cdecl
+    #include <Windows.h>
 #else
-	#include <unistd.h>
-	#include <dlfcn.h>
-	#include <ctime>
-	#include <errno.h>
-	#include <sys/ioctl.h>
-
-	#define MainCalling
-
-	using BOOL = int;
-	constexpr int TRUE = 1;
-#ifndef FALSE
-	// strangely, on some systems, FALSE constant is not defined
-	// NOTE: this has to be #define, as some libraries may check for this constant using preprocessor macro
-	#define FALSE 0
+    #include <unistd.h>
+    #include <fcntl.h>
 #endif
 
-	using HMODULE = void*;
+#include "net_utils.h"
 
-	void localtime_s(struct tm* t, const time_t* tim);
-	void gmtime_s(struct tm* t, const time_t* tim);
-	void _get_timezone(long* tzdst);
+bool Set_Socket_Blocking_State(SOCKET skt, bool state)
+{
+#ifdef WIN32
+	u_long mode = state ? 1 : 0;
+	auto result = ioctlsocket(skt, FIONBIO, &mode);
+	if (result != NO_ERROR)
+		return false;
+#else
+	int arg;
 
-	void* LoadLibraryW(const wchar_t *filename);
-	void* GetProcAddress(void *libhandle, const char *symbolname);
-	void FreeLibrary(void* libhandle);
+	if ((arg = fcntl(skt, F_GETFL, NULL)) < 0)
+		return false;
 
-	/* closesocket is present in Android standard library, but not on Unix */
-#if not defined(__ARM_ARCH_7A__) && not defined(__aarch64__)
-	int closesocket(int fd);
+	if (state)
+		arg |= O_NONBLOCK;
+	else
+		arg &= (~O_NONBLOCK);
+
+	if (fcntl(skt, F_SETFL, arg) < 0)
+		return false;
 #endif
 
-	#define SOCKET int
-	#define InetPtonA inet_pton
-	#define InetPton InetPtonA
-	#define InetNtopA inet_ntop
-	#define InetNtop InetNtopA
-	#define WSAEINPROGRESS EINPROGRESS
-	#define INVALID_SOCKET (SOCKET)(~0)
+	return true;
+}
 
-	inline int WSAGetLastError() {
-		return errno;
-	}
-
-	inline int ioctlsocket(int fd, unsigned long request, void* arg) {
-		return ioctl(fd, request, arg);
-	}
-
-	#define swscanf_s swscanf
-
-	void* _aligned_malloc(size_t n, size_t alignment);
-	void _aligned_free(void* _Block);
-
-	int wcstombs_s(size_t* converted, char* dst, size_t dstSizeBytes, const wchar_t* src, size_t maxSizeBytes);
-
-	#define SD_BOTH SHUT_RDWR
+bool Init_Network()
+{
+#ifdef _WIN32
+	// startup WSA on Windows
+	WORD version = MAKEWORD(2, 2);
+	WSADATA data;
+	if (WSAStartup(version, &data) != 0)
+		return false;
 #endif
+	return true;
+}
+
+bool Deinit_Network()
+{
+#ifdef _WIN32
+	// https://docs.microsoft.com/en-us/windows/win32/api/winsock/nf-winsock-wsastartup
+	// "An application must call the WSACleanup function for every successful time the WSAStartup function is called.
+	//  This means, for example, that if an application calls WSAStartup three times, it must call WSACleanup three times."
+	WSACleanup();
+#endif
+	return true;
+}

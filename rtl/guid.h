@@ -94,3 +94,7 @@ template <typename... Args>
 bool Is_Invalid_GUID(const GUID& id, const Args&... args) {
     return Is_Invalid_GUID(id) || Is_Invalid_GUID(args...);
 }
+
+
+// Generates a new GUID version 4 (completely random, suitable for network traffic)
+GUID Generate_GUIDv4();

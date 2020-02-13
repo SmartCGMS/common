@@ -10,8 +10,8 @@
  * Faculty of Applied Sciences, University of West Bohemia
  * Univerzitni 8
  * 301 00, Pilsen
- * 
- * 
+ *
+ *
  * Purpose of this software:
  * This software is intended to demonstrate work of the diabetes.zcu.cz research
  * group to other scientists, to complement our published papers. It is strictly
@@ -38,68 +38,30 @@
 
 #pragma once
 
-#ifdef _WIN32
-	#include <Windows.h>
+#include "winapi_mapping.h"
 
-	extern "C" char __ImageBase;
+#include "../iface/NetIface.h"
 
-	using socklen_t = int;
+// Sets the socket into blocking / non-blocking state
+bool Set_Socket_Blocking_State(SOCKET skt, bool state);
 
-	#define MainCalling __cdecl
-#else
-	#include <unistd.h>
-	#include <dlfcn.h>
-	#include <ctime>
-	#include <errno.h>
-	#include <sys/ioctl.h>
+// Initializes network subsystem of run-time environment
+bool Init_Network();
 
-	#define MainCalling
+// De-initializes network subsystem of run-time environment
+bool Deinit_Network();
 
-	using BOOL = int;
-	constexpr int TRUE = 1;
-#ifndef FALSE
-	// strangely, on some systems, FALSE constant is not defined
-	// NOTE: this has to be #define, as some libraries may check for this constant using preprocessor macro
-	#define FALSE 0
-#endif
 
-	using HMODULE = void*;
+// Helper method retrieving the fixed body part ref
+template<typename T>
+inline T& Get_Fixed_Body(scgms::TNet_Packet_Header* base)
+{
+	return *reinterpret_cast<T*>(base + 1);
+}
 
-	void localtime_s(struct tm* t, const time_t* tim);
-	void gmtime_s(struct tm* t, const time_t* tim);
-	void _get_timezone(long* tzdst);
-
-	void* LoadLibraryW(const wchar_t *filename);
-	void* GetProcAddress(void *libhandle, const char *symbolname);
-	void FreeLibrary(void* libhandle);
-
-	/* closesocket is present in Android standard library, but not on Unix */
-#if not defined(__ARM_ARCH_7A__) && not defined(__aarch64__)
-	int closesocket(int fd);
-#endif
-
-	#define SOCKET int
-	#define InetPtonA inet_pton
-	#define InetPton InetPtonA
-	#define InetNtopA inet_ntop
-	#define InetNtop InetNtopA
-	#define WSAEINPROGRESS EINPROGRESS
-	#define INVALID_SOCKET (SOCKET)(~0)
-
-	inline int WSAGetLastError() {
-		return errno;
-	}
-
-	inline int ioctlsocket(int fd, unsigned long request, void* arg) {
-		return ioctl(fd, request, arg);
-	}
-
-	#define swscanf_s swscanf
-
-	void* _aligned_malloc(size_t n, size_t alignment);
-	void _aligned_free(void* _Block);
-
-	int wcstombs_s(size_t* converted, char* dst, size_t dstSizeBytes, const wchar_t* src, size_t maxSizeBytes);
-
-	#define SD_BOTH SHUT_RDWR
-#endif
+// Helper method retrieving the dynamic body part ref
+template<typename T, typename U>
+inline U* Get_Dynamic_Body(scgms::TNet_Packet_Header* base)
+{
+	return reinterpret_cast<U*>(reinterpret_cast<T*>(base + 1) + 1);
+}

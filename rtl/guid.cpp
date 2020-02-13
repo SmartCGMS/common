@@ -38,68 +38,22 @@
 
 #pragma once
 
-#ifdef _WIN32
-	#include <Windows.h>
+#include "guid.h"
 
-	extern "C" char __ImageBase;
+#include <random>
 
-	using socklen_t = int;
+GUID Generate_GUIDv4()
+{
+    GUID guid;
 
-	#define MainCalling __cdecl
-#else
-	#include <unistd.h>
-	#include <dlfcn.h>
-	#include <ctime>
-	#include <errno.h>
-	#include <sys/ioctl.h>
+    static std::random_device rdev;
 
-	#define MainCalling
+    guid.Data1 = static_cast<decltype(guid.Data1)>(rdev());
+    guid.Data2 = static_cast<decltype(guid.Data2)>(rdev());
+    guid.Data3 = static_cast<decltype(guid.Data3)>(rdev());
 
-	using BOOL = int;
-	constexpr int TRUE = 1;
-#ifndef FALSE
-	// strangely, on some systems, FALSE constant is not defined
-	// NOTE: this has to be #define, as some libraries may check for this constant using preprocessor macro
-	#define FALSE 0
-#endif
+    for (size_t i = 0; i < 8; i++)
+        guid.Data4[i] = static_cast<std::remove_reference_t<decltype(guid.Data4[0])>>(rdev());
 
-	using HMODULE = void*;
-
-	void localtime_s(struct tm* t, const time_t* tim);
-	void gmtime_s(struct tm* t, const time_t* tim);
-	void _get_timezone(long* tzdst);
-
-	void* LoadLibraryW(const wchar_t *filename);
-	void* GetProcAddress(void *libhandle, const char *symbolname);
-	void FreeLibrary(void* libhandle);
-
-	/* closesocket is present in Android standard library, but not on Unix */
-#if not defined(__ARM_ARCH_7A__) && not defined(__aarch64__)
-	int closesocket(int fd);
-#endif
-
-	#define SOCKET int
-	#define InetPtonA inet_pton
-	#define InetPton InetPtonA
-	#define InetNtopA inet_ntop
-	#define InetNtop InetNtopA
-	#define WSAEINPROGRESS EINPROGRESS
-	#define INVALID_SOCKET (SOCKET)(~0)
-
-	inline int WSAGetLastError() {
-		return errno;
-	}
-
-	inline int ioctlsocket(int fd, unsigned long request, void* arg) {
-		return ioctl(fd, request, arg);
-	}
-
-	#define swscanf_s swscanf
-
-	void* _aligned_malloc(size_t n, size_t alignment);
-	void _aligned_free(void* _Block);
-
-	int wcstombs_s(size_t* converted, char* dst, size_t dstSizeBytes, const wchar_t* src, size_t maxSizeBytes);
-
-	#define SD_BOTH SHUT_RDWR
-#endif
+    return guid;
+}
