@@ -1394,7 +1394,7 @@ CSimpleIniTempl<SI_CHAR,SI_STRLESS,SI_CONVERTER>::LoadFile(
     }
     
     // allocate and ensure NULL terminated
-    char * pData = new(std::nothrow) char[lSize+static_cast<decltype(lSize)>(1)];
+    char * pData = new(std::nothrow) char[static_cast<size_t>(lSize)+static_cast<size_t>(1)];
     if (!pData) {
         return SI_Error::SI_NOMEM;
     }

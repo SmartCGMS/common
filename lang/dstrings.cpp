@@ -496,6 +496,11 @@ const wchar_t *dsSignal_GUI_Name_Unknown = L"Unknown signal";
 
 const wchar_t *dsSolver_Progress_Box_Title = L"Solver progress";
 
+const wchar_t *dsCoult_Not_Init_Network = L"Could not initialize network subsystem";
+const wchar_t *dsInvalid_Network_Port = L"Invalid network port specified";
+const wchar_t *dsInvalid_Model_GUID = L"Invalid network model ID specified";
+const wchar_t *dsCoult_Not_Allocate_Network_Pool_Slot = L"Could not allocate network pool slot due to fatal error";
+
 const wchar_t *dsError_Column_Average = L"Average";
 const wchar_t *dsError_Column_StdDev = L"Std.Dev (Bessel)";
 const wchar_t *dsError_Column_Count = L"Count";
@@ -706,12 +711,17 @@ const wchar_t *dsBergman_Signal_Basal_Insulin = L"Bergman - dosed basal insulin"
 const wchar_t *dsBergman_Signal_Insulin_Activity = L"Bergman - insulin activity";
 
 const wchar_t* dsSignal_Generator = L"Signal generator";
+const wchar_t* dsSignal_Generator_Network = L"Signal generator (network)";
 const wchar_t* dsParameters = L"Parameters";
 const wchar_t* dsFeedback_Name = L"Feedback name";
 const wchar_t* dsSynchronize_to_Signal = L"Synchronize to signal";
 const wchar_t* dsSynchronization_Signal = L"Synchronization signal";
 const wchar_t* dsStepping = L"Stepping";
 const wchar_t* dsMaximum_Time = L"Maximum time";
+
+const wchar_t* dsRemote_Host = L"Host";
+const wchar_t* dsRemote_Port = L"Port";
+const wchar_t* dsRemote_Model_Id = L"Remote model";
 
 const wchar_t* dsSignal_Error = L"Signal error";
 const wchar_t* dsReference_Signal = L"Reference signal";
@@ -1108,6 +1118,10 @@ const wchar_t* rsSynchronize_to_Signal = L"Synchronize_To_Signal";
 const wchar_t* rsSynchronization_Signal = L"Synchronization_Signal";
 const wchar_t* rsStepping = L"Stepping";
 const wchar_t* rsMaximum_Time = L"Maximum_Time";
+
+const wchar_t* rsRemote_Host = L"Host";
+const wchar_t* rsRemote_Port = L"Port";
+const wchar_t* rsRemote_Model_Id = L"Remote_Model";
 
 const wchar_t* rsReference_Signal = L"Reference_Signal";
 const wchar_t* rsError_Signal = L"Error_Signal";

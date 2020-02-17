@@ -494,6 +494,11 @@ extern const wchar_t *dsSolver_Progress_Box_Title;
 //extern const wchar_t *dsError_Absolute;
 //extern const wchar_t *dsError_Relative;
 
+extern const wchar_t *dsCoult_Not_Init_Network;
+extern const wchar_t *dsInvalid_Network_Port;
+extern const wchar_t *dsInvalid_Model_GUID;
+extern const wchar_t *dsCoult_Not_Allocate_Network_Pool_Slot;
+
 extern const wchar_t *dsError_Column_Average;
 extern const wchar_t *dsError_Column_StdDev;
 extern const wchar_t *dsError_Column_Count;
@@ -731,12 +736,17 @@ extern const wchar_t *dsBergman_Signal_Basal_Insulin;
 extern const wchar_t *dsBergman_Signal_Insulin_Activity;
 
 extern const wchar_t* dsSignal_Generator;
+extern const wchar_t* dsSignal_Generator_Network;
 extern const wchar_t* dsParameters;
 extern const wchar_t* dsFeedback_Name;
 extern const wchar_t* dsSynchronize_to_Signal;
 extern const wchar_t* dsSynchronization_Signal;
 extern const wchar_t* dsStepping;
 extern const wchar_t* dsMaximum_Time;
+
+extern const wchar_t* dsRemote_Host;
+extern const wchar_t* dsRemote_Port;
+extern const wchar_t* dsRemote_Model_Id;
 
 extern const wchar_t* dsParam_K;
 extern const wchar_t* dsKp;
@@ -1075,6 +1085,10 @@ extern const wchar_t *rsUse_Just_Opened_Segments;
 extern const wchar_t *rsHold_During_Solve;
 extern const wchar_t* rsStepping;
 extern const wchar_t* rsMaximum_Time;
+
+extern const wchar_t* rsRemote_Host;
+extern const wchar_t* rsRemote_Port;
+extern const wchar_t* rsRemote_Model_Id;
 
 extern const wchar_t* rsReference_Signal;
 extern const wchar_t* rsError_Signal;
