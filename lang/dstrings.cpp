@@ -486,9 +486,11 @@ const wchar_t *dsSignal_GUI_Name_Carbs = L"Carbohydrate intake";
 const wchar_t* dsSignal_GUI_Name_Carb_Rescue = L"Carbohydrate rescue";
 const wchar_t *dsSignal_GUI_Name_Physical_Activity = L"Physical activity";
 const wchar_t* dsSignal_GUI_Name_Skin_Temperature = L"Skin temperature";
+const wchar_t* dsSignal_GUI_Name_Air_Temperature = L"Air temperature";
 const wchar_t* dsSignal_GUI_Name_Heartbeat = L"Heartbeat";
 const wchar_t* dsSignal_GUI_Name_Electrodermal_Activity = L"Electrodermal activity";
 const wchar_t* dsSignal_GUI_Name_Steps = L"Steps";
+const wchar_t* dsSignal_GUI_Name_Sleep_Quality = L"Sleep quality";
 const wchar_t* dsSignal_GUI_Name_Acceleration = L"Acceleration";
 const wchar_t* dsSignal_GUI_Name_Error_Metric = L"error metric";
 
@@ -787,6 +789,7 @@ const char* rsAbout_Text = R"CLC(
 <a href="https://diabetes.zcu.cz/smartcgms">https://diabetes.zcu.cz/</a><br>
 &nbsp;<br>
 Copyright&copy; since 2018 University of West Bohemia.<br>
+Release date: February 18, 2020<br>
 &nbsp;<br>
 <i>Contact:</i><br>
 <a href="mailto:diabetes@mail.kiv.zcu.cz?Subject=SmartCGMS">diabetes@mail.kiv.zcu.cz</a><br>

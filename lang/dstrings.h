@@ -482,9 +482,11 @@ extern const wchar_t* dsSignal_GUI_Name_Carb_Rescue;
 extern const wchar_t* dsSignal_GUI_Name_Physical_Activity;
 
 extern const wchar_t* dsSignal_GUI_Name_Skin_Temperature;
+extern const wchar_t* dsSignal_GUI_Name_Air_Temperature;
 extern const wchar_t* dsSignal_GUI_Name_Heartbeat;
 extern const wchar_t* dsSignal_GUI_Name_Electrodermal_Activity;
 extern const wchar_t* dsSignal_GUI_Name_Steps;
+extern const wchar_t* dsSignal_GUI_Name_Sleep_Quality;
 extern const wchar_t* dsSignal_GUI_Name_Acceleration;
 extern const wchar_t* dsSignal_GUI_Name_Error_Metric;
 
