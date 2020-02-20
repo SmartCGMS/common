@@ -37,7 +37,7 @@
  */
 
 #include "UILib.h"
-#include "FactoryLib.h"
+#include "scgmsLib.h"
 
 #include "../lang/dstrings.h"
 #include "../utils/winapi_mapping.h"
@@ -49,10 +49,10 @@
 
 namespace scgms {
 	namespace imported {
-		scgms::TGet_Metric_Descriptors get_metric_descriptors = factory::resolve_symbol<scgms::TGet_Metric_Descriptors>("get_metric_descriptors");
-		scgms::TGet_Model_Descriptors get_model_descriptors = factory::resolve_symbol<scgms::TGet_Model_Descriptors>("get_model_descriptors");
-		scgms::TGet_Solver_Descriptors get_solver_descriptors = factory::resolve_symbol<scgms::TGet_Solver_Descriptors>("get_solver_descriptors");
-		scgms::TGet_Signal_Descriptors get_signal_descriptors = factory::resolve_symbol<scgms::TGet_Signal_Descriptors>("get_signal_descriptors");
+		scgms::TGet_Metric_Descriptors get_metric_descriptors = scgms::factory::resolve_symbol<scgms::TGet_Metric_Descriptors>("get_metric_descriptors");
+		scgms::TGet_Model_Descriptors get_model_descriptors = scgms::factory::resolve_symbol<scgms::TGet_Model_Descriptors>("get_model_descriptors");
+		scgms::TGet_Solver_Descriptors get_solver_descriptors = scgms::factory::resolve_symbol<scgms::TGet_Solver_Descriptors>("get_solver_descriptors");
+		scgms::TGet_Signal_Descriptors get_signal_descriptors = scgms::factory::resolve_symbol<scgms::TGet_Signal_Descriptors>("get_signal_descriptors");
 	}
 
 	std::vector<TModel_Descriptor> get_model_descriptors()

@@ -40,11 +40,11 @@
 
 #include "DeviceLib.h"
 #include "rattime.h"
-#include "FactoryLib.h"
+#include "scgmsLib.h"
 
 namespace imported {
-	scgms::TCreate_Signal create_signal = factory::resolve_symbol<scgms::TCreate_Signal>("create_signal");
-	scgms::TCreate_Device_Event create_device_event = factory::resolve_symbol<scgms::TCreate_Device_Event>("create_device_event");
+	scgms::TCreate_Signal create_signal = scgms::factory::resolve_symbol<scgms::TCreate_Signal>("create_signal");
+	scgms::TCreate_Device_Event create_device_event = scgms::factory::resolve_symbol<scgms::TCreate_Device_Event>("create_device_event");
 }
 
 

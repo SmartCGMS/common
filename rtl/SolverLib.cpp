@@ -39,12 +39,12 @@
 #include "SolverLib.h"
 #include "DeviceLib.h"
 
-#include "FactoryLib.h"
+#include "scgmsLib.h"
 
 namespace imported {
-	scgms::TSolve_Model_Parameters solve_model_parameters = factory::resolve_symbol<scgms::TSolve_Model_Parameters>("solve_model_parameters");
-	scgms::TCreate_Metric create_metric = factory::resolve_symbol<scgms::TCreate_Metric>("create_metric");
-	scgms::TOptimize_Parameters optimize_parameters = factory::resolve_symbol<scgms::TOptimize_Parameters>("optimize_parameters");
+	scgms::TSolve_Model_Parameters solve_model_parameters = scgms::factory::resolve_symbol<scgms::TSolve_Model_Parameters>("solve_model_parameters");
+	scgms::TCreate_Metric create_metric = scgms::factory::resolve_symbol<scgms::TCreate_Metric>("create_metric");
+	scgms::TOptimize_Parameters optimize_parameters = scgms::factory::resolve_symbol<scgms::TOptimize_Parameters>("optimize_parameters");
 }
 
 solver::TSolver_Setup solver::Check_Default_Parameters(const solver::TSolver_Setup &setup, const size_t default_max_generations, const size_t default_population_size) {

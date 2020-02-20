@@ -38,11 +38,11 @@
 
 #include "ApproxLib.h"
 
-#include "FactoryLib.h"
+#include "scgmsLib.h"
 
 namespace imported {
-	scgms::TCreate_Approximator create_approximator = factory::resolve_symbol<scgms::TCreate_Approximator>("create_approximator");
-	scgms::TGet_Approx_Descriptors get_approx_descriptors = factory::resolve_symbol<scgms::TGet_Approx_Descriptors>("get_approx_descriptors");
+	scgms::TCreate_Approximator create_approximator = scgms::factory::resolve_symbol<scgms::TCreate_Approximator>("create_approximator");
+	scgms::TGet_Approx_Descriptors get_approx_descriptors = scgms::factory::resolve_symbol<scgms::TGet_Approx_Descriptors>("get_approx_descriptors");
 }
 
 std::vector<scgms::TApprox_Descriptor> scgms::get_approx_descriptors() {

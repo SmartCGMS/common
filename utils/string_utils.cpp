@@ -178,6 +178,12 @@ int64_t wstr_2_int(const wchar_t* wstr, bool& ok) {
 }
 
 
+using TGUID_Overlay = uint8_t[16];
+static_assert(sizeof(GUID) == sizeof(TGUID_Overlay), "Invalid packing of GUID overlay!");
+const std::array<uint8_t, 16> guid_overlay_indexes = { 3, 2, 1, 0, 5, 4, 7, 6, 8, 9, 10, 11, 12, 13, 14, 15 };	//UUID would start with 0, 1, 2, 3
+const std::array<size_t, 16> guid_parsing_indexes = { 0, 2, 4, 6, 9, 11, 14, 16, 19, 21, 24, 26, 28, 30, 32, 34 };
+
+
 GUID WString_To_GUID(const std::wstring& str, bool& ok) {
     GUID guid = Invalid_GUID;
 
@@ -200,15 +206,6 @@ GUID WString_To_GUID(const std::wstring& str, bool& ok) {
             const size_t h4th = 23;
             ok = (gs[h1st] == L'-') && (gs[h2nd] == L'-') && (gs[h3rd] == L'-') && (gs[h4th] == L'-');
             if (ok) {
-                using TGUID_Overlay = uint8_t[16];
-
-                static_assert(sizeof(GUID) == sizeof(TGUID_Overlay), "Invalid packing of GUID overlay!");
-
-                const std::array<uint8_t, 16> overlay_indexes = { 3, 2, 1, 0, 5, 4, 7, 6, 8, 9, 10, 11, 12, 13, 14, 15 };	//UUID would start with 0, 1, 2, 3
-                const std::array<size_t, 16> parsing_indexes = { 0, 2, 4, 6, 9, 11, 14, 16, 19, 21, 24, 26, 28, 30, 32, 34 };
-
-
-
                 auto hex_2_bin = [&ok](const wchar_t ch)->uint8_t {
                     switch (ch) {
                         case '0': case '1': case '2': case '3':	case '4': case '5':	case '6': case '7': case '8': case '9': return ch - L'0';
@@ -219,9 +216,9 @@ GUID WString_To_GUID(const std::wstring& str, bool& ok) {
                 };
 
                 TGUID_Overlay& guid_overlay = *reinterpret_cast<TGUID_Overlay*>(&guid);
-                for (size_t i = 0; i < parsing_indexes.size(); i++) {
-                    const size_t idx = parsing_indexes[i];
-                    guid_overlay[overlay_indexes[i]] = hex_2_bin(gs[idx + 0]) * 16 + hex_2_bin(gs[idx + 1]);
+                for (size_t i = 0; i < guid_parsing_indexes.size(); i++) {
+                    const size_t idx = guid_parsing_indexes[i];
+                    guid_overlay[guid_overlay_indexes[i]] = hex_2_bin(gs[idx + 0]) * 16 + hex_2_bin(gs[idx + 1]);
                 }
 
                 if (!ok) guid = Invalid_GUID;	//undo any writes that might have occured
@@ -235,19 +232,26 @@ GUID WString_To_GUID(const std::wstring& str, bool& ok) {
 }
 
 std::wstring GUID_To_WString(const GUID& guid) {
-    const size_t guid_len = 39; //plus zero terminating char
-    wchar_t guid_cstr[guid_len];
-    swprintf(guid_cstr, guid_len,
-        L"{%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x}",
-        guid.Data1, guid.Data2, guid.Data3,
-        guid.Data4[0], guid.Data4[1], guid.Data4[2], guid.Data4[3],
-        guid.Data4[4], guid.Data4[5], guid.Data4[6], guid.Data4[7]);
+    std::wstring result = L"{00000000-0000-0000-0000-000000000000}";
+    const wchar_t* to_x = L"0123456789ABCDEF";
 
-    return std::wstring(guid_cstr);
+    TGUID_Overlay& guid_overlay = *reinterpret_cast<TGUID_Overlay*>(const_cast<GUID*>(&guid));
+    
+    for (size_t i = 0; i < guid_parsing_indexes.size(); i++) {             
+        
+        const uint8_t byte = guid_overlay[guid_overlay_indexes[i]];
+        const uint8_t lo = byte & 0xf;
+        const uint8_t hi = byte / 0x10;
+
+        const size_t result_index = guid_parsing_indexes[i];
+        result[result_index + 1] = to_x[hi];        //+1 because of the starting '{'
+        result[result_index + 2] = to_x[lo];
+    }
+    
+    return result;
 }
 
-std::wstring Get_Padded_Number(uint32_t num, size_t places)
-{
+std::wstring Get_Padded_Number(uint32_t num, size_t places) {
     std::wstring tmp = std::to_wstring(num);
     while (tmp.length() < places)
         tmp = L'0' + tmp;

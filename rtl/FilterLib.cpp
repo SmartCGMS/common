@@ -37,7 +37,7 @@
  */
 
 #include "FilterLib.h"
-#include "FactoryLib.h"
+#include "scgmsLib.h"
 #include "UILib.h"
 #include "../utils/string_utils.h"
 
@@ -50,13 +50,13 @@ namespace scgms {
 
 
 	namespace imported {
-		scgms::TGet_Filter_Descriptors get_filter_descriptors = factory::resolve_symbol<scgms::TGet_Filter_Descriptors>("get_filter_descriptors");
-		scgms::TAdd_Filters add_filters = factory::resolve_symbol<scgms::TAdd_Filters>("add_filters");
-		scgms::TCreate_Persistent_Filter_Chain_Configuration create_persistent_filter_chain_configuration = factory::resolve_symbol<scgms::TCreate_Persistent_Filter_Chain_Configuration>("create_persistent_filter_chain_configuration");		
-		scgms::TExecute_Filter_Configuration execute_filter_configuration = factory::resolve_symbol<scgms::TExecute_Filter_Configuration>("execute_filter_configuration");
-		scgms::TCreate_Filter_Parameter create_filter_parameter = factory::resolve_symbol<scgms::TCreate_Filter_Parameter>("create_filter_parameter");
-		scgms::TCreate_Filter_Configuration_Link create_filter_configuration_link = factory::resolve_symbol<scgms::TCreate_Filter_Configuration_Link>("create_filter_configuration_link");
-		scgms::TCreate_Discrete_Model create_discrete_model = factory::resolve_symbol<scgms::TCreate_Discrete_Model>("create_discrete_model");
+		scgms::TGet_Filter_Descriptors get_filter_descriptors = scgms::factory::resolve_symbol<scgms::TGet_Filter_Descriptors>("get_filter_descriptors");
+		scgms::TAdd_Filters add_filters = scgms::factory::resolve_symbol<scgms::TAdd_Filters>("add_filters");
+		scgms::TCreate_Persistent_Filter_Chain_Configuration create_persistent_filter_chain_configuration = scgms::factory::resolve_symbol<scgms::TCreate_Persistent_Filter_Chain_Configuration>("create_persistent_filter_chain_configuration");
+		scgms::TExecute_Filter_Configuration execute_filter_configuration = scgms::factory::resolve_symbol<scgms::TExecute_Filter_Configuration>("execute_filter_configuration");
+		scgms::TCreate_Filter_Parameter create_filter_parameter = scgms::factory::resolve_symbol<scgms::TCreate_Filter_Parameter>("create_filter_parameter");
+		scgms::TCreate_Filter_Configuration_Link create_filter_configuration_link = scgms::factory::resolve_symbol<scgms::TCreate_Filter_Configuration_Link>("create_filter_configuration_link");
+		scgms::TCreate_Discrete_Model create_discrete_model = scgms::factory::resolve_symbol<scgms::TCreate_Discrete_Model>("create_discrete_model");
 	}
 
 	NParameter_Type SFilter_Parameter::type() {
