@@ -36,8 +36,6 @@
  *       monitoring", Procedia Computer Science, Volume 141C, pp. 279-286, 2018
  */
 
-#pragma once
-
 #include "guid.h"
 
 #include <random>

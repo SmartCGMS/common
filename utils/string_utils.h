@@ -38,7 +38,7 @@
 
 #pragma once
 
-#include "..\rtl\guid.h"
+#include "../rtl/guid.h"
 
 #include <string>
 

@@ -85,6 +85,7 @@
 	#define InetNtop InetNtopA
 	#define WSAEINPROGRESS EINPROGRESS
 	#define INVALID_SOCKET (SOCKET)(~0)
+	#define wcstok_s wcstok
 
 	inline int WSAGetLastError() {
 		return errno;
