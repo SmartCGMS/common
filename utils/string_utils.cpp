@@ -257,3 +257,20 @@ std::wstring Get_Padded_Number(uint32_t num, size_t places) {
         tmp = L'0' + tmp;
     return tmp;
 }
+
+
+const wchar_t* trim_chars = L"\t\n\v\f\r ";
+
+std::wstring& ltrim(std::wstring& str) {
+    str.erase(0, str.find_first_not_of(trim_chars));
+    return str;
+}
+
+std::wstring& rtrim(std::wstring& str) {
+    str.erase(str.find_last_not_of(trim_chars) + 1);
+    return str;
+}
+
+std::wstring& trim(std::wstring& str) {
+    return ltrim(rtrim(str));
+}

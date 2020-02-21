@@ -74,3 +74,6 @@ int64_t wstr_2_int(const wchar_t* wstr, bool& ok);
 GUID WString_To_GUID(const std::wstring& str, bool& ok);
 std::wstring GUID_To_WString(const GUID& guid);
 std::wstring Get_Padded_Number(uint32_t num, size_t places);
+
+
+std::wstring& trim(std::wstring& str);
