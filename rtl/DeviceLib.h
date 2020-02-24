@@ -100,7 +100,8 @@ namespace scgms {
 			null,
 			level,
 			info,
-			parameters
+			parameters,
+			control
 		};
 
 		UDevice_Event_internal::NDevice_Event_Major_Type major_type(const scgms::NDevice_Event_Code code);
@@ -138,6 +139,7 @@ namespace scgms {
 		bool is_level_event() const;
 		bool is_parameters_event() const;
 		bool is_info_event() const;
+		bool is_control_event() const;
 	};
 
 

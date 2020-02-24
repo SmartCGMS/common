@@ -173,7 +173,12 @@ scgms::UDevice_Event_internal::NDevice_Event_Major_Type scgms::UDevice_Event_int
 
 		case scgms::NDevice_Event_Code::Information:
 		case scgms::NDevice_Event_Code::Warning:
-		case scgms::NDevice_Event_Code::Error:			return scgms::UDevice_Event_internal::NDevice_Event_Major_Type::info;
+		case scgms::NDevice_Event_Code::Error:				return scgms::UDevice_Event_internal::NDevice_Event_Major_Type::info;
+
+		case scgms::NDevice_Event_Code::Shut_Down:
+		case scgms::NDevice_Event_Code::Warm_Reset:
+		case scgms::NDevice_Event_Code::Suspend_Parameter_Solving:
+		case scgms::NDevice_Event_Code::Resume_Parameter_Solving: return scgms::UDevice_Event_internal::NDevice_Event_Major_Type::control;
 
 		default:	break;
 	}
@@ -243,6 +248,10 @@ bool scgms::UDevice_Event::is_parameters_event() const {
 
 bool scgms::UDevice_Event::is_info_event() const {
 	return major_type() == scgms::UDevice_Event_internal::NDevice_Event_Major_Type::info;
+}
+
+bool scgms::UDevice_Event::is_control_event() const {
+	return major_type() == scgms::UDevice_Event_internal::NDevice_Event_Major_Type::control;
 }
 
 
