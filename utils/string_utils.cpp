@@ -49,6 +49,8 @@ std::string Narrow_WString(const std::wstring& wstr) {
 }
 
 std::string Narrow_WChar(const wchar_t *wstr) {
+    if (!wstr) return "";
+
 	std::ostringstream stm;
 	const std::ctype<wchar_t>& ctfacet = std::use_facet< std::ctype<wchar_t> >(stm.getloc());
 
@@ -60,6 +62,8 @@ std::string Narrow_WChar(const wchar_t *wstr) {
 }
 
 std::wstring Widen_Char(const char *str) {
+    if (!str) return L"";
+
 	std::wostringstream wstm;
 	const std::ctype<wchar_t>& ctfacet = std::use_facet<std::ctype<wchar_t> >(wstm.getloc());
 	const size_t len = strlen(str);
