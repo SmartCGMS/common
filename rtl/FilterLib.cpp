@@ -73,11 +73,11 @@ namespace scgms {
 	}
 
 
-	std::wstring SFilter_Parameter::as_wstring(HRESULT &rc) {
+	std::wstring SFilter_Parameter::as_wstring(HRESULT &rc, bool read_interpreted) {
 		std::wstring result;
 
 		refcnt::wstr_container* wstr;
-		rc = get()->Get_WChar_Container(&wstr);
+		rc = get()->Get_WChar_Container(&wstr, read_interpreted);
 		if (rc == S_OK) {
 			result = refcnt::WChar_Container_To_WString(wstr);
 			wstr->Release();

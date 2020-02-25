@@ -74,7 +74,7 @@ namespace scgms {
 		virtual HRESULT IfaceCalling Get_Config_Name(wchar_t **config_name) = 0;	
 		
 		//read-write
-		virtual HRESULT IfaceCalling Get_WChar_Container(refcnt::wstr_container **wstr) = 0;
+		virtual HRESULT IfaceCalling Get_WChar_Container(refcnt::wstr_container **wstr, bool read_interpreted) = 0;	//$(Variable_Name) reads system-variable with read_interpreted==true
 		virtual HRESULT IfaceCalling Set_WChar_Container(refcnt::wstr_container *wstr) = 0;	
 
 		virtual HRESULT IfaceCalling Get_Time_Segment_Id_Container(time_segment_id_container **ids) = 0;

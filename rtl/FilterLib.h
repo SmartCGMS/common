@@ -55,7 +55,7 @@ namespace scgms {
 		NParameter_Type type();
 		const wchar_t* configuration_name();
 
-		std::wstring as_wstring(HRESULT &rc);
+		std::wstring as_wstring(HRESULT &rc, bool read_interpreted);
 		HRESULT set_wstring(const wchar_t *str);		
 
 		int64_t as_int(HRESULT &rc);		
@@ -90,13 +90,13 @@ namespace scgms {
 		template <typename IConfiguration>
 		class CInternal_Filter_Configuration : public virtual refcnt::SReferenced<IConfiguration> {
 		protected:
-			template <typename T, typename M>
-			T Read_Parameter(const wchar_t *name, M method, T default_value) const {				
+			template <typename T, typename M, typename... TArgs>
+			T Read_Parameter(const wchar_t *name, M method, T default_value, TArgs... args) const {				
 				SFilter_Parameter parameter = Resolve_Parameter(name);
 				if (!parameter) return default_value;
 				
 				HRESULT rc = E_FAIL;
-				T value = ((&parameter)->*method)(rc);
+				T value = ((&parameter)->*method)(rc, args...);
 				if (rc != S_OK) return default_value;
 
 				return value;
@@ -104,8 +104,8 @@ namespace scgms {
 		public:
 			virtual ~CInternal_Filter_Configuration() {};
 
-			std::wstring Read_String(const wchar_t* name, const std::wstring& default_value = {}) const {
-				return Read_Parameter<std::wstring>(name, &SFilter_Parameter::as_wstring, default_value);
+			std::wstring Read_String(const wchar_t* name, bool read_interpreted = true, const std::wstring& default_value = {}) const {
+				return Read_Parameter<std::wstring>(name, &SFilter_Parameter::as_wstring, default_value, read_interpreted);
 			}
 
 			int64_t Read_Int(const wchar_t* name, const int64_t default_value = std::numeric_limits<int64_t>::max()) const {
