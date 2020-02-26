@@ -152,7 +152,7 @@ namespace scgms {
 
 	class IDiscrete_Model : public virtual scgms::IFilter {
 	public:
-		virtual HRESULT IfaceCalling Set_Current_Time(const double new_current_time) = 0;
+		virtual HRESULT IfaceCalling Initialize(const double current_time, const uint64_t segment_id) = 0;
 		virtual HRESULT IfaceCalling Step(const double time_advance_delta) = 0;	//time_advance_delta == 0.0 means to emit the current state
 	};
 
