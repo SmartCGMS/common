@@ -720,6 +720,7 @@ const wchar_t* dsSynchronize_to_Signal = L"Synchronize to signal";
 const wchar_t* dsSynchronization_Signal = L"Synchronization signal";
 const wchar_t* dsStepping = L"Stepping";
 const wchar_t* dsMaximum_Time = L"Maximum time";
+const wchar_t* rsAsync_Stepping_Not_Positive = L"Asynchronous stepping must be positive. Affected model: ";
 
 const wchar_t* dsRemote_Host = L"Host";
 const wchar_t* dsRemote_Port = L"Port";

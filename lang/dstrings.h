@@ -745,6 +745,7 @@ extern const wchar_t* dsSynchronize_to_Signal;
 extern const wchar_t* dsSynchronization_Signal;
 extern const wchar_t* dsStepping;
 extern const wchar_t* dsMaximum_Time;
+extern const wchar_t* rsAsync_Stepping_Not_Positive;
 
 extern const wchar_t* dsRemote_Host;
 extern const wchar_t* dsRemote_Port;
