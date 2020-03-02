@@ -75,6 +75,21 @@ namespace scgms {
 		const wchar_t *description;
 	};
 
+	enum class NModel_Flags : uint8_t {
+		None = 0,
+		Signal_Model	= 1 << 0,
+		Discrete_Model	= 1 << 1,
+	};
+
+	using TModel_Flags = std::underlying_type<NModel_Flags>::type;
+
+	inline NModel_Flags operator|(const NModel_Flags lhs, const NModel_Flags rhs) {
+		return static_cast<NModel_Flags>(static_cast<TModel_Flags>(lhs) | static_cast<TModel_Flags>(rhs));
+	}
+
+	inline NModel_Flags operator&(const NModel_Flags lhs, const NModel_Flags rhs) {
+		return static_cast<NModel_Flags>(static_cast<TModel_Flags>(lhs) & static_cast<TModel_Flags>(rhs));
+	}
 
 	/* any model parameter must be expressed with double
 	   these constant express how to interpret that double
@@ -87,6 +102,7 @@ namespace scgms {
 
 	struct TModel_Descriptor {
 		const GUID id;
+		const NModel_Flags flags;
 		const wchar_t *description;
 		const wchar_t *db_table_name;
 
@@ -105,7 +121,7 @@ namespace scgms {
 		const GUID* reference_signal_ids;
 	};
 
-	constexpr TModel_Descriptor Null_Model_Descriptor = { Invalid_GUID, nullptr, nullptr, 0, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, 0, nullptr, nullptr };
+	constexpr TModel_Descriptor Null_Model_Descriptor = { Invalid_GUID, NModel_Flags::None, nullptr, nullptr, 0, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, 0, nullptr, nullptr };
 
 	struct TSolver_Descriptor {
 		const GUID id;

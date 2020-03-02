@@ -729,6 +729,10 @@ extern const wchar_t* dsBergman_BasalRate0;
 extern const wchar_t* dsBergman_diff2_p;
 extern const wchar_t* dsBergman_diff2_cg;
 extern const wchar_t* dsBergman_diff2_c; 
+extern const wchar_t* dsBergman_diff2_dt;
+extern const wchar_t* dsBergman_diff2_k;
+extern const wchar_t* dsBergman_diff2_h;
+extern const wchar_t* dsBergman_Ag;
 
 extern const wchar_t *dsBergman_Signal_BG;
 extern const wchar_t *dsBergman_Signal_IG;
@@ -745,7 +749,7 @@ extern const wchar_t* dsSynchronize_to_Signal;
 extern const wchar_t* dsSynchronization_Signal;
 extern const wchar_t* dsStepping;
 extern const wchar_t* dsMaximum_Time;
-extern const wchar_t* rsAsync_Stepping_Not_Positive;
+extern const wchar_t* dsAsync_Stepping_Not_Positive;
 
 extern const wchar_t* dsRemote_Host;
 extern const wchar_t* dsRemote_Port;

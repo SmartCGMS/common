@@ -704,6 +704,10 @@ const wchar_t* dsBergman_BasalRate0 = L"BasalRate0";
 const wchar_t* dsBergman_diff2_p = L"p";
 const wchar_t* dsBergman_diff2_cg = L"cg";
 const wchar_t* dsBergman_diff2_c = L"c";
+const wchar_t* dsBergman_diff2_dt = L"dt";
+const wchar_t* dsBergman_diff2_k = L"k";
+const wchar_t* dsBergman_diff2_h = L"h";
+const wchar_t* dsBergman_Ag = L"Ag";
 
 const wchar_t *dsBergman_Signal_BG = L"Bergman - blood glucose";
 const wchar_t *dsBergman_Signal_IG = L"Bergman - interst. glucose";
@@ -720,7 +724,7 @@ const wchar_t* dsSynchronize_to_Signal = L"Synchronize to signal";
 const wchar_t* dsSynchronization_Signal = L"Synchronization signal";
 const wchar_t* dsStepping = L"Stepping";
 const wchar_t* dsMaximum_Time = L"Maximum time";
-const wchar_t* rsAsync_Stepping_Not_Positive = L"Asynchronous stepping must be positive. Affected model: ";
+const wchar_t* dsAsync_Stepping_Not_Positive = L"Asynchronous stepping must be positive. Affected model: ";
 
 const wchar_t* dsRemote_Host = L"Host";
 const wchar_t* dsRemote_Port = L"Port";

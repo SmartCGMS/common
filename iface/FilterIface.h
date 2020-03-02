@@ -58,14 +58,15 @@ namespace scgms {
 		ptRatTime,					//double interperted as the rattime
 		ptInt64,
 		ptBool,
-		ptModel_Id,
+		ptSignal_Model_Id,
+		ptDiscrete_Model_Id,
 		ptMetric_Id,
 		ptSolver_Id,
-		ptModel_Signal_Id,	// signal dependend on model selection
+		ptModel_Produced_Signal_Id,	// signal dependend on model selection
 		ptSignal_Id,		// any signal available (measured, calculated)
 		ptDouble_Array,		// three parameter sets in one container - lower bound, default values, higher bound
 		ptSubject_Id		// int64_t, but with additional functionality in GUI
-	};
+	}; 
 
 	class IFilter_Parameter : public virtual refcnt::IReferenced {
 	public:
