@@ -375,7 +375,7 @@ extern const wchar_t* dsInsulin_BetaPID3_Rate;
 extern const wchar_t* dsKp;
 extern const wchar_t* dsKi;
 extern const wchar_t* dsKd;
-extern const wchar_t* dsBIN;
+extern const wchar_t* dsBasal_Insulin_Rate;
 extern const wchar_t* dsBolus_Calculator;
 
 extern const wchar_t* dsCalculated_Bolus_Insulin;
@@ -540,13 +540,13 @@ extern const wchar_t* rsBetaPID3;
 extern const wchar_t* rsKp;
 extern const wchar_t* rsKi;
 extern const wchar_t* rsKd;
-extern const wchar_t* rsBIN;
+extern const wchar_t* rsBasal_Insulin_Rate;
 
 extern const wchar_t* rsBolus_Calculator;
 extern const wchar_t* rsConst_Basal_Insulin;
 
 extern const wchar_t* dsLGS_Basal_Insulin_Model;
-extern const wchar_t* dsLGS_Lower_Threshold;
+extern const wchar_t* dsSuspend_Threshold;
 extern const wchar_t* dsLGS_Suspend_Duration;
 extern const wchar_t* dsInsulin_LGS_Rate;
 
@@ -759,7 +759,7 @@ extern const wchar_t* dsParam_K;
 extern const wchar_t* dsKp;
 extern const wchar_t* dsKi;
 extern const wchar_t* dsKd;
-extern const wchar_t* dsBIN;
+extern const wchar_t* dsBasal_Insulin_Rate;
 extern const wchar_t* dsKiDecay;
 
 extern const wchar_t* dsSignal_Feedback;
@@ -1109,11 +1109,11 @@ extern const wchar_t* rsParam_K;
 extern const wchar_t* rsKp;
 extern const wchar_t* rsKi;
 extern const wchar_t* rsKd;
-extern const wchar_t* rsBIN;
+extern const wchar_t* rsBasal_Insulin_Rate;
 extern const wchar_t* rsKiDecay;
 
 extern const wchar_t* rsLGS_Basal_Insulin_Model;
-extern const wchar_t* rsLGS_Lower_Threshold;
+extern const wchar_t* rsSuspend_Threshold;
 extern const wchar_t* rsLGS_Suspend_Duration;
 
 extern const wchar_t* rsConst_ISF;

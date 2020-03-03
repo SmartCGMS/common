@@ -375,16 +375,16 @@ const wchar_t* dsParam_K = L"K";
 const wchar_t* dsKp = L"Kp";
 const wchar_t* dsKi = L"Ki";
 const wchar_t* dsKd = L"Kd";
-const wchar_t* dsBIN = L"BIN";
+const wchar_t* dsBasal_Insulin_Rate = L"Basal insulin rate";
 const wchar_t* dsKiDecay = L"KiDecay";
 
-const wchar_t* dsLGS_Basal_Insulin_Model = L"LGS Basal Insulin Rate";
+const wchar_t* dsLGS_Basal_Insulin_Model = L"Low-Glucose Suspend";
 const wchar_t* dsBolus_Calculator = L"Bolus calculator";
 const wchar_t* dsCalculated_Bolus_Insulin = L"Calculated bolus insulin";
 const wchar_t* dsConst_Basal_Insulin = L"Constant basal insulin rate";
 const wchar_t* dsConst_Basal_Low_Suspend_Insulin = L"Constant basal insulin rate with low glucose suspend";
 
-const wchar_t* dsLGS_Lower_Threshold = L"Lower threshold";
+const wchar_t* dsSuspend_Threshold = L"Suspend threshold";
 const wchar_t* dsLGS_Suspend_Duration = L"Suspend duration";
 
 const wchar_t* dsISF = L"ISF";
@@ -542,7 +542,7 @@ const wchar_t* rsBetaPID3 = L"betapid3";
 const wchar_t* rsKp = L"kp";
 const wchar_t* rsKi = L"ki";
 const wchar_t* rsKd = L"kd";
-const wchar_t* rsBIN = L"bin";
+const wchar_t* rsBasal_Insulin_Rate = L"Basal_insulin_rate";
 
 const wchar_t* rsBolus_Calculator = L"boluscalc";
 const wchar_t* rsConst_Basal_Insulin = L"const-basal";
@@ -1143,8 +1143,8 @@ const wchar_t* rsCOB_Model = L"cob";
 const wchar_t* rsParam_K = L"k";
 const wchar_t* rsKiDecay = L"kidecay";
 
-const wchar_t* rsLGS_Basal_Insulin_Model = L"lgs_basal_insulin_rate";
-const wchar_t* rsLGS_Lower_Threshold = L"Lower_Threshold";
+const wchar_t* rsLGS_Basal_Insulin_Model = L"Low_Glucose_Suspend";
+const wchar_t* rsSuspend_Threshold = L"Suspend_Threshold";
 const wchar_t* rsLGS_Suspend_Duration = L"Suspend_Duration";
 
 const wchar_t* rsConst_ISF = L"const_insulin_sensitivity_factor";
