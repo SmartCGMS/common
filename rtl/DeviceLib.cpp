@@ -316,7 +316,7 @@ scgms::STime_Segment scgms::CTime_Segment::Clone()
 			continue;
 
 		// update cloned signal
-		target->Add_Levels(tmpTimes.data(), tmpLevels.data(), filled, TRUE);
+		target->Update_Levels(tmpTimes.data(), tmpLevels.data(), filled);
 	}
 
 	return refcnt::make_shared_reference_ext<scgms::STime_Segment, scgms::ITime_Segment>(cloned, false);

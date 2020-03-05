@@ -49,6 +49,6 @@ HRESULT IfaceCalling CCommon_Calculated_Signal::Get_Discrete_Bounds(scgms::TBoun
 	return E_NOTIMPL;
 }
 
-HRESULT IfaceCalling CCommon_Calculated_Signal::Add_Levels(const double *times, const double *levels, const size_t count, BOOL allow_update) {
+HRESULT IfaceCalling CCommon_Calculated_Signal::Update_Levels(const double *times, const double *levels, const size_t count) {
 	return E_NOTIMPL;	//we calculate from a signal that can possibly add new levels
 }

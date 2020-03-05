@@ -198,7 +198,7 @@ namespace scgms {
 		/* adds measured levels to internal containers
 		   for measured and calculated signals, dtto Get_Discrete_Levels
 		*/
-		virtual HRESULT IfaceCalling Add_Levels(const double *times, const double *levels, const size_t count, BOOL allow_update) = 0;
+		virtual HRESULT IfaceCalling Update_Levels(const double *times, const double *levels, const size_t count) = 0;
 
 		/*
 			this method will be called in parallel by solvers and therefore it has to be const
@@ -210,10 +210,6 @@ namespace scgms {
 					- level that cannot be calculated must be se to quiet nan
 			count - the total number of times for which to get the levels
 			derivation_order - order of derivation requested
-
-			allow_update - if true, any existing level at times[i] is updated with levels[i]
-						 - if false, detection of existing level at times[i] causes the method to return E_ILLEGAL_STATE_CHANGE
-						 - non-exsting level at times[i] is always added
 		*/
 		virtual HRESULT IfaceCalling Get_Continuous_Levels(IModel_Parameter_Vector *params,
 			const double* times, double* const levels, const size_t count, const size_t derivation_order) const = 0;
