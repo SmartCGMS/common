@@ -136,16 +136,16 @@ namespace scgms {
 
 	bool SFilter_Parameter::as_bool(HRESULT &rc) {
 		bool result = false;
-		uint8_t uint8;
+		BOOL uint8;
 		rc = get()->Get_Bool(&uint8);
 		if (rc == S_OK) 
-			result = uint8 != 0;
+			result = uint8 != FALSE;
 		
 		return result;
 	}
 
 	HRESULT SFilter_Parameter::set_bool(const bool value) {
-		return get()->Set_Bool(value ? static_cast<uint8_t>(-1) : 0);
+		return get()->Set_Bool(value ? TRUE : FALSE);
 	}
 
 

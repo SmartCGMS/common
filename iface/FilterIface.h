@@ -75,7 +75,7 @@ namespace scgms {
 		virtual HRESULT IfaceCalling Get_Config_Name(wchar_t **config_name) = 0;	
 		
 		//read-write
-		virtual HRESULT IfaceCalling Get_WChar_Container(refcnt::wstr_container **wstr, bool read_interpreted) = 0;	//$(Variable_Name) reads system-variable with read_interpreted==true
+		virtual HRESULT IfaceCalling Get_WChar_Container(refcnt::wstr_container **wstr, BOOL read_interpreted) = 0;	//$(Variable_Name) reads system-variable with read_interpreted==true
 		virtual HRESULT IfaceCalling Set_WChar_Container(refcnt::wstr_container *wstr) = 0;	
 
 		virtual HRESULT IfaceCalling Get_Time_Segment_Id_Container(time_segment_id_container **ids) = 0;
@@ -87,8 +87,8 @@ namespace scgms {
 		virtual HRESULT IfaceCalling Get_Int64(int64_t *value) = 0;
 		virtual HRESULT IfaceCalling Set_Int64(const int64_t value) = 0;
 
-		virtual HRESULT IfaceCalling Get_Bool(uint8_t *boolean) = 0;
-		virtual HRESULT IfaceCalling Set_Bool(const uint8_t boolean) = 0;
+		virtual HRESULT IfaceCalling Get_Bool(BOOL *boolean) = 0;
+		virtual HRESULT IfaceCalling Set_Bool(const BOOL boolean) = 0;
 
 		virtual HRESULT IfaceCalling Get_GUID(GUID *id) = 0;
 		virtual HRESULT IfaceCalling Set_GUID(const GUID *id) = 0;
@@ -293,7 +293,7 @@ namespace scgms {
 	constexpr GUID IID_Signal_Error_Inspection = { 0xfb51bcab, 0x5c2b, 0x45af, { 0x98, 0x80, 0xe3, 0x4d, 0xde, 0xc4, 0x3c, 0x4c } };
 	class ISignal_Error_Inspection : public virtual refcnt::IReferenced {
 	public:
-		virtual HRESULT IfaceCalling Promise_Metric(const uint64_t segment_id, double* const metric_value, bool defer_to_dtor) = 0;
+		virtual HRESULT IfaceCalling Promise_Metric(const uint64_t segment_id, double* const metric_value, BOOL defer_to_dtor) = 0;
 		//return S_OK if there are new data available since object construction or last call of Peek_New_Data_Available
 		virtual HRESULT IfaceCalling Peek_New_Data_Available() = 0;
 		virtual HRESULT IfaceCalling Calculate_Signal_Error(const uint64_t segment_id, scgms::TSignal_Stats *absolute_error, scgms::TSignal_Stats *relative_error) = 0;

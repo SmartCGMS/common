@@ -94,7 +94,7 @@ namespace db {
 		template <typename TParam1, typename std::enable_if_t<std::is_same_v<std::remove_const_t<TParam1>, bool>, TParam1>* = nullptr>
 		bool Bind_Parameter(TParam1 param1, TParameter &desc) {
 			desc.type = db::NParameter_Type::ptBool;
-			desc.boolean = static_cast<decltype(desc.boolean)>(param1);
+			desc.boolean = static_cast<decltype(desc.boolean)>(param1 ? TRUE : FALSE);
 			return true;
 		}
 

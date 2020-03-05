@@ -127,7 +127,7 @@ namespace scgms {
 		const GUID id;
 		const wchar_t *description;
 
-		const bool specialized;	//if false, can be applied to any model
+		const BOOL specialized;	//if false, can be applied to any model
 								//if true, the following fields apply
 		const size_t specialized_count;		//can be zero with specialized == false, usually 1
 		const GUID *specialized_models;		//array of models, whose parameters the solver can solve

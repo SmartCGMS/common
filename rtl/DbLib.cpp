@@ -67,7 +67,7 @@ namespace db {
 						break;
 
 					case db::NParameter_Type::ptBool:
-						*(reinterpret_cast<bool*>(mRow_Bindings[i].str)) = mRow_Storage[i].type != db::NParameter_Type::ptNull ? mRow_Storage[i].boolean : false;
+						*(reinterpret_cast<BOOL*>(mRow_Bindings[i].str)) = mRow_Storage[i].type != db::NParameter_Type::ptNull ? mRow_Storage[i].boolean : FALSE;
 						break;
 
 					default:

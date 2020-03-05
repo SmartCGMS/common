@@ -47,7 +47,7 @@ namespace solver {
 	struct TSolver_Progress {
 		size_t current_progress, max_progress;	//minimum progress is zero
 		double best_metric;
-		char cancelled;	//just cast it to bool, if set to true, solver cancels the current operation
+		BOOL cancelled;	//just cast it to bool, if set to true, solver cancels the current operation
 	};
 
 	const TSolver_Progress Null_Solver_Progress = { 0, 0, 0.0, 0 };

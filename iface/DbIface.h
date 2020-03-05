@@ -57,7 +57,7 @@ namespace db {
 			int64_t integer;
 			double dbl;
 			wchar_t *str;
-			bool boolean;
+			BOOL boolean;
 		};
 	};
 
