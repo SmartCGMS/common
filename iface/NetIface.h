@@ -52,7 +52,7 @@ namespace scgms
 	// protocol (major) version used in handshake - mismatch would cause fatal error
 	constexpr uint16_t ProtoVersionMajor = 0x0001;
 	// protocol (minor) version used in handshake - mismatch would cause warning
-	constexpr uint16_t ProtoVersionMinor = 0x0001;
+	constexpr uint16_t ProtoVersionMinor = 0x0002;
 
 	// maximum total length of a packet (header + body), aka buffer size
 	constexpr size_t Max_Packet_Length = 1024;
@@ -176,6 +176,8 @@ namespace scgms
 	enum NNetmodel_Signal_Flags : uint8_t
 	{
 		Netmodel_Signal_Flag_Requires_Fresh_Value = 0x01,	// always require a fresh value of given signal; otherwise use last available
+		Netmodel_Signal_Flag_Send_Only_Fresh_Value = 0x02,	// if a fresh value is available, send it; otherwise don't send it - this is valid for e.g.; some event-based signals
+		Netmodel_Signal_Flag_Allow_Multiple_Values = 0x04,	// allow multiple values of a given signal to be sent
 	};
 
 	/*
