@@ -39,6 +39,7 @@
 #pragma once
 
 #include "../rtl/guid.h"
+#include "../utils/winapi_mapping.h"
 #include "referencedIface.h"
 
 namespace db {

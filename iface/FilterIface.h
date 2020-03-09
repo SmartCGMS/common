@@ -44,7 +44,7 @@
 
 #include "DeviceIface.h"
 #include "referencedIface.h"
-
+#include "../utils/winapi_mapping.h"
 
 namespace scgms {
 
