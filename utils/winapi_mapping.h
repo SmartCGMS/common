@@ -95,10 +95,6 @@
 		return ioctl(fd, request, arg);
 	}
 
-	inline int ioctlsocket(int fd, unsigned long request, void* arg) {
-		return ioctl(fd, request, arg);
-	}
-
 	#define swscanf_s swscanf
 
 	void* _aligned_malloc(size_t n, size_t alignment);
