@@ -725,6 +725,7 @@ const wchar_t* dsSynchronization_Signal = L"Synchronization signal";
 const wchar_t* dsStepping = L"Stepping";
 const wchar_t* dsMaximum_Time = L"Maximum time";
 const wchar_t* dsAsync_Stepping_Not_Positive = L"Asynchronous stepping must be positive. Affected model: ";
+const wchar_t* dsCannot_Get_Model_Descriptor_By_Signal_Id = L"Cannot get model descriptor. Signal id: ";
 
 const wchar_t* dsRemote_Host = L"Host";
 const wchar_t* dsRemote_Port = L"Port";
