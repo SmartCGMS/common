@@ -322,8 +322,8 @@ namespace scgms {
 	constexpr GUID IID_Drawing_Filter_Inspection_v2 = { 0x80c23438, 0x8eb8, 0x4e45, { 0xac, 0x35, 0x6f, 0x4e, 0xa8, 0xdc, 0xfc, 0xad } }; //{80C23438-8EB8-4E45-AC35-6F4EA8DCFCAD}
 	class IDrawing_Filter_Inspection_v2 : public virtual ILogical_Clock {
 	public:
-		virtual HRESULT IfaceCalling Get_Capabilities(TDrawing_Image_Type* type, size_t const *type_count,
-										 TDiagnosis* diagnosis, size_t const *diagnosis_count) const = 0;
+		virtual HRESULT IfaceCalling Get_Capabilities(TDrawing_Image_Type* const *type, size_t const *type_count,
+										 TDiagnosis* const *diagnosis, size_t const *diagnosis_count) const = 0;
 
 		virtual HRESULT IfaceCalling Get_Available_Segments(refcnt::IVector_Container<uint64_t> *segments) = 0;
 
