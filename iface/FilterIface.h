@@ -290,12 +290,22 @@ namespace scgms {
 		NotSpecified = Type1
 	};
 
+	class ILogical_Clock : public virtual refcnt::IReferenced {
+	public:
+		//Logical clock, which indicates if there are new data to process, starts with zero - no data to process yet.
+		//Clock is the recently obtained value of the logical clock, or zero when not called yet. Hence, this parameter
+		//cannot be nullptr. On success, the callee updates *clock to the current value and returns:
+		//S_OK - if new data are available, hence the *clock differs from its recent value - by an arbitrary number, not necessarily 1
+		//S_FALSE - if no new data are available, hence *clock has not changed
+		//E_* otherwise
+		virtual HRESULT IfaceCalling Logical_Clock(ULONG *clock) = 0;
+	};
+
 	constexpr GUID IID_Signal_Error_Inspection = { 0xfb51bcab, 0x5c2b, 0x45af, { 0x98, 0x80, 0xe3, 0x4d, 0xde, 0xc4, 0x3c, 0x4c } };
-	class ISignal_Error_Inspection : public virtual refcnt::IReferenced {
+	class ISignal_Error_Inspection : public virtual ILogical_Clock {
 	public:
 		virtual HRESULT IfaceCalling Promise_Metric(const uint64_t segment_id, double* const metric_value, BOOL defer_to_dtor) = 0;
-		//return S_OK if there are new data available since object construction or last call of Peek_New_Data_Available
-		virtual HRESULT IfaceCalling Peek_New_Data_Available() = 0;
+		//return S_OK if there are new data available since object construction or last call of Peek_New_Data_Available		
 		virtual HRESULT IfaceCalling Calculate_Signal_Error(const uint64_t segment_id, scgms::TSignal_Stats *absolute_error, scgms::TSignal_Stats *relative_error) = 0;
 			//should there be a zero reference level, then absolute_error.count != relative_error.count
 		virtual HRESULT IfaceCalling Get_Description(wchar_t** const desc) = 0;
@@ -308,6 +318,27 @@ namespace scgms {
 		// retrieves generated SVG for given drawing type and diagnosis		
 		virtual HRESULT IfaceCalling Draw(TDrawing_Image_Type type, TDiagnosis diagnosis, refcnt::str_container *svg, refcnt::IVector_Container<uint64_t> *segmentIds, refcnt::IVector_Container<GUID> *signalIds) = 0;
 	};
+
+	constexpr GUID IID_Drawing_Filter_Inspection_v2 = { 0x80c23438, 0x8eb8, 0x4e45, { 0xac, 0x35, 0x6f, 0x4e, 0xa8, 0xdc, 0xfc, 0xad } }; //{80C23438-8EB8-4E45-AC35-6F4EA8DCFCAD}
+	class IDrawing_Filter_Inspection_v2 : public virtual ILogical_Clock {
+	public:
+		virtual HRESULT IfaceCalling Get_Capabilities(TDrawing_Image_Type* type, size_t const *type_count,
+										 TDiagnosis* diagnosis, size_t const *diagnosis_count) const = 0;
+
+		virtual HRESULT IfaceCalling Get_Available_Segments(refcnt::IVector_Container<uint64_t> *segments) = 0;
+
+			//per given segment, it obtains a vector of avilable signals
+		virtual HRESULT IfaceCalling Get_Available_Signals(const uint64_t segment_id, refcnt::IVector_Container<GUID> *signal) = 0;
+
+		// retrieves generated SVG for given drawing type and diagnosis		
+		virtual HRESULT IfaceCalling Draw(TDrawing_Image_Type type, TDiagnosis diagnosis, refcnt::str_container *svg,		//what, how and where to draw 
+										  const uint64_t *segment, const size_t segment_count,								//which segments to draw
+										  const GUID *signal, const GUID *reference_signal, const size_t signal_count) = 0; //which signals to draw, optional, may be null depending on type
+										  //reference signal is optional and may be null - needed for e.g.; for error grids, then its size must match with signal size
+										  //when using reference signal to draw e.g.; an error grid, the filter is assumed take discrete levels
+										  //of the reference signal, while plotting them against continous levels of the signal
+	};
+
 
 	constexpr GUID IID_Log_Filter_Inspection = { 0xa6054c8d, 0x5c01, 0x9e1d,{ 0x14, 0x39, 0x50, 0xda, 0xd1, 0x08, 0xc9, 0x48 } };
 	class ILog_Filter_Inspection : public virtual refcnt::IReferenced {
