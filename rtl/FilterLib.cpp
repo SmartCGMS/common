@@ -244,7 +244,7 @@ namespace scgms {
 
 	SFilter_Executor::SFilter_Executor(refcnt::SReferenced<scgms::IFilter_Chain_Configuration> configuration, scgms::TOn_Filter_Created on_filter_created, const void* on_filter_created_data, refcnt::Swstr_list error_description) {
 		scgms::IFilter_Executor *executor;
-		if (SUCCEEDED(imported::execute_filter_configuration(configuration.get(), on_filter_created, on_filter_created_data, &executor, error_description.get())))
+		if (SUCCEEDED(imported::execute_filter_configuration(configuration.get(), on_filter_created, on_filter_created_data, nullptr, &executor, error_description.get())))
 			reset(executor, [](scgms::IFilter_Executor* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });
 	}
 

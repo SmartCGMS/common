@@ -96,8 +96,8 @@ namespace scgms {
 	};
 
 	namespace UDevice_Event_internal {
-		enum class NDevice_Event_Major_Type {
-			null,
+		enum class NDevice_Event_Major_Type : uint8_t {
+			null = 0,
 			level,
 			info,
 			parameters,

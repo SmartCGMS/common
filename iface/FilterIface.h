@@ -160,7 +160,7 @@ namespace scgms {
 	using TCreate_Persistent_Filter_Chain_Configuration = HRESULT(IfaceCalling *)(IPersistent_Filter_Chain_Configuration **configuration);
 	using TCreate_Filter = HRESULT(IfaceCalling *)(const GUID *id, IFilter *next_filter, scgms::IFilter **filter);
 	using TOn_Filter_Created = HRESULT(IfaceCalling *)(scgms::IFilter *filter, const void* data);
-	using TExecute_Filter_Configuration = HRESULT(IfaceCalling*)(IFilter_Chain_Configuration *configuration, scgms::TOn_Filter_Created on_filter_created, const void* on_filter_created_data, scgms::IFilter_Executor **executor, refcnt::wstr_list *error_description);
+	using TExecute_Filter_Configuration = HRESULT(IfaceCalling*)(IFilter_Chain_Configuration *configuration, scgms::TOn_Filter_Created on_filter_created, const void* on_filter_created_data, scgms::IFilter *output, scgms::IFilter_Executor **executor, refcnt::wstr_list *error_description);
 	using TCreate_Filter_Parameter = HRESULT(IfaceCalling*)(const scgms::NParameter_Type type, const wchar_t *config_name, scgms::IFilter_Parameter **parameter);
 	using TCreate_Filter_Configuration_Link = HRESULT(IfaceCalling*)(const GUID *filter_id, scgms::IFilter_Configuration_Link **link);
 	using TCreate_Discrete_Model = HRESULT(IfaceCalling*)(const GUID *model_id, scgms::IModel_Parameter_Vector *parameters, scgms::IFilter *output, scgms::IDiscrete_Model **model);
