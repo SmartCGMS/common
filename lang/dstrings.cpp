@@ -323,6 +323,10 @@ const wchar_t* dsOref0_BG_UAM_Prediction = L"oref0 UAM-based BG Prediction";
 const wchar_t* dsOref0_BG_ZT_Prediction = L"oref0 ZT-based BG Prediction";
 const wchar_t* dsOref0_BG_Prediction_Signal = L"oref0 aggregated BG Prediction";
 const wchar_t* dsConstant_Model = L"Constant model";
+const wchar_t* dsUVa_Padova_Model = L"UVa/Padova model";
+
+const wchar_t* dsUVa_Padova_IG = L"UVa/Padova model - Interstitial glucose";
+const wchar_t* dsUVa_Padova_BG = L"UVa/Padova model - Blood glucose";
 
 const wchar_t* dsOref0_Solver = L"oref0 solver";
 
