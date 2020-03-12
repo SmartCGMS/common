@@ -319,6 +319,11 @@ namespace scgms {
 		virtual HRESULT IfaceCalling Draw(TDrawing_Image_Type type, TDiagnosis diagnosis, refcnt::str_container *svg, refcnt::IVector_Container<uint64_t> *segmentIds, refcnt::IVector_Container<GUID> *signalIds) = 0;
 	};
 
+	struct TPlot_Descriptor {
+		GUID id;		//one of the dc constants
+		wchar_t* name;
+	};
+
 	//knonw drawing capability
 	constexpr GUID dcGraph =		{ 0xb7ca6ed4, 0xfb05, 0x4b16, { 0x91, 0x4c, 0x3f, 0xdd, 0xed, 0x23, 0x22, 0xa0 } }; // {B7CA6ED4-FB05-4B16-914C-3FDDED2322A0}
 	constexpr GUID dcDaily_Graph =  { 0x1564bc55, 0xcb1b, 0x4f4a, { 0x82, 0x4b, 0xef, 0x41, 0x52, 0x34, 0xc2, 0x10 } } ;// {1564BC55-CB1B-4F4A-824B-EF415234C210}
@@ -335,21 +340,28 @@ namespace scgms {
 	class IDrawing_Filter_Inspection_v2 : public virtual ILogical_Clock {
 	public:
 		//id identifies what to draw, e.g. graph, AGP or CEG for T2D. name is localization of what it displays
-		//as the renderer might not know the id beforehand
-		virtual HRESULT IfaceCalling Get_Capabilities(GUID* const *plot_id, wchar_t* const *plot_name, size_t const *plot_count) const = 0;
+		//as the renderer might not know the id beforehand 
+		//with IPlot_Drawing specialized drawers, scgms would supersede this
+		//virtual HRESULT IfaceCalling Get_Capabilities(GUID* const *plot_id, wchar_t* const *plot_name, size_t const *plot_count) const = 0;		
 
 		virtual HRESULT IfaceCalling Get_Available_Segments(refcnt::IVector_Container<uint64_t> *segments) = 0;
 
-			//per given segment, it obtains a vector of avilable signals
+		//per given segment, it obtains a vector of avilable signals
 		virtual HRESULT IfaceCalling Get_Available_Signals(const uint64_t segment_id, refcnt::IVector_Container<GUID> *signal) = 0;
 
-		// retrieves generated SVG for given drawing type and diagnosis		
-		virtual HRESULT IfaceCalling Draw(TDrawing_Image_Type type, TDiagnosis diagnosis, refcnt::str_container *svg,		//what, how and where to draw 
+		// retrieves generated SVG for a given type of the plot
+		virtual HRESULT IfaceCalling Draw(const GUID *plot_id, refcnt::str_container *svg,									//what, how and where to draw 
 										  const uint64_t *segment, const size_t segment_count,								//which segments to draw
 										  const GUID *signal, const GUID *reference_signal, const size_t signal_count) = 0; //which signals to draw, optional, may be null depending on type
 										  //reference signal is optional and may be null - needed for e.g.; for error grids, then its size must match with signal size
 										  //when using reference signal to draw e.g.; an error grid, the filter is assumed take discrete levels
 										  //of the reference signal, while plotting them against continous levels of the signal
+	};
+
+	class IPlot_Drawer : public virtual refcnt::IReferenced {
+		virtual HRESULT IfaceCalling Draw(refcnt::str_container *svg,			
+										const ITime_Segment **segment, const size_t segment_count,								
+										const GUID *signal, const GUID *reference_signal, const size_t signal_count) = 0;
 	};
 
 
