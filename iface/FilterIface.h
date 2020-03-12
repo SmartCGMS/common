@@ -319,11 +319,24 @@ namespace scgms {
 		virtual HRESULT IfaceCalling Draw(TDrawing_Image_Type type, TDiagnosis diagnosis, refcnt::str_container *svg, refcnt::IVector_Container<uint64_t> *segmentIds, refcnt::IVector_Container<GUID> *signalIds) = 0;
 	};
 
+	//knonw drawing capability
+	constexpr GUID dcGraph =		{ 0xb7ca6ed4, 0xfb05, 0x4b16, { 0x91, 0x4c, 0x3f, 0xdd, 0xed, 0x23, 0x22, 0xa0 } }; // {B7CA6ED4-FB05-4B16-914C-3FDDED2322A0}
+	constexpr GUID dcDaily_Graph =  { 0x1564bc55, 0xcb1b, 0x4f4a, { 0x82, 0x4b, 0xef, 0x41, 0x52, 0x34, 0xc2, 0x10 } } ;// {1564BC55-CB1B-4F4A-824B-EF415234C210}
+	constexpr GUID dcParkesEG_T1D =	{ 0x74258c2f, 0x3f33, 0x4497, { 0xae, 0x97, 0x88, 0x79, 0xb3, 0xc1, 0x90, 0xbc } }; // {74258C2F-3F33-4497-AE97-8879B3C190BC}
+	constexpr GUID dcParkesEG_T2D = { 0xdf6a8075, 0xba09, 0x44b5, { 0x9c, 0x98, 0x1c, 0xf9, 0x75, 0x6c, 0x89, 0xc3 } };	// {DF6A8075-BA09-44B5-9C98-1CF9756C89C3}
+	constexpr GUID dcClarkEG_T1D =	{ 0x6ec36bf9, 0x5516, 0x4d27, { 0xab, 0x4a, 0x8b, 0x24, 0xc4, 0xc0, 0x2b, 0x56 } };	// {6EC36BF9-5516-4D27-AB4A-8B24C4C02B56}
+	constexpr GUID dcAGP =			{ 0x979503a3, 0xef64, 0x437c, { 0x98, 0xa4, 0x9e, 0xd1, 0xf2, 0x98, 0x20, 0x57 } };	// {979503A3-EF64-437C-98A4-9ED1F2982057}
+	constexpr GUID dcECDF =			{ 0x46dd1fa8, 0xdfe4, 0x44be, { 0x9a, 0x9, 0xa3, 0xf3, 0x31, 0x49, 0xec, 0xe6 } };	// {46DD1FA8-DFE4-44BE-9A09-A3F33149ECE6}
+	constexpr GUID dcProfile_Glucose = { 0x77be67e9, 0xfb9f, 0x4b1b, { 0xbf, 0x91, 0x2b, 0x94, 0xc3, 0x20, 0xfc, 0xd } }; // {77BE67E9-FB9F-4B1B-BF91-2B94C320FC0D}
+	constexpr GUID dcProfile_Insulin = { 0x2f58f928, 0xfe42, 0x4dd1, { 0xa3, 0x75, 0x2e, 0x4d, 0x84, 0xea, 0x10, 0xa8 } }; // {2F58F928-FE42-4DD1-A375-2E4D84EA10A8}
+	constexpr GUID dcProfile_Carbs = { 0xb72f566f, 0x9953, 0x4d0a, { 0xaf, 0xd8, 0x10, 0xd5, 0x1e, 0xef, 0x9, 0xe6 } };	// {B72F566F-9953-4D0A-AFD8-10D51EEF09E6}
+	
 	constexpr GUID IID_Drawing_Filter_Inspection_v2 = { 0x80c23438, 0x8eb8, 0x4e45, { 0xac, 0x35, 0x6f, 0x4e, 0xa8, 0xdc, 0xfc, 0xad } }; //{80C23438-8EB8-4E45-AC35-6F4EA8DCFCAD}
 	class IDrawing_Filter_Inspection_v2 : public virtual ILogical_Clock {
 	public:
-		virtual HRESULT IfaceCalling Get_Capabilities(TDrawing_Image_Type* const *type, size_t const *type_count,
-										 TDiagnosis* const *diagnosis, size_t const *diagnosis_count) const = 0;
+		//id identifies what to draw, e.g. graph, AGP or CEG for T2D. name is localization of what it displays
+		//as the renderer might not know the id beforehand
+		virtual HRESULT IfaceCalling Get_Capabilities(GUID* const *plot_id, wchar_t* const *plot_name, size_t const *plot_count) const = 0;
 
 		virtual HRESULT IfaceCalling Get_Available_Segments(refcnt::IVector_Container<uint64_t> *segments) = 0;
 
