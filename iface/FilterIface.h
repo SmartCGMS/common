@@ -123,16 +123,16 @@ namespace scgms {
 		//Executes the filter's control loop
 		//when called, the filter owns the event - the filter has to either forward the event, 
 		//or call Release on it to discard it
-		//Filter forwards existing/sends new event using IFilter_Communicator * supplied to its constructor
 		virtual HRESULT IfaceCalling Execute(scgms::IDevice_Event *event) = 0;	
 	};
 
 	class IFilter_Executor : public virtual refcnt::IReferenced {	//IEvent_Sender sends the event to the first filter
 	public:
 			//whatever Filter_Executor swallows it never releases back => Execute always consumes the event
-		virtual HRESULT IfaceCalling Execute(scgms::IDevice_Event *event) = 0;
-		virtual HRESULT IfaceCalling Wait_For_Shutdown_and_Terminate() = 0;	//returns once all filters have terminated and joined
-		virtual HRESULT IfaceCalling Terminate() = 0;	//returns once all filters are executing		
+		virtual HRESULT IfaceCalling Execute(scgms::IDevice_Event *event) = 0;		
+			//if wait_for_shutdown, returns once all filters have terminated and joined
+			//else attempt to terminate all filters at once and then return
+		virtual HRESULT IfaceCalling Terminate(const BOOL wait_for_shutdown) = 0;	
 	};
 	
 	class IFilter_Feedback : public virtual scgms::IFilter {

@@ -41,9 +41,10 @@
 #ifdef _WIN32
 	#include <Windows.h>
 
-	extern "C" char __ImageBase;
-
-	using socklen_t = int;
+	#ifdef __cplusplus
+		extern "C" char __ImageBase;
+		using socklen_t = int;	
+	#endif
 
 	#define MainCalling __cdecl
 #else

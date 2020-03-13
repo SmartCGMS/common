@@ -104,7 +104,7 @@ namespace scgms {
 			control
 		};
 
-		UDevice_Event_internal::NDevice_Event_Major_Type major_type(const scgms::NDevice_Event_Code code);
+		NDevice_Event_Major_Type major_type(const scgms::NDevice_Event_Code code);
 	}
 
 	class UDevice_Event : public std::unique_ptr<IDevice_Event, UDevice_Event_Deleter> {

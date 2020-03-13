@@ -40,13 +40,14 @@
 
 #include <stdint.h>
 #include "..\..\common\rtl\guid.h"
+#include "..\..\common\utils\winapi_mapping.h"
 
 #define SimpleCalling __cdecl
 
 typedef struct _TSCGMS_Event_Data {
 	uint8_t event_code;
-	GUID *device_id;					//supporting parallel measurements
-	GUID *signal_id;					//blood, ist, isig, model id aka e.g, calculated blood, etc.
+	GUID *device_id;				//supporting parallel measurements
+	GUID *signal_id;				//blood, ist, isig, model id aka e.g, calculated blood, etc.
 
 	double device_time;				//signal with multiple values are aggregated by device_time with the same signal_id and device_id
 	int64_t logical_time;
@@ -60,13 +61,13 @@ typedef struct _TSCGMS_Event_Data {
 	size_t count;
 
 	wchar_t *str;					//info event
-
 } TSCGMS_Event_Data;
 
 typedef void* scgms_execution_t;
 
-typedef scgms_execution_t(*SimpleCalling TExecute_SCMGS_Configuration)(wchar_t *config, TSCGMS_Execution_Callback *callback);
-typedef void(*SimpleCalling TSCGMS_Execution_Callback)(const TSCGMS_Event_Data *event);
+typedef HRESULT(SimpleCalling *TSCGMS_Execution_Callback)(TSCGMS_Event_Data *event);
+typedef scgms_execution_t(SimpleCalling *TExecute_SCMGS_Configuration)(const char *config, TSCGMS_Execution_Callback callback);
+	
+typedef BOOL(SimpleCalling *TInject_SCGMS_Event)(const scgms_execution_t execution, const TSCGMS_Event_Data *event);
 
-	//0 means failure, non-zero success
-typedef int(*SimpleCalling TInject_SCGMS_Event)(const scgms_execution_t execution, const TSCGMS_Event_Data *event);
+typedef void(SimpleCalling *TShutdown_SCGMS)(const scgms_execution_t execution, BOOL wait_for_shutdown);
