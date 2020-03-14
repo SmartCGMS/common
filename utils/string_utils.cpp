@@ -104,10 +104,30 @@ double wstr_2_dbl(const wchar_t* wstr) {
 }
 
 double wstr_2_dbl(const wchar_t* wstr, bool& ok) {
-    wchar_t* end_char;
-    double value = std::wcstod(wstr, &end_char);
 
-    ok = *end_char == 0;
+	wchar_t* end_char;
+	double value = std::wcstod(wstr, &end_char);
+	ok = *end_char == 0;
+
+	//detecting local does not seems reliable in all cases we encountered
+	auto try_convert = [&](const wchar_t old_point, const wchar_t new_point) {
+		//could have made the number by properly combining mantisa and exponent
+		//but then, we would have to detect e.g.; 1.0e61 formatting
+		//does not seem worth the effort
+
+		std::wstring converted{ wstr };
+		std::replace(converted.begin(), converted.end(), old_point, new_point);
+		value = std::wcstod(converted.c_str(), &end_char);
+		ok = *end_char == 0;
+		return value;
+	};
+
+	switch (*end_char) {
+		case L'.':	value = try_convert(L'.', L','); break;
+		case L',' :	value = try_convert(L',', L'.'); break;
+		default: break;
+	}
+	  
 
     if (!ok)
         value = std::numeric_limits<double>::quiet_NaN(); //sanity

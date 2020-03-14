@@ -78,34 +78,27 @@
 #ifdef __cplusplus
 	inline bool operator<(const GUID& rguid1, const GUID& rguid2) {
 		return memcmp(&rguid1, &rguid2, sizeof(GUID)) < 0;
-}
-	constexpr 
-#else	
-	const
-#endif
-GUID Invalid_GUID = { 0, 0, 0, { 0, 0, 0, 0, 0, 0, 0, 0 } };
+	}
+	constexpr GUID Invalid_GUID = { 0, 0, 0, { 0, 0, 0, 0, 0, 0, 0, 0 } };
+
+	inline bool Is_Invalid_GUID(const GUID& id) {
+		return id == Invalid_GUID;
+	}
+
+	template <typename... Args>
+	bool Is_Invalid_GUID(const GUID& id, const Args&... args) {
+		return Is_Invalid_GUID(id) || Is_Invalid_GUID(args...);
+	}
 
 
-// on several systems (OS's and compilers), the lengths of standard types may vary (e.g. "unsigned long" on LLP64 vs. LP64);
-// the C++ standard itself defines minimal length, but does not guarantee exact length on every platform;
-// this is here to ensure correct lengths of all GUID fields	
+	// on several systems (OS's and compilers), the lengths of standard types may vary (e.g. "unsigned long" on LLP64 vs. LP64);
+	// the C++ standard itself defines minimal length, but does not guarantee exact length on every platform;
+	// this is here to ensure correct lengths of all GUID fields	
 
-static_assert(sizeof(Invalid_GUID.Data1) == 4, "GUID Data1 (unsigned long) is not 4 bytes long");
-static_assert(sizeof(Invalid_GUID.Data2) == 2, "GUID Data2 (unsigned short) is not 2 bytes long");
-static_assert(sizeof(Invalid_GUID.Data3) == 2, "GUID Data3 is not 2 bytes long");
-static_assert(sizeof(Invalid_GUID.Data4) == 8, "GUID Data4 is not 8 bytes long");
-
-#ifdef __cplusplus
-
-inline bool Is_Invalid_GUID(const GUID& id) {
-    return id == Invalid_GUID;
-}
-
-template <typename... Args>
-bool Is_Invalid_GUID(const GUID& id, const Args&... args) {
-    return Is_Invalid_GUID(id) || Is_Invalid_GUID(args...);
-}
-
+	static_assert(sizeof(GUID::Data1) == 4, "GUID Data1 (unsigned long) is not 4 bytes long");
+	static_assert(sizeof(GUID::Data2) == 2, "GUID Data2 (unsigned short) is not 2 bytes long");
+	static_assert(sizeof(GUID::Data3) == 2, "GUID Data3 is not 2 bytes long");
+	static_assert(sizeof(GUID::Data4) == 8, "GUID Data4 is not 8 bytes long");
 #endif
 
 // Generates a new GUID version 4 (completely random, suitable for network traffic)

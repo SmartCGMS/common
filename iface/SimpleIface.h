@@ -46,8 +46,8 @@
 
 typedef struct _TSCGMS_Event_Data {
 	uint8_t event_code;
-	GUID *device_id;				//supporting parallel measurements
-	GUID *signal_id;				//blood, ist, isig, model id aka e.g, calculated blood, etc.
+	GUID device_id;				//supporting parallel measurements
+	GUID signal_id;				//blood, ist, isig, model id aka e.g, calculated blood, etc.
 
 	double device_time;				//signal with multiple values are aggregated by device_time with the same signal_id and device_id
 	int64_t logical_time;
