@@ -306,9 +306,9 @@ public:
 
     /** key entry */
     struct Entry {
-        const SI_CHAR * pItem;
-        const SI_CHAR * pComment;
-        int             nOrder;
+        const SI_CHAR * pItem = nullptr;
+        const SI_CHAR * pComment = nullptr;
+        int             nOrder = 0;
 
         Entry(const SI_CHAR * a_pszItem = NULL, int a_nOrder = 0)
             : pItem(a_pszItem)
