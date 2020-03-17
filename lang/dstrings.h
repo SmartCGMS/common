@@ -324,7 +324,7 @@ extern const wchar_t* dsOref0_BG_UAM_Prediction;
 extern const wchar_t* dsOref0_BG_ZT_Prediction;
 extern const wchar_t* dsOref0_BG_Prediction_Signal;
 extern const wchar_t* dsConstant_Model;
-extern const wchar_t* dsUVa_Padova_Model;
+extern const wchar_t* dsUVa_Padova_S2013;
 extern const wchar_t* dsUVa_Padova_IG;
 extern const wchar_t* dsUVa_Padova_BG;
 
