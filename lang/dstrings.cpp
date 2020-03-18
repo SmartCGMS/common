@@ -325,8 +325,9 @@ const wchar_t* dsOref0_BG_Prediction_Signal = L"oref0 aggregated BG Prediction";
 const wchar_t* dsConstant_Model = L"Constant model";
 const wchar_t* dsUVa_Padova_S2013 = L"UVA/Padova S2013";
 
-const wchar_t* dsUVa_Padova_IG = L"UVa/Padova model - Interstitial glucose";
-const wchar_t* dsUVa_Padova_BG = L"UVa/Padova model - Blood glucose";
+const wchar_t* dsUVa_Padova_IG = L"UVa/Padova S2013 - Interstitial glucose";
+const wchar_t* dsUVa_Padova_BG = L"UVa/Padova S2013 - Blood glucose";
+const wchar_t* dsUVa_Padova_Delivered_Insulin = L"UVa/Padova S2013 - Delivered insulin";
 
 const wchar_t* dsOref0_Solver = L"oref0 solver";
 
@@ -457,6 +458,7 @@ const wchar_t *dsSignal_Measured_IG = L"interstitial fluid glucose";
 const wchar_t *dsSignal_Measured_ISIG = L"ISIG";
 const wchar_t *dsSignal_Measured_Calibration = L"blood glucose calibration";
 const wchar_t *dsSignal_Delivered_Insulin_Bolus = L"delivered insulin bolus";
+const wchar_t *dsSignal_Delivered_Insulin_Total = L"delivered insulin total";
 const wchar_t* dsSignal_Requested_Insulin_Bolus = L"requested insulin bolus";
 const wchar_t *dsSignal_Delivered_Insulin_Basal_Rate = L"delivered insulin basal rate";
 const wchar_t *dsSignal_Requested_Insulin_Basal_Rate = L"requested insulin basal rate";
