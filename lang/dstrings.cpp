@@ -354,15 +354,15 @@ const wchar_t* dsInv_G = L"1/g";
 
 const wchar_t* dsConstantParam = L"c";
 
-const wchar_t* dsRetrospectiveP = L"p<sub>retro</sub>";
-const wchar_t* dsRetrospectiveCg = L"cg<sub>retro</sub>";
-const wchar_t* dsRetrospectiveC = L"c<sub>retro</sub>";
-const wchar_t* dsRetrospectiveDt = L"&Delta;t<sub>retro</sub>";
+const wchar_t* dsRetrospectiveP = L"pr";
+const wchar_t* dsRetrospectiveCg = L"cgr";
+const wchar_t* dsRetrospectiveC = L"cr";
+const wchar_t* dsRetrospectiveDt = L"dtr";
 
-const wchar_t* dsPredictiveP = L"p<sub>pred</sub>";
-const wchar_t* dsPredictiveCg = L"cg<sub>pred</sub>";
-const wchar_t* dsPredictiveC = L"c<sub>pred</sub>";
-const wchar_t* dsPredictiveDt = L"&Delta;t<sub>pred</sub>";
+const wchar_t* dsPredictiveP = L"pp";
+const wchar_t* dsPredictiveCg = L"cgp";
+const wchar_t* dsPredictiveC = L"cp";
+const wchar_t* dsPredictiveDt = L"dtp";
 
 const wchar_t* dsInsulin_TwoTerm_Regulation = L"Insulin two-term regulation";
 const wchar_t* dsInsulin_PID_Regulation = L"Insulin PID regulation";
