@@ -327,6 +327,7 @@ extern const wchar_t* dsConstant_Model;
 extern const wchar_t* dsUVa_Padova_S2013;
 extern const wchar_t* dsUVa_Padova_IG;
 extern const wchar_t* dsUVa_Padova_BG;
+extern const wchar_t* dsUVa_Padova_Delivered_Insulin;
 
 extern const wchar_t* dsOref0_Solver;
 
@@ -451,6 +452,7 @@ extern const wchar_t *dsSignal_Measured_IG;
 extern const wchar_t *dsSignal_Measured_ISIG;
 extern const wchar_t *dsSignal_Measured_Calibration;
 extern const wchar_t *dsSignal_Delivered_Insulin_Bolus;
+extern const wchar_t *dsSignal_Delivered_Insulin_Total;
 extern const wchar_t* dsSignal_Requested_Insulin_Bolus;
 extern const wchar_t *dsSignal_Delivered_Insulin_Basal_Rate;
 extern const wchar_t *dsSignal_Requested_Insulin_Basal_Rate;
