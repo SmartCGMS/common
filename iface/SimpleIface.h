@@ -39,10 +39,15 @@
 #pragma once
 
 #include <stdint.h>
-#include "..\..\common\rtl\guid.h"
-#include "..\..\common\utils\winapi_mapping.h"
+#include "../../common/rtl/guid.h"
+#include "../../common/rtl/hresult.h"
+#include "../../common/utils/winapi_mapping.h"
 
+#ifdef __GNUC__
+#define SimpleCalling
+#else
 #define SimpleCalling __cdecl
+#endif
 
 typedef struct _TSCGMS_Event_Data {
 	uint8_t event_code;

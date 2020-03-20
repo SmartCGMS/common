@@ -41,7 +41,7 @@
 #ifdef _WIN32
 	#include <WTypes.h>
 #else
-	using HRESULT = long;
+	typedef long HRESULT;
 
 	typedef unsigned long	DWORD;
 	typedef long			LONG;
