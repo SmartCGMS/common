@@ -42,9 +42,9 @@
 	#include <Windows.h>
 
 	#ifdef __cplusplus
-		extern "C" char __ImageBase;
-		using socklen_t = int;	
+		extern "C" char __ImageBase;		
 	#endif
+	typedef int socklen_t;
 
 	#define MainCalling __cdecl
 #else
@@ -55,16 +55,16 @@
 	#include <sys/ioctl.h>
 
 	#define MainCalling
-
-	using BOOL = int;
+	
+	typedef int BOOL;
 	constexpr int TRUE = 1;
 #ifndef FALSE
 	// strangely, on some systems, FALSE constant is not defined
 	// NOTE: this has to be #define, as some libraries may check for this constant using preprocessor macro
 	#define FALSE 0
 #endif
-
-	using HMODULE = void*;
+	
+	typedef void* HMODULE;
 
 	void localtime_s(struct tm* t, const time_t* tim);
 	void gmtime_s(struct tm* t, const time_t* tim);
