@@ -43,10 +43,10 @@
 #include "../../common/rtl/hresult.h"
 #include "../../common/utils/winapi_mapping.h"
 
-#ifdef __GNUC__
-#define SimpleCalling
+#ifdef _WIN32
+	#define SimpleCalling __cdecl
 #else
-#define SimpleCalling __cdecl
+	#define SimpleCalling
 #endif
 
 typedef struct _TSCGMS_Event_Data {
