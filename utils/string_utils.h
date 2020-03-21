@@ -42,6 +42,15 @@
 
 #include <string>
 
+template<typename CharT>
+class CDecimal_Separator : public std::numpunct<CharT> {
+protected:
+	CharT mSeparator;
+	CharT do_decimal_point() const { return mSeparator; }
+public:
+	CDecimal_Separator(CharT Separator) : mSeparator(Separator) {}
+};
+
 
 //works with non-locale installed languages
 std::string Narrow_WString(const std::wstring &wstr);

@@ -135,7 +135,6 @@ double wstr_2_dbl(const wchar_t* wstr, bool& ok) {
     return value;
 }
 
-
 template <typename T>
 int get_base(T* str) {
     int base = 10;

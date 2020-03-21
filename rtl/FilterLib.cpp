@@ -43,6 +43,7 @@
 
 
 #include <wchar.h>
+#include <iostream>
 #include <sstream>
 #include "manufactory.h"
 
@@ -417,23 +418,29 @@ scgms::time_segment_id_container* WString_To_Select_Time_Segments_Id(const wchar
 	return obj;
 }
 
-std::wstring Model_Parameters_To_WString(scgms::IModel_Parameter_Vector *container)
-{
-	std::wstring result;
+std::wstring Model_Parameters_To_WString(scgms::IModel_Parameter_Vector *container) {
+	
+	std::wstringstream result;
+
+	result.imbue(std::locale(std::wcout.getloc(), new CDecimal_Separator<wchar_t>(L'.')));
+
+	bool not_empty = false;
 
 	double *begin, *end;
 	if (container->get(&begin, &end) == S_OK)
 	{
 		for (auto iter = begin; iter != end; iter++)
 		{
-			if (result.size() > 0)
-				result += L" ";
+			if (not_empty)
+				result << L" ";
+			else
+				not_empty = true;
 
-			result += std::to_wstring(*iter);
+			result << *iter;
 		}
 	}
 
-	return result;
+	return result.str();
 }
 
 scgms::IModel_Parameter_Vector* WString_To_Model_Parameters(const wchar_t *str) {
