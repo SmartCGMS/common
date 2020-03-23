@@ -49,32 +49,42 @@
 	#include <stdlib.h>
 #endif
 
-void* LoadLibraryW(const wchar_t *libname) {
-	std::string libstr{libname, libname + wcslen(libname)};
-	return (dlopen(libstr.c_str(), RTLD_LOCAL|RTLD_NOW));
+EXTERN_C void* LoadLibraryW(const wchar_t *libname) {
+
+	char* tmp = (char*)malloc(wcslen(libname) + 1);
+	wcstombs(tmp, libname, wcslen(libname));
+
+	void* result = LoadLibraryA(tmp);
+
+	free(tmp);
+	return result;
 }
 
-void *GetProcAddress(void *libhandle, const char *symbolname) {
+EXTERN_C void* LoadLibraryA(const char *filename) {
+	return (dlopen(filename, RTLD_LOCAL | RTLD_NOW));
+}
+
+EXTERN_C void *GetProcAddress(void *libhandle, const char *symbolname) {
 	return dlsym(libhandle, symbolname);
 }
 
-void FreeLibrary(void* libhandle) {
+EXTERN_C void FreeLibrary(void* libhandle) {
 	dlclose(libhandle);
 }
 
-void localtime_s(struct tm* t, const time_t* tim)
+EXTERN_C void localtime_s(struct tm* t, const time_t* tim)
 {
 	localtime_r(tim, t);
 }
 
-void gmtime_s(struct tm* t, const time_t* tim)
+EXTERN_C void gmtime_s(struct tm* t, const time_t* tim)
 {
 	gmtime_r(tim, t);
 }
 
-void* _aligned_malloc(size_t n, size_t alignment)
+EXTERN_C void* _aligned_malloc(size_t n, size_t alignment)
 {
-	void* mem = nullptr;
+	void* mem = NULL;
 #if defined(__ARM_ARCH_7A__) || defined(__aarch64__)
 	mem = malloc(n);
 #else
@@ -84,12 +94,12 @@ void* _aligned_malloc(size_t n, size_t alignment)
 	return mem;
 }
 
-void _aligned_free(void* _Block)
+EXTERN_C void _aligned_free(void* _Block)
 {
 	free(_Block);
 }
 
-int wcstombs_s(size_t* converted, char* dst, size_t dstSizeBytes, const wchar_t* src, size_t maxSizeBytes)
+EXTERN_C int wcstombs_s(size_t* converted, char* dst, size_t dstSizeBytes, const wchar_t* src, size_t maxSizeBytes)
 {
 	return wcstombs(dst, src, maxSizeBytes);
 }
@@ -97,7 +107,7 @@ int wcstombs_s(size_t* converted, char* dst, size_t dstSizeBytes, const wchar_t*
 // probably the only portable version of multiple ifdef
 #if defined(__ARM_ARCH_7A__) || defined(__aarch64__)
 #else
-int closesocket(SOCKET skt)
+EXTERN_C int closesocket(SOCKET skt)
 {
 	return close(skt);
 }
