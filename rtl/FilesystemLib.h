@@ -40,11 +40,12 @@
 
 // feature check for C++17/TS support state - filesystem is supported on both MSVS2017 and GCC8, but
 // on MSVS it's still in experimental namespace, contrary to GCC8, where it's considered stable
-#if __has_include(<filesystem>)
+// we may also decide to disable C++17 FS support on some platforms (e.g.; some Android targets) with STDCPP_FS_DISABLED macro
+#if !defined(STDCPP_FS_DISABLED) && __has_include(<filesystem>)
 	#include <filesystem>
 	namespace filesystem = std::filesystem;
 	#define DHAS_FILESYSTEM
-#elif __has_include(<experimental/filesystem>)
+#elif !defined(STDCPP_FS_DISABLED) && __has_include(<experimental/filesystem>)
 	#include <experimental/filesystem>
 	namespace filesystem = std::experimental::filesystem;
 	#define DHAS_FILESYSTEM
