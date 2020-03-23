@@ -83,7 +83,9 @@
 	void FreeLibrary(void* libhandle);
 
 	/* closesocket is present in Android standard library, but not on Unix */
-#if (!defined(__ARM_ARCH_7A__)) && (!defined(__aarch64__))
+	// probably the only portable version of multiple ifdef
+#if defined(__ARM_ARCH_7A__) || defined(__aarch64__)
+#else
 	int closesocket(int fd);
 #endif
 

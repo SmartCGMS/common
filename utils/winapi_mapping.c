@@ -41,8 +41,13 @@
 #ifdef _WIN32
 #else
 
-#include <string>
-#include <cstdlib>
+#ifdef __cplusplus
+	#include <string>
+	#include <cstdlib>
+#else
+	#include <string.h>
+	#include <stdlib.h>
+#endif
 
 void* LoadLibraryW(const wchar_t *libname) {
 	std::string libstr{libname, libname + wcslen(libname)};
@@ -56,8 +61,6 @@ void *GetProcAddress(void *libhandle, const char *symbolname) {
 void FreeLibrary(void* libhandle) {
 	dlclose(libhandle);
 }
-
-#include <ctime>
 
 void localtime_s(struct tm* t, const time_t* tim)
 {
@@ -91,7 +94,9 @@ int wcstombs_s(size_t* converted, char* dst, size_t dstSizeBytes, const wchar_t*
 	return wcstombs(dst, src, maxSizeBytes);
 }
 
-#if not defined(__ARM_ARCH_7A__) && not defined(__aarch64__)
+// probably the only portable version of multiple ifdef
+#if defined(__ARM_ARCH_7A__) || defined(__aarch64__)
+#else
 int closesocket(SOCKET skt)
 {
 	return close(skt);
