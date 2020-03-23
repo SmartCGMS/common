@@ -107,13 +107,9 @@ EXTERN_C int wcstombs_s(size_t* converted, char* dst, size_t dstSizeBytes, const
 	return wcstombs(dst, src, maxSizeBytes);
 }
 
-// probably the only portable version of multiple ifdef
-#if defined(__ARM_ARCH_7A__) || defined(__aarch64__)
-#else
 EXTERN_C int closesocket(SOCKET skt)
 {
 	return close(skt);
 }
-#endif
 
 #endif
