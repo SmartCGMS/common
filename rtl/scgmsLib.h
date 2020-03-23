@@ -37,7 +37,9 @@
  */
 
 #pragma once
+
 #include "../iface/DeviceIface.h"
+#include "../iface/FilterIface.h"
 #include "Dynamic_Library.h"
 
 namespace scgms {
