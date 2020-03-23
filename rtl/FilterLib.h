@@ -227,8 +227,7 @@ namespace scgms {
 			CInternal_Filter_Configuration Clone() {
 				CInternal_Filter_Configuration result = refcnt::Create_Container_shared<scgms::IFilter_Parameter*, CInternal_Filter_Configuration>(nullptr, nullptr);
 
-				if (refcnt::SReferenced<IConfiguration>::operator bool()) {
-					auto *self = refcnt::SReferenced<IConfiguration>::get();
+				if (refcnt::SReferenced<IConfiguration>::operator bool()) {					
 					for_each([this, &result](scgms::SFilter_Parameter param) {
 						scgms::IFilter_Parameter *clone;
 						if (param->Clone(&clone) == S_OK) {

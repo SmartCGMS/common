@@ -273,10 +273,13 @@ namespace refcnt {
 	template <typename T, typename I = IVector_Container<T>>
 	I* Copy_Container(I* src) {
 		I* result = nullptr;
-		// copy parameter hint to internal vector
-		T *begin, *end;
-		if (src->get(&begin, &end) == S_OK)
-			result = Create_Container<T>(begin, end);
+
+		if (src) {
+			// copy parameter hint to internal vector
+			T *begin, *end;
+			if (src->get(&begin, &end) == S_OK)
+				result = Create_Container<T>(begin, end);
+		}
 
 		return result;
 	}
