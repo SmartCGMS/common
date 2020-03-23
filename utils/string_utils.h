@@ -41,6 +41,7 @@
 #include "../rtl/guid.h"
 
 #include <string>
+#include <locale>
 
 template<typename CharT>
 class CDecimal_Separator : public std::numpunct<CharT> {

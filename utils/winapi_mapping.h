@@ -36,47 +36,73 @@
  *       monitoring", Procedia Computer Science, Volume 141C, pp. 279-286, 2018
  */
 
-#pragma once
+#ifndef INC_WINAPI_MAPPING_H
+#define INC_WINAPI_MAPPING_H
+
+#ifndef EXTERN_C
+	#ifdef __cplusplus
+		#define EXTERN_C extern "C"
+	#else
+		#define EXTERN_C extern
+	#endif
+#endif
 
 #ifdef _WIN32
 	#include <Windows.h>
+	#include <locale.h>
 
-	#ifdef __cplusplus
-		extern "C" char __ImageBase;		
-	#endif
+	EXTERN_C char __ImageBase;
+
 	typedef int socklen_t;
 
 	#define MainCalling __cdecl
+
+	#define WSTRING_FORMATTER "%ws"
+
+	inline _locale_t getlocale(int cat) {
+		return _get_current_locale();
+	}
 #else
 	#include <unistd.h>
 	#include <dlfcn.h>
-	#include <ctime>
 	#include <errno.h>
 	#include <sys/ioctl.h>
+
+#ifdef __cplusplus
+	#include <ctime>
+	#include <clocale>
+#else
+	#include <time.h>
+	#include <wchar.h>
+	#include <locale.h>
+#endif
 
 	#define MainCalling
 	
 	typedef int BOOL;
-	constexpr int TRUE = 1;
+	#define TRUE ((BOOL)1)
 #ifndef FALSE
 	// strangely, on some systems, FALSE constant is not defined
 	// NOTE: this has to be #define, as some libraries may check for this constant using preprocessor macro
-	#define FALSE 0
+	#define FALSE ((BOOL)0)
 #endif
-	
+
 	typedef void* HMODULE;
 
-	void localtime_s(struct tm* t, const time_t* tim);
-	void gmtime_s(struct tm* t, const time_t* tim);
-	void _get_timezone(long* tzdst);
+	EXTERN_C void localtime_s(struct tm* t, const time_t* tim);
+	EXTERN_C void gmtime_s(struct tm* t, const time_t* tim);
+	EXTERN_C void _get_timezone(long* tzdst);
 
-	void* LoadLibraryW(const wchar_t *filename);
-	void* GetProcAddress(void *libhandle, const char *symbolname);
-	void FreeLibrary(void* libhandle);
+	EXTERN_C void* LoadLibraryW(const wchar_t *filename);
+	EXTERN_C void* LoadLibraryA(const char *filename);
+	EXTERN_C void* GetProcAddress(void *libhandle, const char *symbolname);
+	EXTERN_C void FreeLibrary(void* libhandle);
 
 	/* closesocket is present in Android standard library, but not on Unix */
-#if not defined(__ARM_ARCH_7A__) && not defined(__aarch64__)
-	int closesocket(int fd);
+	// probably the only portable version of multiple ifdef
+#if defined(__ARM_ARCH_7A__) || defined(__aarch64__)
+#else
+	EXTERN_C int closesocket(int fd);
 #endif
 
 	#define SOCKET int
@@ -88,20 +114,28 @@
 	#define INVALID_SOCKET (SOCKET)(~0)
 	#define wcstok_s wcstok
 
-	inline int WSAGetLastError() {
+	static inline int WSAGetLastError() {
 		return errno;
 	}
 
-	inline int ioctlsocket(int fd, unsigned long request, void* arg) {
+	static inline int ioctlsocket(int fd, unsigned long request, void* arg) {
 		return ioctl(fd, request, arg);
+	}
+
+	static inline char* getlocale(int cat) {
+		return setlocale(cat, NULL);
 	}
 
 	#define swscanf_s swscanf
 
-	void* _aligned_malloc(size_t n, size_t alignment);
-	void _aligned_free(void* _Block);
+	EXTERN_C void* _aligned_malloc(size_t n, size_t alignment);
+	EXTERN_C void _aligned_free(void* _Block);
 
-	int wcstombs_s(size_t* converted, char* dst, size_t dstSizeBytes, const wchar_t* src, size_t maxSizeBytes);
+	EXTERN_C int wcstombs_s(size_t* converted, char* dst, size_t dstSizeBytes, const wchar_t* src, size_t maxSizeBytes);
 
 	#define SD_BOTH SHUT_RDWR
+
+	#define WSTRING_FORMATTER "%ls"
+#endif
+
 #endif
