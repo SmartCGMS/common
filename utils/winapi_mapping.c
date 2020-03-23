@@ -51,8 +51,11 @@
 
 EXTERN_C void* LoadLibraryW(const wchar_t *libname) {
 
-	char* tmp = (char*)malloc(wcslen(libname) + 1);
-	wcstombs(tmp, libname, wcslen(libname));
+	size_t len = wcslen(libname);
+
+	char* tmp = (char*)malloc(len + 1);
+	wcstombs(tmp, libname, len);
+	tmp[len] = '\0';
 
 	void* result = LoadLibraryA(tmp);
 
