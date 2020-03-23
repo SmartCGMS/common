@@ -223,6 +223,22 @@ namespace scgms {
 				for (; begin != end; begin++)
 					callback(refcnt::make_shared_reference_ext<SFilter_Parameter, IFilter_Parameter>(*begin, true));
 			}
+
+			CInternal_Filter_Configuration Clone() {
+				CInternal_Filter_Configuration result = refcnt::Create_Container_shared<scgms::IFilter_Parameter*, CInternal_Filter_Configuration>(nullptr, nullptr);
+
+				if (refcnt::SReferenced<IConfiguration>::operator bool()) {
+					auto *self = refcnt::SReferenced<IConfiguration>::get();
+					for_each([this, &result](scgms::SFilter_Parameter param) {
+						scgms::IFilter_Parameter *clone;
+						if (param->Clone(&clone) == S_OK) {
+							result->add(&clone, &clone + 1);
+						}
+					});
+				}
+
+				return result;
+			}
 		};
 	}
 

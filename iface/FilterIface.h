@@ -95,6 +95,8 @@ namespace scgms {
 
 		virtual HRESULT IfaceCalling Get_Model_Parameters(scgms::IModel_Parameter_Vector **parameters) = 0;
 		virtual HRESULT IfaceCalling Set_Model_Parameters(scgms::IModel_Parameter_Vector *parameters) = 0;
+
+		virtual HRESULT IfaceCalling Clone(scgms::IFilter_Parameter **deep_copy) = 0;
 	};
 	
 
