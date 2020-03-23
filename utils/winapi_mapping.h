@@ -42,28 +42,36 @@
 	#include <Windows.h>
 
 	#ifdef __cplusplus
-		extern "C" char __ImageBase;		
+		extern "C" char __ImageBase;
 	#endif
 	typedef int socklen_t;
 
 	#define MainCalling __cdecl
+
+	#define WSTRING_FORMATTER "%ws"
 #else
 	#include <unistd.h>
 	#include <dlfcn.h>
-	#include <ctime>
 	#include <errno.h>
 	#include <sys/ioctl.h>
+
+#ifdef __cplusplus
+	#include <ctime>
+#else
+	#include <time.h>
+	#include <wchar.h>
+#endif
 
 	#define MainCalling
 	
 	typedef int BOOL;
-	constexpr int TRUE = 1;
+	#define TRUE ((BOOL)1)
 #ifndef FALSE
 	// strangely, on some systems, FALSE constant is not defined
 	// NOTE: this has to be #define, as some libraries may check for this constant using preprocessor macro
-	#define FALSE 0
+	#define FALSE ((BOOL)0)
 #endif
-	
+
 	typedef void* HMODULE;
 
 	void localtime_s(struct tm* t, const time_t* tim);
@@ -75,7 +83,7 @@
 	void FreeLibrary(void* libhandle);
 
 	/* closesocket is present in Android standard library, but not on Unix */
-#if not defined(__ARM_ARCH_7A__) && not defined(__aarch64__)
+#if (!defined(__ARM_ARCH_7A__)) && (!defined(__aarch64__))
 	int closesocket(int fd);
 #endif
 
@@ -104,4 +112,6 @@
 	int wcstombs_s(size_t* converted, char* dst, size_t dstSizeBytes, const wchar_t* src, size_t maxSizeBytes);
 
 	#define SD_BOTH SHUT_RDWR
+
+	#define WSTRING_FORMATTER "%ls"
 #endif

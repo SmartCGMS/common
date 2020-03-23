@@ -43,15 +43,20 @@
 #ifdef _WIN32
 	#include <guiddef.h>
 #else
-	#include <cstring>
-	#include <cstdint>
+	#ifdef __cplusplus
+		#include <cstring>
+		#include <cstdint>
+	#else
+		#include <string.h>
+		#include <stdint.h>
+	#endif
 
-	struct GUID {
+	typedef struct GUID {
 		uint32_t Data1;
 		uint16_t Data2;
 		uint16_t Data3;
 		uint8_t  Data4[8];
-	};
+	} GUID;
 
 	// some libraries expect the constant GUID_DEFINED to be defined in order to avoid redefinition of GUID structure
 	#define GUID_DEFINED
