@@ -98,12 +98,7 @@
 	EXTERN_C void* GetProcAddress(void *libhandle, const char *symbolname);
 	EXTERN_C void FreeLibrary(void* libhandle);
 
-	/* closesocket is present in Android standard library, but not on Unix */
-	// probably the only portable version of multiple ifdef
-#if defined(__ARM_ARCH_7A__) || defined(__aarch64__)
-#else
 	EXTERN_C int closesocket(int fd);
-#endif
 
 	#define SOCKET int
 	#define InetPtonA inet_pton
