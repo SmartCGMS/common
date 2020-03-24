@@ -421,8 +421,10 @@ scgms::time_segment_id_container* WString_To_Select_Time_Segments_Id(const wchar
 std::wstring Model_Parameters_To_WString(scgms::IModel_Parameter_Vector *container) {
 	
 	std::wstringstream result;
-	CDecimal_Separator<wchar_t> decimal_separator{ L'.' };
-	result.imbue(std::locale(std::wcout.getloc(), &decimal_separator));
+	//let's declare dec_sep as a named var to avoid a static-analysis warning
+	//=>refs must be 1, other locale would free it upon passing it
+	CDecimal_Separator<wchar_t>* decimal_separator = new CDecimal_Separator<wchar_t>{L'.', 1};	
+	result.imbue(std::locale(std::wcout.getloc(), decimal_separator)); //locale takes owner ship of dec_sep
 
 	bool not_empty = false;
 
