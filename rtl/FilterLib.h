@@ -155,8 +155,8 @@ namespace scgms {
 								}
 							}
 						}
-					}
-					raw_parameters->Release();
+						raw_parameters->Release();
+					}					
 				}
 
 				return success;
