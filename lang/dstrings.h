@@ -295,10 +295,12 @@ extern const wchar_t* dsPerc_Abs;
 extern const wchar_t* dsThresh_Abs;
 extern const wchar_t* dsLeal_2010;
 extern const wchar_t* dsAIC;
-extern const wchar_t* dsStd_Dev;
+extern const wchar_t* dsBessel_Std_Dev;
+extern const wchar_t* dsBessel_Variance;
 extern const wchar_t* dsCrosswalk;
 extern const wchar_t* dsIntegral_CDF;
 extern const wchar_t* dsAvg_Plus_Bessel_Std_Dev;
+extern const wchar_t* dsRMSE;
 
 extern const wchar_t* dsBlood;
 extern const wchar_t* dsInterstitial;
