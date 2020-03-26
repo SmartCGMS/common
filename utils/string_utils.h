@@ -49,7 +49,7 @@ protected:
 	CharT mSeparator;
 	CharT do_decimal_point() const { return mSeparator; }
 public:
-	CDecimal_Separator(CharT Separator, size_t refs = 0) : mSeparator(Separator), std::numpunct<CharT>(refs){}
+	CDecimal_Separator(CharT Separator, size_t refs = 0) : std::numpunct<CharT>(refs), mSeparator(Separator) {}
 };
 
 
