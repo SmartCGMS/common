@@ -114,6 +114,8 @@ extern const char* dsExport_CSV_Default_File_Name;
 extern const char* dsExport_CSV_Ext_Spec;
 extern const char* dsExport_CSV_Dialog_Title;
 
+extern const char* dsParameters_Optimization_Use;
+
 extern const wchar_t *dsDb_Reader;
 extern const wchar_t *dsDb_Writer;
 extern const wchar_t *dsSinCos_Generator;

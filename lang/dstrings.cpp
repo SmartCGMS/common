@@ -113,6 +113,10 @@ const char* dsExport_CSV_Default_File_Name = "export.csv";
 const char* dsExport_CSV_Ext_Spec = "CSV file (*.csv)";
 const char* dsExport_CSV_Dialog_Title = "Export to CSV";
 
+const char* dsParameters_Optimization_Use = "To enable parameters' optimization, the filter chain must contain:\n"
+											"  a) at least one filter with configured and saved parameters (configure, commit and save)\n"
+											"  b) exactly one, configured Signal Error filter";
+
 const wchar_t *dsDb_Reader = L"Db Reader";
 const wchar_t *dsDb_Writer = L"Db Writer";
 const wchar_t *dsSinCos_Generator = L"Sin/Cos IG/BG generator";
