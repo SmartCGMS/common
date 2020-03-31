@@ -565,6 +565,9 @@ extern const wchar_t* dsConst_ISF_Model;
 extern const wchar_t* dsConst_CR;
 extern const wchar_t* dsConst_CR_Model;
 
+extern const wchar_t* dsHistogram_IG_Prediction_Model;
+extern const wchar_t* dsHistogram_IG_Prediction_Signal;
+
 extern const wchar_t* dsExtModel_Unknown_Opcode;
 extern const wchar_t* dsExtModel_Invalid_Opcode_Direction;
 extern const wchar_t* dsExtModel_Invalid_State_Handshake_Reply;
@@ -1134,3 +1137,5 @@ extern const wchar_t* rsConst_CR;
 extern const wchar_t* rsOutput_CSV_File;
 extern const wchar_t* rsSignal_Stats_Header;
 extern const wchar_t* rsDecoupling_Stats_Header;
+
+extern const wchar_t* rsHistogram_IG_Prediction_Model;

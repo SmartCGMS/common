@@ -761,6 +761,9 @@ const wchar_t* dsConst_ISF_Model = L"Constant insulin sensitivity factor";
 const wchar_t* dsConst_CR = L"carb-to-insulin ratio";
 const wchar_t* dsConst_CR_Model = L"Constant carb-to-insulin ratio";
 
+const wchar_t* dsHistogram_IG_Prediction_Model = L"Histogram ist. prediction";
+const wchar_t* dsHistogram_IG_Prediction_Signal = L"Histogram ist. prediction";
+
 const wchar_t* dsExtModel_Unknown_Opcode = L"Unknown opcode received";
 const wchar_t* dsExtModel_Invalid_Opcode_Direction = L"Received an opcode in unexpected direction";
 const wchar_t* dsExtModel_Invalid_State_Handshake_Reply = L"Handshake reply received in invalid state";
@@ -1170,3 +1173,6 @@ const wchar_t* rsConst_CR = L"const_carb_to_insulin_ratio";
 const wchar_t* rsOutput_CSV_File = L"Output_CSV_file";
 const wchar_t* rsSignal_Stats_Header = L"Segment id; marker;; avg; stddev;count;; min; 25th; median; 75; max";
 const wchar_t* rsDecoupling_Stats_Header = L"Segment id; marker;; avg; stddev;count;; min; 25th; median; 75; max;; matched_events; total_events; matched_levels; total_levels";
+
+
+const wchar_t* rsHistogram_IG_Prediction_Model = L"Histogram_IG_Prediction";
