@@ -115,7 +115,8 @@ const char* dsExport_CSV_Dialog_Title = "Export to CSV";
 
 const char* dsParameters_Optimization_Use = "To enable parameters' optimization, the filter chain must contain:\n"
 											"  a) at least one filter with configured and saved parameters (configure, commit and save)\n"
-											"  b) exactly one, configured Signal Error filter";
+											"  b) exactly one, configured Signal Error filter\n"
+											"Parameters with improved fitness are applied automatically.";
 
 const wchar_t *dsDb_Reader = L"Db Reader";
 const wchar_t *dsDb_Writer = L"Db Writer";
