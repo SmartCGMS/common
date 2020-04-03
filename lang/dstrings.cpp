@@ -763,6 +763,7 @@ const wchar_t* dsConst_CR_Model = L"Constant carb-to-insulin ratio";
 
 const wchar_t* dsHistogram_IG_Prediction_Model = L"Histogram ist. prediction";
 const wchar_t* dsHistogram_IG_Prediction_Signal = L"Histogram ist. prediction";
+const wchar_t* dsBand = L"Band";
 
 const wchar_t* dsExtModel_Unknown_Opcode = L"Unknown opcode received";
 const wchar_t* dsExtModel_Invalid_Opcode_Direction = L"Received an opcode in unexpected direction";
@@ -1176,3 +1177,4 @@ const wchar_t* rsDecoupling_Stats_Header = L"Segment id; marker;; avg; stddev;co
 
 
 const wchar_t* rsHistogram_IG_Prediction_Model = L"Histogram_IG_Prediction";
+const wchar_t* rsBand = L"Band";
