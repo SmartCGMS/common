@@ -93,7 +93,7 @@ namespace scgms {
 		   count is the number of elements of differences, which are encoded as vectors to exploit SIMD
 				this will become significant with ist prediction, where increased number of levels is expected compared to blood
 		   count is the total number of all levels that could have been calculated under optimal conditions
-				not calculated levels are quiet NaN
+				not calculated levels are quiet NaN and they are ignored
 		*/
 		virtual HRESULT IfaceCalling Accumulate(const double *times, const double *reference, const double *calculated, const size_t count) = 0;
 
@@ -101,7 +101,7 @@ namespace scgms {
 		virtual HRESULT IfaceCalling Reset() = 0;
 
 		/* calculates the metric - the less number is better
-		   levels will be the number of levels accumulated
+		   levels_accumulated will be the number of non-nan levels accumulated, can be nullptr
 		   returns S_FALSE if *levels_accumulated < levels_required
 		*/
 		virtual HRESULT IfaceCalling Calculate(double *metric, size_t *levels_accumulated, size_t levels_required) = 0;
