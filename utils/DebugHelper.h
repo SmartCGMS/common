@@ -114,20 +114,8 @@
 		OutputDebugStringA(stream.str().c_str());
 	}
 
-	template <>
-	void dprintf(std::stringstream &stream) {
-		OutputDebugStringA(stream.str().c_str());
-	}
-
-
-	template <>
-	void dprintf(std::string &str) {
-		OutputDebugStringA(str.c_str());
-	}
-
-	template <>
-	void dprintf(const char *str) {
-		OutputDebugStringA(str);
-	}
+	void dprintf(std::stringstream &stream);
+	void dprintf(std::string &str);
+	void dprintf(const char *str);
 
 #endif
