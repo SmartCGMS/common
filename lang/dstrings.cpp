@@ -423,6 +423,7 @@ const wchar_t* dsPathfinder_LD_Directions_Population = L"Pathfinder, LD Dir Pop"
 const wchar_t* dsPathfinder_Fast = L"Pathfinder, fast";
 const wchar_t* dsPathfinder_Spiral = L"Pathfinder, spiral";
 const wchar_t* dsPathfinder_Landscape = L"Pathfinder, landscape";
+const wchar_t* dsSequential_Brute_Force_Scan = L"Sequential Brute Force Scan";
 const wchar_t* dsPSO = L"PSO";
 const wchar_t* dsSADE = L"SADE";
 const wchar_t* dsDE1220 = L"DE1220";
