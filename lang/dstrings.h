@@ -499,6 +499,8 @@ extern const wchar_t* dsSignal_GUI_Name_Steps;
 extern const wchar_t* dsSignal_GUI_Name_Sleep_Quality;
 extern const wchar_t* dsSignal_GUI_Name_Acceleration;
 extern const wchar_t* dsSignal_GUI_Name_Error_Metric;
+extern const wchar_t *dsSignal_GUI_Name_Insulin_Sensitivity;
+extern const wchar_t *dsSignal_GUI_Name_Carb_Ratio;
 
 extern const wchar_t *dsSignal_GUI_Name_Unknown;
 

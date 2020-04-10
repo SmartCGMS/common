@@ -507,6 +507,8 @@ const wchar_t* dsSignal_GUI_Name_Steps = L"Steps";
 const wchar_t* dsSignal_GUI_Name_Sleep_Quality = L"Sleep quality";
 const wchar_t* dsSignal_GUI_Name_Acceleration = L"Acceleration";
 const wchar_t* dsSignal_GUI_Name_Error_Metric = L"error metric";
+const wchar_t *dsSignal_GUI_Name_Insulin_Sensitivity = L"Insulin sensitivity factor";
+const wchar_t *dsSignal_GUI_Name_Carb_Ratio = L"CHO-to-insulin ratio";
 
 const wchar_t *dsSignal_GUI_Name_Unknown = L"Unknown signal";
 
