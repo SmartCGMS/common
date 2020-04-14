@@ -305,7 +305,7 @@ namespace scgms {
 	class SFilter_Executor : public virtual refcnt::SReferenced<scgms::IFilter_Executor> {
 	public:
 		SFilter_Executor() : refcnt::SReferenced<scgms::IFilter_Executor>() {};
-		SFilter_Executor(refcnt::SReferenced<scgms::IFilter_Chain_Configuration> configuration, scgms::TOn_Filter_Created on_filter_created, const void* on_filter_created_data, refcnt::Swstr_list error_description);
+		SFilter_Executor(refcnt::SReferenced<scgms::IFilter_Chain_Configuration> configuration, scgms::TOn_Filter_Created on_filter_created, const void* on_filter_created_data, refcnt::Swstr_list error_description, scgms::IFilter *output = nullptr);
 
 		HRESULT Execute(scgms::UDevice_Event &&event);
 	};
