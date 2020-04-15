@@ -243,7 +243,7 @@ namespace scgms {
 	}
 
 
-	SFilter_Executor::SFilter_Executor(refcnt::SReferenced<scgms::IFilter_Chain_Configuration> configuration, scgms::TOn_Filter_Created on_filter_created, const void* on_filter_created_data, refcnt::Swstr_list error_description, , scgms::IFilter *output) {
+	SFilter_Executor::SFilter_Executor(refcnt::SReferenced<scgms::IFilter_Chain_Configuration> configuration, scgms::TOn_Filter_Created on_filter_created, const void* on_filter_created_data, refcnt::Swstr_list error_description, scgms::IFilter *output) {
 		scgms::IFilter_Executor *executor;
 		if (SUCCEEDED(imported::execute_filter_configuration(configuration.get(), on_filter_created, on_filter_created_data, output, &executor, error_description.get())))
 			reset(executor, [](scgms::IFilter_Executor* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });
@@ -396,7 +396,7 @@ scgms::time_segment_id_container* WString_To_Select_Time_Segments_Id(const wchar
 	std::wstring str_copy{ str };	//wcstok modifies the input string
 	const wchar_t* delimiters = L" ";	//string of chars, which designate individual delimiters
 	wchar_t* buffer = nullptr;
-	wchar_t* str_val = wcstok_s(str_copy.data(), delimiters, &buffer);
+	wchar_t* str_val = wcstok_s(const_cast<wchar_t*>(str_copy.data()), delimiters, &buffer);
 	while (str_val != nullptr) {
 		bool ok;
 		const int64_t value = wstr_2_int(str_val, ok);
@@ -451,7 +451,7 @@ scgms::IModel_Parameter_Vector* WString_To_Model_Parameters(const wchar_t *str) 
 	std::wstring str_copy{ str };	//wcstok modifies the input string
 	const wchar_t* delimiters = L" ";	//string of chars, which designate individual delimiters
 	wchar_t* buffer = nullptr;
-	wchar_t* str_val = wcstok_s(str_copy.data(), delimiters, &buffer);
+	wchar_t* str_val = wcstok_s(const_cast<wchar_t*>(str_copy.data()), delimiters, &buffer);
 	while (str_val != nullptr) {
 		bool ok;
 		const double value = wstr_2_dbl(str_val, ok);
