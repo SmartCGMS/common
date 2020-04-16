@@ -414,6 +414,7 @@ extern const wchar_t* dsPathfinder_LD_Population;
 extern const wchar_t* dsPathfinder_LD_Directions_Population;
 */
 extern const wchar_t* dsPathfinder_Fast;
+extern const wchar_t* dsSequential_Brute_Force_Scan;
 extern const wchar_t* dsPSO;
 extern const wchar_t* dsSADE;
 extern const wchar_t* dsDE1220;

@@ -96,3 +96,15 @@ CMemory_Leak_Tracker::~CMemory_Leak_Tracker() {
 		#endif
 	#endif
 }
+
+void dprintf(std::stringstream &stream) {
+	OutputDebugStringA(stream.str().c_str());
+}
+
+void dprintf(std::string &str) {
+	OutputDebugStringA(str.c_str());
+}
+
+void dprintf(const char *str) {
+	OutputDebugStringA(str);
+}

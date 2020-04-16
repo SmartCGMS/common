@@ -114,4 +114,8 @@
 		OutputDebugStringA(stream.str().c_str());
 	}
 
+	void dprintf(std::stringstream &stream);
+	void dprintf(std::string &str);
+	void dprintf(const char *str);
+
 #endif
