@@ -49,7 +49,7 @@ const wchar_t* dsm_per_s2 = L"m/s2";
 
 
 const char* dsFile = "File";
-const char* dsSave_Configuration = "Save Configruation";
+const char* dsSave_Configuration = "Save Configuration";
 const char* dsQuit = "Quit";
 const char* dsTools = "Tools";
 const char* dsFilters = "Filters";
