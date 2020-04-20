@@ -116,6 +116,7 @@ const char* dsExport_CSV_Dialog_Title = "Export to CSV";
 const char* dsParameters_Optimization_Use = "To enable parameters' optimization, the filter chain must contain:\n"
 											"  a) at least one filter with configured and saved parameters (configure, commit and save)\n"
 											"  b) exactly one, configured Signal Error filter\n"
+											"  c) exactly one filter must emit Shutdown, and any feedback receiver cannot precede this filter\n"
 											"Parameters with improved fitness are applied automatically.";
 
 const wchar_t *dsDb_Reader = L"Db Reader";
@@ -283,6 +284,7 @@ const char *dsSimulation_Is_In_Progress = "Simulation is in progress.";
 
 const char *dsInformation = "Information";
 const char *dsMain_Parameters = "Main parameters";
+const char *dsFilter_Executor_Failed_Review_Config_Errors = "Failed to execute the filters. Please, review the Log|Configuration errors tab.";
 
 const char* dsOK = "OK";
 const char* dsCancel = "Cancel";
@@ -461,6 +463,7 @@ const char *dsReset_Bounds = "Reset";
 
 const char *dsLog_Table_View = "Table";
 const char *dsLog_Raw_View = "Raw";
+const char* dsConfig_Errors = "Configuration errors";
 
 const wchar_t *dsSignal_Measured_BG = L"blood glucose";
 const wchar_t *dsSignal_Measured_IG = L"interstitial fluid glucose";

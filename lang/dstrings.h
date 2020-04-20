@@ -281,6 +281,7 @@ extern const char *dsSimulation_Is_In_Progress;
 
 extern const char *dsInformation;
 extern const char *dsMain_Parameters;
+extern const char *dsFilter_Executor_Failed_Review_Config_Errors;
 
 extern const char* dsOK;
 extern const char* dsCancel;
@@ -452,6 +453,7 @@ extern const char *dsReset_Bounds;
 
 extern const char *dsLog_Table_View;
 extern const char *dsLog_Raw_View;
+extern const char* dsConfig_Errors;
 
 extern const wchar_t *dsSignal_Measured_BG;
 extern const wchar_t *dsSignal_Measured_IG;
