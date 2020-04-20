@@ -762,9 +762,13 @@ const wchar_t* dsConst_ISF_Model = L"Constant insulin sensitivity factor";
 const wchar_t* dsConst_CR = L"carb-to-insulin ratio";
 const wchar_t* dsConst_CR_Model = L"Constant carb-to-insulin ratio";
 
-const wchar_t* dsHistogram_IG_Prediction_Model = L"Histogram ist. prediction";
-const wchar_t* dsHistogram_IG_Prediction_Signal = L"Histogram ist. prediction";
+const wchar_t* dsPattern_Prediction_Model = L"Pattern ist. prediction";
+const wchar_t* dsPattern_Prediction_Signal = L"Pattern ist. prediction";
 const wchar_t* dsBand = L"Band";
+
+const wchar_t* dsNeural_Net_Prediction_Model = L"Neural ist. prediction";
+const wchar_t* dsNeural_Net_Prediction_Signal = L"Neural ist. prediction";
+const wchar_t* dsWeight = L"Weight";
 
 const wchar_t* dsExtModel_Unknown_Opcode = L"Unknown opcode received";
 const wchar_t* dsExtModel_Invalid_Opcode_Direction = L"Received an opcode in unexpected direction";
@@ -1177,5 +1181,8 @@ const wchar_t* rsSignal_Stats_Header = L"Segment id; marker;; avg; stddev;count;
 const wchar_t* rsDecoupling_Stats_Header = L"Segment id; marker;; avg; stddev;count;; min; 25th; median; 75; max;; matched_events; total_events; matched_levels; total_levels";
 
 
-const wchar_t* rsHistogram_IG_Prediction_Model = L"Histogram_IG_Prediction";
+const wchar_t* rsPattern_Prediction_Model = L"Histogram_IG_Prediction";
 const wchar_t* rsBand = L"Band";
+
+const wchar_t* rsNeural_Net_Prediction_Model = L"Neural_Net_IG_Prediction";
+const wchar_t* rsWeight = L"Weight";
