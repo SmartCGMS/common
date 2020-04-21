@@ -73,7 +73,7 @@ namespace scgms {
 		HRESULT Get_Discrete_Bounds(scgms::TBounds* const time_bounds, scgms::TBounds* const level_bounds, size_t *level_count) const;
 	};
 
-	class WTime_Segment { //: public std::weak_ptr<ITime_Segment> { --cannot inherit because shared-weak relationshop cannot live across COM interface
+	class WTime_Segment { //: public std::weak_ptr<ITime_Segment> { --cannot inherit because shared-weak relationship cannot live across COM interface
 						  //Perhaps, we should make STime_Segment export friendly function to WTimeSegment that will take WTime_Segment's
 						  //as callback of STime_Segment. STime_Segment will call the WTime_Segment's callback from STime_Segment's dctor.
 						  //That way, WTime_Segment will learn about STime_Segment's desctruction and return appropriate error codes from that moment on.

@@ -60,3 +60,8 @@ template <typename T>
 Eigen::Map<T> Map_Double_To_Eigen(double* const vector, const size_t count) {
 	return Eigen::Map<T> { vector, T::RowsAtCompileTime, static_cast<Eigen::Index>(count) };
 }
+
+template <typename T>
+Eigen::Map<T> Map_Double_To_Eigen(const double* vector) {
+	return Eigen::Map<T> { const_cast<double*>(vector), T::RowsAtCompileTime, T::ColsAtCompileTime };
+}
