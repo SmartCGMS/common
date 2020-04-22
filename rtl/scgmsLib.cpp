@@ -218,4 +218,8 @@ namespace scgms {
 		}
 
 	}
+
+	bool is_scgms_loaded() {
+		return factory::internal::resolve_factory_symbol("create_signal") != nullptr;
+	}
 }

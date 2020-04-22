@@ -49,6 +49,8 @@ extern const wchar_t* dsA;
 extern const wchar_t* dsS;
 extern const wchar_t* dsm_per_s2;
 
+extern const char* dsSCGMS_Not_Loaded;
+
 extern const char* dsFile;
 extern const char* dsSave_Configuration;
 extern const char* dsQuit;
@@ -281,6 +283,7 @@ extern const char *dsSimulation_Is_In_Progress;
 
 extern const char *dsInformation;
 extern const char *dsMain_Parameters;
+extern const char *dsFilter_Executor_Failed_Review_Config_Errors;
 
 extern const char* dsOK;
 extern const char* dsCancel;
@@ -452,6 +455,7 @@ extern const char *dsReset_Bounds;
 
 extern const char *dsLog_Table_View;
 extern const char *dsLog_Raw_View;
+extern const char* dsConfig_Errors;
 
 extern const wchar_t *dsSignal_Measured_BG;
 extern const wchar_t *dsSignal_Measured_IG;
@@ -568,9 +572,13 @@ extern const wchar_t* dsConst_ISF_Model;
 extern const wchar_t* dsConst_CR;
 extern const wchar_t* dsConst_CR_Model;
 
-extern const wchar_t* dsHistogram_IG_Prediction_Model;
-extern const wchar_t* dsHistogram_IG_Prediction_Signal;
+extern const wchar_t* dsPattern_Prediction_Model;
+extern const wchar_t* dsPattern_Prediction_Signal;
 extern const wchar_t* dsBand;
+
+extern const wchar_t* dsNeural_Net_Prediction_Model;
+extern const wchar_t* dsNeural_Net_Prediction_Signal;
+extern const wchar_t* dsWeight;
 
 extern const wchar_t* dsExtModel_Unknown_Opcode;
 extern const wchar_t* dsExtModel_Invalid_Opcode_Direction;
@@ -1142,5 +1150,8 @@ extern const wchar_t* rsOutput_CSV_File;
 extern const wchar_t* rsSignal_Stats_Header;
 extern const wchar_t* rsDecoupling_Stats_Header;
 
-extern const wchar_t* rsHistogram_IG_Prediction_Model;
+extern const wchar_t* rsPattern_Prediction_Model;
 extern const wchar_t* rsBand;
+
+extern const wchar_t* rsNeural_Net_Prediction_Model;
+extern const wchar_t* rsWeight;

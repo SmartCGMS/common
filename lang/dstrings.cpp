@@ -47,6 +47,7 @@ const wchar_t* dsA = L"A";
 const wchar_t* dsS = L"S";
 const wchar_t* dsm_per_s2 = L"m/s2";
 
+const char* dsSCGMS_Not_Loaded = "SmartCGMS library is not loaded!";
 
 const char* dsFile = "File";
 const char* dsSave_Configuration = "Save Configuration";
@@ -116,6 +117,7 @@ const char* dsExport_CSV_Dialog_Title = "Export to CSV";
 const char* dsParameters_Optimization_Use = "To enable parameters' optimization, the filter chain must contain:\n"
 											"  a) at least one filter with configured and saved parameters (configure, commit and save)\n"
 											"  b) exactly one, configured Signal Error filter\n"
+											"  c) exactly one filter must emit Shutdown, and any feedback receiver cannot precede this filter\n"
 											"Parameters with improved fitness are applied automatically.";
 
 const wchar_t *dsDb_Reader = L"Db Reader";
@@ -283,6 +285,7 @@ const char *dsSimulation_Is_In_Progress = "Simulation is in progress.";
 
 const char *dsInformation = "Information";
 const char *dsMain_Parameters = "Main parameters";
+const char *dsFilter_Executor_Failed_Review_Config_Errors = "Failed to execute the filters. Please, review the Log|Configuration errors tab.";
 
 const char* dsOK = "OK";
 const char* dsCancel = "Cancel";
@@ -461,6 +464,7 @@ const char *dsReset_Bounds = "Reset";
 
 const char *dsLog_Table_View = "Table";
 const char *dsLog_Raw_View = "Raw";
+const char* dsConfig_Errors = "Configuration errors";
 
 const wchar_t *dsSignal_Measured_BG = L"blood glucose";
 const wchar_t *dsSignal_Measured_IG = L"interstitial fluid glucose";
@@ -764,9 +768,13 @@ const wchar_t* dsConst_ISF_Model = L"Constant insulin sensitivity factor";
 const wchar_t* dsConst_CR = L"carb-to-insulin ratio";
 const wchar_t* dsConst_CR_Model = L"Constant carb-to-insulin ratio";
 
-const wchar_t* dsHistogram_IG_Prediction_Model = L"Histogram ist. prediction";
-const wchar_t* dsHistogram_IG_Prediction_Signal = L"Histogram ist. prediction";
+const wchar_t* dsPattern_Prediction_Model = L"Pattern ist. prediction";
+const wchar_t* dsPattern_Prediction_Signal = L"Pattern ist. prediction";
 const wchar_t* dsBand = L"Band";
+
+const wchar_t* dsNeural_Net_Prediction_Model = L"Neural ist. prediction";
+const wchar_t* dsNeural_Net_Prediction_Signal = L"Neural ist. prediction";
+const wchar_t* dsWeight = L"Weight";
 
 const wchar_t* dsExtModel_Unknown_Opcode = L"Unknown opcode received";
 const wchar_t* dsExtModel_Invalid_Opcode_Direction = L"Received an opcode in unexpected direction";
@@ -1179,5 +1187,8 @@ const wchar_t* rsSignal_Stats_Header = L"Segment id; marker;; avg; stddev;count;
 const wchar_t* rsDecoupling_Stats_Header = L"Segment id; marker;; avg; stddev;count;; min; 25th; median; 75; max;; matched_events; total_events; matched_levels; total_levels";
 
 
-const wchar_t* rsHistogram_IG_Prediction_Model = L"Histogram_IG_Prediction";
+const wchar_t* rsPattern_Prediction_Model = L"Histogram_IG_Prediction";
 const wchar_t* rsBand = L"Band";
+
+const wchar_t* rsNeural_Net_Prediction_Model = L"Neural_Net_IG_Prediction";
+const wchar_t* rsWeight = L"Weight";
