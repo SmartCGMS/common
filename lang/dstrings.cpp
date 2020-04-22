@@ -47,6 +47,7 @@ const wchar_t* dsA = L"A";
 const wchar_t* dsS = L"S";
 const wchar_t* dsm_per_s2 = L"m/s2";
 
+const char* dsSCGMS_Not_Loaded = "SmartCGMS library is not loaded!";
 
 const char* dsFile = "File";
 const char* dsSave_Configuration = "Save Configuration";

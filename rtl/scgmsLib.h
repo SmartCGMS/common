@@ -65,4 +65,6 @@ namespace scgms {
         }
     }
 
+
+	bool is_scgms_loaded();
 }

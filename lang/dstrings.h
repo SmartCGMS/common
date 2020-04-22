@@ -49,6 +49,8 @@ extern const wchar_t* dsA;
 extern const wchar_t* dsS;
 extern const wchar_t* dsm_per_s2;
 
+extern const char* dsSCGMS_Not_Loaded;
+
 extern const char* dsFile;
 extern const char* dsSave_Configuration;
 extern const char* dsQuit;
