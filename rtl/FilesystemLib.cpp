@@ -60,7 +60,7 @@ std::wstring Get_Application_Dir() {
 
 #ifdef _WIN32
 	wchar_t ModuleFileName[bufsize];
-	GetModuleFileNameW(((HINSTANCE)&__ImageBase), ModuleFileName, bufsize);
+	GetModuleFileNameW(NULL, ModuleFileName, bufsize);
 #elif __APPLE__
 	char RelModuleFileName[bufsize];
 	uint32_t size = static_cast<uint32_t>(bufsize);
@@ -91,6 +91,60 @@ std::wstring Get_Application_Dir() {
 	return path;
 #endif
 }
+
+std::wstring Get_Dll_Dir() {
+
+	const size_t bufsize = 1024;
+
+#ifdef _WIN32
+	wchar_t ModuleFileName[bufsize];	
+
+	char path[MAX_PATH];
+	HMODULE hm = NULL;
+
+	bool got_dll = GetModuleHandleExW(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS |
+		GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
+		(LPCWSTR)L"DllMain", &hm) != 0;
+
+	if (got_dll)	
+		got_dll = GetModuleFileNameW(hm, ModuleFileName, bufsize);
+
+	if (!got_dll)
+		GetModuleFileNameW(((HINSTANCE)&__ImageBase), ModuleFileName, bufsize);
+
+#elif __APPLE_
+	//TODO get dll not app
+	char RelModuleFileName[bufsize];
+	uint32_t size = static_cast<uint32_t>(bufsize);
+	_NSGetExecutablePath(RelModuleFileName, &size);
+
+	char ModuleFileName[bufsize];
+	realpath(RelModuleFileName, ModuleFileName);
+#else
+	//TODO get dll not app
+	char ModuleFileName[bufsize];
+	memset(ModuleFileName, 0, bufsize);
+	readlink("/proc/self/exe", ModuleFileName, bufsize);
+	// TODO: error checking
+#endif
+
+
+#ifdef DHAS_FILESYSTEM
+	filesystem::path exePath{ ModuleFileName };
+
+	return exePath.remove_filename().wstring();
+#else
+	std::string spath(ModuleFileName);
+	std::wstring path(spath.begin(), spath.end());
+
+	size_t pos = path.find_last_of('/');
+	if (pos != std::string::npos)
+		path = path.substr(0, pos + 1);
+
+	return path;
+#endif
+}
+
 
 std::wstring& Path_Append(std::wstring& path, const wchar_t* level) {
 #ifdef DHAS_FILESYSTEM

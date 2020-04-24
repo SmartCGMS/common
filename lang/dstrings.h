@@ -812,7 +812,10 @@ extern const wchar_t* dsFailed_to_configure_filter;
 extern const wchar_t* dsFeedback_sender_not_connected;
 extern const wchar_t* dsFilter_configuration_param_value_error;
 extern const wchar_t* dsStored_Parameters_Corrupted_Not_Loaded;
-;
+
+extern const wchar_t* dsDefault_Filters_Path;
+extern const wchar_t* dsLoaded_Filters;
+extern const wchar_t* dsNone;
 
 //--------------------------------- do not translate any of the rs-prefixed texts --
 

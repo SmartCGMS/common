@@ -64,6 +64,8 @@
 // resolves application directory (may be different from working directory)
 std::wstring Get_Application_Dir();
 
+std::wstring Get_Dll_Dir();
+
 // appends next level to supplied path using preferred separator
 std::wstring& Path_Append(std::wstring& path, const wchar_t* level);
 
