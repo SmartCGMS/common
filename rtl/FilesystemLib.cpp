@@ -45,7 +45,6 @@
 	#include <mach-o/dyld.h>
 #endif
 
-
 #include "FilesystemLib.h"
 
 #include "hresult.h"
@@ -53,6 +52,10 @@
 #include "../utils/string_utils.h"
 
 #include <cstring>
+
+#ifndef WIN32
+#include <dlfcn.h>
+#endif
 
 std::wstring Get_Application_Dir() {
 
@@ -90,6 +93,32 @@ std::wstring Get_Application_Dir() {
 
 	return path;
 #endif
+}
+
+std::wstring Get_Current_Module_Dir()
+{
+#ifdef WIN32
+	std::wstring path{ Get_Application_Dir() };
+#else
+	Dl_info dl_info;
+	dladdr((void*)Get_Current_Module_Dir, &dl_info);
+
+	std::string spath(dl_info.dli_fname);
+	std::wstring path(spath.begin(), spath.end());
+#endif
+
+#ifdef DHAS_FILESYSTEM
+	filesystem::path bpath(path);
+	bpath = bpath.remove_filename();
+
+	path = bpath.wstring();
+#else
+	auto pos = path.find_last_of('/');
+	if (pos != path.length() - 1)
+		path = path.substr(0, pos + 1); // leave the last '/'
+#endif
+
+	return path;
 }
 
 std::wstring& Path_Append(std::wstring& path, const wchar_t* level) {

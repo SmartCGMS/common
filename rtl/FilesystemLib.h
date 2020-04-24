@@ -64,6 +64,10 @@
 // resolves application directory (may be different from working directory)
 std::wstring Get_Application_Dir();
 
+// resolves current module (executable or dynamic library) directory; this strictly depends on symbol location
+// - if the FilesystemLib is linked to a dynamic library and is called from there, it resolves the dynamic library path
+std::wstring Get_Current_Module_Dir();
+
 // appends next level to supplied path using preferred separator
 std::wstring& Path_Append(std::wstring& path, const wchar_t* level);
 
