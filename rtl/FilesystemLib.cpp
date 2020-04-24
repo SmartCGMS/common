@@ -82,10 +82,9 @@ std::wstring Get_Application_Dir() {
 
 	return exePath.remove_filename().wstring();
 #else
-	std::string spath(ModuleFileName);
-	std::wstring path(spath.begin(), spath.end());
+	std::wstring path{ Widen_Char(ModuleFileName) };
 
-	size_t pos = path.find_last_of('/');
+	size_t pos = path.find_last_of(L'/');
 	if (pos != std::string::npos)
 		path = path.substr(0, pos + 1);
 
@@ -96,14 +95,13 @@ std::wstring Get_Application_Dir() {
 std::wstring Get_Dll_Dir() {
 
 	const size_t bufsize = 1024;
-
 #ifdef _WIN32
 	wchar_t ModuleFileName[bufsize];	
-	GetModuleFileNameW(((HINSTANCE)&__ImageBase), ModuleFileName, bufsize);
+	GetModuleFileNameW(((HINSTANCE)&__ImageBase), ModuleFileName, bufsize);	
 #else
+	char ModuleFileName[bufsize];
 	Dl_info info;
-	if (dladdr(static_cast<void*>(Get_Dll_Dir), &info) != 0) {
-		char ModuleFileName[bufsize];
+	if (dladdr((void*)Get_Dll_Dir, &info) != 0) {		
 		realpath(info.dli_fname, ModuleFileName);
 	}
 	else
@@ -116,10 +114,9 @@ std::wstring Get_Dll_Dir() {
 
 	return exePath.remove_filename().wstring();
 #else
-	std::string spath(ModuleFileName);
-	std::wstring path(spath.begin(), spath.end());
+	std::wstring path{Widen_Char(ModuleFileName) };
 
-	size_t pos = path.find_last_of('/');
+	size_t pos = path.find_last_of(L'/');
 	if (pos != std::string::npos)
 		path = path.substr(0, pos + 1);
 
