@@ -43,6 +43,7 @@
 	#define DYLD_BOOL class DYLD_BOOL
 
 	#include <mach-o/dyld.h>
+	#include <dlfcn.h>
 #endif
 
 
@@ -98,28 +99,16 @@ std::wstring Get_Dll_Dir() {
 
 #ifdef _WIN32
 	wchar_t ModuleFileName[bufsize];	
-
-	char path[MAX_PATH];
-	HMODULE hm = NULL;
-
-	bool got_dll = GetModuleHandleExW(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS |
-		GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
-		(LPCWSTR)L"DllMain", &hm) != 0;
-
-	if (got_dll)	
-		got_dll = GetModuleFileNameW(hm, ModuleFileName, bufsize);
-
-	if (!got_dll)
-		GetModuleFileNameW(((HINSTANCE)&__ImageBase), ModuleFileName, bufsize);
-
+	GetModuleFileNameW(((HINSTANCE)&__ImageBase), ModuleFileName, bufsize);
 #elif __APPLE_
-	//TODO get dll not app
-	char RelModuleFileName[bufsize];
-	uint32_t size = static_cast<uint32_t>(bufsize);
-	_NSGetExecutablePath(RelModuleFileName, &size);
 
-	char ModuleFileName[bufsize];
-	realpath(RelModuleFileName, ModuleFileName);
+	Dl_info info;
+	if (dladdr(Get_Dll_Dir, &info) != 0) {
+		char ModuleFileName[bufsize];
+		realpath(info.dli_fname, ModuleFileName);
+	}
+	else
+		return Get_Application_Dir();
 #else
 	//TODO get dll not app
 	char ModuleFileName[bufsize];
