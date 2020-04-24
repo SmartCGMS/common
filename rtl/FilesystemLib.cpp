@@ -100,21 +100,14 @@ std::wstring Get_Dll_Dir() {
 #ifdef _WIN32
 	wchar_t ModuleFileName[bufsize];	
 	GetModuleFileNameW(((HINSTANCE)&__ImageBase), ModuleFileName, bufsize);
-#elif __APPLE_
-
+#else
 	Dl_info info;
-	if (dladdr(Get_Dll_Dir, &info) != 0) {
+	if (dladdr(static_cast<void*>(Get_Dll_Dir), &info) != 0) {
 		char ModuleFileName[bufsize];
 		realpath(info.dli_fname, ModuleFileName);
 	}
 	else
 		return Get_Application_Dir();
-#else
-	//TODO get dll not app
-	char ModuleFileName[bufsize];
-	memset(ModuleFileName, 0, bufsize);
-	readlink("/proc/self/exe", ModuleFileName, bufsize);
-	// TODO: error checking
 #endif
 
 
