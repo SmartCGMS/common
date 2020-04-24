@@ -52,7 +52,7 @@ namespace scgms
 	// protocol (major) version used in handshake - mismatch would cause fatal error
 	constexpr uint16_t ProtoVersionMajor = 0x0001;
 	// protocol (minor) version used in handshake - mismatch would cause warning
-	constexpr uint16_t ProtoVersionMinor = 0x0002;
+	constexpr uint16_t ProtoVersionMinor = 0x0003;
 
 	// maximum total length of a packet (header + body), aka buffer size
 	constexpr size_t Max_Packet_Length = 1024;
@@ -69,9 +69,10 @@ namespace scgms
 	enum class NNet_Status_Code : uint8_t
 	{
 		OK					= 0,
-		FAIL_VERSION		= 1,
-		FAIL_UNK_SESSION	= 2,
-		FAIL_UNK_MODEL		= 3,
+		FAIL_VERSION		= 1,	// major version mismatch
+		FAIL_UNK_SESSION	= 2,	// unknown session requested to be restored
+		FAIL_UNK_MODEL		= 3,	// unknown model requested
+		FAIL_NO_SLOT		= 4,	// no slot available within selected model
 	};
 
 	/*
