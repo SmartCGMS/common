@@ -818,6 +818,10 @@ const wchar_t* dsFeedback_sender_not_connected = L"Feedback-sender not connected
 const wchar_t* dsFilter_configuration_param_value_error = L"Filter(1)-parameter(2) value(3) error: (1)";
 const wchar_t* dsStored_Parameters_Corrupted_Not_Loaded = L"Stored parameters are corruped and were not loaded.";
 
+const wchar_t* dsDefault_Filters_Path = L"Default filters directory: ";
+const wchar_t* dsLoaded_Filters = L"Loaded filters: ";
+const wchar_t* dsNone = L"None";
+
 
 //--------------------------------- do not translate any of the rs-prefixed texts --
 

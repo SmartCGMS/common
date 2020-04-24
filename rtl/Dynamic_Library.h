@@ -54,6 +54,7 @@ class CDynamic_Library final {
 		HMODULE mHandle;
 		// library base for given platform (sometimes needs to be set in runtime, on e.g. Android)
 		static std::unique_ptr<std::wstring> mLibrary_Base;	//unique_ptr to avoid a memory leak due to TBB allocator
+        std::wstring mLib_Path;
 	public:
 		CDynamic_Library() noexcept;
 		// disallow copying - the handle has to be unique
@@ -76,6 +77,7 @@ class CDynamic_Library final {
 
 		// is module (properly) loaded?
 		bool Is_Loaded() const;
+        const std::wstring Lib_Path();
 
 		// checks extension of supplied path to verify, if it's a library (platform-dependent check)
 		static bool Is_Library(const std::wstring& path);

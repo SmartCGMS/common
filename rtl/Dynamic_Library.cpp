@@ -56,6 +56,8 @@ CDynamic_Library::CDynamic_Library() noexcept : mHandle(nullptr) {
 
 CDynamic_Library::CDynamic_Library(CDynamic_Library&& other) noexcept : mHandle(nullptr) {
 	std::swap(mHandle, other.mHandle);
+    mLib_Path = std::move(other.mLib_Path);
+    mLibrary_Base = std::move(other.mLibrary_Base);
 }
 
 CDynamic_Library::~CDynamic_Library() {
@@ -63,12 +65,17 @@ CDynamic_Library::~CDynamic_Library() {
 		Unload();
 }
 
+bool CDynamic_Library::Load(const wchar_t *file_path) {   
+    if (mLibrary_Base) mLib_Path = *mLibrary_Base + file_path;
+        else mLib_Path = file_path;
 
-bool CDynamic_Library::Load(const wchar_t *file_path) {
-	if (mLibrary_Base) mHandle = LoadLibraryW((*mLibrary_Base + file_path).c_str());
-		else mHandle = LoadLibraryW(file_path);
+    mHandle = LoadLibraryW(mLib_Path.c_str());
 
 	return mHandle != NULL;
+}
+
+const std::wstring CDynamic_Library::Lib_Path() {    
+    return mLib_Path;
 }
 
 bool CDynamic_Library::Is_Loaded() const {
