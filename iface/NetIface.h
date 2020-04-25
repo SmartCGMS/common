@@ -195,7 +195,7 @@ namespace scgms
 	 */
 	struct TPacket_Advance_Model_Body
 	{
-		double device_time;					// current RatTime of the running simulation
+		double device_time;					// current RatTime relative to the start of the simulation
 		uint8_t signal_count;				// number of following TNet_Data_Item items
 		// dynamic data: signal_count * TNet_Data_Item
 	};
