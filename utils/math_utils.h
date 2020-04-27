@@ -42,10 +42,22 @@
 
 #include <cmath>
 #include <vector>
+#include <type_traits>
 
 template <typename T>
-bool Is_NaN(const T value) {
+typename std::enable_if<std::is_floating_point<T>::value, bool>::type
+Is_NaN(const T value) {
     return std::isnan(value);
+}
+
+
+template <typename T>
+typename std::enable_if<!std::is_floating_point<T>::value, bool>::type
+Is_NaN(const T list) {
+    for (const auto& elem : list)
+        if (Is_NaN(elem)) return true;
+
+    return false;
 }
 
 template <typename T, typename... Args>
