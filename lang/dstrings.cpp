@@ -772,6 +772,7 @@ const wchar_t* dsBand = L"Band";
 
 const wchar_t* dsNeural_Net_Prediction_Model = L"Neural ist. prediction";
 const wchar_t* dsNeural_Net_Prediction_Signal = L"Neural ist. prediction";
+const wchar_t* dsReference_Neural_Net_Filter = L"Neural reference ist.";
 const wchar_t* dsWeight = L"Weight";
 
 const wchar_t* dsExtModel_Unknown_Opcode = L"Unknown opcode received";

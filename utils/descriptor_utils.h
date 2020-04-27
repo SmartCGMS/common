@@ -38,7 +38,7 @@
 
 #pragma once
 
-#include "hresult.h"
+#include "../rtl/hresult.h"
 
 template <typename T, typename A = std::allocator<T>, typename V = std::vector<T, A>>
 HRESULT do_get_descriptors(const V &descriptors, T **begin, T **end) {
@@ -59,4 +59,39 @@ constexpr scgms::TSolver_Descriptor Describe_Non_Specialized_Solver(const GUID i
 		0,
 		nullptr
 	};
+}
+
+
+template <typename R, typename T>
+R Set_Value_First_Followers(const T first, const T follower, const size_t param_count) {
+	using Q = typename std::remove_const<R>::type;
+	Q result;
+	result[0] = first;
+	for (auto i = 1; i < param_count; i++)
+		result[i] = follower;
+	return result;
+}
+
+template <typename R>
+R Set_Double_First_Followers(const double first, const double follower, const size_t param_count) {
+	R result = { first };
+	result.vector = Set_Value_First_Followers<decltype(result.vector), double>(first, follower, param_count);
+	return result;
+}
+template <typename R>
+R Name_Parameters_First_Followers(const wchar_t* first, const wchar_t* follower_prefix, bool ui, const size_t param_count, std::vector<std::wstring>& name_placeholder) {
+	using Q = typename std::remove_const<R>::type;
+
+	Q result = { const_cast<wchar_t*>(first) };
+	for (auto i = 1; i < param_count; i++) {
+		std::wstring tmp = follower_prefix;
+		tmp += ui ? L' ' : L'_';
+		tmp += std::to_wstring(i);
+
+		const size_t idx = static_cast<size_t>(2) * i + (ui ? static_cast<size_t>(0) : static_cast<size_t>(1));
+		name_placeholder[idx] = std::move(tmp);
+		result[i] = const_cast<wchar_t*>(name_placeholder[idx].c_str());
+	}
+
+	return result;
 }
