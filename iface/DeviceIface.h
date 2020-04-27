@@ -120,7 +120,9 @@ namespace scgms {
 
 	enum class NDevice_Event_Code : uint8_t {
 		Nothing = 0,		//internal event of the object
-		Shut_Down,
+		Shut_Down,			//transform the filter to the "Zombie" state (see Linux task state) so that it still can provide data
+							//via an inspection interface (obtained by QueryInterface), but performs no tasks
+							//SmartCGMS can invoke filter's destructor without sending the Shut_Down event first
 
 		Level,				//level contains newly measured or calculated level of a given signal
 		Masked_Level,		//level not advertised for solving, i.e., tranining, but for testing set
@@ -135,8 +137,8 @@ namespace scgms {
 		Solve_Parameters,	//user can either request to recalculate, or we can request to recalculate it at the end of the segment - i.e., prior sending Time_Segment_Stop
 		Time_Segment_Start,
 		Time_Segment_Stop,
-		Warm_Reset,			//all incoming levels (and associated errors) are thrown away, calculated parameters are kept and DB/File input filters replays the data from begining, while CGMS input filter just ignores this message		
-
+		Warm_Reset,			//any received data are thrown away, self-calculated parameters are kept and DB/File input filters replays the data from begining
+							//this is an analogy to x86 jumping to the reset-vector address
 
 		//-------- codes intended for log parsers ------
 		Information,
