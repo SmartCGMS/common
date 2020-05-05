@@ -752,6 +752,7 @@ const wchar_t* dsError_Initializing_Discrete_Model = L"Cannot initialize discret
 const wchar_t* dsRemote_Host = L"Host";
 const wchar_t* dsRemote_Port = L"Port";
 const wchar_t* dsRemote_Model_Id = L"Remote model";
+const wchar_t* dsRemote_Subject_Name = L"Remote subject name";
 
 const wchar_t* dsSignal_Error = L"Signal error";
 const wchar_t* dsReference_Signal = L"Reference signal";
@@ -1166,6 +1167,7 @@ const wchar_t* rsMaximum_Time = L"Maximum_Time";
 const wchar_t* rsRemote_Host = L"Host";
 const wchar_t* rsRemote_Port = L"Port";
 const wchar_t* rsRemote_Model_Id = L"Remote_Model";
+const wchar_t* rsRemote_Subject_Name = L"Remote_Subject";
 
 const wchar_t* rsReference_Signal = L"Reference_Signal";
 const wchar_t* rsError_Signal = L"Error_Signal";
