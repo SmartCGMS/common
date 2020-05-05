@@ -51,6 +51,7 @@
 		#include <stdint.h>
 	#endif
 
+#ifndef GUID_DEFINED
 	typedef struct GUID {
 		uint32_t Data1;
 		uint16_t Data2;
@@ -60,6 +61,7 @@
 
 	// some libraries expect the constant GUID_DEFINED to be defined in order to avoid redefinition of GUID structure
 	#define GUID_DEFINED
+#endif
 
 	#ifdef __cplusplus
 		static inline int IsEqualGUID(const GUID& rguid1, const GUID& rguid2) {

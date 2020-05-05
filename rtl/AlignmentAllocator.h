@@ -110,6 +110,10 @@ public:
 	}
 };
 
+#if defined(new) && defined(new_operator_replacement)
+#undef new
+#endif
+
 template <size_t alignment = AVX2Alignment>
 class alignas(alignment) CAligned {
 
@@ -117,11 +121,25 @@ class alignas(alignment) CAligned {
 public:
 	virtual ~CAligned() {};
 
-	void* operator new(size_t i){
+	static void* operator new(size_t i) noexcept(false) {
 		return _aligned_malloc(i, alignment);
 	}
 
-	void operator delete (void *p) {
+	static void operator delete (void *p) noexcept(false) {
+		_aligned_free(p);
+	}
+
+	template<typename T>
+	static void* operator new(size_t i, T placement, const char* file = nullptr, int line = 0) noexcept(false) {
+		return _aligned_malloc_dbg(i, alignment, file, line);
+	}
+
+	template<typename T>
+	static void operator delete(void *p, T, const char*, int) noexcept(false) {
 		_aligned_free(p);
 	}
 };
+
+#ifdef new_operator_replacement
+#define new new_operator_replacement
+#endif

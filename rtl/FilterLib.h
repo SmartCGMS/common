@@ -232,6 +232,7 @@ namespace scgms {
 						scgms::IFilter_Parameter *clone;
 						if (param->Clone(&clone) == S_OK) {
 							result->add(&clone, &clone + 1);
+							clone->Release(); // pass ownership completely to filter parameter container (Clone call adds reference count as well, as "add" for container)
 						}
 					});
 				}

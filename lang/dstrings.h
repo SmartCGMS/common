@@ -504,6 +504,8 @@ extern const wchar_t* dsSignal_GUI_Name_Steps;
 extern const wchar_t* dsSignal_GUI_Name_Sleep_Quality;
 extern const wchar_t* dsSignal_GUI_Name_Acceleration;
 extern const wchar_t* dsSignal_GUI_Name_Error_Metric;
+extern const wchar_t *dsSignal_GUI_Name_Insulin_Sensitivity;
+extern const wchar_t *dsSignal_GUI_Name_Carb_Ratio;
 
 extern const wchar_t *dsSignal_GUI_Name_Unknown;
 
@@ -781,6 +783,7 @@ extern const wchar_t* dsError_Initializing_Discrete_Model;
 extern const wchar_t* dsRemote_Host;
 extern const wchar_t* dsRemote_Port;
 extern const wchar_t* dsRemote_Model_Id;
+extern const wchar_t* dsRemote_Subject_Name;
 
 extern const wchar_t* dsParam_K;
 extern const wchar_t* dsKp;
@@ -1127,6 +1130,7 @@ extern const wchar_t* rsMaximum_Time;
 extern const wchar_t* rsRemote_Host;
 extern const wchar_t* rsRemote_Port;
 extern const wchar_t* rsRemote_Model_Id;
+extern const wchar_t* rsRemote_Subject_Name;
 
 extern const wchar_t* rsReference_Signal;
 extern const wchar_t* rsError_Signal;

@@ -43,15 +43,18 @@
 
 #ifdef TrackLeaks
 
+	//Visual Leak Detector - vld.codeplex.com
+	//This will cause problems, if a dll enabling VLD is loaded in a thread that does not finish as the last one.
 	#define prefer_vld
-		//Visual Leak Detector - vld.codeplex.com
-		//This will cause problems, if a dll enabling VLD is loaded in a thread that does not finish as the last one.
-
 
 	#if defined(_MSC_VER) && defined(_DEBUG)
 		#ifdef prefer_vld
-			//#include <vld.h>
-			#include "../../../Third Party/Visual Leak Detector/include/vld.h"
+			// local-specific path to VLD; left here for compatibility/legacy reasons
+			#if __has_include("../../../Third Party/Visual Leak Detector/include/vld.h")
+				#include "../../../Third Party/Visual Leak Detector/include/vld.h"
+			#else
+				#include <vld.h>
+			#endif
 		#else
 
 			//The Thread Building Blocks has to include prior redefining new
@@ -61,20 +64,20 @@
 				#include "tbb/atomic.h"
 			#endif
 
-			#include <crtdbg.h>
 			#define _CRTDBG_MAP_ALLOC
+			#include <crtdbg.h>
 			#define DEBUG_CLIENTBLOCK   new( _CLIENT_BLOCK, __FILE__, __LINE__)
-			#define new DEBUG_CLIENTBLOCK
-		#endif	
+			#define DEBUG_NORMALBLOCK   new( _NORMAL_BLOCK, __FILE__, __LINE__)
+			#define new_operator_replacement DEBUG_CLIENTBLOCK
+			#define new new_operator_replacement
+		#endif
 	#endif
 
 #endif
 
-#include <sstream>
-
-
 #include <iostream>
-#include <fstream>	
+#include <sstream>
+#include <fstream>
 
 #define overridedefdprintf
 
@@ -93,24 +96,24 @@
 
 	template <typename... Args>
 	void dprintf(char *format, Args... args) {
-	   const size_t bufsize=2048;
-	   char buf[bufsize];
-	   sprintf_s(buf, bufsize, format, args...);
-	   OutputDebugStringA(buf); 
+		const size_t bufsize=2048;
+		char buf[bufsize];
+		sprintf_s(buf, bufsize, format, args...);
+		OutputDebugStringA(buf); 
 	}
 
 	template <typename... Args>
 	void dprintf(wchar_t *format, Args... args) {
-	   const size_t bufsize=2048;
-	   wchar_t buf[bufsize];
-	   swprintf_s(buf, bufsize, format, args...);
-	   OutputDebugStringW(buf); 
+		const size_t bufsize=2048;
+		wchar_t buf[bufsize];
+		swprintf_s(buf, bufsize, format, args...);
+		OutputDebugStringW(buf); 
 	}
 
 	template <typename T>
 	void dprintf(T arg) {
 		std::stringstream stream;
-		stream << arg;		
+		stream << arg;
 		OutputDebugStringA(stream.str().c_str());
 	}
 
