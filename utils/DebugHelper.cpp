@@ -40,13 +40,11 @@
 
 #if defined(_MSC_VER) && defined(_DEBUG)
     #include <wchar.h>
-	#include <stdlib.h>	
+	#include <stdlib.h>
 	#include <Windows.h>
 
-    extern "C" char __ImageBase;
+	extern "C" char __ImageBase;
 #endif
-
-	
 
 class CMemory_Leak_Tracker {
 	//just a class-helper that correctly catches memory allocated with global const variable
