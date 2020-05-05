@@ -576,6 +576,7 @@ extern const wchar_t* dsBand;
 
 extern const wchar_t* dsNeural_Net_Prediction_Model;
 extern const wchar_t* dsNeural_Net_Prediction_Signal;
+extern const wchar_t* dsNeural_Net_Prediction_Filter;
 extern const wchar_t* dsReference_Neural_Net_Filter;
 extern const wchar_t* dsWeight;
 

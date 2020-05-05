@@ -53,7 +53,7 @@ Is_NaN(const T value) {
 
 template <typename T>
 typename std::enable_if<!std::is_floating_point<T>::value, bool>::type
-Is_NaN(const T list) {
+Is_NaN(const T& list) {
     for (const auto& elem : list)
         if (Is_NaN(elem)) return true;
 
