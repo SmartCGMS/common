@@ -361,6 +361,12 @@ namespace scgms {
 		SSignal_Error_Inspection(const SFilter &signal_error_filter);
 	};
 
+	class SEvent_Export_Filter_Inspection : public std::shared_ptr<scgms::IEvent_Export_Filter_Inspection> {
+	public:
+		SEvent_Export_Filter_Inspection() noexcept {};
+		SEvent_Export_Filter_Inspection(const SFilter &event_export_filter);
+	};
+
 }
 
 

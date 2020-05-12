@@ -370,6 +370,11 @@ namespace scgms {
 			refcnt::Query_Interface<scgms::IFilter, scgms::ISignal_Error_Inspection>(signal_error_filter.get(), IID_Signal_Error_Inspection, *this);
 	}
 
+	SEvent_Export_Filter_Inspection::SEvent_Export_Filter_Inspection(const SFilter &event_export_filter) {
+		if (event_export_filter)
+			refcnt::Query_Interface<scgms::IFilter, scgms::IEvent_Export_Filter_Inspection>(event_export_filter.get(), IID_Event_Export_Filter_Inspection, *this);
+	}
+
 }
 
 
