@@ -321,7 +321,9 @@ namespace scgms {
 		virtual HRESULT IfaceCalling Draw(TDrawing_Image_Type type, TDiagnosis diagnosis, refcnt::str_container *svg, refcnt::IVector_Container<uint64_t> *segmentIds, refcnt::IVector_Container<GUID> *signalIds) = 0;
 	};
 
-	using TEvent_Export_Callback = HRESULT(*)(NDevice_Event_Code event_code, GUID* device_id, GUID* signal_id, double device_time, int64_t logical_time, uint64_t segment_id, double level, IModel_Parameter_Vector* parameters, refcnt::wstr_container* info);
+	// event export callback function prototype; used in filters implementing IEvent_Export_Filter_Inspection iface
+	using TEvent_Export_Callback = HRESULT(*)(NDevice_Event_Code /*event_code*/, GUID* /*device_id*/, GUID* /*signal_id*/, double /*device_time*/, int64_t /*logical_time*/,
+												uint64_t /*segment_id*/, double /*level*/, IModel_Parameter_Vector* /*parameters*/, refcnt::wstr_container* /*info*/);
 
 	constexpr GUID IID_Event_Export_Filter_Inspection = { 0x22724c4b, 0x57e5, 0x46a1, { 0xac, 0xfb, 0x29, 0x5a, 0x7a, 0xd2, 0xeb, 0xcc } };// {22724C4B-57E5-46A1-ACFB-295A7AD2EBCC}
 	class IEvent_Export_Filter_Inspection : public virtual refcnt::IReferenced {
