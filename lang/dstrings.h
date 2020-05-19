@@ -574,13 +574,6 @@ extern const wchar_t* dsConst_CR_Model;
 
 extern const wchar_t* dsPattern_Prediction_Model;
 extern const wchar_t* dsPattern_Prediction_Signal;
-extern const wchar_t* dsBand;
-
-extern const wchar_t* dsNeural_Net_Prediction_Model;
-extern const wchar_t* dsNeural_Net_Prediction_Signal;
-extern const wchar_t* dsNeural_Net_Prediction_Filter;
-extern const wchar_t* dsReference_Neural_Net_Filter;
-extern const wchar_t* dsWeight;
 
 extern const wchar_t* dsExtModel_Unknown_Opcode;
 extern const wchar_t* dsExtModel_Invalid_Opcode_Direction;
@@ -1158,7 +1151,4 @@ extern const wchar_t* rsSignal_Stats_Header;
 extern const wchar_t* rsDecoupling_Stats_Header;
 
 extern const wchar_t* rsPattern_Prediction_Model;
-extern const wchar_t* rsBand;
 
-extern const wchar_t* rsNeural_Net_Prediction_Model;
-extern const wchar_t* rsWeight;
