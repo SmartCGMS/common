@@ -48,8 +48,9 @@
 namespace scgms {
 	std::vector<TApprox_Descriptor> get_approx_descriptors();
 
-	using SApproximator = std::shared_ptr<IApproximator>;
-	using SApprox_Parameters_Vector = std::shared_ptr<IApprox_Parameters_Vector>;
-	SApproximator Create_Approximator(const GUID &id, SSignal signal, SApprox_Parameters_Vector configuration);
-	SApproximator Create_Approximator(const GUID &id, ISignal* signal, SApprox_Parameters_Vector configuration);
+	using SApproximator = refcnt::SReferenced<IApproximator>;
+			
+	SApproximator Create_Approximator(const GUID &id, SSignal signal);
+	SApproximator Create_Approximator(const GUID &id, ISignal* signal);
+	SApproximator Create_Approximator(ISignal* signal); //creates a default one
 }

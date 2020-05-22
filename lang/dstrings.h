@@ -436,6 +436,7 @@ extern const char* dsPopulation_Size;
 
 extern const wchar_t *dsLine_Approx;
 extern const wchar_t *dsAkima;
+extern const wchar_t* dsAvgExp;
 
 extern const char *dsDrawing_Tab_Graph;
 extern const char *dsDrawing_Tab_Day;
@@ -574,6 +575,9 @@ extern const wchar_t* dsConst_CR_Model;
 
 extern const wchar_t* dsPattern_Prediction_Model;
 extern const wchar_t* dsPattern_Prediction_Signal;
+extern const wchar_t* dsParameters_File;
+extern const wchar_t* dsUpdate_Parameters_File;
+extern const wchar_t* dsDo_Not_Learn;
 
 extern const wchar_t* dsExtModel_Unknown_Opcode;
 extern const wchar_t* dsExtModel_Invalid_Opcode_Direction;
@@ -1151,4 +1155,6 @@ extern const wchar_t* rsSignal_Stats_Header;
 extern const wchar_t* rsDecoupling_Stats_Header;
 
 extern const wchar_t* rsPattern_Prediction_Model;
-
+extern const wchar_t* rsParameters_File;
+extern const wchar_t* rsUpdate_Parameters_File;
+extern const wchar_t* rsDo_Not_Learn;

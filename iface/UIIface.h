@@ -138,12 +138,9 @@ namespace scgms {
 	struct TApprox_Descriptor {
 		const GUID id;
 		const wchar_t *description;
-		const size_t parameters_count;	//can be zero
-		const wchar_t** ui_parameter_name;
-		const wchar_t** config_parameter_name;
 	};
 
-	constexpr TApprox_Descriptor Null_Approx_Descriptor = { Invalid_GUID, nullptr, 0, nullptr, nullptr };
+	constexpr TApprox_Descriptor Null_Approx_Descriptor = { Invalid_GUID, nullptr };
 
 	//Units used for displayed signals
 	enum class NSignal_Unit : uint16_t {

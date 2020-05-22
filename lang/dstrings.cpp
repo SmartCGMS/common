@@ -445,6 +445,7 @@ const char* dsPopulation_Size = "Population size";
 
 const wchar_t *dsLine_Approx = L"Line";
 const wchar_t *dsAkima = L"Akima";
+const wchar_t* dsAvgExp = L"AvgExp";
 
 const char *dsDrawing_Tab_Graph = "Single plot";
 const char *dsDrawing_Tab_Day = "Daily plot";
@@ -771,6 +772,9 @@ const wchar_t* dsConst_CR_Model = L"Constant carb-to-insulin ratio";
 
 const wchar_t* dsPattern_Prediction_Model = L"Pattern ist. prediction";
 const wchar_t* dsPattern_Prediction_Signal = L"Pattern ist. prediction";
+const wchar_t* dsParameters_File = L"Parameters file";
+const wchar_t* dsUpdate_Parameters_File = L"Update parameters file";
+const wchar_t* dsDo_Not_Learn = L"Do not learn";
 
 const wchar_t* dsExtModel_Unknown_Opcode = L"Unknown opcode received";
 const wchar_t* dsExtModel_Invalid_Opcode_Direction = L"Received an opcode in unexpected direction";
@@ -1188,4 +1192,7 @@ const wchar_t* rsSignal_Stats_Header = L"Segment id; marker;; avg; stddev;count;
 const wchar_t* rsDecoupling_Stats_Header = L"Segment id; marker;; avg; stddev;count;; min; 25th; median; 75; max;; matched_events; total_events; matched_levels; total_levels";
 
 
-const wchar_t* rsPattern_Prediction_Model = L"Histogram_IG_Prediction";
+const wchar_t* rsPattern_Prediction_Model = L"Pattern_IG_Prediction";
+const wchar_t* rsParameters_File = L"Parameters_File";
+const wchar_t* rsUpdate_Parameters_File = L"Update_Parameters_File";
+const wchar_t* rsDo_Not_Learn = L"Do_Not_Learn";

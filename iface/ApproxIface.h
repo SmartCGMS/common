@@ -43,7 +43,10 @@
 #include "DeviceIface.h"
 
 namespace scgms {
-	using IApprox_Parameters_Vector = refcnt::double_container;
+	constexpr GUID apxLine = { 0xb89204aa, 0x5842, 0xa8f1, { 0x4c, 0xa1, 0x43, 0x12, 0x5f, 0x4e, 0xb2, 0xa7 } };		// {B89204AA-5842-A8F1-4CA1-43125F4EB2A7}
+	constexpr GUID apxAkima = { 0xc3e9669d, 0x594a, 0x4fd4,{ 0xb0, 0xf4, 0x44, 0xab, 0x9d, 0x4e, 0x7, 0x39 } };			// {C3E9669D-594A-4FD4-B0F4-44AB9D4E0739}
+	constexpr GUID apxAvgExpAppx = { 0x97b51526, 0x533b, 0x40ae, { 0xa9, 0xb4, 0x9f, 0xac, 0xfd, 0x82, 0x41, 0x49 } };	// {97B51526-533B-40AE-A9B4-9FACFD824149}
+		//primary DOI: 10.1109/ITAB.2010.5687663		following DOI: 10.1007/978-3-319-00846-2_304
 
 	class IApproximator : public virtual refcnt::IReferenced
 	{
@@ -56,5 +59,5 @@ namespace scgms {
 			virtual HRESULT IfaceCalling GetLevels(const double* times, double* const levels, const size_t count, const size_t derivation_order) = 0;
 	};
 
-	using TCreate_Approximator = HRESULT(IfaceCalling *)(const GUID *approx_id, ISignal *signal, IApprox_Parameters_Vector* configuration, IApproximator **approx);
+	using TCreate_Approximator = HRESULT(IfaceCalling *)(const GUID *approx_id, ISignal *signal, IApproximator **approx);
 }

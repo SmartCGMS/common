@@ -48,8 +48,8 @@ namespace solver {
 }
 
 namespace scgms {
-	template <typename T>
-	const T& Convert_Parameters(scgms::IModel_Parameter_Vector *params, const double *default_parameters) {
+	template <typename R, typename P = scgms::IModel_Parameter_Vector*>	
+	const R& Convert_Parameters(P params, const double* default_parameters) {
 		double *begin{ const_cast<double*>(default_parameters) };	//just in case that no parameters are set at all -> than we have to use the default ones
 		if (params) {
 			double *tmp_begin, *end;
@@ -59,7 +59,7 @@ namespace scgms {
 			}
 		}
 
-		T &result = *(reinterpret_cast<T*>(begin));
+		R &result = *(reinterpret_cast<R*>(begin));
 		return result;
 	}
 

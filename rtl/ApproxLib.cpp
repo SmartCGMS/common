@@ -56,18 +56,28 @@ std::vector<scgms::TApprox_Descriptor> scgms::get_approx_descriptors() {
 }
 
 
-
-scgms::SApproximator scgms::Create_Approximator(const GUID &id, scgms::SSignal signal, scgms::SApprox_Parameters_Vector configuration) {
-	return Create_Approximator(id, signal.get(), configuration);
-}
-
-scgms::SApproximator scgms::Create_Approximator(const GUID &id, scgms::ISignal* signal, scgms::SApprox_Parameters_Vector configuration) {
+scgms::SApproximator Create_Approximator_Raw_ID(const GUID* id, scgms::ISignal* signal) {
 
 	scgms::SApproximator result;
-	scgms::IApproximator *approximator;
+	scgms::IApproximator* approximator;
 
-	if (imported::create_approximator(&id,  signal, configuration.get(), &approximator) == S_OK)
+	if (imported::create_approximator(id, signal, &approximator) == S_OK)
 		result = refcnt::make_shared_reference_ext<scgms::SApproximator, scgms::IApproximator>(approximator, false);
 
 	return result;
+}
+
+
+
+scgms::SApproximator scgms::Create_Approximator(const GUID &id, scgms::SSignal signal) {
+	return Create_Approximator_Raw_ID(&id, signal.get());
+}
+
+
+scgms::SApproximator scgms::Create_Approximator(const GUID &id, scgms::ISignal* signal) {
+	return Create_Approximator_Raw_ID(&id, signal);	
+}
+
+scgms::SApproximator scgms::Create_Approximator(scgms::ISignal* signal) {
+	return Create_Approximator_Raw_ID(nullptr, signal);
 }
