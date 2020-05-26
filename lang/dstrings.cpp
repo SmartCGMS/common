@@ -87,7 +87,10 @@ const char* dsWindow = "Window";
 const char* dsHelp = "&Help";
 const char* dsAbout = "About";
 const char* dsAbout_Amp = "&About";
-const char* dsGlucose_Prediction = "Glucose Prediction - %1";
+const char* dsGlucose_Prediction = "GPredict3 (SmartCGMS) - %1";
+const char* dsWarning = "Warning";
+
+const char* dsSave_Experimental_Setup_Failed = "Failed to save the experimental setup.\n\nError code: ";
 
 const char* dsAdd = "Add";
 const char* dsDelete = "Delete";

@@ -46,6 +46,7 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <functional>
 
 namespace refcnt {
 
@@ -151,19 +152,19 @@ namespace refcnt {
 		public:
 			virtual ~CVector_Container() { Release_Content();  };
 
-			virtual HRESULT set(T *begin, T *end) override final {
+			virtual HRESULT IfaceCalling set(T *begin, T *end) override final {
 				Release_Content();
 				TAligned_Vector<T>::clear();
 				return add(begin, end);
 			}
 
-			virtual HRESULT add(T *begin, T *end) override final {
+			virtual HRESULT IfaceCalling add(T *begin, T *end) override {
 				if (begin != nullptr)
 					Add_Content(begin, end);
 				return S_OK;
 			}
 
-			virtual HRESULT get(T **begin, T **end) const override final {
+			virtual HRESULT IfaceCalling get(T **begin, T **end) const override final {
 				if (!TAligned_Vector<T>::empty()) {
 					*begin = const_cast<T*>(TAligned_Vector<T>::data());
 					*end = const_cast<T*>(TAligned_Vector<T>::data()) + TAligned_Vector<T>::size();
@@ -174,7 +175,7 @@ namespace refcnt {
 				}
 			}
 		
-			virtual HRESULT pop(T* value) override final {
+			virtual HRESULT IfaceCalling pop(T* value) override final {
 				if (TAligned_Vector<T>::empty()) return S_FALSE;
 
 				*value = TAligned_Vector<T>::back();
@@ -184,7 +185,7 @@ namespace refcnt {
 				return S_OK;
 			}
 
-			virtual HRESULT remove(const size_t index) override {
+			virtual HRESULT IfaceCalling remove(const size_t index) override {
 				if (TAligned_Vector<T>::empty()) return S_FALSE;
 								
 				Release_Item(TAligned_Vector<T>::operator [](index) );
@@ -193,7 +194,7 @@ namespace refcnt {
 				return S_OK;
 			}
 
-			virtual HRESULT move(const size_t from_index, const size_t to_index) override {
+			virtual HRESULT IfaceCalling move(const size_t from_index, const size_t to_index) override {
 				if ((from_index >= TAligned_Vector<T>::size()) ||
 					(to_index >= TAligned_Vector<T>::size()) ||
 					(from_index == to_index)) return E_INVALIDARG;
@@ -207,7 +208,7 @@ namespace refcnt {
 				return S_OK;
 			}
 
-			virtual HRESULT empty() const override final {
+			virtual HRESULT IfaceCalling empty() const override final {
 				return TAligned_Vector<T>::empty() ? S_OK : S_FALSE;
 			}
 		};
@@ -220,13 +221,13 @@ namespace refcnt {
 		public:
 			CVector_View(const T *begin, const T *end) : mBegin(begin), mEnd(end) {}
 
-			virtual HRESULT set(T *begin, T *end) override final { return E_NOTIMPL; };
-			virtual HRESULT add(T *begin, T *end) override final { return E_NOTIMPL; };
-			virtual HRESULT get(T **begin, T **end) const override final { *begin = const_cast<T*>(mBegin); *end = const_cast<T*>(mEnd); return S_OK; }
-			virtual HRESULT pop(T* value) override final { return E_NOTIMPL; }
-			virtual HRESULT remove(const size_t index) override final { return E_NOTIMPL; }
-			virtual HRESULT move(const size_t from_index, const size_t to_index) override final { return E_NOTIMPL; };
-			virtual HRESULT empty() const override final { return mEnd<=mBegin ? S_OK : S_FALSE; }
+			virtual HRESULT IfaceCalling set(T *begin, T *end) override final { return E_NOTIMPL; };
+			virtual HRESULT IfaceCalling add(T *begin, T *end) override final { return E_NOTIMPL; };
+			virtual HRESULT IfaceCalling get(T** begin, T** end) const override final { *begin = const_cast<T*>(mBegin); *end = const_cast<T*>(mEnd); return S_OK; }
+			virtual HRESULT IfaceCalling pop(T* value) override final { return E_NOTIMPL; };
+			virtual HRESULT IfaceCalling remove(const size_t index) override final { return E_NOTIMPL; };
+			virtual HRESULT IfaceCalling move(const size_t from_index, const size_t to_index) override final { return E_NOTIMPL; };
+			virtual HRESULT IfaceCalling empty() const override final { return mEnd <= mBegin ? S_OK : S_FALSE; };
 		};
 
 		#pragma warning( pop ) 
@@ -338,6 +339,8 @@ namespace refcnt {
 		Swstr_list();
 		void push(const wchar_t* wstr);
 		void push(const std::wstring &wstr);
+
+		void for_each(std::function<void(const std::wstring &wstr)> callback) const;
 	};
 	
 }

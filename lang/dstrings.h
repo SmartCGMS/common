@@ -90,6 +90,9 @@ extern const char* dsHelp;
 extern const char* dsAbout;
 extern const char* dsAbout_Amp;
 extern const char* dsGlucose_Prediction;
+extern const char* dsWarning;
+
+extern const char* dsSave_Experimental_Setup_Failed;
 
 extern const char* dsAdd;
 extern const char* dsDelete;

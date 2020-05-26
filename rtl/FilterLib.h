@@ -297,7 +297,7 @@ namespace scgms {
 	}
 
 	using SFilter_Chain_Configuration = internal::CInternal_Filter_Chain_Configuration<scgms::IFilter_Chain_Configuration>;
-
+	
 	class SPersistent_Filter_Chain_Configuration : public virtual internal::CInternal_Filter_Chain_Configuration<scgms::IPersistent_Filter_Chain_Configuration> {
 	public:
 		SPersistent_Filter_Chain_Configuration();				

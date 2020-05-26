@@ -141,4 +141,14 @@ namespace refcnt {
 		push(wstr.c_str());
 	}
 
+
+	void Swstr_list::for_each(std::function<void(const std::wstring& wstr)> callback) const {
+		refcnt::wstr_container** begin, ** end;
+		HRESULT rc = refcnt::SReferenced<refcnt::wstr_list>::get()->get(&begin, &end);
+		if (rc != S_OK) return;
+
+
+		for (; begin != end; begin++)
+			callback(refcnt::WChar_Container_To_WString(*begin));
+	}
 }
