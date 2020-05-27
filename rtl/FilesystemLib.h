@@ -111,3 +111,4 @@ std::list<std::wstring, A> List_Directory(std::wstring basePath) {
 	return result;
 }
 
+std::wstring Native_Slash(const wchar_t* path);

@@ -93,6 +93,19 @@ namespace scgms {
 	}
 
 	
+	std::wstring SFilter_Parameter::as_filepath(HRESULT& rc) {
+		std::wstring result;
+
+		refcnt::wstr_container* wstr;
+		rc = get()->Get_File_Path(&wstr);			
+		if (rc == S_OK) {
+			result = refcnt::WChar_Container_To_WString(wstr);
+			wstr->Release();
+		}
+
+		return result;
+	}
+
 	int64_t SFilter_Parameter::as_int(HRESULT &rc) {
 		int64_t result = 0;
 		rc = get()->Get_Int64(&result);	//if fails, it returns 0
