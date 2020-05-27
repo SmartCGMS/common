@@ -39,8 +39,6 @@
 #pragma once
 
 #include "hresult.h"
-#include "referencedImpl.h"
-
 
 template <class T, class I, typename... Args>
 HRESULT Manufacture_Object(I** manufactured, Args... args) {
@@ -59,16 +57,4 @@ HRESULT Manufacture_Object(I** manufactured, Args... args) {
 
 
 	return rc;
-}
-
-
-template <class T, class I, class S, typename... Args>
-S Manufacture_Object_Shared(Args... args) {
-	I* manufactured;
-	S result;
-
-	if (Manufacture_Object<T, I>(&manufactured, args...) == S_OK)
-		result = refcnt::make_shared_reference_ext<S, I>(manufactured, false);
-	
-	return result;
 }

@@ -52,7 +52,12 @@ extern const wchar_t* dsm_per_s2;
 extern const char* dsSCGMS_Not_Loaded;
 
 extern const char* dsFile;
-extern const char* dsSave_Configuration;
+extern const char* dsNew_Experimental_Setup;
+extern const char* dsOpen_Experimental_Setup;
+extern const char* dsSave_Experimental_Setup;
+extern const char* dsSave_Experimental_Setup_As;
+extern const char* dsExperimental_Setup_File_Mask;
+extern const char* dsUnsaved_Experimental_Setup;
 extern const char* dsQuit;
 extern const char* dsTools;
 extern const char* dsFilters;
@@ -93,6 +98,7 @@ extern const char* dsGlucose_Prediction;
 extern const char* dsWarning;
 
 extern const char* dsSave_Experimental_Setup_Failed;
+extern const char* dsErrors_Warnings_Hints;
 
 extern const char* dsAdd;
 extern const char* dsDelete;

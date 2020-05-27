@@ -99,7 +99,7 @@ wchar_t* Describe_Error(const HRESULT error) {
 		case MK_E_CANTOPENFILE: return L"Cannot open file"; break;
 		case CO_E_ERRORINDLL: return L"Dynamic-libray error"; break;
 		case ENOENT: return L"No entry"; break;
-		default:	return L"Unknown error"; break;
+		default:	return L"Error description is not available"; break;
 	}
 }
 

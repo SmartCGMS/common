@@ -50,7 +50,12 @@ const wchar_t* dsm_per_s2 = L"m/s2";
 const char* dsSCGMS_Not_Loaded = "SmartCGMS library is not loaded!";
 
 const char* dsFile = "File";
-const char* dsSave_Configuration = "Save Configuration";
+const char* dsNew_Experimental_Setup = "New";
+const char* dsOpen_Experimental_Setup = "Open";
+const char* dsSave_Experimental_Setup = "Save";
+const char* dsSave_Experimental_Setup_As = "Save As...";
+const char* dsExperimental_Setup_File_Mask = "Experimental Setup (*.ini)";
+const char* dsUnsaved_Experimental_Setup = "Unsaved experimental setup";
 const char* dsQuit = "Quit";
 const char* dsTools = "Tools";
 const char* dsFilters = "Filters";
@@ -90,7 +95,8 @@ const char* dsAbout_Amp = "&About";
 const char* dsGlucose_Prediction = "GPredict3 (SmartCGMS) - %1";
 const char* dsWarning = "Warning";
 
-const char* dsSave_Experimental_Setup_Failed = "Failed to save the experimental setup.\n\nError code: ";
+const char* dsSave_Experimental_Setup_Failed = "There are warnings related this experimental setup.\n\nError code: ";
+const char* dsErrors_Warnings_Hints = "Errors, Warnings, Hints:";
 
 const char* dsAdd = "Add";
 const char* dsDelete = "Delete";
@@ -806,7 +812,7 @@ const wchar_t* dsPeriod = L"period";
 const wchar_t* dsInvalid_Section_Name = L"Configuration, invalid section name: ";
 const wchar_t* dsCannot_Resolve_Filter_Descriptor = L"Cannot resolve filter descriptor by id: ";
 const wchar_t* dsMalformed_Filter_Parameter_Value = L"Malformed filter(1)-parameter(2)'s value(3): (1)";
-const wchar_t* dsFilter_Parameter_Not_Configured = L"Filter(1)-parameter(2) is not configured, default value will be used. Save the configuration to fix it.   (1)";
+const wchar_t* dsFilter_Parameter_Not_Configured = L"Filter(1)-parameter(2) is not configured, default value will be used. Configure it, and ave the configuration to fix it.\n(1)";
 
 const wchar_t* dsParameters_to_optimize_not_found = L"Parameters to optimize were not found.";
 const wchar_t* dsParameters_to_optimize_could_not_be_read_bounds_including = L"Parameters to optimize could not be read, bounds including.";
