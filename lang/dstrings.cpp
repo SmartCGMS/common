@@ -759,6 +759,8 @@ const wchar_t* dsMaximum_Time = L"Maximum time";
 const wchar_t* dsAsync_Stepping_Not_Positive = L"Asynchronous stepping must be positive. Affected model: ";
 const wchar_t* dsCannot_Get_Model_Descriptor_By_Signal_Id = L"Cannot get model descriptor. Signal id: ";
 const wchar_t* dsError_Initializing_Discrete_Model = L"Cannot initialize discrete model.";
+const wchar_t* dsAsync_Sig_Gen_Req_Seg_Id = L"Asynchronously configured model requires a valid segment-id configuration!";
+
 
 const wchar_t* dsRemote_Host = L"Host";
 const wchar_t* dsRemote_Port = L"Port";

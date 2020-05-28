@@ -786,6 +786,7 @@ extern const wchar_t* dsMaximum_Time;
 extern const wchar_t* dsAsync_Stepping_Not_Positive;
 extern const wchar_t* dsCannot_Get_Model_Descriptor_By_Signal_Id;
 extern const wchar_t* dsError_Initializing_Discrete_Model;
+extern const wchar_t* dsAsync_Sig_Gen_Req_Seg_Id;
 
 extern const wchar_t* dsRemote_Host;
 extern const wchar_t* dsRemote_Port;
