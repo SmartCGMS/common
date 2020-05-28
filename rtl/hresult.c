@@ -38,45 +38,6 @@
 
 #include "hresult.h"
 
-
-
-#ifdef _WIN32
-	#include <WTypes.h>
-#else
-	typedef long HRESULT;
-
-	typedef unsigned long	DWORD;
-	typedef long			LONG;
-	typedef unsigned long	ULONG;
-	// define macro to avoid redefinition in several used libraries (e.g. ExcelFormat)
-	#define INT32_TYPES_DEFINED
-
-	#define S_OK									((HRESULT)0L)
-	#define S_FALSE									((HRESULT)1L)
-	#define E_INVALIDARG							((HRESULT)0x80070057)
-	#define E_NOTIMPL								((HRESULT)0x80004001)
-	#define E_UNEXPECTED							((HRESULT)0x8000FFFFL)
-	#define E_FAIL									((HRESULT)0x80004005L)
-	#define E_NOINTERFACE							((HRESULT)0x80004002L)
-	#define E_ABORT									((HRESULT)0x80004004L)
-	#define E_ILLEGAL_METHOD_CALL					((HRESULT)0x8000000EL)
-	#define E_ILLEGAL_STATE_CHANGE					((HRESULT)0x8000000DL)
-	#define ERROR_DS_DRA_EXTN_CONNECTION_FAILED		((HRESULT)8466L)
-	#define E_ACCESSDENIED							((HRESULT)0x80070005L)
-	#define E_NOT_SET								((HRESULT)0x80070490L)
-	#define MK_E_CANTOPENFILE						((HRESULT)0x800401EAL)
-	#define CO_E_ERRORINDLL							((HRESULT)0x800401F9L)
-
-	#ifndef ENOENT
-		#define ENOENT								((HRESULT)2L)
-	#endif
-
-	#define SUCCEEDED(hr) (((HRESULT)(hr)) >= 0)
-	#define FAILED(hr) (((HRESULT)(hr)) < 0)
-#endif
-
-
-
 wchar_t* Describe_Error(const HRESULT error) {
 	//although we could use the system error description, at least on Win32,
 	//we provide the meanings as we use them
@@ -85,6 +46,8 @@ wchar_t* Describe_Error(const HRESULT error) {
 	switch (error) {
 		case S_OK: return L"No error"; break;
 		case S_FALSE: return L"Succeeded, but no result"; break;
+		case ERROR_FILE_NOT_FOUND: return L"File not found"; break;
+		case ERROR_READ_FAULT: return L"Cannot read from the given source"; break;
 		case E_INVALIDARG: return L"One or more invalid argument(s)"; break;
 		case E_NOTIMPL: return L"Not implemented"; break;
 		case E_UNEXPECTED: return L"Catastrophic failure"; break;
@@ -98,7 +61,6 @@ wchar_t* Describe_Error(const HRESULT error) {
 		case /*E_NOT_SET*/((HRESULT)0x80070490L): return L"Not set/found"; break;	//otherwise fails to compile on Win
 		case MK_E_CANTOPENFILE: return L"Cannot open file"; break;
 		case CO_E_ERRORINDLL: return L"Dynamic-libray error"; break;
-		case ENOENT: return L"No entry"; break;
 		default:	return L"Error description is not available"; break;
 	}
 }

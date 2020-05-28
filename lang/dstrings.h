@@ -200,6 +200,7 @@ extern const wchar_t* dsCollect_Statistics;
 extern const wchar_t* dsOutput_to_file_enabled_but_no_filename_given;
 extern const wchar_t* dsInvalid_Argument_Value_per_Parameter;
 extern const wchar_t* dsCannot_Open_File;
+extern const wchar_t* dsCannot_Read_File;
 
 extern const wchar_t *dsSignal_Masked_Id;
 extern const wchar_t *dsSignal_Value_Bitmask;
@@ -585,7 +586,7 @@ extern const wchar_t* dsConst_CR_Model;
 extern const wchar_t* dsPattern_Prediction_Model;
 extern const wchar_t* dsPattern_Prediction_Signal;
 extern const wchar_t* dsParameters_File;
-extern const wchar_t* dsUpdate_Parameters_File;
+extern const wchar_t* dsDo_Not_Update_Parameters_File;
 extern const wchar_t* dsDo_Not_Learn;
 
 extern const wchar_t* dsExtModel_Unknown_Opcode;
@@ -1165,5 +1166,5 @@ extern const wchar_t* rsDecoupling_Stats_Header;
 
 extern const wchar_t* rsPattern_Prediction_Model;
 extern const wchar_t* rsParameters_File;
-extern const wchar_t* rsUpdate_Parameters_File;
+extern const wchar_t* rsDo_Not_Update_Parameters_File;
 extern const wchar_t* rsDo_Not_Learn;

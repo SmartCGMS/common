@@ -44,6 +44,7 @@
 
 #include <wchar.h>
 #include <iostream>
+#include <iomanip>
 #include <sstream>
 #include "manufactory.h"
 
@@ -437,6 +438,7 @@ std::wstring Model_Parameters_To_WString(scgms::IModel_Parameter_Vector *contain
 
 	//unused keeps static analysis happy about creating an unnamed object
 	auto unused = result.imbue(std::locale(std::wcout.getloc(), new CDecimal_Separator<wchar_t>{ L'.'})); //locale takes owner ship of dec_sep
+	result << std::setprecision(std::numeric_limits<long double>::digits10 + 1);
 
 	bool not_empty = false;
 

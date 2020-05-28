@@ -95,7 +95,7 @@ const char* dsAbout_Amp = "&About";
 const char* dsGlucose_Prediction = "GPredict3 (SmartCGMS) - %1";
 const char* dsWarning = "Warning";
 
-const char* dsSave_Experimental_Setup_Failed = "There are warnings related this experimental setup.\n\nError code: ";
+const char* dsSave_Experimental_Setup_Failed = "There are warnings/errrors related this experimental setup.\n\nError code: ";
 const char* dsErrors_Warnings_Hints = "Errors, Warnings, Hints:";
 
 const char* dsAdd = "Add";
@@ -201,6 +201,7 @@ const wchar_t* dsCollect_Statistics = L"Collect statistics";
 const wchar_t* dsOutput_to_file_enabled_but_no_filename_given = L"Ouput to file enabled, but not filename given.";
 const wchar_t* dsInvalid_Argument_Value_per_Parameter = L"Invalid argument value, parameter name: ";
 const wchar_t* dsCannot_Open_File = L"Cannot open file: ";
+const wchar_t* dsCannot_Read_File = L"Cannot read file: ";
 
 
 const wchar_t *rsSignal_Masked_Id = L"Signal";
@@ -782,7 +783,7 @@ const wchar_t* dsConst_CR_Model = L"Constant carb-to-insulin ratio";
 const wchar_t* dsPattern_Prediction_Model = L"Pattern ist. prediction";
 const wchar_t* dsPattern_Prediction_Signal = L"Pattern ist. prediction";
 const wchar_t* dsParameters_File = L"Parameters file";
-const wchar_t* dsUpdate_Parameters_File = L"Update parameters file";
+const wchar_t* dsDo_Not_Update_Parameters_File = L"Do not update the parameters file";
 const wchar_t* dsDo_Not_Learn = L"Do not learn";
 
 const wchar_t* dsExtModel_Unknown_Opcode = L"Unknown opcode received";
@@ -812,7 +813,7 @@ const wchar_t* dsPeriod = L"period";
 const wchar_t* dsInvalid_Section_Name = L"Configuration, invalid section name: ";
 const wchar_t* dsCannot_Resolve_Filter_Descriptor = L"Cannot resolve filter descriptor by id: ";
 const wchar_t* dsMalformed_Filter_Parameter_Value = L"Malformed filter(1)-parameter(2)'s value(3): (1)";
-const wchar_t* dsFilter_Parameter_Not_Configured = L"Filter(1)-parameter(2) is not configured, default value will be used. Configure it, and ave the configuration to fix it.\n(1)";
+const wchar_t* dsFilter_Parameter_Not_Configured = L"Filter(1)-parameter(2) is not configured, default value will be used. Configure it, and save the configuration to fix it.\n(1)";
 
 const wchar_t* dsParameters_to_optimize_not_found = L"Parameters to optimize were not found.";
 const wchar_t* dsParameters_to_optimize_could_not_be_read_bounds_including = L"Parameters to optimize could not be read, bounds including.";
@@ -1203,5 +1204,5 @@ const wchar_t* rsDecoupling_Stats_Header = L"Segment id; marker;; avg; stddev;co
 
 const wchar_t* rsPattern_Prediction_Model = L"Pattern_IG_Prediction";
 const wchar_t* rsParameters_File = L"Parameters_File";
-const wchar_t* rsUpdate_Parameters_File = L"Update_Parameters_File";
+const wchar_t* rsDo_Not_Update_Parameters_File = L"Do_Not_Update_Parameters_File";
 const wchar_t* rsDo_Not_Learn = L"Do_Not_Learn";

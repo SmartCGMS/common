@@ -43,6 +43,8 @@
 #include <cwctype>
 #include <cstring>
 #include <array>
+#include <iostream>
+#include <iomanip>
 
 std::string Narrow_WString(const std::wstring& wstr) {
 	return Narrow_WChar(wstr.c_str());
@@ -133,6 +135,15 @@ double wstr_2_dbl(const wchar_t* wstr, bool& ok) {
         value = std::numeric_limits<double>::quiet_NaN(); //sanity
 
     return value;
+}
+
+std::wstring dbl_2_wstr(const double val) {
+    std::wstringstream  stream;
+    auto unused = stream.imbue(std::locale(std::wcout.getloc(), new CDecimal_Separator<wchar_t>{ L'.' })); //locale takes owner ship of dec_sep
+
+    stream << std::setprecision(std::numeric_limits<long double>::digits10 + 1) << val;
+
+    return stream.str();
 }
 
 template <typename T>
