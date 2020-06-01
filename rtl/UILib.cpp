@@ -143,6 +143,14 @@ namespace scgms {
 		return get_descriptor_by_id<TGet_Signal_Descriptors, TSignal_Descriptor>(signal_id, desc, imported::get_signal_descriptors);
 	}
 
+	bool get_metric_descriptor_by_id(const GUID& signal_id, TMetric_Descriptor& desc) {
+		return get_descriptor_by_id<TGet_Metric_Descriptors, TMetric_Descriptor>(signal_id, desc, imported::get_metric_descriptors);
+	}
+
+	bool get_solver_descriptor_by_id(const GUID& signal_id, TSolver_Descriptor& desc) {
+		return get_descriptor_by_id<TGet_Solver_Descriptors, TSolver_Descriptor>(signal_id, desc, imported::get_solver_descriptors);
+	}
+
 	const std::array<const wchar_t*, static_cast<size_t>(scgms::NDevice_Event_Code::count)> event_code_text = { {
 		L"Nothing",
 		L"Shut_Down",

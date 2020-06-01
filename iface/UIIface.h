@@ -75,6 +75,8 @@ namespace scgms {
 		const wchar_t *description;
 	};
 
+	constexpr TMetric_Descriptor Null_Metric_Descriptor{ Invalid_GUID, nullptr };
+
 	enum class NModel_Flags : uint8_t {
 		None = 0,
 		Signal_Model	= 1 << 0,

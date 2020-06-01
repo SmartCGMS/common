@@ -830,6 +830,10 @@ extern const wchar_t* dsDefault_Filters_Path;
 extern const wchar_t* dsLoaded_Filters;
 extern const wchar_t* dsNone;
 
+extern const wchar_t* dsIcarus_v1_AI_Boluses;
+extern const wchar_t* dsBolus_Offset;
+extern const wchar_t* dsBolus_Amount;
+
 //--------------------------------- do not translate any of the rs-prefixed texts --
 
 extern const char* rsAbout_Text;
@@ -1169,3 +1173,7 @@ extern const wchar_t* rsPattern_Prediction_Model;
 extern const wchar_t* rsParameters_File;
 extern const wchar_t* rsDo_Not_Update_Parameters_File;
 extern const wchar_t* rsDo_Not_Learn;
+
+extern const wchar_t* rsIcarus_v1_AI_Boluses;
+extern const wchar_t* rsBolus_Offset;
+extern const wchar_t* rsBolus_Amount;

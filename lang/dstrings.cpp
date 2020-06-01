@@ -834,6 +834,9 @@ const wchar_t* dsDefault_Filters_Path = L"Default filters directory: ";
 const wchar_t* dsLoaded_Filters = L"Loaded filters: ";
 const wchar_t* dsNone = L"None";
 
+const wchar_t* dsIcarus_v1_AI_Boluses = L"Icarus v1 AI boluses";
+const wchar_t* dsBolus_Offset = L"Bolus Offset ";
+const wchar_t* dsBolus_Amount = L"Bolus Amount ";
 
 //--------------------------------- do not translate any of the rs-prefixed texts --
 
@@ -1208,3 +1211,7 @@ const wchar_t* rsPattern_Prediction_Model = L"Pattern_IG_Prediction";
 const wchar_t* rsParameters_File = L"Parameters_File";
 const wchar_t* rsDo_Not_Update_Parameters_File = L"Do_Not_Update_Parameters_File";
 const wchar_t* rsDo_Not_Learn = L"Do_Not_Learn";
+
+const wchar_t* rsIcarus_v1_AI_Boluses = L"Icarus_v1_AI_boluses";
+const wchar_t* rsBolus_Offset = L"Bolus_Offset_";
+const wchar_t* rsBolus_Amount = L"Bolus_Amount_";
