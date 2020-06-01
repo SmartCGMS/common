@@ -156,10 +156,6 @@ extern const wchar_t *dsGen_BG_Cos_Period;
 extern const wchar_t *dsGen_BG_Sampling_Period;
 extern const wchar_t *dsGen_Total_Time;
 
-extern const wchar_t *dsFeedback_Channel_Identifier;
-extern const wchar_t *dsDevice_Driver_Id;
-extern const wchar_t *dsSynchronize_With_Pump;
-
 extern const wchar_t *dsSolver_Filter;
 
 extern const wchar_t *dsSelected_Model;
@@ -223,8 +219,6 @@ extern const wchar_t *dsDrawing_Filter_Filename_Parkes;
 extern const wchar_t *dsDrawing_Filter_Filename_Clark;
 extern const wchar_t *dsDrawing_Filter_Filename_ECDF;
 
-extern const wchar_t *dsDevice_Interop_Filter;
-
 extern const wchar_t *dsInterop_Export_Filter;
 
 extern const wchar_t *dsLog_Filter;
@@ -244,8 +238,6 @@ extern const wchar_t* dsInvalid_GUID;
 
 extern const wchar_t *dsDevice_Feedback_Filter;
 extern const wchar_t *dsDevice_Filter;
-
-extern const wchar_t *dsT1DMS_Device_Driver;
 
 extern const wchar_t *dsGUI_Filter;
 
@@ -701,10 +693,6 @@ extern const wchar_t *dsFilename_ECDF_Tooltip;
 extern const wchar_t *dsLog_File_Output_Tooltip;
 extern const wchar_t *dsLog_File_Input_Tooltip;
 
-extern const wchar_t *dsPump_Interval_Tooltip;
-extern const wchar_t *dsFeedback_Channel_Identifier_Tooltip;
-extern const wchar_t *dsDevice_Driver_Id_Tooltip;
-
 extern const wchar_t *dsSelected_Model_Tooltip;
 extern const wchar_t *dsSelected_Signal_Tooltip;
 extern const wchar_t *dsPrediction_Window_Tooltip;
@@ -947,11 +935,6 @@ extern const wchar_t *rsRecalculate_On_Calibration;
 extern const wchar_t *rsLog_Output_File;
 extern const wchar_t *rsEmit_Shutdown_Msg;
 extern const wchar_t* rsInterpret_Filename_As_Segment_Id;
-
-extern const wchar_t *rsPump_Interval;
-extern const wchar_t *rsFeedback_Channel_Identifier;
-extern const wchar_t *rsDevice_Driver_Id;
-extern const wchar_t *rsSynchronize_With_Pump;
 
 extern const wchar_t *rsDrawing_Filter_Period;
 extern const wchar_t *rsDiagnosis_Is_Type2;

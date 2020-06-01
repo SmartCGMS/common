@@ -158,10 +158,6 @@ const wchar_t *dsGen_BG_Cos_Period = L"BG cosinus period";
 const wchar_t *dsGen_BG_Sampling_Period = L"BG sampling period";
 const wchar_t *dsGen_Total_Time = L"Total generated time interval";
 
-const wchar_t *dsFeedback_Channel_Identifier = L"Feedback channel identifier";
-const wchar_t *dsDevice_Driver_Id = L"Device driver";
-const wchar_t *dsSynchronize_With_Pump = L"Synchronize with pump";
-
 const wchar_t *dsSolver_Filter = L"Solver";
 
 const wchar_t *dsSelected_Model = L"Model";
@@ -228,10 +224,6 @@ const wchar_t *dsDrawing_Filter_Filename_Parkes = L"Parkes grid file path";
 const wchar_t *dsDrawing_Filter_Filename_Clark = L"Clark grid file path";
 const wchar_t *dsDrawing_Filter_Filename_ECDF = L"ECDF file path";
 
-const wchar_t *dsDevice_Interop_Filter = L"Real device interface";
-
-const wchar_t *dsInterop_Export_Filter = L"Interop export filter";
-
 const wchar_t *dsLog_Filter = L"Log";
 const wchar_t *dsLog_Output_File = L"Save log to CSV file";
 const wchar_t* dsLog_Input_File_Or_Dir = L"Log file or dir with log files";
@@ -249,8 +241,6 @@ const wchar_t* dsInvalid_GUID = L"Invalid GUID";
 
 const wchar_t *dsDevice_Feedback_Filter = L"Device feedback";
 const wchar_t *dsDevice_Filter = L"Device";
-
-const wchar_t *dsT1DMS_Device_Driver = L"T1DMS Device driver";
 
 const wchar_t *dsGUI_Filter = L"Visualization";
 
@@ -564,9 +554,6 @@ const wchar_t* rsRename_Time_Segment = L"UPDATE timesegment SET name = ? WHERE i
 const wchar_t* rsDelete_Parameters_Of_Segment_Base = L"DELETE FROM ";
 const wchar_t* rsDelete_Parameters_Of_Segment_Stmt = L" WHERE segmentid = ?";
 
-const wchar_t* rsT1DMS_Receiver_Filter = L"T1DMS Receiver filter";
-const wchar_t* rsT1DMS_Sender_Filter = L"T1DMS Sender filter";
-
 const wchar_t* rsInsulin_Regulation = L"insulin-regulation";
 const wchar_t* rsInsulin_PID_Regulation = L"insulin-pid-regulation";
 const wchar_t* rsBetaPID = L"betapid";
@@ -678,12 +665,6 @@ const wchar_t *dsFilename_ECDF_Tooltip = L"Where to store 'ECDF' drawing at the 
 const wchar_t *dsLog_File_Output_Tooltip = L"Log file output. Any existing file with such name will be overwritten";
 const wchar_t *dsLog_File_Input_Tooltip = L"Log file to be parsed and its contents to be sent to simulation";
 
-// virtual pump group
-const wchar_t *dsPump_Interval_Tooltip = L"How often the pump should dose basal insulin";
-const wchar_t *dsFeedback_Channel_Identifier_Tooltip = L"Identifier of the feedback channel used for pairing and communication";
-const wchar_t *dsDevice_Driver_Id_Tooltip = L"Selected device driver to be loaded";
-const wchar_t *dsSynchronize_With_Pump_Tooltip = L"Synchronize with pump (pump driver)";
-
 // signals filter group
 const wchar_t *dsSelected_Model_Tooltip = L"Model to be used. Make sure you also select valid signal from signal box below";
 const wchar_t *dsSelected_Signal_Tooltip = L"Model signal to be used";
@@ -709,7 +690,7 @@ const wchar_t *dsUse_Opened_Segments_Only_Tooltip = L"Use currently opened segme
 
 const wchar_t *dsParameter_Configuration_Failed_RC = L"Parameter (%1) configuration failed with HRESULT == %2";
 
-const wchar_t* dsBergman_Minimal_Model = L"Bergman extended minimal model device";
+const wchar_t* dsBergman_Minimal_Model = L"Bergman extended minimal model";
 const wchar_t* dsBergman_p1 = L"p1";
 const wchar_t* dsBergman_p2 = L"p2";
 const wchar_t* dsBergman_p3 = L"p3";
@@ -988,11 +969,6 @@ const wchar_t *rsLog_Output_File = L"Log_File";
 const wchar_t *rsEmit_Shutdown_Msg = L"Emit_Shutdown";
 const wchar_t *rsInterpret_Filename_As_Segment_Id = L"Filename_as_segment_id";
 
-const wchar_t *rsPump_Interval = L"Pump_Interval";
-const wchar_t *rsFeedback_Channel_Identifier = L"Feedback_Channel_Identifier";
-const wchar_t *rsDevice_Driver_Id = L"Device_Driver_Id";
-const wchar_t *rsSynchronize_With_Pump = L"Synchronize_With_Pump";
-
 const wchar_t *rsDrawing_Filter_Period = L"Redraw_Period";
 const wchar_t *rsDiagnosis_Is_Type2 = L"Diabetes_Type_2";
 const wchar_t *rsDrawing_Filter_Canvas_Width = L"Canvas_Width";
@@ -1151,9 +1127,6 @@ const char16_t* rsMatlab_Variable_Solver_Hints = u"solver_hints";
 const char16_t* rsMatlab_Variable_Solver_Lowbounds = u"solver_lowerbounds";
 const char16_t* rsMatlab_Variable_Solver_Upbounds = u"solver_upperbounds";
 const char16_t* rsMatlab_Variable_Solver_Output = u"solver_output";
-
-const wchar_t* rsT1DMS_Feedback_Request = L"T1DMS_Feedback_Request";
-const wchar_t* rsBergman_Feedback_Request = L"Bergman_Feedback_Request";
 
 const wchar_t* rsOref0_Manifest_File = L"oref0_manifest.xml";
 const wchar_t* rsOref0_Manifest_Workdir_Path = L"manifest.workdir:path";
