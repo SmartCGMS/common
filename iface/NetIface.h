@@ -52,7 +52,7 @@ namespace scgms
 	// protocol (major) version used in handshake - mismatch would cause fatal error
 	constexpr uint16_t ProtoVersionMajor = 0x0001;
 	// protocol (minor) version used in handshake - mismatch would cause warning
-	constexpr uint16_t ProtoVersionMinor = 0x0004;
+	constexpr uint16_t ProtoVersionMinor = 0x0005;
 
 	// maximum total length of a packet (header + body), aka buffer size
 	constexpr size_t Max_Packet_Length = 1024;
@@ -161,6 +161,8 @@ namespace scgms
 		double tick_interval;				// interval in RatTime
 		GUID requested_model_id;			// GUID of the requested model; if session_id != scgms::Invalid_Session_Id, this field is ignored
 		wchar_t subject_name[Subject_Name_Length];	// null-terminated subject name, empty (zero-filled) if not chosen or requested
+		double initial_time;				// rat time at the beginning of simulation; zero if the initiating side is not the synchronization source
+		double requested_duration;			// requested rat time duration of simulation; zero if the initiating side is not the synchronization source or if no request made
 	};
 
 	/*
