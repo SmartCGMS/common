@@ -134,6 +134,8 @@ const wchar_t *dsDb_Password = L"Password";
 const wchar_t *dsTime_Segment_ID = L"Segment Id";
 const wchar_t *dsShutdown_After_Last = L"Shutdown after last value";
 
+const wchar_t *dsError_Could_Not_Connect_To_Db = L"Could not connect to database!";
+
 const wchar_t *dsGenerate_Primary_Keys = L"Generate new primary keys";
 const wchar_t *dsStore_Data = L"Store data";
 const wchar_t *dsStore_Parameters = L"Store parameters";
@@ -308,6 +310,7 @@ const wchar_t* dsCrosswalk = L"Crosswalk";
 const wchar_t* dsIntegral_CDF = L"area under ECDF";
 const wchar_t* dsAvg_Plus_Bessel_Std_Dev = L"average plus standard deviation with Bessel's correction, within threshold to 1-threshold percentiles";
 const wchar_t* dsRMSE = L"RMSE";
+const wchar_t* dsExpWtDiffPolar = L"weighted average error preferring positive differences";
 
 const wchar_t* dsBlood = L"blood";
 const wchar_t* dsInterstitial = L"interstitial fluid";
@@ -335,10 +338,16 @@ const wchar_t* dsOref0_BG_ZT_Prediction = L"oref0 ZT-based BG Prediction";
 const wchar_t* dsOref0_BG_Prediction_Signal = L"oref0 aggregated BG Prediction";
 const wchar_t* dsConstant_Model = L"Constant model";
 const wchar_t* dsUVa_Padova_S2013 = L"UVA/Padova S2013";
+const wchar_t* dsUVa_Padova_S2017 = L"UVA/Padova S2017";
 
 const wchar_t* dsUVa_Padova_IG = L"UVa/Padova S2013 - Interstitial glucose";
 const wchar_t* dsUVa_Padova_BG = L"UVa/Padova S2013 - Blood glucose";
 const wchar_t* dsUVa_Padova_Delivered_Insulin = L"UVa/Padova S2013 - Delivered insulin";
+const wchar_t* dsUVa_Padova_S2017_IG = L"UVa/Padova S2017 - Interstitial glucose";
+const wchar_t* dsUVa_Padova_S2017_BG = L"UVa/Padova S2017 - Blood glucose";
+const wchar_t* dsUVa_Padova_S2017_Delivered_Insulin = L"UVa/Padova S2017 - Delivered insulin";
+const wchar_t* dsUVa_Padova_S2017_IOB = L"UVa/Padova S2017 - IOB";
+const wchar_t* dsUVa_Padova_S2017_COB = L"UVa/Padova S2017 - COB";
 
 const wchar_t* dsOref0_Solver = L"oref0 solver";
 
@@ -475,6 +484,9 @@ const wchar_t *dsSignal_Delivered_Insulin_Total = L"delivered insulin total";
 const wchar_t* dsSignal_Requested_Insulin_Bolus = L"requested insulin bolus";
 const wchar_t *dsSignal_Delivered_Insulin_Basal_Rate = L"delivered insulin basal rate";
 const wchar_t *dsSignal_Requested_Insulin_Basal_Rate = L"requested insulin basal rate";
+const wchar_t *dsSignal_Delivered_Insulin_Intradermal_Rate = L"delivered insulin intradermal rate";
+const wchar_t *dsSignal_Requested_Insulin_Intradermal_Rate = L"requested insulin intradermal rate";
+const wchar_t *dsSignal_Delivered_Insulin_Inhaled = L"delivered inhaled insulin";
 const wchar_t *dsSignal_Measured_Insulin_Activity = L"insulin activity";
 const wchar_t *dsSignal_Measured_IOB = L"insulin on board (IOB)";
 const wchar_t *dsSignal_Measured_COB = L"carbohydrates on board (COB)";
