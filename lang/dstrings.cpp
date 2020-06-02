@@ -819,6 +819,9 @@ const wchar_t* dsIcarus_v1_AI_Boluses = L"Icarus v1 AI boluses";
 const wchar_t* dsBolus_Offset = L"Bolus Offset ";
 const wchar_t* dsBolus_Amount = L"Bolus Amount ";
 
+const wchar_t* dsIcarus_Basal_And_Bolus = L"Icarus Basal and Bolus";
+const wchar_t* dsCarb_To_Insulin_Ratio = L"Carb to Insulin Ratio";
+
 //--------------------------------- do not translate any of the rs-prefixed texts --
 
 const char* rsAbout_Text = R"CLC(
@@ -1188,3 +1191,6 @@ const wchar_t* rsDo_Not_Learn = L"Do_Not_Learn";
 const wchar_t* rsIcarus_v1_AI_Boluses = L"Icarus_v1_AI_boluses";
 const wchar_t* rsBolus_Offset = L"Bolus_Offset_";
 const wchar_t* rsBolus_Amount = L"Bolus_Amount_";
+
+const wchar_t* rsIcarus_Basal_And_Bolus = L"Icarus_Basal_And_Bolus";
+const wchar_t* rsCarb_To_Insulin_Ratio = L"Carb_To_Insulin_Ratio";

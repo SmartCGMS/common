@@ -822,6 +822,9 @@ extern const wchar_t* dsIcarus_v1_AI_Boluses;
 extern const wchar_t* dsBolus_Offset;
 extern const wchar_t* dsBolus_Amount;
 
+extern const wchar_t* dsIcarus_Basal_And_Bolus;
+extern const wchar_t* dsCarb_To_Insulin_Ratio;
+
 //--------------------------------- do not translate any of the rs-prefixed texts --
 
 extern const char* rsAbout_Text;
@@ -1160,3 +1163,6 @@ extern const wchar_t* rsDo_Not_Learn;
 extern const wchar_t* rsIcarus_v1_AI_Boluses;
 extern const wchar_t* rsBolus_Offset;
 extern const wchar_t* rsBolus_Amount;
+
+extern const wchar_t* rsIcarus_Basal_And_Bolus;
+extern const wchar_t* rsCarb_To_Insulin_Ratio;
