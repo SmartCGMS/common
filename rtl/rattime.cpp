@@ -37,7 +37,9 @@
  */
 
 #include "rattime.h"
+#include "../iface/DeviceIface.h"
 #include "../utils/winapi_mapping.h"
+#include "../utils/string_utils.h"
 
 #include <chrono>
 #include <iostream>
@@ -45,6 +47,8 @@
 #include <iomanip>
 #include <cmath>
 #include <ctime>
+
+#undef max
 
 int Get_UTC_Offset()
 {
@@ -68,7 +72,7 @@ double Unix_Time_To_Rat_Time(const time_t qdt)
 time_t Rat_Time_To_Unix_Time(const double rt)
 {
 	double diff = rt * MSecsPerDay;
-	int64_t msecs = (static_cast<int64_t>(ceil(diff))) - diffFrom1970To1900;
+	int64_t msecs = (static_cast<int64_t>(ceil(diff))) - diffFrom1970To1900;	
 
 	return static_cast<time_t>(msecs / 1000);
 }
@@ -114,4 +118,131 @@ double Local_Time_WStr_To_Rat_Time(const std::wstring& str, const wchar_t* fmt) 
 	time_t ltim = mktime(&ptm);
 
 	return ltim != -1 ? Unix_Time_To_Rat_Time(ltim) : std::numeric_limits<double>::quiet_NaN();
+}
+
+std::wstring Rat_Time_To_Default_WStr(double rattime) {
+	if (std::isnan(rattime))
+		return L"NaN";
+
+	auto calc_fraction = [&](const double factor) {
+		double intpart;
+		rattime *= factor;
+		rattime = std::modf(rattime, &intpart);
+		return intpart;
+	};
+
+
+	auto add_fraction = [&](const double intpart, const double factor) {
+		if (factor == 1.0) {	//days
+			return intpart != 0.0 ? std::to_wstring(static_cast<int>(intpart)) + L' ' : L"";
+		}
+		else {
+			std::wstring result = std::to_wstring(static_cast<int>(intpart));
+			while (result.size() < 2)
+				result = L'0' + result;
+			return result;
+		}
+	};
+
+
+	//handle the sign
+	std::wstring result{ rattime < 0.0 ? L"-" : L"" };
+	rattime = std::fabs(rattime);
+
+	//decompose to individual parts
+	double days = calc_fraction(1.0);
+	double hours = calc_fraction(24.0);
+	double minutes = calc_fraction(60.0);
+	double seconds = calc_fraction(60.0);
+
+	//perform round-up to seconds
+	if (std::round(rattime) > 0.0) {
+		seconds++;
+
+		if (seconds >= 60.0) {
+			minutes++;
+			seconds = 0.0;
+
+			if (minutes >= 60.0) {
+				hours++;
+				minutes = 0.0;
+
+				if (hours >= 24.0) {
+					days++;
+				}
+			}
+		}
+	}
+
+	//and compose the string
+	result += add_fraction(days, 1.0);
+	result += add_fraction(hours, 24.0) + L':';
+	result += add_fraction(minutes, 60.0) + L':';
+	result += add_fraction(seconds, 60.0);
+
+	return result;
+}
+
+
+double Default_WStr_To_Rat_Time(const wchar_t *input, bool& converted_ok) {
+	converted_ok = false;	//assume an error (and simplify the exit code)
+
+	double days = 0.0, hours = 0.0, minutes = 0.0, seconds = 0.0;
+
+	double plus_minus_sign = 1.0;
+	int plus_minus_pos = 0;	//must be signed int!
+	
+	if (!input || (*input == 0))  return std::numeric_limits<double>::quiet_NaN();	
+		
+	if (input[0] == L'-') {
+		plus_minus_sign = -1.0;
+		plus_minus_pos = 1;
+	}
+
+
+	int pos, last_pos = static_cast<int>(wcslen(input));
+
+	auto fetch_number = [&](const wchar_t sep, const wchar_t decimal, double& result, const double result_max) {
+		pos = last_pos - 1;
+
+		while (pos >= plus_minus_pos) {
+			const wchar_t ch = input[pos];
+			if (ch == sep) break;
+			if (!isdigit(ch) && (ch != decimal)) return false;
+
+			pos--;
+		}
+
+		pos++;
+		std::wstring substring(&input[pos], static_cast<size_t>(last_pos) - static_cast<size_t>(pos));	//must be a string to add the terminating zero
+		bool ok;
+		result = wstr_2_dbl(substring.c_str(), ok);			
+
+		if ((!ok) || (result >= result_max)) return false;
+
+		last_pos = pos - 1;
+		return true;
+	};
+
+
+	//search for seconds, minutes, hours and days
+
+	if (!fetch_number(L':', L'.', seconds, 60.0)) return false;
+
+	if (last_pos > plus_minus_pos) {
+		if (!fetch_number(L':', 0, minutes, 60.0)) return false;
+
+		if (last_pos > plus_minus_pos) {
+			if (!fetch_number(L' ', 0, hours, 24.0)) return false;
+
+			if (last_pos > plus_minus_pos)
+				if (!fetch_number(L'-', 0, days, std::numeric_limits<double>::max())) 					
+					return std::numeric_limits<double>::quiet_NaN();				
+		}
+	}
+
+	converted_ok = true;
+	return plus_minus_sign * (days + scgms::One_Hour * hours + scgms::One_Minute * minutes + scgms::One_Second * seconds);
+
+	return true;
 }

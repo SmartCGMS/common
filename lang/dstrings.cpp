@@ -50,7 +50,12 @@ const wchar_t* dsm_per_s2 = L"m/s2";
 const char* dsSCGMS_Not_Loaded = "SmartCGMS library is not loaded!";
 
 const char* dsFile = "File";
-const char* dsSave_Configuration = "Save Configuration";
+const char* dsNew_Experimental_Setup = "New";
+const char* dsOpen_Experimental_Setup = "Open";
+const char* dsSave_Experimental_Setup = "Save";
+const char* dsSave_Experimental_Setup_As = "Save As...";
+const char* dsExperimental_Setup_File_Mask = "Experimental Setup (*.ini)";
+const char* dsUnsaved_Experimental_Setup = "Unsaved experimental setup";
 const char* dsQuit = "Quit";
 const char* dsTools = "Tools";
 const char* dsFilters = "Filters";
@@ -87,7 +92,11 @@ const char* dsWindow = "Window";
 const char* dsHelp = "&Help";
 const char* dsAbout = "About";
 const char* dsAbout_Amp = "&About";
-const char* dsGlucose_Prediction = "Glucose Prediction - %1";
+const char* dsGlucose_Prediction = "GPredict3 (SmartCGMS) - %1";
+const char* dsWarning = "Warning";
+
+const char* dsSave_Experimental_Setup_Failed = "There are warnings/errrors related this experimental setup.\n\nError code: ";
+const char* dsErrors_Warnings_Hints = "Errors, Warnings, Hints:";
 
 const char* dsAdd = "Add";
 const char* dsDelete = "Delete";
@@ -151,10 +160,6 @@ const wchar_t *dsGen_BG_Cos_Period = L"BG cosinus period";
 const wchar_t *dsGen_BG_Sampling_Period = L"BG sampling period";
 const wchar_t *dsGen_Total_Time = L"Total generated time interval";
 
-const wchar_t *dsFeedback_Channel_Identifier = L"Feedback channel identifier";
-const wchar_t *dsDevice_Driver_Id = L"Device driver";
-const wchar_t *dsSynchronize_With_Pump = L"Synchronize with pump";
-
 const wchar_t *dsSolver_Filter = L"Solver";
 
 const wchar_t *dsSelected_Model = L"Model";
@@ -194,6 +199,7 @@ const wchar_t* dsCollect_Statistics = L"Collect statistics";
 const wchar_t* dsOutput_to_file_enabled_but_no_filename_given = L"Ouput to file enabled, but not filename given.";
 const wchar_t* dsInvalid_Argument_Value_per_Parameter = L"Invalid argument value, parameter name: ";
 const wchar_t* dsCannot_Open_File = L"Cannot open file: ";
+const wchar_t* dsCannot_Read_File = L"Cannot read file: ";
 
 
 const wchar_t *rsSignal_Masked_Id = L"Signal";
@@ -220,10 +226,6 @@ const wchar_t *dsDrawing_Filter_Filename_Parkes = L"Parkes grid file path";
 const wchar_t *dsDrawing_Filter_Filename_Clark = L"Clark grid file path";
 const wchar_t *dsDrawing_Filter_Filename_ECDF = L"ECDF file path";
 
-const wchar_t *dsDevice_Interop_Filter = L"Real device interface";
-
-const wchar_t *dsInterop_Export_Filter = L"Interop export filter";
-
 const wchar_t *dsLog_Filter = L"Log";
 const wchar_t *dsLog_Output_File = L"Save log to CSV file";
 const wchar_t* dsLog_Input_File_Or_Dir = L"Log file or dir with log files";
@@ -241,8 +243,6 @@ const wchar_t* dsInvalid_GUID = L"Invalid GUID";
 
 const wchar_t *dsDevice_Feedback_Filter = L"Device feedback";
 const wchar_t *dsDevice_Filter = L"Device";
-
-const wchar_t *dsT1DMS_Device_Driver = L"T1DMS Device driver";
 
 const wchar_t *dsGUI_Filter = L"Visualization";
 
@@ -454,6 +454,7 @@ const char* dsPopulation_Size = "Population size";
 
 const wchar_t *dsLine_Approx = L"Line";
 const wchar_t *dsAkima = L"Akima";
+const wchar_t* dsAvgExp = L"AvgExp";
 
 const char *dsDrawing_Tab_Graph = "Single plot";
 const char *dsDrawing_Tab_Day = "Daily plot";
@@ -564,9 +565,6 @@ const wchar_t* rsSelect_Time_Segment_Id_By_Name = L"SELECT id FROM timesegment W
 const wchar_t* rsRename_Time_Segment = L"UPDATE timesegment SET name = ? WHERE id = ?";
 const wchar_t* rsDelete_Parameters_Of_Segment_Base = L"DELETE FROM ";
 const wchar_t* rsDelete_Parameters_Of_Segment_Stmt = L" WHERE segmentid = ?";
-
-const wchar_t* rsT1DMS_Receiver_Filter = L"T1DMS Receiver filter";
-const wchar_t* rsT1DMS_Sender_Filter = L"T1DMS Sender filter";
 
 const wchar_t* rsInsulin_Regulation = L"insulin-regulation";
 const wchar_t* rsInsulin_PID_Regulation = L"insulin-pid-regulation";
@@ -679,12 +677,6 @@ const wchar_t *dsFilename_ECDF_Tooltip = L"Where to store 'ECDF' drawing at the 
 const wchar_t *dsLog_File_Output_Tooltip = L"Log file output. Any existing file with such name will be overwritten";
 const wchar_t *dsLog_File_Input_Tooltip = L"Log file to be parsed and its contents to be sent to simulation";
 
-// virtual pump group
-const wchar_t *dsPump_Interval_Tooltip = L"How often the pump should dose basal insulin";
-const wchar_t *dsFeedback_Channel_Identifier_Tooltip = L"Identifier of the feedback channel used for pairing and communication";
-const wchar_t *dsDevice_Driver_Id_Tooltip = L"Selected device driver to be loaded";
-const wchar_t *dsSynchronize_With_Pump_Tooltip = L"Synchronize with pump (pump driver)";
-
 // signals filter group
 const wchar_t *dsSelected_Model_Tooltip = L"Model to be used. Make sure you also select valid signal from signal box below";
 const wchar_t *dsSelected_Signal_Tooltip = L"Model signal to be used";
@@ -710,7 +702,7 @@ const wchar_t *dsUse_Opened_Segments_Only_Tooltip = L"Use currently opened segme
 
 const wchar_t *dsParameter_Configuration_Failed_RC = L"Parameter (%1) configuration failed with HRESULT == %2";
 
-const wchar_t* dsBergman_Minimal_Model = L"Bergman extended minimal model device";
+const wchar_t* dsBergman_Minimal_Model = L"Bergman extended minimal model";
 const wchar_t* dsBergman_p1 = L"p1";
 const wchar_t* dsBergman_p2 = L"p2";
 const wchar_t* dsBergman_p3 = L"p3";
@@ -760,6 +752,8 @@ const wchar_t* dsMaximum_Time = L"Maximum time";
 const wchar_t* dsAsync_Stepping_Not_Positive = L"Asynchronous stepping must be positive. Affected model: ";
 const wchar_t* dsCannot_Get_Model_Descriptor_By_Signal_Id = L"Cannot get model descriptor. Signal id: ";
 const wchar_t* dsError_Initializing_Discrete_Model = L"Cannot initialize discrete model.";
+const wchar_t* dsAsync_Sig_Gen_Req_Seg_Id = L"Asynchronously configured model requires a valid segment-id configuration!";
+
 
 const wchar_t* dsRemote_Host = L"Host";
 const wchar_t* dsRemote_Port = L"Port";
@@ -783,11 +777,9 @@ const wchar_t* dsConst_CR_Model = L"Constant carb-to-insulin ratio";
 
 const wchar_t* dsPattern_Prediction_Model = L"Pattern ist. prediction";
 const wchar_t* dsPattern_Prediction_Signal = L"Pattern ist. prediction";
-const wchar_t* dsBand = L"Band";
-
-const wchar_t* dsNeural_Net_Prediction_Model = L"Neural ist. prediction";
-const wchar_t* dsNeural_Net_Prediction_Signal = L"Neural ist. prediction";
-const wchar_t* dsWeight = L"Weight";
+const wchar_t* dsParameters_File = L"Parameters file";
+const wchar_t* dsDo_Not_Update_Parameters_File = L"Do not update the parameters file";
+const wchar_t* dsDo_Not_Learn = L"Do not learn";
 
 const wchar_t* dsExtModel_Unknown_Opcode = L"Unknown opcode received";
 const wchar_t* dsExtModel_Invalid_Opcode_Direction = L"Received an opcode in unexpected direction";
@@ -816,7 +808,7 @@ const wchar_t* dsPeriod = L"period";
 const wchar_t* dsInvalid_Section_Name = L"Configuration, invalid section name: ";
 const wchar_t* dsCannot_Resolve_Filter_Descriptor = L"Cannot resolve filter descriptor by id: ";
 const wchar_t* dsMalformed_Filter_Parameter_Value = L"Malformed filter(1)-parameter(2)'s value(3): (1)";
-const wchar_t* dsFilter_Parameter_Not_Configured = L"Filter(1)-parameter(2) is not configured, default value will be used. Save the configuration to fix it.   (1)";
+const wchar_t* dsFilter_Parameter_Not_Configured = L"Filter(1)-parameter(2) is not configured, default value will be used. Configure it, and save the configuration to fix it.\n(1)";
 
 const wchar_t* dsParameters_to_optimize_not_found = L"Parameters to optimize were not found.";
 const wchar_t* dsParameters_to_optimize_could_not_be_read_bounds_including = L"Parameters to optimize could not be read, bounds including.";
@@ -835,6 +827,12 @@ const wchar_t* dsDefault_Filters_Path = L"Default filters directory: ";
 const wchar_t* dsLoaded_Filters = L"Loaded filters: ";
 const wchar_t* dsNone = L"None";
 
+const wchar_t* dsIcarus_v1_AI_Boluses = L"Icarus v1 AI boluses";
+const wchar_t* dsBolus_Offset = L"Bolus Offset ";
+const wchar_t* dsBolus_Amount = L"Bolus Amount ";
+
+const wchar_t* dsIcarus_Basal_And_Bolus = L"Icarus Basal and Bolus";
+const wchar_t* dsCarb_To_Insulin_Ratio = L"Carb to Insulin Ratio";
 
 //--------------------------------- do not translate any of the rs-prefixed texts --
 
@@ -985,11 +983,6 @@ const wchar_t *rsRecalculate_On_Calibration = L"Recalculate_On_Calibration";
 const wchar_t *rsLog_Output_File = L"Log_File";
 const wchar_t *rsEmit_Shutdown_Msg = L"Emit_Shutdown";
 const wchar_t *rsInterpret_Filename_As_Segment_Id = L"Filename_as_segment_id";
-
-const wchar_t *rsPump_Interval = L"Pump_Interval";
-const wchar_t *rsFeedback_Channel_Identifier = L"Feedback_Channel_Identifier";
-const wchar_t *rsDevice_Driver_Id = L"Device_Driver_Id";
-const wchar_t *rsSynchronize_With_Pump = L"Synchronize_With_Pump";
 
 const wchar_t *rsDrawing_Filter_Period = L"Redraw_Period";
 const wchar_t *rsDiagnosis_Is_Type2 = L"Diabetes_Type_2";
@@ -1150,9 +1143,6 @@ const char16_t* rsMatlab_Variable_Solver_Lowbounds = u"solver_lowerbounds";
 const char16_t* rsMatlab_Variable_Solver_Upbounds = u"solver_upperbounds";
 const char16_t* rsMatlab_Variable_Solver_Output = u"solver_output";
 
-const wchar_t* rsT1DMS_Feedback_Request = L"T1DMS_Feedback_Request";
-const wchar_t* rsBergman_Feedback_Request = L"Bergman_Feedback_Request";
-
 const wchar_t* rsOref0_Manifest_File = L"oref0_manifest.xml";
 const wchar_t* rsOref0_Manifest_Workdir_Path = L"manifest.workdir:path";
 const wchar_t* rsOref0_Manifest_Runner_Script_Path = L"manifest.runner:path";
@@ -1205,8 +1195,14 @@ const wchar_t* rsSignal_Stats_Header = L"Segment id; marker;; avg; stddev;count;
 const wchar_t* rsDecoupling_Stats_Header = L"Segment id; marker;; avg; stddev;count;; min; 25th; median; 75; max;; matched_events; total_events; matched_levels; total_levels";
 
 
-const wchar_t* rsPattern_Prediction_Model = L"Histogram_IG_Prediction";
-const wchar_t* rsBand = L"Band";
+const wchar_t* rsPattern_Prediction_Model = L"Pattern_IG_Prediction";
+const wchar_t* rsParameters_File = L"Parameters_File";
+const wchar_t* rsDo_Not_Update_Parameters_File = L"Do_Not_Update_Parameters_File";
+const wchar_t* rsDo_Not_Learn = L"Do_Not_Learn";
 
-const wchar_t* rsNeural_Net_Prediction_Model = L"Neural_Net_IG_Prediction";
-const wchar_t* rsWeight = L"Weight";
+const wchar_t* rsIcarus_v1_AI_Boluses = L"Icarus_v1_AI_boluses";
+const wchar_t* rsBolus_Offset = L"Bolus_Offset_";
+const wchar_t* rsBolus_Amount = L"Bolus_Amount_";
+
+const wchar_t* rsIcarus_Basal_And_Bolus = L"Icarus_Basal_And_Bolus";
+const wchar_t* rsCarb_To_Insulin_Ratio = L"Carb_To_Insulin_Ratio";

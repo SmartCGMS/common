@@ -40,7 +40,6 @@
 
 #include "hresult.h"
 
-
 template <class T, class I, typename... Args>
 HRESULT Manufacture_Object(I** manufactured, Args... args) {
 	HRESULT rc = E_UNEXPECTED;

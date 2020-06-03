@@ -76,6 +76,8 @@ double str_2_dbl(const char* str, bool& ok);
 double wstr_2_dbl(const wchar_t* wstr);
 double wstr_2_dbl(const wchar_t* wstr, bool& ok);
 
+std::wstring dbl_2_wstr(const double val);
+
 int64_t str_2_int(const char* str);
 int64_t str_2_int(const char* str, bool& ok);
 int64_t wstr_2_int(const wchar_t* wstr);

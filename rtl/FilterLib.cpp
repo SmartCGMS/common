@@ -44,6 +44,7 @@
 
 #include <wchar.h>
 #include <iostream>
+#include <iomanip>
 #include <sstream>
 #include "manufactory.h"
 
@@ -93,6 +94,19 @@ namespace scgms {
 	}
 
 	
+	std::wstring SFilter_Parameter::as_filepath(HRESULT& rc) {
+		std::wstring result;
+
+		refcnt::wstr_container* wstr;
+		rc = get()->Get_File_Path(&wstr);			
+		if (rc == S_OK) {
+			result = refcnt::WChar_Container_To_WString(wstr);
+			wstr->Release();
+		}
+
+		return result;
+	}
+
 	int64_t SFilter_Parameter::as_int(HRESULT &rc) {
 		int64_t result = 0;
 		rc = get()->Get_Int64(&result);	//if fails, it returns 0
@@ -429,6 +443,7 @@ std::wstring Model_Parameters_To_WString(scgms::IModel_Parameter_Vector *contain
 
 	//unused keeps static analysis happy about creating an unnamed object
 	auto unused = result.imbue(std::locale(std::wcout.getloc(), new CDecimal_Separator<wchar_t>{ L'.'})); //locale takes owner ship of dec_sep
+	result << std::setprecision(std::numeric_limits<long double>::digits10 + 1);
 
 	bool not_empty = false;
 

@@ -67,3 +67,6 @@ std::wstring Rat_Time_To_Local_Time_WStr(const double rt, const wchar_t *fmt);
 
 // converts string representation of local time (str) to rat time; fmt is the string formatting used by C++ standard library
 double Local_Time_WStr_To_Rat_Time(const std::wstring& str, const wchar_t* fmt);
+
+std::wstring Rat_Time_To_Default_WStr(double rattime);
+double Default_WStr_To_Rat_Time(const wchar_t* input, bool& converted_ok);

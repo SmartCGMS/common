@@ -233,7 +233,8 @@ namespace scgms {
 
 	// segment provides source levels for the calculation
 	// only ITime_Segment::Get_Signal is supposed to call this function to avoid (although not probihit) creating of over-complex segment-graphs
-	using TCreate_Signal = HRESULT(IfaceCalling *)(const GUID *calc_id, ITime_Segment *segment, ISignal **signal);
+	// approx can be nullptr to use a default one
+	using TCreate_Signal = HRESULT(IfaceCalling *)(const GUID *calc_id, ITime_Segment *segment, const GUID *approx_id, ISignal **signal);
 
 	using TCreate_Device_Event = HRESULT(IfaceCalling *)(scgms::NDevice_Event_Code code, scgms::IDevice_Event **event);
 }

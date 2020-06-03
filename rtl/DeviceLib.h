@@ -61,6 +61,7 @@ namespace scgms {
 	public:
 		SSignal() {};	//just an empty object
 		SSignal(STime_Segment segment, const GUID &signal_id);
+		SSignal(STime_Segment segment, const GUID& signal_id, const GUID& approx_id);
 	};
 
 	class WSignal {

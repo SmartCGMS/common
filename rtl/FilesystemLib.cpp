@@ -54,6 +54,7 @@
 #include "../utils/string_utils.h"
 
 #include <cstring>
+#include <algorithm>
 
 std::wstring Get_Application_Dir() {
 
@@ -168,4 +169,17 @@ bool Is_Regular_File_Or_Symlink(const std::wstring& path)
 		return false;
 	return S_ISREG(statbuf.st_mode);
 #endif
+}
+
+std::wstring Native_Slash(const wchar_t* path) {
+#ifdef DHAS_FILESYSTEM
+	return std::filesystem::path{ path }.make_preferred().c_str();
+#elif defined(_WIN32)
+	std::wstring result{ path };
+	std::replace(result.begin(), results.end(), '/', '\'); 
+	return result;
+#else
+	return path;	//internal path is the Linux path
+#endif
+
 }

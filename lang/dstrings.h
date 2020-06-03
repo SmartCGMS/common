@@ -52,7 +52,12 @@ extern const wchar_t* dsm_per_s2;
 extern const char* dsSCGMS_Not_Loaded;
 
 extern const char* dsFile;
-extern const char* dsSave_Configuration;
+extern const char* dsNew_Experimental_Setup;
+extern const char* dsOpen_Experimental_Setup;
+extern const char* dsSave_Experimental_Setup;
+extern const char* dsSave_Experimental_Setup_As;
+extern const char* dsExperimental_Setup_File_Mask;
+extern const char* dsUnsaved_Experimental_Setup;
 extern const char* dsQuit;
 extern const char* dsTools;
 extern const char* dsFilters;
@@ -90,6 +95,10 @@ extern const char* dsHelp;
 extern const char* dsAbout;
 extern const char* dsAbout_Amp;
 extern const char* dsGlucose_Prediction;
+extern const char* dsWarning;
+
+extern const char* dsSave_Experimental_Setup_Failed;
+extern const char* dsErrors_Warnings_Hints;
 
 extern const char* dsAdd;
 extern const char* dsDelete;
@@ -149,10 +158,6 @@ extern const wchar_t *dsGen_BG_Cos_Period;
 extern const wchar_t *dsGen_BG_Sampling_Period;
 extern const wchar_t *dsGen_Total_Time;
 
-extern const wchar_t *dsFeedback_Channel_Identifier;
-extern const wchar_t *dsDevice_Driver_Id;
-extern const wchar_t *dsSynchronize_With_Pump;
-
 extern const wchar_t *dsSolver_Filter;
 
 extern const wchar_t *dsSelected_Model;
@@ -193,6 +198,7 @@ extern const wchar_t* dsCollect_Statistics;
 extern const wchar_t* dsOutput_to_file_enabled_but_no_filename_given;
 extern const wchar_t* dsInvalid_Argument_Value_per_Parameter;
 extern const wchar_t* dsCannot_Open_File;
+extern const wchar_t* dsCannot_Read_File;
 
 extern const wchar_t *dsSignal_Masked_Id;
 extern const wchar_t *dsSignal_Value_Bitmask;
@@ -215,8 +221,6 @@ extern const wchar_t *dsDrawing_Filter_Filename_Parkes;
 extern const wchar_t *dsDrawing_Filter_Filename_Clark;
 extern const wchar_t *dsDrawing_Filter_Filename_ECDF;
 
-extern const wchar_t *dsDevice_Interop_Filter;
-
 extern const wchar_t *dsInterop_Export_Filter;
 
 extern const wchar_t *dsLog_Filter;
@@ -236,8 +240,6 @@ extern const wchar_t* dsInvalid_GUID;
 
 extern const wchar_t *dsDevice_Feedback_Filter;
 extern const wchar_t *dsDevice_Filter;
-
-extern const wchar_t *dsT1DMS_Device_Driver;
 
 extern const wchar_t *dsGUI_Filter;
 
@@ -445,6 +447,7 @@ extern const char* dsPopulation_Size;
 
 extern const wchar_t *dsLine_Approx;
 extern const wchar_t *dsAkima;
+extern const wchar_t* dsAvgExp;
 
 extern const char *dsDrawing_Tab_Graph;
 extern const char *dsDrawing_Tab_Day;
@@ -586,11 +589,9 @@ extern const wchar_t* dsConst_CR_Model;
 
 extern const wchar_t* dsPattern_Prediction_Model;
 extern const wchar_t* dsPattern_Prediction_Signal;
-extern const wchar_t* dsBand;
-
-extern const wchar_t* dsNeural_Net_Prediction_Model;
-extern const wchar_t* dsNeural_Net_Prediction_Signal;
-extern const wchar_t* dsWeight;
+extern const wchar_t* dsParameters_File;
+extern const wchar_t* dsDo_Not_Update_Parameters_File;
+extern const wchar_t* dsDo_Not_Learn;
 
 extern const wchar_t* dsExtModel_Unknown_Opcode;
 extern const wchar_t* dsExtModel_Invalid_Opcode_Direction;
@@ -704,10 +705,6 @@ extern const wchar_t *dsFilename_ECDF_Tooltip;
 extern const wchar_t *dsLog_File_Output_Tooltip;
 extern const wchar_t *dsLog_File_Input_Tooltip;
 
-extern const wchar_t *dsPump_Interval_Tooltip;
-extern const wchar_t *dsFeedback_Channel_Identifier_Tooltip;
-extern const wchar_t *dsDevice_Driver_Id_Tooltip;
-
 extern const wchar_t *dsSelected_Model_Tooltip;
 extern const wchar_t *dsSelected_Signal_Tooltip;
 extern const wchar_t *dsPrediction_Window_Tooltip;
@@ -789,6 +786,7 @@ extern const wchar_t* dsMaximum_Time;
 extern const wchar_t* dsAsync_Stepping_Not_Positive;
 extern const wchar_t* dsCannot_Get_Model_Descriptor_By_Signal_Id;
 extern const wchar_t* dsError_Initializing_Discrete_Model;
+extern const wchar_t* dsAsync_Sig_Gen_Req_Seg_Id;
 
 extern const wchar_t* dsRemote_Host;
 extern const wchar_t* dsRemote_Port;
@@ -831,6 +829,13 @@ extern const wchar_t* dsStored_Parameters_Corrupted_Not_Loaded;
 extern const wchar_t* dsDefault_Filters_Path;
 extern const wchar_t* dsLoaded_Filters;
 extern const wchar_t* dsNone;
+
+extern const wchar_t* dsIcarus_v1_AI_Boluses;
+extern const wchar_t* dsBolus_Offset;
+extern const wchar_t* dsBolus_Amount;
+
+extern const wchar_t* dsIcarus_Basal_And_Bolus;
+extern const wchar_t* dsCarb_To_Insulin_Ratio;
 
 //--------------------------------- do not translate any of the rs-prefixed texts --
 
@@ -945,11 +950,6 @@ extern const wchar_t *rsRecalculate_On_Calibration;
 extern const wchar_t *rsLog_Output_File;
 extern const wchar_t *rsEmit_Shutdown_Msg;
 extern const wchar_t* rsInterpret_Filename_As_Segment_Id;
-
-extern const wchar_t *rsPump_Interval;
-extern const wchar_t *rsFeedback_Channel_Identifier;
-extern const wchar_t *rsDevice_Driver_Id;
-extern const wchar_t *rsSynchronize_With_Pump;
 
 extern const wchar_t *rsDrawing_Filter_Period;
 extern const wchar_t *rsDiagnosis_Is_Type2;
@@ -1168,7 +1168,13 @@ extern const wchar_t* rsSignal_Stats_Header;
 extern const wchar_t* rsDecoupling_Stats_Header;
 
 extern const wchar_t* rsPattern_Prediction_Model;
-extern const wchar_t* rsBand;
+extern const wchar_t* rsParameters_File;
+extern const wchar_t* rsDo_Not_Update_Parameters_File;
+extern const wchar_t* rsDo_Not_Learn;
 
-extern const wchar_t* rsNeural_Net_Prediction_Model;
-extern const wchar_t* rsWeight;
+extern const wchar_t* rsIcarus_v1_AI_Boluses;
+extern const wchar_t* rsBolus_Offset;
+extern const wchar_t* rsBolus_Amount;
+
+extern const wchar_t* rsIcarus_Basal_And_Bolus;
+extern const wchar_t* rsCarb_To_Insulin_Ratio;

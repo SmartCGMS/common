@@ -112,14 +112,14 @@ namespace refcnt {
 	template <typename T>
 	class IVector_Container : public virtual refcnt::IReferenced {
 	public:
-		virtual HRESULT set(T *begin, T *end) = 0;			//sets new content to a given block for <begin, end)
+		virtual HRESULT IfaceCalling set(T *begin, T *end) = 0;			//sets new content to a given block for <begin, end)
 															//T may point to e.g., IReferenced, thus cannot be const
-		virtual HRESULT add(T *begin, T *end) = 0;			//appends new content
-		virtual HRESULT get(T **begin, T **end) const = 0;	//receives boundaries of existing content <*begin, *end)
-		virtual HRESULT pop(T* value) = 0;					//removes and returns exactly one item from the existing content
-		virtual HRESULT remove(const size_t index) = 0;		//removes exactly one item from the existing content, identified by its ordinal number/position from begin
-		virtual HRESULT move(const size_t from_index, const size_t to_index) = 0;	//moves exactly one item from to
-		virtual HRESULT empty() const = 0;					//tests whether there is at least one item
+		virtual HRESULT IfaceCalling add(T *begin, T *end) = 0;			//appends new content
+		virtual HRESULT IfaceCalling get(T **begin, T **end) const = 0;	//receives boundaries of existing content <*begin, *end)
+		virtual HRESULT IfaceCalling pop(T* value) = 0;					//removes and returns exactly one item from the existing content
+		virtual HRESULT IfaceCalling remove(const size_t index) = 0;		//removes exactly one item from the existing content, identified by its ordinal number/position from begin
+		virtual HRESULT IfaceCalling move(const size_t from_index, const size_t to_index) = 0;	//moves exactly one item from to
+		virtual HRESULT IfaceCalling empty() const = 0;					//tests whether there is at least one item
 	};
 
 	using str_container = IVector_Container<char>;

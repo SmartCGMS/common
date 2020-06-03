@@ -77,6 +77,8 @@ namespace scgms {
 		//read-write
 		virtual HRESULT IfaceCalling Get_WChar_Container(refcnt::wstr_container **wstr, BOOL read_interpreted) = 0;	//$(Variable_Name) reads system-variable with read_interpreted==true
 		virtual HRESULT IfaceCalling Set_WChar_Container(refcnt::wstr_container *wstr) = 0;	
+		virtual HRESULT IfaceCalling Get_File_Path(refcnt::wstr_container **wstr) = 0;	//reads interpreted string as filpath, which is absolute-ed with the parent_path, when relative
+		virtual HRESULT IfaceCalling Set_Parent_Path(const wchar_t* parent_path) = 0;
 
 		virtual HRESULT IfaceCalling Get_Time_Segment_Id_Container(time_segment_id_container **ids) = 0;
 		virtual HRESULT IfaceCalling Set_Time_Segment_Id_Container(time_segment_id_container *ids) = 0;
@@ -104,17 +106,23 @@ namespace scgms {
 	
 	class IFilter_Configuration_Link : public virtual IFilter_Configuration {
 	public:
-		virtual HRESULT IfaceCalling Get_Filter_Id(GUID *id) = 0;		
+		virtual HRESULT IfaceCalling Get_Filter_Id(GUID *id) = 0;	
+		virtual HRESULT IfaceCalling Set_Parent_Path(const wchar_t* parent_path) = 0;	//sets the parent path in the contained parameters
 	};
 
-	using IFilter_Chain_Configuration = refcnt::IVector_Container<IFilter_Configuration_Link*>;
+	class IFilter_Chain_Configuration : public virtual refcnt::IVector_Container<IFilter_Configuration_Link*> {
+	public:
+		virtual HRESULT IfaceCalling Get_Parent_Path(refcnt::wstr_container** path) = 0;
+		virtual HRESULT IfaceCalling Set_Parent_Path(const wchar_t* parent_path) = 0;
+	};
 
 	class IPersistent_Filter_Chain_Configuration : public virtual IFilter_Chain_Configuration {
 	public:
 			//both Load_From_ methods returns S_FALSE if incomplete configuration was constructed
-		virtual HRESULT IfaceCalling Load_From_File(const wchar_t *file_path, refcnt::wstr_list* error_description) = 0;	//if nullptr, assumes default config file name
-		virtual HRESULT IfaceCalling Load_From_Memory(const char *memory, const size_t len, refcnt::wstr_list* error_description) = 0;
-		virtual HRESULT IfaceCalling Save_To_File(const wchar_t *file_path) = 0; //if nullptr, saves to the file_name previously supplied to Load_From_File		
+		virtual HRESULT IfaceCalling Load_From_File(const wchar_t *file_path, refcnt::wstr_list* error_description) = 0;	//file_path cannot be nullptr
+		virtual HRESULT IfaceCalling Load_From_Memory(const char *memory, const size_t len, refcnt::wstr_list* error_description) = 0;	//resets internal file path to nullptr
+		virtual HRESULT IfaceCalling Save_To_File(const wchar_t *file_path, refcnt::wstr_list* error_description) = 0; //if nullptr, saves to the file_name previously supplied to Load_From_File		
+																				 //=> cannot be called with file_path==nullptr after Load_From_Memory only, returns E_ILLEGAL_METHOD_CALL then
 	};	
 
 	class IFilter : public virtual refcnt::IReferenced {

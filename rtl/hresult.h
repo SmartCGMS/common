@@ -51,6 +51,9 @@
 
 	#define S_OK									((HRESULT)0L)
 	#define S_FALSE									((HRESULT)1L)
+	#define ERROR_FILE_NOT_FOUND					((HRESULT)2L)
+	#define ERROR_READ_FAULT						((HRESULT)30L)
+
 	#define E_INVALIDARG							((HRESULT)0x80070057)
 	#define E_NOTIMPL								((HRESULT)0x80004001)
 	#define E_UNEXPECTED							((HRESULT)0x8000FFFFL)
@@ -65,10 +68,11 @@
 	#define MK_E_CANTOPENFILE						((HRESULT)0x800401EAL)
 	#define CO_E_ERRORINDLL							((HRESULT)0x800401F9L)
 
-	#ifndef ENOENT
-		#define ENOENT								((HRESULT)2L)
-	#endif
-
 	#define SUCCEEDED(hr) (((HRESULT)(hr)) >= 0)
 	#define FAILED(hr) (((HRESULT)(hr)) < 0)
 #endif
+
+#ifdef __cplusplus
+	extern "C"
+#endif
+wchar_t* Describe_Error(const HRESULT error);

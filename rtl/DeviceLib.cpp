@@ -78,9 +78,14 @@ bool scgms::SModel_Parameter_Vector::empty() const {
 	return get()->empty() == S_OK;
 }
 
-scgms::SSignal::SSignal(scgms::STime_Segment segment, const GUID &signal_id) {
-	scgms::ISignal *signal;
-	if (imported::create_signal(&signal_id, segment.get(), &signal) == S_OK) {
+
+scgms::SSignal::SSignal(scgms::STime_Segment segment, const GUID &signal_id) :
+	scgms::SSignal::SSignal(segment, signal_id, Invalid_GUID) {
+}
+
+scgms::SSignal::SSignal(scgms::STime_Segment segment, const GUID& signal_id, const GUID& approx_id) {
+	scgms::ISignal* signal;
+	if (imported::create_signal(&signal_id, segment.get(), approx_id == Invalid_GUID ? nullptr : &approx_id, &signal) == S_OK) {
 		reset(signal, [](scgms::ISignal* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });
 	}
 }
@@ -271,7 +276,7 @@ HRESULT IfaceCalling scgms::CTime_Segment::Get_Signal(const GUID *signal_id, scg
 	}
 
 	// prefer calculated signal, fall back to measured signal
-	if (imported::create_signal(signal_id, this, signal) != S_OK) {
+	if (imported::create_signal(signal_id, this, nullptr, signal) != S_OK) {
 		return E_NOTIMPL;
 	}
 	mSignals[*signal_id] = refcnt::make_shared_reference_ext<scgms::SSignal, scgms::ISignal>(*signal, true);  // true due to creating "clone" of pointer with custom reference counter
