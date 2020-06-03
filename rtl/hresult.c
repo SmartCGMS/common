@@ -65,3 +65,7 @@ wchar_t* Describe_Error(const HRESULT error) {
 	}
 }
 
+
+bool Succeeded(const HRESULT rc) {
+	return (rc == S_OK) || (rc == S_FALSE);
+}

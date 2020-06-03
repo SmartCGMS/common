@@ -38,6 +38,8 @@
 
 #pragma once
 
+#include <stdbool.h>
+
 #ifdef _WIN32
 	#include <WTypes.h>
 #else
@@ -67,12 +69,16 @@
 	#define E_NOT_SET								((HRESULT)0x80070490L)
 	#define MK_E_CANTOPENFILE						((HRESULT)0x800401EAL)
 	#define CO_E_ERRORINDLL							((HRESULT)0x800401F9L)
-
-	#define SUCCEEDED(hr) (((HRESULT)(hr)) >= 0)
-	#define FAILED(hr) (((HRESULT)(hr)) < 0)
 #endif
 
 #ifdef __cplusplus
 	extern "C"
 #endif
 wchar_t* Describe_Error(const HRESULT error);
+
+	
+#ifdef __cplusplus
+	extern "C"
+#endif
+	bool Succeeded(const HRESULT rc);
+	//the default Succeeded macro tests rc>0, which fails to indicate e.g.; file not found as a success
