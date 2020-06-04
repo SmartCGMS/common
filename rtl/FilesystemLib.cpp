@@ -133,7 +133,7 @@ std::wstring Get_Dll_Dir() {
 std::wstring& Path_Append(std::wstring& path, const wchar_t* level) {
 #ifdef DHAS_FILESYSTEM
 	// use overloaded operator/, which uses preferred path component separator
-	path = (filesystem::path(path) / level).wstring();
+	path = (filesystem::path(path) / std::wstring{ level }).wstring();
 #else
 	if (!path.empty()) {
 		if (path.substr(path.size() - 1, 1) != L"/")
@@ -177,7 +177,7 @@ bool Is_Regular_File_Or_Symlink(const std::wstring& path)
 
 std::wstring Native_Slash(const wchar_t* path) {
 #ifdef DHAS_FILESYSTEM
-	return std::filesystem::path{ path }.make_preferred().wstring();
+	return filesystem::path{ std::wstring{ path } }.make_preferred().wstring();
 #elif defined(_WIN32)
 	std::wstring result{ path };
 	std::replace(result.begin(), results.end(), '/', '\\'); 
