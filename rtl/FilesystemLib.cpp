@@ -56,9 +56,13 @@
 #include <cstring>
 #include <algorithm>
 
+#ifndef PATH_MAX
+#define PATH_MAX 1024
+#endif
+
 std::wstring Get_Application_Dir() {
 
-	const size_t bufsize = 1024;
+	const size_t bufsize = PATH_MAX;
 
 #ifdef _WIN32
 	wchar_t ModuleFileName[bufsize];
@@ -95,14 +99,14 @@ std::wstring Get_Application_Dir() {
 
 std::wstring Get_Dll_Dir() {
 
-	const size_t bufsize = 1024;
+	const size_t bufsize = PATH_MAX;
 #ifdef _WIN32
 	wchar_t ModuleFileName[bufsize];	
 	GetModuleFileNameW(((HINSTANCE)&__ImageBase), ModuleFileName, bufsize);	
 #else
 	char ModuleFileName[bufsize];
 	Dl_info info;
-	if (dladdr((void*)Get_Dll_Dir, &info) != 0) {		
+	if (dladdr((void*)Get_Dll_Dir, &info) != 0) {
 		realpath(info.dli_fname, ModuleFileName);
 	}
 	else
