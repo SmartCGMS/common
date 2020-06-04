@@ -173,10 +173,10 @@ bool Is_Regular_File_Or_Symlink(const std::wstring& path)
 
 std::wstring Native_Slash(const wchar_t* path) {
 #ifdef DHAS_FILESYSTEM
-	return std::filesystem::path{ path }.make_preferred().c_str();
+	return std::filesystem::path{ path }.make_preferred().wstring();
 #elif defined(_WIN32)
 	std::wstring result{ path };
-	std::replace(result.begin(), results.end(), '/', '\'); 
+	std::replace(result.begin(), results.end(), '/', '\\'); 
 	return result;
 #else
 	return path;	//internal path is the Linux path

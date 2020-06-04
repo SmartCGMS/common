@@ -124,9 +124,11 @@
 	#define swscanf_s swscanf
 
 	EXTERN_C void* _aligned_malloc(size_t n, size_t alignment);
+	EXTERN_C void* _aligned_malloc_dbg(size_t n, size_t alignment, const char* filename, int line);
 	EXTERN_C void _aligned_free(void* _Block);
 
 	EXTERN_C int wcstombs_s(size_t* converted, char* dst, size_t dstSizeBytes, const wchar_t* src, size_t maxSizeBytes);
+	EXTERN_C int wcsncpy_s(wchar_t *dest, const wchar_t *src, size_t n);
 
 	#define SD_BOTH SHUT_RDWR
 
