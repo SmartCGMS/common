@@ -94,7 +94,7 @@ namespace scgms {
 	}
 
 	
-	std::wstring SFilter_Parameter::as_filepath(HRESULT& rc) {
+	filesystem::path SFilter_Parameter::as_filepath(HRESULT& rc) {
 		std::wstring result;
 
 		refcnt::wstr_container* wstr;
@@ -104,7 +104,7 @@ namespace scgms {
 			wstr->Release();
 		}
 
-		return result;
+		return filesystem::path{ result };
 	}
 
 	int64_t SFilter_Parameter::as_int(HRESULT &rc) {

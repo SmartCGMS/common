@@ -185,6 +185,7 @@ extern const wchar_t *dsInput_Values_File;
 extern const wchar_t *dsInput_Segment_Spacing;
 extern const wchar_t *dsMinimum_Segment_Levels;
 extern const wchar_t *dsRequire_IG_BG;
+extern const wchar_t* dsFailed_To_Send_Event;
 
 extern const wchar_t *dsHold_Values_Delay;
 

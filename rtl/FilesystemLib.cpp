@@ -51,22 +51,19 @@
 
 #include "hresult.h"
 #include "../utils/winapi_mapping.h"
-#include "../utils/string_utils.h"
 
 #include <cstring>
 #include <algorithm>
 
-#ifndef PATH_MAX
-#define PATH_MAX 1024
-#endif
 
-std::wstring Get_Application_Dir() {
+const size_t Max_File_Path = 1024;
 
-	const size_t bufsize = PATH_MAX;
+
+filesystem::path Get_Application_Dir() {
 
 #ifdef _WIN32
-	wchar_t ModuleFileName[bufsize];
-	GetModuleFileNameW(NULL, ModuleFileName, bufsize);
+	wchar_t ModuleFileName[Max_File_Path];
+	GetModuleFileNameW(NULL, ModuleFileName, Max_File_Path);
 #elif __APPLE__
 	char RelModuleFileName[bufsize];
 	uint32_t size = static_cast<uint32_t>(bufsize);
@@ -81,28 +78,16 @@ std::wstring Get_Application_Dir() {
 	// TODO: error checking
 #endif
 
+	filesystem::path exe_path{ ModuleFileName };
 
-#ifdef DHAS_FILESYSTEM
-	filesystem::path exePath{ ModuleFileName };
-
-	return exePath.remove_filename().wstring();
-#else
-	std::wstring path{ Widen_Char(ModuleFileName) };
-
-	size_t pos = path.find_last_of(L'/');
-	if (pos != std::string::npos)
-		path = path.substr(0, pos + 1);
-
-	return path;
-#endif
+	return exe_path.remove_filename();
 }
 
-std::wstring Get_Dll_Dir() {
-
-	const size_t bufsize = PATH_MAX;
+filesystem::path Get_Dll_Dir() {
+	
 #ifdef _WIN32
-	wchar_t ModuleFileName[bufsize];	
-	GetModuleFileNameW(((HINSTANCE)&__ImageBase), ModuleFileName, bufsize);	
+	wchar_t ModuleFileName[Max_File_Path];
+	GetModuleFileNameW(((HINSTANCE)&__ImageBase), ModuleFileName, Max_File_Path);
 #else
 	char ModuleFileName[bufsize];
 	Dl_info info;
@@ -113,77 +98,25 @@ std::wstring Get_Dll_Dir() {
 		return Get_Application_Dir();
 #endif
 
+	filesystem::path dll_path{ ModuleFileName };
 
-#ifdef DHAS_FILESYSTEM
-	filesystem::path exePath{ ModuleFileName };
-
-	return exePath.remove_filename().wstring();
-#else
-	std::wstring path{Widen_Char(ModuleFileName) };
-
-	size_t pos = path.find_last_of(L'/');
-	if (pos != std::string::npos)
-		path = path.substr(0, pos + 1);
-
-	return path;
-#endif
+	return dll_path.remove_filename();
 }
 
 
-std::wstring& Path_Append(std::wstring& path, const wchar_t* level) {
-#ifdef DHAS_FILESYSTEM
-	// use overloaded operator/, which uses preferred path component separator
-	path = (filesystem::path(path) / std::wstring{ level }).wstring();
-#else
-	if (!path.empty()) {
-		if (path.substr(path.size() - 1, 1) != L"/")
-			path += L"/";
-	}
-	path += level;
-#endif
-	return path;
+bool Is_Directory(const filesystem::path& path) {
+	std::error_code ec;
+	const bool result = filesystem::is_directory(path, ec);
+	return result && !ec;
 }
 
-bool Is_Directory(const std::wstring& path)
-{
-#ifdef DHAS_FILESYSTEM
-	return filesystem::is_directory(path);
-#elif defined(_WIN32)
-	DWORD dwAttrib = GetFileAttributes(Narrow_WString(path).c_str());
+bool Is_Regular_File_Or_Symlink(const filesystem::path& path) {
+	std::error_code ec;
 
-	return (dwAttrib != INVALID_FILE_ATTRIBUTES && (dwAttrib & FILE_ATTRIBUTE_DIRECTORY));
-#else
-	struct stat statbuf;
-	if (stat(Narrow_WString(path).c_str(), &statbuf) != 0)
-		return false;
-	return S_ISDIR(statbuf.st_mode);
-#endif
-}
+	bool is_reg = filesystem::is_regular_file(path, ec);
+	is_reg &= !ec;	
+	if (is_reg) return true;
 
-bool Is_Regular_File_Or_Symlink(const std::wstring& path)
-{
-#ifdef DHAS_FILESYSTEM
-	return filesystem::is_regular_file(path) || filesystem::is_symlink(path);
-#elif defined(_WIN32)
-	return !Is_Directory(path); // good enough
-#else
-	// no need to check for symlink, stat follows symbolic links
-	struct stat statbuf;
-	if (stat(Narrow_WString(path).c_str(), &statbuf) != 0)
-		return false;
-	return S_ISREG(statbuf.st_mode);
-#endif
-}
-
-std::wstring Native_Slash(const wchar_t* path) {
-#ifdef DHAS_FILESYSTEM
-	return filesystem::path{ std::wstring{ path } }.make_preferred().wstring();
-#elif defined(_WIN32)
-	std::wstring result{ path };
-	std::replace(result.begin(), results.end(), '/', '\\'); 
-	return result;
-#else
-	return path;	//internal path is the Linux path
-#endif
-
+	bool is_sym = filesystem::is_symlink(path, ec);
+	return is_sym & !ec;
 }

@@ -186,6 +186,7 @@ const wchar_t *dsInput_Values_File = L"Input file";
 const wchar_t *dsInput_Segment_Spacing = L"Segment spacing [s]";
 const wchar_t *dsMinimum_Segment_Levels = L"Segment value minimum count";
 const wchar_t *dsRequire_IG_BG = L"Require both IG and BG values";
+const wchar_t* dsFailed_To_Send_Event = L" failed to send event. Return code: ";
 
 const wchar_t *dsHold_Values_Delay = L"Hold delay [ms] (0 for real-time)";
 

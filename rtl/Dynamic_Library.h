@@ -42,6 +42,7 @@
 #include <memory>
 
 #include "referencedImpl.h"
+#include "../rtl/FilesystemLib.h"
 #include "../utils/winapi_mapping.h"
 
 /*
@@ -52,8 +53,8 @@ class CDynamic_Library final {
 		// stored module handle (nullptr if invalid)
 		HMODULE mHandle;
 		// library base for given platform (sometimes needs to be set in runtime, on e.g. Android)
-		static std::unique_ptr<std::wstring> mLibrary_Base;	//unique_ptr to avoid a memory leak due to TBB allocator
-        std::wstring mLib_Path;
+		static filesystem::path mLibrary_Base;	// to avoid a memory leak due to TBB allocator
+		filesystem::path mLib_Path;
 	public:
 		CDynamic_Library() noexcept;
 		// disallow copying - the handle has to be unique
@@ -62,7 +63,7 @@ class CDynamic_Library final {
 		virtual ~CDynamic_Library();
 
 		// loads module and returns result
-		bool Load(const wchar_t *file_path);
+		bool Load(const filesystem::path &file_path);
 		// unloads module if loaded
 		void Unload();
 		// resolves symbol from loaded module; returns nullptr if no such symbol found or no module loaded
@@ -76,12 +77,12 @@ class CDynamic_Library final {
 
 		// is module (properly) loaded?
 		bool Is_Loaded() const;
-        const std::wstring Lib_Path();
+        filesystem::path Lib_Path() const;
 
 		// checks extension of supplied path to verify, if it's a library (platform-dependent check)
-		static bool Is_Library(const std::wstring& path);
+		static bool Is_Library(const filesystem::path& path);
 		// sets library base
-		static void Set_Library_Base(const std::wstring& base);
+		static void Set_Library_Base(const filesystem::path& base);
 		// retrieves library base directory
-		static const wchar_t* Get_Library_Base();
+		static filesystem::path Get_Library_Base();
 };
