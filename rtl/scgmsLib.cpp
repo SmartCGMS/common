@@ -104,6 +104,7 @@ namespace scgms {
 			const char* rsAdd_Filters = "add_filters";
 			const char* rsExecute_Filter_Configuration = "execute_filter_configuration";
 			const char* rsOptimize_Parameters = "optimize_parameters";
+			const char* rsOptimize_Multiple_Parameters = "optimize_multiple_parameters";
 
 			// stub for: get_*_descriptors exported functions
 			HRESULT IfaceCalling get_desc_not_impl(void *begin, void *end) { return E_NOTIMPL; }
@@ -125,6 +126,7 @@ namespace scgms {
 
 			HRESULT IfaceCalling execute_filter_configuration_not_impl(void *configuration, void* on_filter_created, void* data, void *custom_output, void *executor, void *error_description) { return E_NOTIMPL; }
 			HRESULT IfaceCalling optimize_parameters_not_impl(void *cfg, size_t idx, void *parameters_configuration_name, void* on_filter_created, void* data, void *solver_id, size_t population_size, size_t max_generations, void *progress, void *error_description) { return E_NOTIMPL; }
+			HRESULT IfaceCalling optimize_multiple_parameters_not_impl(void *cfg, size_t *idx, void *parameters_configuration_name, size_t count, void* on_filter_created, void* data, void *solver_id, size_t population_size, size_t max_generations, void *progress, void *error_description) { return E_NOTIMPL; }
 
 			template<typename... Args>
 			HRESULT factory_lazy_load(const char* symbol_name, Args... args)
@@ -161,6 +163,7 @@ namespace scgms {
 
 			HRESULT IfaceCalling execute_filter_configuration_lazy(void *configuration, void* on_filter_created, void* data, void *custom_output, void *executor, void *error_description) { return factory_lazy_load(rsExecute_Filter_Configuration, configuration, on_filter_created, data, custom_output, executor, error_description); }
 			HRESULT IfaceCalling optimize_parameters_lazy(void *cfg, size_t idx, void *parameters_cfg_name, void* on_filter_created, void* data, void *solver_id, size_t population_size, size_t max_generations, void *progress, void *error_description) { return factory_lazy_load(rsOptimize_Parameters, cfg, idx, parameters_cfg_name, on_filter_created, data, solver_id, population_size, max_generations, progress, error_description); }
+			HRESULT IfaceCalling optimize_multiple_parameters_lazy(void *cfg, size_t *idx, void *parameters_cfg_name, size_t count, void* on_filter_created, void* data, void *solver_id, size_t population_size, size_t max_generations, void *progress, void *error_description) { return factory_lazy_load(rsOptimize_Multiple_Parameters, cfg, idx, parameters_cfg_name, count, on_filter_created, data, solver_id, population_size, max_generations, progress, error_description); }
 
 			void* resolve_not_impl_symbol(const char* symbol_name) {
 	#if defined(__ARM_ARCH_7A__) || defined(__aarch64__)
@@ -186,6 +189,7 @@ namespace scgms {
 				if (strcmp(symbol_name, rsAdd_Filters) == 0) return reinterpret_cast<void(*)>(internal::add_filters_lazy);
 				if (strcmp(symbol_name, rsExecute_Filter_Configuration) == 0) return reinterpret_cast<void(*)>(internal::execute_filter_configuration_lazy);
 				if (strcmp(symbol_name, rsOptimize_Parameters) == 0) return reinterpret_cast<void(*)>(internal::optimize_parameters_lazy);
+				if (strcmp(symbol_name, rsOptimize_Multiple_Parameters) == 0) return reinterpret_cast<void(*)>(internal::optimize_multiple_parameters_lazy);
 
 	#else
 				if (strcmp(symbol_name, rsGet_Filter_Descriptors) == 0) return reinterpret_cast<void(*)>(internal::get_desc_not_impl);
@@ -210,6 +214,7 @@ namespace scgms {
 				if (strcmp(symbol_name, rsAdd_Filters) == 0) return reinterpret_cast<void(*)>(internal::add_filters_not_impl);
 				if (strcmp(symbol_name, rsExecute_Filter_Configuration) == 0) return reinterpret_cast<void(*)>(internal::execute_filter_configuration_not_impl);
 				if (strcmp(symbol_name, rsOptimize_Parameters) == 0) return reinterpret_cast<void(*)>(internal::optimize_parameters_not_impl);
+				if (strcmp(symbol_name, rsOptimize_Multiple_Parameters) == 0) return reinterpret_cast<void(*)>(internal::optimize_multiple_parameters_not_impl);
 	#endif
 
 				return reinterpret_cast<void(*)>(internal::get_desc_not_impl);

@@ -45,6 +45,7 @@ namespace imported {
 	scgms::TSolve_Model_Parameters solve_model_parameters = scgms::factory::resolve_symbol<scgms::TSolve_Model_Parameters>("solve_model_parameters");
 	scgms::TCreate_Metric create_metric = scgms::factory::resolve_symbol<scgms::TCreate_Metric>("create_metric");
 	scgms::TOptimize_Parameters optimize_parameters = scgms::factory::resolve_symbol<scgms::TOptimize_Parameters>("optimize_parameters");
+	scgms::TOptimize_Multiple_Parameters optimize_multiple_parameters = scgms::factory::resolve_symbol<scgms::TOptimize_Multiple_Parameters>("optimize_multiple_parameters");
 }
 
 solver::TSolver_Setup solver::Check_Default_Parameters(const solver::TSolver_Setup &setup, const size_t default_max_generations, const size_t default_population_size) {
@@ -115,4 +116,13 @@ HRESULT scgms::Optimize_Parameters(scgms::SFilter_Chain_Configuration configurat
 	
 	return imported::optimize_parameters(configuration.get(), filter_index, parameters_configuration_name,
 									 	on_filter_created, on_filter_created_data, &solver_id, population_size, max_generations, &progress, error_description.get());
+}
+
+HRESULT scgms::Optimize_Multiple_Parameters(scgms::SFilter_Chain_Configuration configuration, const size_t *filter_indices, const wchar_t **parameters_configuration_names, size_t filter_count,
+	scgms::TOn_Filter_Created on_filter_created, const void* on_filter_created_data,
+	const GUID &solver_id, const size_t population_size, const size_t max_generations, solver::TSolver_Progress &progress,
+	refcnt::Swstr_list error_description) {
+
+	return imported::optimize_multiple_parameters(configuration.get(), filter_indices, parameters_configuration_names, filter_count,
+		on_filter_created, on_filter_created_data, &solver_id, population_size, max_generations, &progress, error_description.get());
 }

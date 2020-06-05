@@ -56,9 +56,13 @@
 #include <cstring>
 #include <algorithm>
 
+#ifndef PATH_MAX
+#define PATH_MAX 1024
+#endif
+
 std::wstring Get_Application_Dir() {
 
-	const size_t bufsize = 1024;
+	const size_t bufsize = PATH_MAX;
 
 #ifdef _WIN32
 	wchar_t ModuleFileName[bufsize];
@@ -95,14 +99,14 @@ std::wstring Get_Application_Dir() {
 
 std::wstring Get_Dll_Dir() {
 
-	const size_t bufsize = 1024;
+	const size_t bufsize = PATH_MAX;
 #ifdef _WIN32
 	wchar_t ModuleFileName[bufsize];	
 	GetModuleFileNameW(((HINSTANCE)&__ImageBase), ModuleFileName, bufsize);	
 #else
 	char ModuleFileName[bufsize];
 	Dl_info info;
-	if (dladdr((void*)Get_Dll_Dir, &info) != 0) {		
+	if (dladdr((void*)Get_Dll_Dir, &info) != 0) {
 		realpath(info.dli_fname, ModuleFileName);
 	}
 	else
@@ -129,7 +133,7 @@ std::wstring Get_Dll_Dir() {
 std::wstring& Path_Append(std::wstring& path, const wchar_t* level) {
 #ifdef DHAS_FILESYSTEM
 	// use overloaded operator/, which uses preferred path component separator
-	path = (filesystem::path(path) / level).wstring();
+	path = (filesystem::path(path) / std::wstring{ level }).wstring();
 #else
 	if (!path.empty()) {
 		if (path.substr(path.size() - 1, 1) != L"/")
@@ -173,10 +177,10 @@ bool Is_Regular_File_Or_Symlink(const std::wstring& path)
 
 std::wstring Native_Slash(const wchar_t* path) {
 #ifdef DHAS_FILESYSTEM
-	return std::filesystem::path{ path }.make_preferred().c_str();
+	return filesystem::path{ std::wstring{ path } }.make_preferred().wstring();
 #elif defined(_WIN32)
 	std::wstring result{ path };
-	std::replace(result.begin(), results.end(), '/', '\'); 
+	std::replace(result.begin(), results.end(), '/', '\\'); 
 	return result;
 #else
 	return path;	//internal path is the Linux path

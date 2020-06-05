@@ -141,6 +141,8 @@ extern const wchar_t *dsDb_Password;
 extern const wchar_t *dsTime_Segment_ID;
 extern const wchar_t *dsShutdown_After_Last;
 
+extern const wchar_t *dsError_Could_Not_Connect_To_Db;
+
 extern const wchar_t *dsGenerate_Primary_Keys;
 extern const wchar_t *dsStore_Data;
 extern const wchar_t *dsStore_Parameters;
@@ -308,6 +310,7 @@ extern const wchar_t* dsCrosswalk;
 extern const wchar_t* dsIntegral_CDF;
 extern const wchar_t* dsAvg_Plus_Bessel_Std_Dev;
 extern const wchar_t* dsRMSE;
+extern const wchar_t* dsExpWtDiffPolar;
 
 extern const wchar_t* dsBlood;
 extern const wchar_t* dsInterstitial;
@@ -335,9 +338,15 @@ extern const wchar_t* dsOref0_BG_ZT_Prediction;
 extern const wchar_t* dsOref0_BG_Prediction_Signal;
 extern const wchar_t* dsConstant_Model;
 extern const wchar_t* dsUVa_Padova_S2013;
+extern const wchar_t* dsUVa_Padova_S2017;
 extern const wchar_t* dsUVa_Padova_IG;
 extern const wchar_t* dsUVa_Padova_BG;
 extern const wchar_t* dsUVa_Padova_Delivered_Insulin;
+extern const wchar_t* dsUVa_Padova_S2017_IG;
+extern const wchar_t* dsUVa_Padova_S2017_BG;
+extern const wchar_t* dsUVa_Padova_S2017_Delivered_Insulin;
+extern const wchar_t* dsUVa_Padova_S2017_IOB;
+extern const wchar_t* dsUVa_Padova_S2017_COB;
 
 extern const wchar_t* dsOref0_Solver;
 
@@ -469,6 +478,9 @@ extern const wchar_t *dsSignal_Delivered_Insulin_Total;
 extern const wchar_t* dsSignal_Requested_Insulin_Bolus;
 extern const wchar_t *dsSignal_Delivered_Insulin_Basal_Rate;
 extern const wchar_t *dsSignal_Requested_Insulin_Basal_Rate;
+extern const wchar_t *dsSignal_Delivered_Insulin_Intradermal_Rate;
+extern const wchar_t *dsSignal_Requested_Insulin_Intradermal_Rate;
+extern const wchar_t *dsSignal_Delivered_Insulin_Inhaled;
 extern const wchar_t *dsSignal_Measured_Insulin_Activity;
 extern const wchar_t *dsSignal_Measured_IOB;
 extern const wchar_t *dsSignal_Measured_COB;

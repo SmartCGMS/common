@@ -50,10 +50,10 @@
 	namespace filesystem = std::experimental::filesystem;
 	#define DHAS_FILESYSTEM
 #else
-	#include <sys/types.h>
-	#include <sys/stat.h>
-	#include <dirent.h>
-	#include <unistd.h>
+	#define GHC_WIN_WSTRING_STRING_TYPE
+	#include "../utils/filesystem.hpp"
+	namespace filesystem = ghc::filesystem;
+	#define DHAS_FILESYSTEM
 #endif
 
 #include <string>
