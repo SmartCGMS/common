@@ -67,7 +67,7 @@ R Set_Value_First_Followers(const T first, const T follower, const size_t param_
 	using Q = typename std::remove_const<R>::type;
 	Q result;
 	result[0] = first;
-	for (auto i = 1; i < param_count; i++)
+	for (size_t i = 1; i < param_count; i++)
 		result[i] = follower;
 	return result;
 }
@@ -83,7 +83,7 @@ R Name_Parameters_First_Followers(const wchar_t* first, const wchar_t* follower_
 	using Q = typename std::remove_const<R>::type;
 
 	Q result = { const_cast<wchar_t*>(first) };
-	for (auto i = 1; i < param_count; i++) {
+	for (size_t i = 1; i < param_count; i++) {
 		std::wstring tmp = follower_prefix;
 		tmp += ui ? L' ' : L'_';
 		tmp += std::to_wstring(i);
