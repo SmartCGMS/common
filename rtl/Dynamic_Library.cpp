@@ -104,7 +104,7 @@ bool CDynamic_Library::Is_Library(const filesystem::path& path) {
 	return ext == rsShared_Object_Extension;
 }
 
-void CDynamic_Library::Set_Library_Base(const std::filesystem::path& base) {
+void CDynamic_Library::Set_Library_Base(const filesystem::path& base) {
 	mLibrary_Base = base;
 }
 
