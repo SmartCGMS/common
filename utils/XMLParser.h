@@ -189,7 +189,7 @@ class CXML_Parser
 
 	public:
 		CXML_Parser(const filesystem::path& fileName) noexcept : mValid(false) {
-			mFile.open(fileName.wstring());
+			mFile.open(fileName);
 			if (mFile.is_open()) Parse_Root_Element();
 		}
 
