@@ -55,12 +55,14 @@
 #include <cstring>
 #include <algorithm>
 
-// PATH_MAX is fixed on several platforms (e.g. Android) to a fairly high number (4096). We don't need so long paths on a regular system,
+// PATH_MAX is fixed on several platforms (e.g. Android) to a fairly big number (4096). We don't need so long paths on a regular system,
 // so we define it to be lower. However, Android-NDK verifies the length of an input buffer to be >= PATH_MAX, so we have to be consistent
-#ifndef PATH_MAX
-#define PATH_MAX 1024
+#ifdef PATH_MAX
+	const size_t Max_File_Path = PATH_MAX;
+#else
+	//On Windows, there's MAX_PATH==260, which is too little => hence we do not check for its presence
+	const size_t Max_File_Path = 1024;
 #endif
-const size_t Max_File_Path = PATH_MAX;
 
 
 filesystem::path Get_Application_Dir() {
