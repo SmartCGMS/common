@@ -45,6 +45,8 @@
 #include <sstream>
 #include <stdexcept>
 
+#include "../rtl/FilesystemLib.h"
+
 // TODO: define templates (maybe variadic) for char16_t, char32_t, ..
 
 template<typename C> constexpr const C* ChooseStrCW(const char* c, const wchar_t* w);
@@ -80,30 +82,6 @@ struct CXML_Element
 		}
 	}
 };
-
-namespace internal
-{
-	inline std::string _Narrow_WChar(const wchar_t* wstr) {
-		std::ostringstream stm;
-		const std::ctype<wchar_t>& ctfacet = std::use_facet< std::ctype<wchar_t> >(stm.getloc());
-
-		const size_t len = wcslen(wstr);
-		for (size_t i = 0; i < len; ++i)
-			stm << ctfacet.narrow(wstr[i], 0);
-
-		return stm.str();
-	}
-
-	template<typename TCHAR>
-	inline std::string _Narrow_WString(const TCHAR& wstr) {
-		return _Narrow_WChar(wstr.c_str());
-	}
-
-	template<>
-	inline std::string _Narrow_WString<std::string>(const std::string& wstr) {
-		return wstr;
-	}
-}
 
 template<typename T, typename S = std::basic_string<T, std::char_traits<T>, std::allocator<T>>,
 	typename IFS = std::basic_ifstream<T, std::char_traits<T>>, typename ISS = std::basic_istringstream<T, std::char_traits<T>, std::allocator<T>>>
@@ -210,8 +188,8 @@ class CXML_Parser
 		}
 
 	public:
-		CXML_Parser(const S& fileName) noexcept : mValid(false) {
-			mFile.open(internal::_Narrow_WString(fileName));
+		CXML_Parser(const filesystem::path& fileName) noexcept : mValid(false) {
+			mFile.open(fileName.wstring());
 			if (mFile.is_open()) Parse_Root_Element();
 		}
 
