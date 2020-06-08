@@ -107,7 +107,9 @@ std::wstring Get_Dll_Dir() {
 	char ModuleFileName[bufsize];
 	Dl_info info;
 	if (dladdr((void*)Get_Dll_Dir, &info) != 0) {
-		realpath(info.dli_fname, ModuleFileName);
+		auto result = realpath(info.dli_fname, ModuleFileName);
+		if (!result)
+			return Get_Application_Dir();
 	}
 	else
 		return Get_Application_Dir();
