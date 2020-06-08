@@ -1624,14 +1624,19 @@ GHC_INLINE void path::postprocess_path_with_format(path::impl_string_type& p, pa
                     p[0] = '\\';
                 }
             }
-            for (auto& c : p) {
-                if (c == '\\') {
-                    c = '/';
-                }
-            }
+            
             break;
 #endif
     }
+
+
+    //tx fix
+    for (auto& c : p) {
+        if (c == '\\') {
+            c = '/';
+        }
+    }
+
     if (p.length() > 2 && p[0] == '/' && p[1] == '/' && p[2] != '/') {
         std::string::iterator new_end = std::unique(p.begin() + 2, p.end(), [](path::value_type lhs, path::value_type rhs) { return lhs == rhs && lhs == '/'; });
         p.erase(new_end, p.end());
