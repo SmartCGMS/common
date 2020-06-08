@@ -44,9 +44,6 @@
 #if !defined(STDCPP_FS_DISABLED) && __has_include(<filesystem>)
 	#include <filesystem>
 	namespace filesystem = std::filesystem;
-#elif !defined(STDCPP_FS_DISABLED) && __has_include(<experimental/filesystem>)
-	#include <experimental/filesystem>
-	namespace filesystem = std::experimental::filesystem;
 #else
 	#define GHC_WIN_WSTRING_STRING_TYPE
 	#include "../utils/filesystem.hpp"

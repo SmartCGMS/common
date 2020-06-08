@@ -101,7 +101,7 @@ bool CDynamic_Library::Is_Library(const filesystem::path& path) {
 	const auto ext = path.extension();
 
 	if (ext.empty()) return false;
-	return ext == rsShared_Object_Extension;
+	return ext.wstring() == rsShared_Object_Extension;
 }
 
 void CDynamic_Library::Set_Library_Base(const filesystem::path& base) {

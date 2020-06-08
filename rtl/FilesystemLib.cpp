@@ -65,16 +65,16 @@ filesystem::path Get_Application_Dir() {
 	wchar_t ModuleFileName[Max_File_Path];
 	GetModuleFileNameW(NULL, ModuleFileName, Max_File_Path);
 #elif __APPLE__
-	char RelModuleFileName[bufsize];
-	uint32_t size = static_cast<uint32_t>(bufsize);
+	char RelModuleFileName[Max_File_Path];
+	uint32_t size = static_cast<uint32_t>(Max_File_Path);
 	_NSGetExecutablePath(RelModuleFileName, &size);
 
-	char ModuleFileName[bufsize];
+	char ModuleFileName[Max_File_Path];
 	realpath(RelModuleFileName, ModuleFileName);
 #else
-	char ModuleFileName[bufsize];
-	memset(ModuleFileName, 0, bufsize);
-	readlink("/proc/self/exe", ModuleFileName, bufsize);
+	char ModuleFileName[Max_File_Path];
+	memset(ModuleFileName, 0, Max_File_Path);
+	readlink("/proc/self/exe", ModuleFileName, Max_File_Path);
 	// TODO: error checking
 #endif
 
@@ -89,7 +89,7 @@ filesystem::path Get_Dll_Dir() {
 	wchar_t ModuleFileName[Max_File_Path];
 	GetModuleFileNameW(((HINSTANCE)&__ImageBase), ModuleFileName, Max_File_Path);
 #else
-	char ModuleFileName[bufsize];
+	char ModuleFileName[Max_File_Path];
 	Dl_info info;
 	if (dladdr((void*)Get_Dll_Dir, &info) != 0) {
 		realpath(info.dli_fname, ModuleFileName);
