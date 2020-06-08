@@ -186,6 +186,7 @@ const wchar_t *dsInput_Values_File = L"Input file";
 const wchar_t *dsInput_Segment_Spacing = L"Segment spacing [s]";
 const wchar_t *dsMinimum_Segment_Levels = L"Segment value minimum count";
 const wchar_t *dsRequire_IG_BG = L"Require both IG and BG values";
+const wchar_t* dsFailed_To_Send_Event = L" failed to send event. Return code: ";
 
 const wchar_t *dsHold_Values_Delay = L"Hold delay [ms] (0 for real-time)";
 
@@ -827,11 +828,11 @@ const wchar_t* dsDefault_Filters_Path = L"Default filters directory: ";
 const wchar_t* dsLoaded_Filters = L"Loaded filters: ";
 const wchar_t* dsNone = L"None";
 
-const wchar_t* dsIcarus_v1_AI_Boluses = L"Icarus v1 AI boluses";
+const wchar_t* dsIcarus_v1_AI_Boluses = L"Icarus v1 AI Boluses";
 const wchar_t* dsBolus_Offset = L"Bolus Offset ";
 const wchar_t* dsBolus_Amount = L"Bolus Amount ";
 
-const wchar_t* dsIcarus_Basal_And_Bolus = L"Icarus Basal and Bolus";
+const wchar_t* dsIcarus_Basal_And_Bolus = L"Icarus Fixed Basal and Boluses";
 const wchar_t* dsCarb_To_Insulin_Ratio = L"Carb to Insulin Ratio";
 
 //--------------------------------- do not translate any of the rs-prefixed texts --
@@ -1200,9 +1201,9 @@ const wchar_t* rsParameters_File = L"Parameters_File";
 const wchar_t* rsDo_Not_Update_Parameters_File = L"Do_Not_Update_Parameters_File";
 const wchar_t* rsDo_Not_Learn = L"Do_Not_Learn";
 
-const wchar_t* rsIcarus_v1_AI_Boluses = L"Icarus_v1_AI_boluses";
+const wchar_t* rsIcarus_v1_AI_Boluses = L"Icarus_v1_AI_Boluses";
 const wchar_t* rsBolus_Offset = L"Bolus_Offset_";
 const wchar_t* rsBolus_Amount = L"Bolus_Amount_";
 
-const wchar_t* rsIcarus_Basal_And_Bolus = L"Icarus_Basal_And_Bolus";
+const wchar_t* rsIcarus_Basal_And_Bolus = L"Icarus_Fixed_Basal_And_Bolus";
 const wchar_t* rsCarb_To_Insulin_Ratio = L"Carb_To_Insulin_Ratio";

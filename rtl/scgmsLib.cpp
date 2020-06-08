@@ -73,7 +73,7 @@ namespace scgms {
 				if (!gFactory_Library.Is_Loaded()) {
 					std::wstring path = Get_Platform_Library_Name(factory_dynamic_lib_name);
 		
-					if (!gFactory_Library.Load(path.c_str())) {
+					if (!gFactory_Library.Load(path)) {
 						return nullptr;
 					}
 				}

@@ -41,6 +41,7 @@
 #include "DeviceLib.h"
 #include "../iface/UIIface.h"
 #include "../lang/dstrings.h"
+#include "../rtl/FilesystemLib.h"
 
 #include <vector>
 #include <string>
@@ -57,7 +58,7 @@ namespace scgms {
 
 		std::wstring as_wstring(HRESULT &rc, bool read_interpreted);
 		HRESULT set_wstring(const wchar_t *str);	
-		std::wstring as_filepath(HRESULT& rc);
+		filesystem::path as_filepath(HRESULT& rc);
 
 		int64_t as_int(HRESULT &rc);		
 
@@ -109,8 +110,8 @@ namespace scgms {
 				return Read_Parameter<std::wstring>(name, &SFilter_Parameter::as_wstring, default_value, read_interpreted);
 			}
 
-			std::wstring Read_File_Path(const wchar_t* name, const std::wstring& default_value = {}) {
-				return Read_Parameter<std::wstring>(name, &SFilter_Parameter::as_filepath, default_value);
+			filesystem::path Read_File_Path(const wchar_t* name, const filesystem::path& default_value = {}) {
+				return Read_Parameter<filesystem::path>(name, &SFilter_Parameter::as_filepath, default_value);
 			}
 
 			int64_t Read_Int(const wchar_t* name, const int64_t default_value = std::numeric_limits<int64_t>::max()) const {
