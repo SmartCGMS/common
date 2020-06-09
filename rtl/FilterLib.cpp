@@ -253,7 +253,20 @@ namespace scgms {
 	SPersistent_Filter_Chain_Configuration::SPersistent_Filter_Chain_Configuration() {
 		IPersistent_Filter_Chain_Configuration *configuration;
 		if (imported::create_persistent_filter_chain_configuration(&configuration) == S_OK)
-			reset(configuration, [](IPersistent_Filter_Chain_Configuration* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });							
+			reset(configuration, [](IPersistent_Filter_Chain_Configuration* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });
+	}
+
+
+	SPersistent_Filter_Chain_Configuration::operator SFilter_Chain_Configuration() {
+		SFilter_Chain_Configuration result;
+
+		if (operator bool()) {
+			scgms::IFilter_Chain_Configuration* raw = get();
+			result.reset(raw, [](IFilter_Chain_Configuration *obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });
+			raw->AddRef();
+		}
+
+		return result;
 	}
 
 
