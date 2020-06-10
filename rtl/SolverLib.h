@@ -48,22 +48,6 @@ namespace solver {
 }
 
 namespace scgms {
-	template <typename R, typename P = scgms::IModel_Parameter_Vector*>	
-	const R& Convert_Parameters(P params, const double* default_parameters) {
-		double *begin{ const_cast<double*>(default_parameters) };	//just in case that no parameters are set at all -> than we have to use the default ones
-		if (params) {
-			double *tmp_begin, *end;
-			if (params->get(&tmp_begin, &end) == S_OK) {
-				//not that params still could be empty
-				if (tmp_begin && (tmp_begin != end))  begin = tmp_begin;
-			}
-		}
-
-		R &result = *(reinterpret_cast<R*>(begin));
-		return result;
-	}
-
-	
 	class SMetric : public std::shared_ptr<IMetric> {
 	private:
 		void Init(const scgms::TMetric_Parameters &params);

@@ -320,6 +320,22 @@ namespace scgms {
 
 	using SFilter_Feedback_Receiver = refcnt::SReferenced<scgms::IFilter_Feedback_Receiver>;
 
+	template <typename R, typename P = scgms::IModel_Parameter_Vector*>
+	const R& Convert_Parameters(P params, const double* default_parameters) {
+		double* begin{ const_cast<double*>(default_parameters) };	//just in case that no parameters are set at all -> than we have to use the default ones
+		if (params) {
+			double* tmp_begin, * end;
+			if (params->get(&tmp_begin, &end) == S_OK) {
+				//not that params still could be empty
+				if (tmp_begin && (tmp_begin != end))  begin = tmp_begin;
+			}
+		}
+
+		R& result = *(reinterpret_cast<R*>(begin));
+		return result;
+	}
+
+
 	#pragma warning( push )
 	#pragma warning( disable : 4250 ) // C4250 - 'class1' : inherits 'class2::member' via dominance
 
@@ -335,10 +351,52 @@ namespace scgms {
 		virtual HRESULT Do_Execute(scgms::UDevice_Event event) = 0;
 		virtual HRESULT Do_Configure(scgms::SFilter_Configuration configuration, refcnt::Swstr_list &error_description) = 0;
 	public:		
+		/*CBase_Filter() : 
+			CBase_Filter(nullptr) {
+			assert(false);
+		};*/
+
 		CBase_Filter(scgms::IFilter* output, const GUID &device_id = Invalid_GUID);
 		virtual ~CBase_Filter();
 		virtual HRESULT IfaceCalling Configure(IFilter_Configuration* configuration, refcnt::wstr_list* error_description) override final;
-		virtual HRESULT IfaceCalling Execute(scgms::IDevice_Event *event) override final;
+		virtual HRESULT IfaceCalling Execute(scgms::IDevice_Event *event) override;
+	};
+
+
+	template <typename TParameters>
+	class CDiscrete_Model : public virtual scgms::CBase_Filter, public virtual scgms::IDiscrete_Model {
+	protected:
+		TParameters mParameters;
+		const double* mDefault_Parameters;
+		virtual bool On_Changing_Parameters(const TParameters &parameters) {
+			return true;	//override and return false, when to p
+		}
+	public:
+		CDiscrete_Model(scgms::IModel_Parameter_Vector* current_parameters, const double *default_parameters, scgms::IFilter* output, const GUID& device_id = Invalid_GUID) : 
+			CBase_Filter{ output, device_id },
+			mParameters(scgms::Convert_Parameters<TParameters>(current_parameters, default_parameters)),
+			mDefault_Parameters(default_parameters) {
+		}
+		virtual ~CDiscrete_Model() {}
+
+		virtual HRESULT IfaceCalling Execute(scgms::IDevice_Event* event) override final {
+			if (!event) return E_INVALIDARG;
+			
+			scgms::UDevice_Event shared_event{ event };
+
+			HRESULT rc = E_UNEXPECTED;
+			if (shared_event.event_code() == scgms::NDevice_Event_Code::Parameters) {
+				TParameters new_parameters = scgms::Convert_Parameters<TParameters>(shared_event.parameters.get(), mDefault_Parameters);
+				if (On_Changing_Parameters(new_parameters)) {
+					mParameters = std::move(new_parameters);
+					rc = S_OK;
+				} else
+					rc = S_FALSE;
+			} else
+				rc = Do_Execute(std::move(shared_event));
+
+			return rc;
+		}
 	};
 
 	#pragma warning( pop )

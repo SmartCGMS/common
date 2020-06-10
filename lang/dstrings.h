@@ -784,10 +784,12 @@ extern const wchar_t* dsSynchronize_to_Signal;
 extern const wchar_t* dsSynchronization_Signal;
 extern const wchar_t* dsStepping;
 extern const wchar_t* dsMaximum_Time;
+extern const wchar_t* dsEcho_Default_Parameters_As_Event;
 extern const wchar_t* dsAsync_Stepping_Not_Positive;
 extern const wchar_t* dsCannot_Get_Model_Descriptor_By_Signal_Id;
 extern const wchar_t* dsError_Initializing_Discrete_Model;
 extern const wchar_t* dsAsync_Sig_Gen_Req_Seg_Id;
+extern const wchar_t* dsFailed_To_Configure_Model;
 
 extern const wchar_t* dsRemote_Host;
 extern const wchar_t* dsRemote_Port;
@@ -1137,6 +1139,7 @@ extern const wchar_t *rsUse_Just_Opened_Segments;
 extern const wchar_t *rsHold_During_Solve;
 extern const wchar_t* rsStepping;
 extern const wchar_t* rsMaximum_Time;
+extern const wchar_t* rsEcho_Default_Parameters_As_Event;
 
 extern const wchar_t* rsRemote_Host;
 extern const wchar_t* rsRemote_Port;

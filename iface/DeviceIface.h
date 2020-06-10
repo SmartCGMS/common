@@ -157,6 +157,7 @@ namespace scgms {
 
 		GUID device_id;					//supporting parallel measurements
 		GUID signal_id;					//blood, ist, isig, model id aka e.g, calculated blood, etc.
+										//discrete_model is also allowed as it may produce multiple signals
 
 		double device_time;				//signal with multiple values are aggregated by device_time with the same signal_id and device_id
 		int64_t logical_time;
