@@ -339,7 +339,7 @@ namespace scgms {
 	#pragma warning( push )
 	#pragma warning( disable : 4250 ) // C4250 - 'class1' : inherits 'class2::member' via dominance
 
-	class CBase_Filter : public virtual scgms::IFilter, public refcnt::CReferenced {
+	class CBase_Filter : public virtual refcnt::CReferenced, public virtual scgms::IFilter {
 	protected:
 		scgms::SFilter mOutput;	//aka the next_filter
 		HRESULT Send(scgms::UDevice_Event &event);
@@ -350,12 +350,7 @@ namespace scgms {
 		//Descending class is supposed to implement these two methods only
 		virtual HRESULT Do_Execute(scgms::UDevice_Event event) = 0;
 		virtual HRESULT Do_Configure(scgms::SFilter_Configuration configuration, refcnt::Swstr_list &error_description) = 0;
-	public:		
-		/*CBase_Filter() : 
-			CBase_Filter(nullptr) {
-			assert(false);
-		};*/
-
+	public:			
 		CBase_Filter(scgms::IFilter* output, const GUID &device_id = Invalid_GUID);
 		virtual ~CBase_Filter();
 		virtual HRESULT IfaceCalling Configure(IFilter_Configuration* configuration, refcnt::wstr_list* error_description) override final;
@@ -364,7 +359,7 @@ namespace scgms {
 
 
 	template <typename TParameters>
-	class CDiscrete_Model : public virtual scgms::CBase_Filter, public virtual scgms::IDiscrete_Model {
+	class CDiscrete_Model : public virtual CBase_Filter, public virtual IDiscrete_Model {
 	protected:
 		TParameters mParameters;
 		const double* mDefault_Parameters;
@@ -373,7 +368,7 @@ namespace scgms {
 		}
 	public:
 		CDiscrete_Model(scgms::IModel_Parameter_Vector* current_parameters, const double *default_parameters, scgms::IFilter* output, const GUID& device_id = Invalid_GUID) : 
-			CBase_Filter{ output, device_id },
+			CBase_Filter(output, device_id),
 			mParameters(scgms::Convert_Parameters<TParameters>(current_parameters, default_parameters)),
 			mDefault_Parameters(default_parameters) {
 		}

@@ -317,7 +317,7 @@ namespace scgms {
 	}
 
 	
-	CBase_Filter::CBase_Filter(scgms::IFilter* output, const GUID& device_id) : mOutput(output), mDevice_ID(device_id) {
+	CBase_Filter::CBase_Filter(scgms::IFilter* output, const GUID& device_id) : CReferenced(), mOutput(output), mDevice_ID(device_id) {
 		if (!mOutput) 
 			throw std::runtime_error{ "Attempted to construct a filter without valid output!" };
 	}
