@@ -339,7 +339,7 @@ namespace scgms {
 	#pragma warning( push )
 	#pragma warning( disable : 4250 ) // C4250 - 'class1' : inherits 'class2::member' via dominance
 
-	class CBase_Filter : public virtual refcnt::CReferenced, public virtual scgms::IFilter {
+	class CBase_Filter : public virtual scgms::IFilter, public virtual refcnt::CReferenced {
 	protected:
 		scgms::SFilter mOutput;	//aka the next_filter
 		HRESULT Send(scgms::UDevice_Event &event);
@@ -377,18 +377,20 @@ namespace scgms {
 		virtual HRESULT IfaceCalling Execute(scgms::IDevice_Event* event) override final {
 			if (!event) return E_INVALIDARG;
 			
-			scgms::UDevice_Event shared_event{ event };
-
-			HRESULT rc = E_UNEXPECTED;
-			if (shared_event.event_code() == scgms::NDevice_Event_Code::Parameters) {
-				TParameters new_parameters = scgms::Convert_Parameters<TParameters>(shared_event.parameters.get(), mDefault_Parameters);
+			scgms::TDevice_Event *raw_event;
+			HRESULT rc = event->Raw(&raw_event);
+			if (!Succeeded(rc))
+				return rc;
+			
+			if (raw_event->event_code == scgms::NDevice_Event_Code::Parameters) {
+				TParameters new_parameters = scgms::Convert_Parameters<TParameters>(raw_event->parameters, mDefault_Parameters);
 				if (On_Changing_Parameters(new_parameters)) {
 					mParameters = std::move(new_parameters);
 					rc = S_OK;
 				} else
 					rc = S_FALSE;
 			} else
-				rc = Do_Execute(std::move(shared_event));
+				rc = Do_Execute(event);
 
 			return rc;
 		}
