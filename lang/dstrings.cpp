@@ -844,7 +844,7 @@ const char* rsAbout_Text = R"CLC(
 <a href="https://diabetes.zcu.cz/smartcgms">https://diabetes.zcu.cz/</a><br>
 &nbsp;<br>
 Copyright&copy; since 2018 University of West Bohemia.<br>
-Release date: June 9, 2020<br>
+Release date: June 12, 2020<br>
 &nbsp;<br>
 <i>Contact:</i><br>
 <a href="mailto:diabetes@mail.kiv.zcu.cz?Subject=SmartCGMS">diabetes@mail.kiv.zcu.cz</a><br>
