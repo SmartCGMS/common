@@ -274,7 +274,7 @@ namespace scgms {
 	};
 
 	// supported types of drawing outputs
-	enum class TDrawing_Image_Type : size_t
+	enum class TDrawing_Image_Type : uint16_t
 	{
 		Graph = 0,
 		Day,
@@ -290,7 +290,7 @@ namespace scgms {
 	};
 
 	// supported diagnosis
-	enum class TDiagnosis : size_t
+	enum class TDiagnosis : uint16_t
 	{
 		Type1 = 0,
 		Type2,
