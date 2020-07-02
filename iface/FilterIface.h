@@ -75,6 +75,8 @@ namespace scgms {
 		virtual HRESULT IfaceCalling Get_Config_Name(wchar_t **config_name) = 0;	
 		
 		//read-write
+		virtual HRESULT IfaceCalling Set_Variable(const wchar_t* name, const wchar_t* value) = 0;
+
 		virtual HRESULT IfaceCalling Get_WChar_Container(refcnt::wstr_container **wstr, BOOL read_interpreted) = 0;	//$(Variable_Name) reads system-variable with read_interpreted==true
 		virtual HRESULT IfaceCalling Set_WChar_Container(refcnt::wstr_container *wstr) = 0;	
 		virtual HRESULT IfaceCalling Get_File_Path(refcnt::wstr_container **wstr) = 0;	//reads interpreted string as filpath, which is absolute-ed with the parent_path, when relative
@@ -99,6 +101,7 @@ namespace scgms {
 		virtual HRESULT IfaceCalling Set_Model_Parameters(scgms::IModel_Parameter_Vector *parameters) = 0;
 
 		virtual HRESULT IfaceCalling Clone(scgms::IFilter_Parameter **deep_copy) = 0;
+		
 	};
 	
 
@@ -108,12 +111,15 @@ namespace scgms {
 	public:
 		virtual HRESULT IfaceCalling Get_Filter_Id(GUID *id) = 0;	
 		virtual HRESULT IfaceCalling Set_Parent_Path(const wchar_t* parent_path) = 0;	//sets the parent path in the contained parameters
+		virtual HRESULT IfaceCalling Set_Variable(const wchar_t* name, const wchar_t* value) = 0;	
 	};
 
 	class IFilter_Chain_Configuration : public virtual refcnt::IVector_Container<IFilter_Configuration_Link*> {
 	public:
 		virtual HRESULT IfaceCalling Get_Parent_Path(refcnt::wstr_container** path) = 0;
 		virtual HRESULT IfaceCalling Set_Parent_Path(const wchar_t* parent_path) = 0;
+		//use the $(variable_name) syntax to read this additional variables, which complements OS-variables
+		virtual HRESULT IfaceCalling Set_Variable(const wchar_t* name, const wchar_t* value) = 0;	//setting value to nullptr erases the variable
 	};
 
 	class IPersistent_Filter_Chain_Configuration : public virtual IFilter_Chain_Configuration {
