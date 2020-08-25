@@ -85,4 +85,6 @@ class CDynamic_Library final {
 		static void Set_Library_Base(const filesystem::path& base);
 		// retrieves library base directory
 		static filesystem::path Get_Library_Base();
+		// appends platform-dependent library/shared object extension (.dll, .so, .dylib, ...)
+		static filesystem::path Append_Library_Extension(const filesystem::path& path);
 };
