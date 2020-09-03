@@ -199,16 +199,27 @@ int64_t wstr_2_int(const wchar_t* wstr) {
     return wstr_2_int(wstr, tmp);
 }
 
-
-int64_t wstr_2_int(const wchar_t* wstr, bool& ok) {
+template <typename I, typename W>
+I wstr_2_xint(const wchar_t* wstr, bool& ok, W func) {
     wchar_t* end_char;
-    int64_t value = std::wcstol(wstr, &end_char, get_base(wstr));
+    I value = func(wstr, &end_char, get_base(wstr));
     ok = *end_char == 0;
 
     if (!ok)
-        value = std::numeric_limits<int64_t>::max(); //sanity
+        value = std::numeric_limits<I>::max(); //sanity
 
     return value;
+}
+
+
+
+int64_t wstr_2_int(const wchar_t* wstr, bool& ok) {
+    return wstr_2_xint<int64_t>(wstr, ok, std::wcstoll);  
+}
+
+
+uint64_t wstr_2_uint(const wchar_t* wstr, bool& ok) {
+    return wstr_2_xint<uint64_t>(wstr, ok, std::wcstoull);
 }
 
 

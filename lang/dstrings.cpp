@@ -1195,7 +1195,7 @@ const wchar_t* rsConst_CR = L"const_carb_to_insulin_ratio";
 
 
 const wchar_t* rsOutput_CSV_File = L"Output_CSV_file";
-const wchar_t* rsSignal_Stats_Header = L"Segment id; marker;; avg; stddev;count;; min; 25th; median; 75; max";
+const wchar_t* rsSignal_Stats_Header = L"Segment id; marker;; avg; stddev;count;; min; 25th; median; 75; 95; 99; max";
 const wchar_t* rsDecoupling_Stats_Header = L"Segment id; marker;; avg; stddev;count;; min; 25th; median; 75; max;; matched_events; total_events; matched_levels; total_levels";
 
 

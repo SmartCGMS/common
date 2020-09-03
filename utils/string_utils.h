@@ -82,6 +82,7 @@ int64_t str_2_int(const char* str);
 int64_t str_2_int(const char* str, bool& ok);
 int64_t wstr_2_int(const wchar_t* wstr);
 int64_t wstr_2_int(const wchar_t* wstr, bool& ok);
+uint64_t wstr_2_uint(const wchar_t* wstr, bool& ok);
 
 GUID WString_To_GUID(const std::wstring& str, bool& ok);
 std::wstring GUID_To_WString(const GUID& guid);
