@@ -142,6 +142,7 @@ extern const wchar_t *dsTime_Segment_ID;
 extern const wchar_t *dsShutdown_After_Last;
 
 extern const wchar_t *dsError_Could_Not_Connect_To_Db;
+extern const wchar_t* dsNo_Time_Segments_Specified;
 
 extern const wchar_t *dsGenerate_Primary_Keys;
 extern const wchar_t *dsStore_Data;
@@ -529,10 +530,10 @@ extern const wchar_t *dsSolver_Progress_Box_Title;
 //extern const wchar_t *dsError_Absolute;
 //extern const wchar_t *dsError_Relative;
 
-extern const wchar_t *dsCoult_Not_Init_Network;
+extern const wchar_t *dsCould_Not_Init_Network;
 extern const wchar_t *dsInvalid_Network_Port;
 extern const wchar_t *dsInvalid_Model_GUID;
-extern const wchar_t *dsCoult_Not_Allocate_Network_Pool_Slot;
+extern const wchar_t *dsCould_Not_Allocate_Network_Pool_Slot;
 
 extern const wchar_t *dsError_Column_Average;
 extern const wchar_t *dsError_Column_StdDev;

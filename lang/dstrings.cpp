@@ -144,6 +144,7 @@ const wchar_t *dsTime_Segment_ID = L"Segment Id";
 const wchar_t *dsShutdown_After_Last = L"Shutdown after last value";
 
 const wchar_t *dsError_Could_Not_Connect_To_Db = L"Could not connect to database!";
+const wchar_t* dsNo_Time_Segments_Specified = L"No time segment specified.";
 
 const wchar_t *dsGenerate_Primary_Keys = L"Generate new primary keys";
 const wchar_t *dsStore_Data = L"Store data";
@@ -533,10 +534,10 @@ const wchar_t *dsSignal_GUI_Name_Unknown = L"Unknown signal";
 
 const wchar_t *dsSolver_Progress_Box_Title = L"Solver progress";
 
-const wchar_t *dsCoult_Not_Init_Network = L"Could not initialize network subsystem";
+const wchar_t *dsCould_Not_Init_Network = L"Could not initialize network subsystem";
 const wchar_t *dsInvalid_Network_Port = L"Invalid network port specified";
 const wchar_t *dsInvalid_Model_GUID = L"Invalid network model ID specified";
-const wchar_t *dsCoult_Not_Allocate_Network_Pool_Slot = L"Could not allocate network pool slot due to fatal error";
+const wchar_t *dsCould_Not_Allocate_Network_Pool_Slot = L"Could not allocate network pool slot due to fatal error";
 
 const wchar_t *dsError_Column_Average = L"Average";
 const wchar_t *dsError_Column_StdDev = L"Std.Dev (Bessel)";
