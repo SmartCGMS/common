@@ -685,6 +685,7 @@ const wchar_t *dsSelected_Signal_Tooltip = L"Model signal to be used";
 const wchar_t *dsPrediction_Window_Tooltip = L"Size of prediction window to be requested from signal calculator regardless of accuracy";
 const wchar_t *dsMapping_Source_Signal_Tooltip = L"Incoming signal to be mapped";
 const wchar_t *dsMapping_Destination_Signal_Tooltip = L"The incoming signal will be mapped to this signal identifier";
+const wchar_t* dsDestination_Signal_Cannot_Be_Invalid = L"Destination signal cannot have invalid id.";
 const wchar_t *dsMasked_Signal_Tooltip = L"Signal to be masked";
 const wchar_t *dsSignal_Values_Mask_Tooltip = L"Recurring pattern (bitmask) to be applied when masking given signal, up to 64 bits are supported, use 1 to mask value, 0 to leave as-is, insert spaces as you wish";
 

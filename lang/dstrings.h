@@ -712,6 +712,7 @@ extern const wchar_t *dsSelected_Signal_Tooltip;
 extern const wchar_t *dsPrediction_Window_Tooltip;
 extern const wchar_t *dsMapping_Source_Signal_Tooltip;
 extern const wchar_t *dsMapping_Destination_Signal_Tooltip;
+extern const wchar_t* dsDestination_Signal_Cannot_Be_Invalid;
 extern const wchar_t *dsMasked_Signal_Tooltip;
 extern const wchar_t *dsSignal_Values_Mask_Tooltip;
 
