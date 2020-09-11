@@ -43,7 +43,8 @@
 namespace scgms {
 
 	// mg/dL -> mmol/L; source: http://www.soc-bdr.org/rds/authors/unit_tables_conversions_and_genetic_dictionaries/conversion_glucose_mg_dl_to_mmol_l/index_en.html
-	const double mgdl_2_mmoll = 1.0 / 18.0182;
+	const double mgdL_2_mmolL = 1.0 / 18.0182;
+	const double mmolL_2_mgdL = 18.0182;
 	// pmol -> U; source: http://www.soc-bdr.org/content/rds/authors/unit_tables_conversions_and_genetic_dictionaries/e5196/index_en.html
 	const double pmol_2_U = 1.0 / 6000.0; 
 

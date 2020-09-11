@@ -75,6 +75,10 @@ std::wstring Widen_Char(const char *str) {
 }
 
 
+std::wstring Widen_String(const std::string& str) {
+    return Widen_Char(str.c_str());
+}
+
 std::wstring WString_To_Lower(const std::wstring& wstr) {
 	std::wstring result;
 
@@ -166,6 +170,7 @@ int get_base(T* str) {
                                         break;
                             default: break;
                         }
+                   break;
 
             default: break;
         }

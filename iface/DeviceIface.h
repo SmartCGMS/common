@@ -48,8 +48,9 @@
 
 namespace scgms {
 
-	// constant to convert mg/dl to mmol/l
-	extern const double mgdl_2_mmoll;	//we assume mmol/l, so to make a conversion possible
+	// constant to convert mg/dL to mmol/L
+	extern const double mgdL_2_mmolL;	//we assume mmol/L, so to make a conversion possible
+	extern const double mmolL_2_mgdL;
 	// constant to convert pmol (calculation unit of insulin) to U ("human-readable" unit of insulin)
 	extern const double pmol_2_U;
  

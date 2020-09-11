@@ -57,6 +57,7 @@ public:
 std::string Narrow_WString(const std::wstring &wstr);
 std::string Narrow_WChar(const wchar_t *wstr);
 std::wstring Widen_Char(const char *str);
+std::wstring Widen_String(const std::string &str);
 
 std::wstring WString_To_Lower(const std::wstring& wstr);
 
