@@ -176,6 +176,8 @@ extern const wchar_t *dsUse_Measured_Levels;
 extern const wchar_t* dsEmit_metric_as_signal;
 extern const wchar_t* dsEmit_last_value_only;
 extern const wchar_t* dsDiscard_Repeating_Level;
+extern const wchar_t* dsSignal_Nor_Metric_ID_Cannot_Be_Null;
+extern const wchar_t* dsSignal_ID_Cannot_Be_Null;
 
 extern const wchar_t *dsRecalculate_On_Levels_Count;
 extern const wchar_t *dsRecalculate_On_Segment_End;

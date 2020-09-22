@@ -49,6 +49,8 @@
 	#define SimpleCalling
 #endif
 
+#pragma pack(push,1)
+
 typedef struct _TSCGMS_Event_Data {
 	uint8_t event_code;
 	GUID device_id;				//supporting parallel measurements
@@ -67,6 +69,8 @@ typedef struct _TSCGMS_Event_Data {
 
 	wchar_t *str;					//info event
 } TSCGMS_Event_Data;
+
+#pragma pack(pop)
 
 typedef void* scgms_execution_t;
 

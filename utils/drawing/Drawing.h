@@ -93,7 +93,8 @@ namespace drawing
 			double mStroke_Width{ 0.0 };
 			RGBColor mStroke_Color{ 0, 0, 0 };
 			RGBColor mFill_Color{ 0, 0, 0 };
-			double mOpacity{ 1.0 }; // 0.0 (not visible) - 1.0 (max opaque)
+			double mStroke_Opacity{ 1.0 }; // 0.0 (not visible) - 1.0 (max opaque)
+			double mFill_Opacity{ 1.0 }; // 0.0 (not visible) - 1.0 (max opaque)
 			std::string mId{ };
 			std::string mClass{ };
 			std::vector<double> mStroke_Dash_Array{ };
@@ -128,7 +129,8 @@ namespace drawing
 			double Get_Stroke_Width() const { return mStroke_Width; }
 			RGBColor Get_Stroke_Color() const { return mStroke_Color; }
 			RGBColor Get_Fill_Color() const { return mFill_Color; }
-			double Get_Opacity() const { return mOpacity; }
+			double Get_Stroke_Opacity() const { return mStroke_Opacity; }
+			double Get_Fill_Opacity() const { return mFill_Opacity; }
 			const std::string& Get_Id() const { return mId; }
 			const std::string& Get_Class() const { return mClass; }
 			const std::vector<double>& Get_Stroke_Dash_Array() { return mStroke_Dash_Array; }
@@ -136,7 +138,8 @@ namespace drawing
 			Element& Set_Stroke_Width(double width) { mStroke_Width = width; return *this; }
 			Element& Set_Stroke_Color(RGBColor color) { mStroke_Color = color; return *this; }
 			Element& Set_Fill_Color(RGBColor color) { mFill_Color = color; return *this; }
-			Element& Set_Opacity(double opacity) { mOpacity = opacity; return *this; }
+			Element& Set_Stroke_Opacity(double opacity) { mStroke_Opacity = opacity; return *this; }
+			Element& Set_Fill_Opacity(double opacity) { mFill_Opacity = opacity; return *this; }
 			Element& Set_Id(const std::string& id) { mId = id; return *this; }
 			Element& Set_Class(const std::string& clss) { mClass = clss; return *this; }
 			Element& Set_Stroke_Dash_Array(const std::vector<double>& dashArray) { mStroke_Dash_Array = dashArray; return *this; }
@@ -146,7 +149,8 @@ namespace drawing
 				target.mStroke_Width = mStroke_Width;
 				target.mStroke_Color = mStroke_Color;
 				target.mFill_Color = mFill_Color;
-				target.mOpacity = mOpacity;
+				target.mStroke_Opacity = mStroke_Opacity;
+				target.mFill_Opacity = mFill_Opacity;
 				// do not copy ID - by design ID is unique
 				target.mClass = mClass;
 				target.mStroke_Dash_Array = mStroke_Dash_Array;
@@ -202,12 +206,14 @@ namespace drawing
 			double Get_Default_Stroke_Width() const { return mDefault_Shape.Get_Stroke_Width(); }
 			RGBColor Get_Default_Stroke_Color() const { return mDefault_Shape.Get_Stroke_Color(); }
 			RGBColor Get_Default_Fill_Color() const { return mDefault_Shape.Get_Fill_Color(); }
-			double Get_Default_Opacity() const { return mDefault_Shape.Get_Opacity(); }
+			double Get_Default_Stroke_Opacity() const { return mDefault_Shape.Get_Stroke_Opacity(); }
+			double Get_Default_Fill_Opacity() const { return mDefault_Shape.Get_Fill_Opacity(); }
 
 			void Set_Default_Stroke_Width(double width) { mDefault_Shape.Set_Stroke_Width(width); }
 			void Set_Default_Stroke_Color(RGBColor color) { mDefault_Shape.Set_Stroke_Color(color); }
 			void Set_Default_Fill_Color(RGBColor color) { mDefault_Shape.Set_Fill_Color(color); }
-			void Set_Default_Opacity(double opacity) { mDefault_Shape.Set_Opacity(opacity); }
+			void Set_Default_Stroke_Opacity(double opacity) { mDefault_Shape.Set_Stroke_Opacity(opacity); }
+			void Set_Default_Fill_Opacity(double opacity) { mDefault_Shape.Set_Fill_Opacity(opacity); }
 	};
 
 	class Circle : public Element

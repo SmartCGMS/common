@@ -177,6 +177,8 @@ const wchar_t *dsUse_Measured_Levels = L"Use measured levels";
 const wchar_t* dsEmit_metric_as_signal = L"Emit metric as a signal";
 const wchar_t* dsEmit_last_value_only = L"Emit last value only";
 const wchar_t* dsDiscard_Repeating_Level = L"Discard repeating level";
+const wchar_t* dsSignal_Nor_Metric_ID_Cannot_Be_Null = L"Signal nor metric id cannot be null.";
+const wchar_t* dsSignal_ID_Cannot_Be_Null = L"Signal ID cannot be null.";
 
 const wchar_t *dsRecalculate_On_Levels_Count = L"Recalculate on reference level count (0 = off)";
 const wchar_t *dsRecalculate_On_Segment_End = L"Recalculate on segment end";
@@ -232,7 +234,7 @@ const wchar_t *dsLog_Filter = L"Log";
 const wchar_t *dsLog_Output_File = L"Save log to CSV file";
 const wchar_t* dsLog_Input_File_Or_Dir = L"Log file or dir with log files";
 const wchar_t *dsEmit_Shutdown_Msg = L"Emit the shutdown message";
-const wchar_t *dsLog_Header = L"Logical Clock; Device Time; Event Code; Signal; Info; Segment Id; Event Code Id; Device Id; Signal Id;";
+const wchar_t *dsLog_Header = L"Logical Clock; Device Time; Event Code; Signal; Info; Segment Id; Event Code Id; Device Id; Signal Id";
 const wchar_t *dsLog_Filter_Replay = L"CSV File Log Replay";
 const wchar_t* dsInterpret_Filename_As_Segment_Id = L"Interpret filename as segment id";
 const wchar_t* dsProcessing_File = L"Processing file: ";
