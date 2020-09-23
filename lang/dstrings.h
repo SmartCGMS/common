@@ -741,6 +741,12 @@ extern const wchar_t* dsDescription;
 extern const wchar_t* dsAbsolute;
 extern const wchar_t* dsRelative;
 
+extern const wchar_t* dsDiabetes_Grid_Filter;
+extern const wchar_t* dsClarke_Error_Grid;
+extern const wchar_t* dsParkes_Error_Grid_Type_1;
+extern const wchar_t* dsParkes_Error_Grid_Type_2;
+
+
 extern const wchar_t* dsBergman_Minimal_Model;
 extern const wchar_t* dsBergman_p1;
 extern const wchar_t* dsBergman_p2;
@@ -1174,6 +1180,7 @@ extern const wchar_t* rsConst_CR;
 extern const wchar_t* rsOutput_CSV_File;
 extern const wchar_t* rsSignal_Stats_Header;
 extern const wchar_t* rsDecoupling_Stats_Header;
+extern const wchar_t* rsDiabetes_Grid_Header;
 
 extern const wchar_t* rsPattern_Prediction_Model;
 extern const wchar_t* rsParameters_File;

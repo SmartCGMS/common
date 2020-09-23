@@ -775,6 +775,12 @@ const wchar_t* dsDescription = L"Description";
 const wchar_t* dsAbsolute = L"Absolute [mmol/l]";
 const wchar_t* dsRelative = L"Relative [%]";
 
+const wchar_t* dsDiabetes_Grid_Filter = L"Diabetes Error Grids";
+const wchar_t* dsClarke_Error_Grid = L"Clarke Error Grid";
+const wchar_t* dsParkes_Error_Grid_Type_1 = L"Parkes' Error Grid, Type 1";
+const wchar_t* dsParkes_Error_Grid_Type_2 = L"Parkes' Error Grid, Type 2";
+
+
 const wchar_t* dsInsulin_LGS_Rate = L"LGS Basal Insulin Rate";
 
 const wchar_t* dsConst_ISF = L"insulin sensitivity factor";
@@ -1201,6 +1207,8 @@ const wchar_t* rsConst_CR = L"const_carb_to_insulin_ratio";
 const wchar_t* rsOutput_CSV_File = L"Output_CSV_file";
 const wchar_t* rsSignal_Stats_Header = L"Segment id; marker;; avg; stddev;count;; min; 25th; median; 75; 95; 99; max";
 const wchar_t* rsDecoupling_Stats_Header = L"Segment id; marker;; avg; stddev;count;; min; 25th; median; 75; max;; matched_events; total_events; matched_levels; total_levels";
+
+const wchar_t* rsDiabetes_Grid_Header = L"Segment id;; A; B; A+B; C; D; E";
 
 
 const wchar_t* rsPattern_Prediction_Model = L"Pattern_IG_Prediction";
