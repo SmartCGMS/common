@@ -1421,14 +1421,18 @@ CSimpleIniTempl<SI_CHAR,SI_STRLESS,SI_CONVERTER>::LoadData(
     size_t          a_uDataLen
     )
 {
-    SI_CONVERTER converter(m_bStoreIsUtf8);
+    if (!a_pData) {
+        return SI_Error::SI_OK;
+    }
 
-    // consume the UTF-8 BOM if it exists
-    if (m_bStoreIsUtf8 && a_uDataLen >= 3) {
-        if (memcmp(a_pData, SI_UTF8_SIGNATURE, 3) == 0) {
-            a_pData    += 3;
-            a_uDataLen -= 3;
-        }
+    // if the UTF-8 BOM exists, consume it and set mode to unicode, if we have
+    // already loaded data and try to change mode half-way through then this will
+    // be ignored and we will assert in debug versions
+    if (a_uDataLen >= 3 && memcmp(a_pData, SI_UTF8_SIGNATURE, 3) == 0) {
+        a_pData += 3;
+        a_uDataLen -= 3;
+        SI_ASSERT(m_bStoreIsUtf8 || !m_pData); // we don't expect mixed mode data
+        SetUnicode();
     }
 
     if (a_uDataLen == 0) {
@@ -1436,6 +1440,7 @@ CSimpleIniTempl<SI_CHAR,SI_STRLESS,SI_CONVERTER>::LoadData(
     }
 
     // determine the length of the converted data
+    SI_CONVERTER converter(m_bStoreIsUtf8);
     size_t uLen = converter.SizeFromStore(a_pData, a_uDataLen);
     if (uLen == (size_t)(-1)) {
         return SI_Error::SI_FAIL;
@@ -1751,8 +1756,8 @@ CSimpleIniTempl<SI_CHAR,SI_STRLESS,SI_CONVERTER>::LoadMultiLineText(
     a_pVal = a_pData;
 
     // find the end tag. This tag must start in column 1 and be
-    // followed by a newline. No whitespace removal is done while
-    // searching for this tag.
+    // followed by a newline. We ignore any whitespace after the end
+    // tag but not whitespace before it. 
     SI_CHAR cEndOfLineChar = *a_pData;
     for(;;) {
         // if we are loading comments then we need a comment character as
@@ -1806,12 +1811,20 @@ CSimpleIniTempl<SI_CHAR,SI_STRLESS,SI_CONVERTER>::LoadMultiLineText(
         *a_pData = 0;
 
         // if are looking for a tag then do the check now. This is done before
-        // checking for end of the data, so that if we have the tag at the end
-        // of the data then the tag is removed correctly.
-        if (a_pTagName &&
-            (!IsLess(pDataLine, a_pTagName) && !IsLess(a_pTagName, pDataLine)))
-        {
-            break;
+       // checking for end of the data, so that if we have the tag at the end
+       // of the data then the tag is removed correctly.
+        if (a_pTagName) {
+            // strip whitespace from the end of this tag
+            SI_CHAR* pc = a_pData - 1;
+            while (pc > pDataLine && IsSpace(*pc)) --pc;
+            SI_CHAR ch = *++pc;
+            *pc = 0;
+
+            if (!IsLess(pDataLine, a_pTagName) && !IsLess(a_pTagName, pDataLine)) {
+                break;
+            }
+
+            *pc = ch;
         }
 
         // if we are at the end of the data then we just automatically end
@@ -1931,6 +1944,7 @@ CSimpleIniTempl<SI_CHAR,SI_STRLESS,SI_CONVERTER>::AddEntry(
     // check for existence of the key
     TKeyVal & keyval = iSection->second;
     typename TKeyVal::iterator iKey = keyval.find(a_pKey);
+    bInserted = iKey == keyval.end();
 
     // remove all existing entries but save the load order and
     // comment of the first entry
@@ -1976,8 +1990,7 @@ CSimpleIniTempl<SI_CHAR,SI_STRLESS,SI_CONVERTER>::AddEntry(
             oKey.pComment = a_pComment;
         }
         typename TKeyVal::value_type oEntry(oKey, static_cast<const SI_CHAR *>(NULL));
-        iKey = keyval.insert(oEntry);
-        bInserted = true;
+        iKey = keyval.insert(oEntry);        
     }
     iKey->second = a_pValue;
     return bInserted ? SI_Error::SI_INSERTED : SI_Error::SI_UPDATED;
@@ -2425,6 +2438,19 @@ CSimpleIniTempl<SI_CHAR,SI_STRLESS,SI_CONVERTER>::Save(
     oSections.sort(typename Entry::LoadOrder());
 #endif
 
+    // if there is an empty section name, then it must be written out first
+   // regardless of the load order
+    typename TNamesDepend::iterator is = oSections.begin();
+    for (; is != oSections.end(); ++is) {
+        if (!*is->pItem) {
+            // move the empty section name to the front of the section list
+            if (is != oSections.begin()) {
+                oSections.splice(oSections.begin(), oSections, is, std::next(is));
+            }
+            break;
+        }
+    }
+
     // write the file comment if we have one
     bool bNeedNewLine = false;
     if (m_pFileComment) {
@@ -2669,13 +2695,15 @@ CSimpleIniTempl<SI_CHAR,SI_STRLESS,SI_CONVERTER>::DeleteString(
 // SimpleIni.h, set the converter that you wish you use by defining one of the
 // following symbols.
 //
+//  SI_NO_CONVERSION        Do not make the "W" wide character version of the 
+//                          library available. Only CSimpleIniA etc is defined.
 //  SI_CONVERT_GENERIC      Use the Unicode reference conversion library in
 //                          the accompanying files ConvertUTF.h/c
 //  SI_CONVERT_ICU          Use the IBM ICU conversion library. Requires
 //                          ICU headers on include path and icuuc.lib
 //  SI_CONVERT_WIN32        Use the Win32 API functions for conversion.
 
-#if !defined(SI_CONVERT_GENERIC) && !defined(SI_CONVERT_WIN32) && !defined(SI_CONVERT_ICU)
+#if !defined(SI_NO_CONVERSION) && !defined(SI_CONVERT_GENERIC) && !defined(SI_CONVERT_WIN32) && !defined(SI_CONVERT_ICU)
 # ifdef _WIN32
 #  define SI_CONVERT_WIN32
 # else
@@ -3410,31 +3438,39 @@ public:
 // ---------------------------------------------------------------------------
 
 typedef CSimpleIniTempl<char,
-    SI_NoCase<char>,SI_ConvertA<char> >                 CSimpleIniA;
+    SI_NoCase<char>, SI_ConvertA<char> >                 CSimpleIniA;
 typedef CSimpleIniTempl<char,
-    SI_Case<char>,SI_ConvertA<char> >                   CSimpleIniCaseA;
+    SI_Case<char>, SI_ConvertA<char> >                   CSimpleIniCaseA;
 
-#if defined(SI_CONVERT_ICU)
-typedef CSimpleIniTempl<UChar,
-    SI_NoCase<UChar>,SI_ConvertW<UChar> >               CSimpleIniW;
-typedef CSimpleIniTempl<UChar,
-    SI_Case<UChar>,SI_ConvertW<UChar> >                 CSimpleIniCaseW;
-#else
-typedef CSimpleIniTempl<wchar_t,
-    SI_NoCase<wchar_t>,SI_ConvertW<wchar_t> >           CSimpleIniW;
-typedef CSimpleIniTempl<wchar_t,
-    SI_Case<wchar_t>,SI_ConvertW<wchar_t> >             CSimpleIniCaseW;
-#endif
-
-#ifdef _UNICODE
-# define CSimpleIni      CSimpleIniW
-# define CSimpleIniCase  CSimpleIniCaseW
-# define SI_NEWLINE      SI_NEWLINE_W
-#else // !_UNICODE
+#if defined(SI_NO_CONVERSION)
+// if there is no wide char conversion then we don't need to define the 
+// widechar "W" versions of CSimpleIni
 # define CSimpleIni      CSimpleIniA
 # define CSimpleIniCase  CSimpleIniCaseA
 # define SI_NEWLINE      SI_NEWLINE_A
-#endif // _UNICODE
+#else
+# if defined(SI_CONVERT_ICU)
+typedef CSimpleIniTempl<UChar,
+    SI_NoCase<UChar>, SI_ConvertW<UChar> >               CSimpleIniW;
+typedef CSimpleIniTempl<UChar,
+    SI_Case<UChar>, SI_ConvertW<UChar> >                 CSimpleIniCaseW;
+# else
+typedef CSimpleIniTempl<wchar_t,
+    SI_NoCase<wchar_t>, SI_ConvertW<wchar_t> >           CSimpleIniW;
+typedef CSimpleIniTempl<wchar_t,
+    SI_Case<wchar_t>, SI_ConvertW<wchar_t> >             CSimpleIniCaseW;
+# endif
+
+# ifdef _UNICODE
+#  define CSimpleIni      CSimpleIniW
+#  define CSimpleIniCase  CSimpleIniCaseW
+#  define SI_NEWLINE      SI_NEWLINE_W
+# else // !_UNICODE 
+#  define CSimpleIni      CSimpleIniA
+#  define CSimpleIniCase  CSimpleIniCaseA
+#  define SI_NEWLINE      SI_NEWLINE_A
+# endif // _UNICODE
+#endif
 
 #ifdef _MSC_VER
 # pragma warning (pop)

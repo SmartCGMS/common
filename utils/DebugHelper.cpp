@@ -96,7 +96,8 @@ CMemory_Leak_Tracker::~CMemory_Leak_Tracker() {
 }
 
 void dprintf(std::stringstream &stream) {
-	OutputDebugStringA(stream.str().c_str());
+        const auto msg = stream.str();
+        OutputDebugStringA(msg.c_str());
 }
 
 void dprintf(std::string &str) {

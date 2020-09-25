@@ -53,7 +53,8 @@ CDb_Connector db_connector{};
 
 CDb_Query::CDb_Query(QSqlDatabase &db, const wchar_t *statement) : mQuery(QSqlQuery{ db }) {
 	if (!mQuery.prepare(QString::fromWCharArray(statement))) {
-		dprintf(mQuery.lastError().databaseText().toStdString().c_str());
+                const auto msg = mQuery.lastError().databaseText().toStdString();
+                dprintf(msg.c_str());
 		dprintf("\n");
 		throw std::invalid_argument{ "Malformed SQL statement." };
 	}
@@ -89,9 +90,11 @@ HRESULT IfaceCalling CDb_Query::Bind_Parameters(const db::TParameter *values, co
 HRESULT IfaceCalling CDb_Query::Get_Next(db::TParameter* const values, const size_t count) {
 	if (!mExecuted) mExecuted = mQuery.exec();
 	if (!mExecuted) {
-		dprintf(mQuery.lastError().driverText().toStdString().c_str());
+                auto msg =mQuery.lastError().driverText().toStdString();
+                dprintf(msg.c_str());
 		dprintf("\n");
-		dprintf(mQuery.lastError().databaseText().toStdString().c_str());
+                msg = mQuery.lastError().databaseText().toStdString();
+                dprintf(msg.c_str());
 		dprintf("\n");
 		return E_FAIL;
 	}
@@ -123,7 +126,7 @@ HRESULT IfaceCalling CDb_Query::Get_Next(db::TParameter* const values, const siz
 																values[i].str = const_cast<wchar_t*>(mResult_String_Row[i].c_str());
 															} else
 																values[i].type = db::NParameter_Type::ptNull;
-															break;
+                                                                                                                        break;
 
 					case db::NParameter_Type::ptBool:		values[i].boolean = db_value.toBool() ? TRUE : FALSE;
 															break;
@@ -159,9 +162,11 @@ CDb_Connection::CDb_Connection(const wchar_t *host, const wchar_t *provider, uin
 	mDb.setPassword(QString::fromWCharArray(password));
 
 	if (!mDb.open()) {
-		dprintf(mDb.lastError().driverText().toStdString().c_str());
+                auto msg = mDb.lastError().driverText().toStdString();
+                dprintf(msg.c_str());
 		dprintf("\n");
-		dprintf(mDb.lastError().databaseText().toStdString().c_str());
+                msg = mDb.lastError().databaseText().toStdString();
+                dprintf(msg.c_str());
 		dprintf("\n");
 		throw "Cannot open database";
 	}

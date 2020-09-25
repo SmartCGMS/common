@@ -70,7 +70,8 @@ bool CDynamic_Library::Load(const filesystem::path &file_path) {
 		else mLib_Path = mLibrary_Base / file_path;
          
 
-    mHandle = LoadLibraryW(mLib_Path.wstring().c_str());
+    const auto converted_path = mLib_Path.wstring();
+    mHandle = LoadLibraryW(converted_path.c_str());
 
 	return mHandle != NULL;
 }
