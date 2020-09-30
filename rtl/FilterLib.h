@@ -111,7 +111,11 @@ namespace scgms {
 			}
 
 			filesystem::path Read_File_Path(const wchar_t* name, const filesystem::path& default_value = {}) {
+#ifndef ANDROID
 				return Read_Parameter<filesystem::path>(name, &SFilter_Parameter::as_filepath, default_value);
+#else
+				return filesystem::path{ Read_String(name, false, default_value.wstring()) };
+#endif
 			}
 
 			int64_t Read_Int(const wchar_t* name, const int64_t default_value = std::numeric_limits<int64_t>::max()) const {
