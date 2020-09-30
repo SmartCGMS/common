@@ -757,6 +757,9 @@ const wchar_t* dsError_Initializing_Discrete_Model = L"Cannot initialize discret
 const wchar_t* dsAsync_Sig_Gen_Req_Seg_Id = L"Asynchronously configured model requires a valid segment-id configuration!";
 const wchar_t* dsFailed_To_Configure_Model = L"Failed to configure the model.";
 
+const wchar_t* dsImpulse_Response_Filter = L"Impulse response filter";
+const wchar_t* dsSignal_Id = L"Signal ID";
+const wchar_t* dsResponse_Window = L"Response window (0 = infinite)";
 
 const wchar_t* dsRemote_Host = L"Host";
 const wchar_t* dsRemote_Port = L"Port";
@@ -947,6 +950,9 @@ const wchar_t *rsSignal_Destination_Id = L"Signal_Dst_Id";
 const wchar_t* rsRemove_From_Source = L"Remove_from_source";
 const wchar_t* rsCondition = L"Condition";
 const wchar_t* rsCollect_Statistics = L"Collect_statistics";
+
+const wchar_t* rsSignal_Id = L"Signal_ID";
+const wchar_t* rsResponse_Window = L"Response_Window";
 
 const wchar_t *rsRecalculate_Past_On_Params = L"Recalculate_Past_On_Params";
 

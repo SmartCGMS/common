@@ -791,6 +791,10 @@ extern const wchar_t* dsError_Initializing_Discrete_Model;
 extern const wchar_t* dsAsync_Sig_Gen_Req_Seg_Id;
 extern const wchar_t* dsFailed_To_Configure_Model;
 
+extern const wchar_t* dsImpulse_Response_Filter;
+extern const wchar_t* dsSignal_Id;
+extern const wchar_t* dsResponse_Window;
+
 extern const wchar_t* dsRemote_Host;
 extern const wchar_t* dsRemote_Port;
 extern const wchar_t* dsRemote_Model_Id;
@@ -913,6 +917,9 @@ extern const wchar_t *rsSignal_Destination_Id;
 extern const wchar_t* rsRemove_From_Source;
 extern const wchar_t* rsCondition;
 extern const wchar_t* rsCollect_Statistics;
+
+extern const wchar_t* rsSignal_Id;
+extern const wchar_t* rsResponse_Window;
 
 extern const wchar_t *rsSignal_Masked_Id;
 extern const wchar_t *rsSignal_Value_Bitmask;
