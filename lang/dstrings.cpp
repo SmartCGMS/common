@@ -144,6 +144,7 @@ const wchar_t *dsTime_Segment_ID = L"Segment Id";
 const wchar_t *dsShutdown_After_Last = L"Shutdown after last value";
 
 const wchar_t *dsError_Could_Not_Connect_To_Db = L"Could not connect to database!";
+const wchar_t* dsNo_Time_Segments_Specified = L"No time segment specified.";
 
 const wchar_t *dsGenerate_Primary_Keys = L"Generate new primary keys";
 const wchar_t *dsStore_Data = L"Store data";
@@ -176,6 +177,8 @@ const wchar_t *dsUse_Measured_Levels = L"Use measured levels";
 const wchar_t* dsEmit_metric_as_signal = L"Emit metric as a signal";
 const wchar_t* dsEmit_last_value_only = L"Emit last value only";
 const wchar_t* dsDiscard_Repeating_Level = L"Discard repeating level";
+const wchar_t* dsSignal_Nor_Metric_ID_Cannot_Be_Null = L"Signal nor metric id cannot be null.";
+const wchar_t* dsSignal_ID_Cannot_Be_Null = L"Signal ID cannot be null.";
 
 const wchar_t *dsRecalculate_On_Levels_Count = L"Recalculate on reference level count (0 = off)";
 const wchar_t *dsRecalculate_On_Segment_End = L"Recalculate on segment end";
@@ -231,7 +234,7 @@ const wchar_t *dsLog_Filter = L"Log";
 const wchar_t *dsLog_Output_File = L"Save log to CSV file";
 const wchar_t* dsLog_Input_File_Or_Dir = L"Log file or dir with log files";
 const wchar_t *dsEmit_Shutdown_Msg = L"Emit the shutdown message";
-const wchar_t *dsLog_Header = L"Logical Clock; Device Time; Event Code; Signal; Info; Segment Id; Event Code Id; Device Id; Signal Id;";
+const wchar_t *dsLog_Header = L"Logical Clock; Device Time; Event Code; Signal; Info; Segment Id; Event Code Id; Device Id; Signal Id";
 const wchar_t *dsLog_Filter_Replay = L"CSV File Log Replay";
 const wchar_t* dsInterpret_Filename_As_Segment_Id = L"Interpret filename as segment id";
 const wchar_t* dsProcessing_File = L"Processing file: ";
@@ -533,10 +536,10 @@ const wchar_t *dsSignal_GUI_Name_Unknown = L"Unknown signal";
 
 const wchar_t *dsSolver_Progress_Box_Title = L"Solver progress";
 
-const wchar_t *dsCoult_Not_Init_Network = L"Could not initialize network subsystem";
+const wchar_t *dsCould_Not_Init_Network = L"Could not initialize network subsystem";
 const wchar_t *dsInvalid_Network_Port = L"Invalid network port specified";
 const wchar_t *dsInvalid_Model_GUID = L"Invalid network model ID specified";
-const wchar_t *dsCoult_Not_Allocate_Network_Pool_Slot = L"Could not allocate network pool slot due to fatal error";
+const wchar_t *dsCould_Not_Allocate_Network_Pool_Slot = L"Could not allocate network pool slot due to fatal error";
 
 const wchar_t *dsError_Column_Average = L"Average";
 const wchar_t *dsError_Column_StdDev = L"Std.Dev (Bessel)";
@@ -684,6 +687,7 @@ const wchar_t *dsSelected_Signal_Tooltip = L"Model signal to be used";
 const wchar_t *dsPrediction_Window_Tooltip = L"Size of prediction window to be requested from signal calculator regardless of accuracy";
 const wchar_t *dsMapping_Source_Signal_Tooltip = L"Incoming signal to be mapped";
 const wchar_t *dsMapping_Destination_Signal_Tooltip = L"The incoming signal will be mapped to this signal identifier";
+const wchar_t* dsDestination_Signal_Cannot_Be_Invalid = L"Destination signal cannot have invalid id.";
 const wchar_t *dsMasked_Signal_Tooltip = L"Signal to be masked";
 const wchar_t *dsSignal_Values_Mask_Tooltip = L"Recurring pattern (bitmask) to be applied when masking given signal, up to 64 bits are supported, use 1 to mask value, 0 to leave as-is, insert spaces as you wish";
 
@@ -773,6 +777,12 @@ const wchar_t* dsError = L"Error";
 const wchar_t* dsDescription = L"Description";
 const wchar_t* dsAbsolute = L"Absolute [mmol/l]";
 const wchar_t* dsRelative = L"Relative [%]";
+
+const wchar_t* dsDiabetes_Grid_Filter = L"Diabetes Error Grids";
+const wchar_t* dsClarke_Error_Grid = L"Clarke Error Grid";
+const wchar_t* dsParkes_Error_Grid_Type_1 = L"Parkes' Error Grid, Type 1";
+const wchar_t* dsParkes_Error_Grid_Type_2 = L"Parkes' Error Grid, Type 2";
+
 
 const wchar_t* dsInsulin_LGS_Rate = L"LGS Basal Insulin Rate";
 
@@ -1201,8 +1211,10 @@ const wchar_t* rsConst_CR = L"const_carb_to_insulin_ratio";
 
 
 const wchar_t* rsOutput_CSV_File = L"Output_CSV_file";
-const wchar_t* rsSignal_Stats_Header = L"Segment id; marker;; avg; stddev;count;; min; 25th; median; 75; max";
+const wchar_t* rsSignal_Stats_Header = L"Segment id; marker;; avg; stddev;count;; min; 25th; median; 75; 95; 99; max";
 const wchar_t* rsDecoupling_Stats_Header = L"Segment id; marker;; avg; stddev;count;; min; 25th; median; 75; max;; matched_events; total_events; matched_levels; total_levels";
+
+const wchar_t* rsDiabetes_Grid_Header = L"Segment id;; A; B; A+B; C; D; E";
 
 
 const wchar_t* rsPattern_Prediction_Model = L"Pattern_IG_Prediction";

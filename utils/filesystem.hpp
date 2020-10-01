@@ -64,6 +64,9 @@
 #define GHC_OS_SYS5R4
 #elif defined(BSD)
 #define GHC_OS_BSD
+#elif defined(__EMSCRIPTEN__)
+#define GHC_OS_WEB
+#include <wasi/api.h>
 #else
 #error "Operating system currently not supported!"
 #endif
@@ -188,7 +191,7 @@
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 // ghc::filesystem version in decimal (major * 10000 + minor * 100 + patch)
-#define GHC_FILESYSTEM_VERSION 10303L
+#define GHC_FILESYSTEM_VERSION 10304L
 
 #if !defined(GHC_WITH_EXCEPTIONS) && (defined(__EXCEPTIONS) || defined(__cpp_exceptions) || defined(_CPPUNWIND))
 #define GHC_WITH_EXCEPTIONS
@@ -590,7 +593,9 @@ enum class copy_options : uint16_t {
 
     directories_only = 0x40,
     create_symlinks = 0x80,
+#ifndef GHC_OS_WEB
     create_hard_links = 0x100
+#endif
 };
 
 enum class directory_options : uint16_t {
@@ -701,10 +706,14 @@ public:
     uintmax_t file_size() const;
 #endif
     uintmax_t file_size(std::error_code& ec) const noexcept;
+
+#ifndef GHC_OS_WEB
 #ifdef GHC_WITH_EXCEPTIONS
     uintmax_t hard_link_count() const;
 #endif
     uintmax_t hard_link_count(std::error_code& ec) const noexcept;
+#endif
+
 #ifdef GHC_WITH_EXCEPTIONS
     file_time_type last_write_time() const;
 #endif
@@ -934,10 +943,12 @@ GHC_FS_API void create_directory_symlink(const path& to, const path& new_symlink
 #endif
 GHC_FS_API void create_directory_symlink(const path& to, const path& new_symlink, std::error_code& ec) noexcept;
 
+#ifndef GHC_OS_WEB
 #ifdef GHC_WITH_EXCEPTIONS
 GHC_FS_API void create_hard_link(const path& to, const path& new_hard_link);
 #endif
 GHC_FS_API void create_hard_link(const path& to, const path& new_hard_link, std::error_code& ec) noexcept;
+#endif
 
 #ifdef GHC_WITH_EXCEPTIONS
 GHC_FS_API void create_symlink(const path& to, const path& new_symlink);
@@ -969,10 +980,12 @@ GHC_FS_API uintmax_t file_size(const path& p);
 #endif
 GHC_FS_API uintmax_t file_size(const path& p, std::error_code& ec) noexcept;
 
+#ifndef GHC_OS_WEB
 #ifdef GHC_WITH_EXCEPTIONS
 GHC_FS_API uintmax_t hard_link_count(const path& p);
 #endif
 GHC_FS_API uintmax_t hard_link_count(const path& p, std::error_code& ec) noexcept;
+#endif
 
 GHC_FS_API bool is_block_file(file_status s) noexcept;
 #ifdef GHC_WITH_EXCEPTIONS
@@ -1109,7 +1122,7 @@ public:
     const basic_filebuf& operator=(const basic_filebuf&) = delete;
     basic_filebuf<charT, traits>* open(const path& p, std::ios_base::openmode mode)
     {
-#if defined(GHC_OS_WINDOWS) && !defined(__GNUC__)
+#if defined(GHC_OS_WINDOWS) && !defined(__GLIBCXX__)
         return std::basic_filebuf<charT, traits>::open(p.wstring().c_str(), mode) ? this : 0;
 #else
         return std::basic_filebuf<charT, traits>::open(p.string().c_str(), mode) ? this : 0;
@@ -1122,7 +1135,7 @@ class basic_ifstream : public std::basic_ifstream<charT, traits>
 {
 public:
     basic_ifstream() {}
-#if defined(GHC_OS_WINDOWS) && !defined(__GNUC__)
+#if defined(GHC_OS_WINDOWS) && !defined(__GLIBCXX__)
     explicit basic_ifstream(const path& p, std::ios_base::openmode mode = std::ios_base::in)
         : std::basic_ifstream<charT, traits>(p.wstring().c_str(), mode)
     {
@@ -1145,7 +1158,7 @@ class basic_ofstream : public std::basic_ofstream<charT, traits>
 {
 public:
     basic_ofstream() {}
-#if defined(GHC_OS_WINDOWS) && !defined(__GNUC__)
+#if defined(GHC_OS_WINDOWS) && !defined(__GLIBCXX__)
     explicit basic_ofstream(const path& p, std::ios_base::openmode mode = std::ios_base::out)
         : std::basic_ofstream<charT, traits>(p.wstring().c_str(), mode)
     {
@@ -1168,7 +1181,7 @@ class basic_fstream : public std::basic_fstream<charT, traits>
 {
 public:
     basic_fstream() {}
-#if defined(GHC_OS_WINDOWS) && !defined(__GNUC__)
+#if defined(GHC_OS_WINDOWS) && !defined(__GLIBCXX__)
     explicit basic_fstream(const path& p, std::ios_base::openmode mode = std::ios_base::in | std::ios_base::out)
         : std::basic_fstream<charT, traits>(p.wstring().c_str(), mode)
     {
@@ -1624,19 +1637,14 @@ GHC_INLINE void path::postprocess_path_with_format(path::impl_string_type& p, pa
                     p[0] = '\\';
                 }
             }
-            
+            for (auto& c : p) {
+                if (c == '\\') {
+                    c = '/';
+                }
+            }
             break;
 #endif
     }
-
-
-    //tx fix
-    for (auto& c : p) {
-        if (c == '\\') {
-            c = '/';
-        }
-    }
-
     if (p.length() > 2 && p[0] == '/' && p[1] == '/' && p[2] != '/') {
         std::string::iterator new_end = std::unique(p.begin() + 2, p.end(), [](path::value_type lhs, path::value_type rhs) { return lhs == rhs && lhs == '/'; });
         p.erase(new_end, p.end());
@@ -1820,12 +1828,14 @@ GHC_INLINE void create_symlink(const path& target_name, const path& new_symlink,
     }
 }
 
+#ifndef GHC_OS_WEB
 GHC_INLINE void create_hardlink(const path& target_name, const path& new_hardlink, std::error_code& ec)
 {
     if (::link(target_name.c_str(), new_hardlink.c_str()) != 0) {
         ec = detail::make_system_error();
     }
 }
+#endif
 #endif
 
 template <typename T>
@@ -3407,9 +3417,11 @@ GHC_INLINE void copy(const path& from, const path& to, copy_options options, std
             if ((options & copy_options::create_symlinks) != copy_options::none) {
                 create_symlink(from.is_absolute() ? from : canonical(from, ec), to, ec);
             }
+#ifndef GHC_OS_WEB
             else if ((options & copy_options::create_hard_links) != copy_options::none) {
                 create_hard_link(from, to, ec);
             }
+#endif
             else if (is_directory(fs_to)) {
                 copy_file(from, to / from.filename(), options, ec);
             }
@@ -3512,16 +3524,15 @@ GHC_INLINE bool copy_file(const path& from, const path& to, copy_options options
         ec = detail::make_system_error();
         return false;
     }
-    std::shared_ptr<void> guard_in(nullptr, [in](void*) { ::close(in); });
     int mode = O_CREAT | O_WRONLY | O_TRUNC;
     if (!overwrite) {
         mode |= O_EXCL;
     }
     if ((out = ::open(to.c_str(), mode, static_cast<int>(sf.permissions() & perms::all))) < 0) {
         ec = detail::make_system_error();
+        ::close(in);
         return false;
     }
-    std::shared_ptr<void> guard_out(nullptr, [out](void*) { ::close(out); });
     ssize_t br, bw;
     while ((br = ::read(in, buffer.data(), buffer.size())) > 0) {
         ssize_t offset = 0;
@@ -3532,10 +3543,14 @@ GHC_INLINE bool copy_file(const path& from, const path& to, copy_options options
             }
             else if (bw < 0) {
                 ec = detail::make_system_error();
+                ::close(in);
+                ::close(out);
                 return false;
             }
         } while (br);
     }
+    ::close(in);
+    ::close(out);
     return true;
 #endif
 }
@@ -3702,6 +3717,7 @@ GHC_INLINE void create_directory_symlink(const path& to, const path& new_symlink
     detail::create_symlink(to, new_symlink, true, ec);
 }
 
+#ifndef GHC_OS_WEB
 #ifdef GHC_WITH_EXCEPTIONS
 GHC_INLINE void create_hard_link(const path& to, const path& new_hard_link)
 {
@@ -3717,6 +3733,7 @@ GHC_INLINE void create_hard_link(const path& to, const path& new_hard_link, std:
 {
     detail::create_hardlink(to, new_hard_link, ec);
 }
+#endif
 
 #ifdef GHC_WITH_EXCEPTIONS
 GHC_INLINE void create_symlink(const path& to, const path& new_symlink)
@@ -3905,6 +3922,7 @@ GHC_INLINE uintmax_t file_size(const path& p, std::error_code& ec) noexcept
 #endif
 }
 
+#ifndef GHC_OS_WEB
 #ifdef GHC_WITH_EXCEPTIONS
 GHC_INLINE uintmax_t hard_link_count(const path& p)
 {
@@ -3945,6 +3963,7 @@ GHC_INLINE uintmax_t hard_link_count(const path& p, std::error_code& ec) noexcep
     return ec ? static_cast<uintmax_t>(-1) : result;
 #endif
 }
+#endif
 
 GHC_INLINE bool is_block_file(file_status s) noexcept
 {
@@ -4181,7 +4200,7 @@ GHC_INLINE void last_write_time(const path& p, file_time_type new_time, std::err
     times[0].tv_sec = 0;
     times[0].tv_nsec = UTIME_OMIT;
     times[1].tv_sec = std::chrono::duration_cast<std::chrono::seconds>(d).count();
-    times[1].tv_nsec = std::chrono::duration_cast<std::chrono::nanoseconds>(d).count() % 1000000000;
+    times[1].tv_nsec = 0; //std::chrono::duration_cast<std::chrono::nanoseconds>(d).count() % 1000000000;
     if (::utimensat(AT_FDCWD, p.c_str(), times, AT_SYMLINK_NOFOLLOW) != 0) {
         ec = detail::make_system_error();
     }
@@ -4950,6 +4969,7 @@ GHC_INLINE uintmax_t directory_entry::file_size(std::error_code& ec) const noexc
     return filesystem::file_size(path(), ec);
 }
 
+#ifndef GHC_OS_WEB
 #ifdef GHC_WITH_EXCEPTIONS
 GHC_INLINE uintmax_t directory_entry::hard_link_count() const
 {
@@ -4972,6 +4992,7 @@ GHC_INLINE uintmax_t directory_entry::hard_link_count(std::error_code& ec) const
 #endif
     return filesystem::hard_link_count(path(), ec);
 }
+#endif
 
 #ifdef GHC_WITH_EXCEPTIONS
 GHC_INLINE file_time_type directory_entry::last_write_time() const
@@ -5200,13 +5221,19 @@ public:
     void increment(std::error_code& ec)
     {
         if (_dir) {
+            bool skip;
             do {
+                skip = false;
                 errno = 0;
-                _entry = readdir(_dir);
+                _entry = ::readdir(_dir);
                 if (_entry) {
                     _current = _base;
                     _current.append_name(_entry->d_name);
                     _dir_entry = directory_entry(_current, ec);
+                    if(ec && (ec.value() == EACCES || ec.value() == EPERM) && (_options & directory_options::skip_permission_denied) == directory_options::skip_permission_denied) {
+                        ec.clear();
+                        skip = true;
+                    }
                 }
                 else {
                     ::closedir(_dir);
@@ -5217,7 +5244,7 @@ public:
                     }
                     break;
                 }
-            } while (std::strcmp(_entry->d_name, ".") == 0 || std::strcmp(_entry->d_name, "..") == 0);
+            } while (skip || std::strcmp(_entry->d_name, ".") == 0 || std::strcmp(_entry->d_name, "..") == 0);
         }
     }
     path _base;

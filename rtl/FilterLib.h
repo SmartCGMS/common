@@ -57,6 +57,7 @@ namespace scgms {
 		const wchar_t* configuration_name();
 
 		std::wstring as_wstring(HRESULT &rc, bool read_interpreted);
+		HRESULT set_wstring(const std::wstring &str);
 		HRESULT set_wstring(const wchar_t *str);	
 		filesystem::path as_filepath(HRESULT& rc);
 

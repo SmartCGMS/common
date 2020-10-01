@@ -47,6 +47,7 @@
 #include <vector>
 #include <algorithm>
 #include <functional>
+#include <iterator>
 
 namespace refcnt {
 

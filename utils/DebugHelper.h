@@ -114,7 +114,8 @@
 	void dprintf(T arg) {
 		std::stringstream stream;
 		stream << arg;
-		OutputDebugStringA(stream.str().c_str());
+		const auto msg = stream.str();
+		OutputDebugStringA(msg.c_str());
 	}
 
 	void dprintf(std::stringstream &stream);

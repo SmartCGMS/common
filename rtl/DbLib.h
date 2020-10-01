@@ -196,4 +196,6 @@ namespace db {
 	};
 
 	using SDb_Sink = std::shared_ptr<IDb_Sink>;
+
+	bool is_file_db(const std::wstring& provider);
 }

@@ -184,6 +184,10 @@ std::wstring Rat_Time_To_Default_WStr(double rattime) {
 }
 
 
+double Default_WStr_To_Rat_Time(const std::wstring& input, bool& converted_ok) {
+	return Default_WStr_To_Rat_Time(input.c_str(), converted_ok);
+}
+
 double Default_WStr_To_Rat_Time(const wchar_t *input, bool& converted_ok) {
 	converted_ok = false;	//assume an error (and simplify the exit code)
 

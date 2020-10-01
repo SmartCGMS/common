@@ -57,6 +57,7 @@ public:
 std::string Narrow_WString(const std::wstring &wstr);
 std::string Narrow_WChar(const wchar_t *wstr);
 std::wstring Widen_Char(const char *str);
+std::wstring Widen_String(const std::string &str);
 
 std::wstring WString_To_Lower(const std::wstring& wstr);
 
@@ -82,6 +83,7 @@ int64_t str_2_int(const char* str);
 int64_t str_2_int(const char* str, bool& ok);
 int64_t wstr_2_int(const wchar_t* wstr);
 int64_t wstr_2_int(const wchar_t* wstr, bool& ok);
+uint64_t wstr_2_uint(const wchar_t* wstr, bool& ok);
 
 GUID WString_To_GUID(const std::wstring& str, bool& ok);
 std::wstring GUID_To_WString(const GUID& guid);

@@ -38,6 +38,8 @@
 
 #include "DbLib.h"
 
+#include <set>
+
 namespace db {
 
 	bool SDb_Query::Get_Next() {
@@ -98,6 +100,12 @@ namespace db {
 			result = refcnt::make_shared_reference_ext<SDb_Connection, IDb_Connection>(connection, false);
 
 		return result;
+	}
+
+	bool is_file_db (const std::wstring& provider) {
+		const std::set<std::wstring> file_dbs = { L"QSQLITE" };
+
+		return file_dbs.find(provider) != file_dbs.end();
 	}
 
 }

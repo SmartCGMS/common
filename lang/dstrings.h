@@ -142,6 +142,7 @@ extern const wchar_t *dsTime_Segment_ID;
 extern const wchar_t *dsShutdown_After_Last;
 
 extern const wchar_t *dsError_Could_Not_Connect_To_Db;
+extern const wchar_t* dsNo_Time_Segments_Specified;
 
 extern const wchar_t *dsGenerate_Primary_Keys;
 extern const wchar_t *dsStore_Data;
@@ -175,6 +176,8 @@ extern const wchar_t *dsUse_Measured_Levels;
 extern const wchar_t* dsEmit_metric_as_signal;
 extern const wchar_t* dsEmit_last_value_only;
 extern const wchar_t* dsDiscard_Repeating_Level;
+extern const wchar_t* dsSignal_Nor_Metric_ID_Cannot_Be_Null;
+extern const wchar_t* dsSignal_ID_Cannot_Be_Null;
 
 extern const wchar_t *dsRecalculate_On_Levels_Count;
 extern const wchar_t *dsRecalculate_On_Segment_End;
@@ -529,10 +532,10 @@ extern const wchar_t *dsSolver_Progress_Box_Title;
 //extern const wchar_t *dsError_Absolute;
 //extern const wchar_t *dsError_Relative;
 
-extern const wchar_t *dsCoult_Not_Init_Network;
+extern const wchar_t *dsCould_Not_Init_Network;
 extern const wchar_t *dsInvalid_Network_Port;
 extern const wchar_t *dsInvalid_Model_GUID;
-extern const wchar_t *dsCoult_Not_Allocate_Network_Pool_Slot;
+extern const wchar_t *dsCould_Not_Allocate_Network_Pool_Slot;
 
 extern const wchar_t *dsError_Column_Average;
 extern const wchar_t *dsError_Column_StdDev;
@@ -711,6 +714,7 @@ extern const wchar_t *dsSelected_Signal_Tooltip;
 extern const wchar_t *dsPrediction_Window_Tooltip;
 extern const wchar_t *dsMapping_Source_Signal_Tooltip;
 extern const wchar_t *dsMapping_Destination_Signal_Tooltip;
+extern const wchar_t* dsDestination_Signal_Cannot_Be_Invalid;
 extern const wchar_t *dsMasked_Signal_Tooltip;
 extern const wchar_t *dsSignal_Values_Mask_Tooltip;
 
@@ -736,6 +740,12 @@ extern const wchar_t* dsError;
 extern const wchar_t* dsDescription;
 extern const wchar_t* dsAbsolute;
 extern const wchar_t* dsRelative;
+
+extern const wchar_t* dsDiabetes_Grid_Filter;
+extern const wchar_t* dsClarke_Error_Grid;
+extern const wchar_t* dsParkes_Error_Grid_Type_1;
+extern const wchar_t* dsParkes_Error_Grid_Type_2;
+
 
 extern const wchar_t* dsBergman_Minimal_Model;
 extern const wchar_t* dsBergman_p1;
@@ -1177,6 +1187,7 @@ extern const wchar_t* rsConst_CR;
 extern const wchar_t* rsOutput_CSV_File;
 extern const wchar_t* rsSignal_Stats_Header;
 extern const wchar_t* rsDecoupling_Stats_Header;
+extern const wchar_t* rsDiabetes_Grid_Header;
 
 extern const wchar_t* rsPattern_Prediction_Model;
 extern const wchar_t* rsParameters_File;

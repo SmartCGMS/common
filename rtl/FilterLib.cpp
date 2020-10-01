@@ -88,6 +88,10 @@ namespace scgms {
 		return result;
 	}
 
+	HRESULT SFilter_Parameter::set_wstring(const std::wstring& str) {
+		return set_wstring(str.c_str());
+	}
+
 	HRESULT SFilter_Parameter::set_wstring(const wchar_t *str) {
 		std::shared_ptr<refcnt::wstr_container> wstr = refcnt::WString_To_WChar_Container_shared(str);
 		return get()->Set_WChar_Container(wstr.get());
