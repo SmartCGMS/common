@@ -761,6 +761,9 @@ const wchar_t* dsError_Initializing_Discrete_Model = L"Cannot initialize discret
 const wchar_t* dsAsync_Sig_Gen_Req_Seg_Id = L"Asynchronously configured model requires a valid segment-id configuration!";
 const wchar_t* dsFailed_To_Configure_Model = L"Failed to configure the model.";
 
+const wchar_t* dsImpulse_Response_Filter = L"Impulse response filter";
+const wchar_t* dsSignal_Id = L"Signal ID";
+const wchar_t* dsResponse_Window = L"Response window (0 = infinite)";
 
 const wchar_t* dsRemote_Host = L"Host";
 const wchar_t* dsRemote_Port = L"Port";
@@ -1222,3 +1225,6 @@ const wchar_t* rsBolus_Amount = L"Bolus_Amount_";
 
 const wchar_t* rsIcarus_Basal_And_Bolus = L"Icarus_Fixed_Basal_And_Bolus";
 const wchar_t* rsCarb_To_Insulin_Ratio = L"Carb_To_Insulin_Ratio";
+
+const wchar_t* rsSignal_Id = L"Signal_ID";
+const wchar_t* rsResponse_Window = L"Response_Window";

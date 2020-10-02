@@ -801,6 +801,10 @@ extern const wchar_t* dsError_Initializing_Discrete_Model;
 extern const wchar_t* dsAsync_Sig_Gen_Req_Seg_Id;
 extern const wchar_t* dsFailed_To_Configure_Model;
 
+extern const wchar_t* dsImpulse_Response_Filter;
+extern const wchar_t* dsSignal_Id;
+extern const wchar_t* dsResponse_Window;
+
 extern const wchar_t* dsRemote_Host;
 extern const wchar_t* dsRemote_Port;
 extern const wchar_t* dsRemote_Model_Id;
@@ -1193,3 +1197,6 @@ extern const wchar_t* rsBolus_Amount;
 
 extern const wchar_t* rsIcarus_Basal_And_Bolus;
 extern const wchar_t* rsCarb_To_Insulin_Ratio;
+
+extern const wchar_t* rsSignal_Id;
+extern const wchar_t* rsResponse_Window;
