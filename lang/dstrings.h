@@ -445,6 +445,8 @@ extern const wchar_t* dsSimplex;
 extern const wchar_t* dsSubplex;
 extern const wchar_t* dsPraxis;
 
+extern const wchar_t* dsPython_Solver;
+
 extern const char* dsMax_Generations;
 extern const char* dsPopulation_Size;
 
