@@ -794,6 +794,20 @@ const wchar_t* dsParameters_File = L"Parameters file";
 const wchar_t* dsDo_Not_Update_Parameters_File = L"Do not update the parameters file";
 const wchar_t* dsDo_Not_Learn = L"Do not learn";
 
+const wchar_t* dsWeighted_Moving_Average = L"Weighted Moving Average";
+const wchar_t* dsWeight_0 = L"Weight t-00";
+const wchar_t* dsWeight_5 = L"Weight t-05";
+const wchar_t* dsWeight_10 = L"Weight t-10";
+const wchar_t* dsWeight_15 = L"Weight t-15";
+const wchar_t* dsWeight_20 = L"Weight t-20";
+const wchar_t* dsWeight_25 = L"Weight t-25";
+const wchar_t* dsWeight_30 = L"Weight t-30";
+const wchar_t* dsWeight_35 = L"Weight t-35";
+const wchar_t* dsWeight_40 = L"Weight t-40";
+const wchar_t* dsWeight_45 = L"Weight t-45";
+const wchar_t* dsWeight_50 = L"Weight t-50";
+const wchar_t* dsWeight_55 = L"Weight t-55";
+
 const wchar_t* dsExtModel_Unknown_Opcode = L"Unknown opcode received";
 const wchar_t* dsExtModel_Invalid_Opcode_Direction = L"Received an opcode in unexpected direction";
 const wchar_t* dsExtModel_Invalid_State_Handshake_Reply = L"Handshake reply received in invalid state";
@@ -1222,3 +1236,18 @@ const wchar_t* rsBolus_Amount = L"Bolus_Amount_";
 
 const wchar_t* rsIcarus_Basal_And_Bolus = L"Icarus_Fixed_Basal_And_Bolus";
 const wchar_t* rsCarb_To_Insulin_Ratio = L"Carb_To_Insulin_Ratio";
+
+
+const wchar_t* rsWeighted_Moving_Average = L"Weighted_Moving_Average";
+const wchar_t* rsWeight_0 = L"Weight_0";
+const wchar_t* rsWeight_5 = L"Weight_5";
+const wchar_t* rsWeight_10 = L"Weight_10";
+const wchar_t* rsWeight_15 = L"Weight_15";
+const wchar_t* rsWeight_20 = L"Weight_20";
+const wchar_t* rsWeight_25 = L"Weight_25";
+const wchar_t* rsWeight_30 = L"Weight_30";
+const wchar_t* rsWeight_35 = L"Weight_35";
+const wchar_t* rsWeight_40 = L"Weight_40";
+const wchar_t* rsWeight_45 = L"Weight_45";
+const wchar_t* rsWeight_50 = L"Weight_50";
+const wchar_t* rsWeight_55 = L"Weight_55";

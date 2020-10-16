@@ -83,10 +83,10 @@ R Name_Parameters_First_Followers(const wchar_t* first, const wchar_t* follower_
 	using Q = typename std::remove_const<R>::type;
 
 	Q result = { const_cast<wchar_t*>(first) };
-	for (size_t i = 1; i < param_count; i++) {
+	for (size_t i = 0; i < param_count; i++) {
 		std::wstring tmp = follower_prefix;
 		tmp += ui ? L' ' : L'_';
-		tmp += std::to_wstring(i);
+		tmp += std::to_wstring(i+1);
 
 		const size_t idx = static_cast<size_t>(2) * i + (ui ? static_cast<size_t>(0) : static_cast<size_t>(1));
 		name_placeholder[idx] = std::move(tmp);
