@@ -445,8 +445,6 @@ extern const wchar_t* dsSimplex;
 extern const wchar_t* dsSubplex;
 extern const wchar_t* dsPraxis;
 
-extern const wchar_t* dsPython_Solver;
-
 extern const char* dsMax_Generations;
 extern const char* dsPopulation_Size;
 
@@ -598,6 +596,20 @@ extern const wchar_t* dsPattern_Prediction_Signal;
 extern const wchar_t* dsParameters_File;
 extern const wchar_t* dsDo_Not_Update_Parameters_File;
 extern const wchar_t* dsDo_Not_Learn;
+
+extern const wchar_t* dsWeighted_Moving_Average;
+extern const wchar_t* dsWeight_0;
+extern const wchar_t* dsWeight_5;
+extern const wchar_t* dsWeight_10;
+extern const wchar_t* dsWeight_15;
+extern const wchar_t* dsWeight_20;
+extern const wchar_t* dsWeight_25;
+extern const wchar_t* dsWeight_30;
+extern const wchar_t* dsWeight_35;
+extern const wchar_t* dsWeight_40;
+extern const wchar_t* dsWeight_45;
+extern const wchar_t* dsWeight_50;
+extern const wchar_t* dsWeight_55;
 
 extern const wchar_t* dsExtModel_Unknown_Opcode;
 extern const wchar_t* dsExtModel_Invalid_Opcode_Direction;
@@ -1199,6 +1211,20 @@ extern const wchar_t* rsBolus_Amount;
 
 extern const wchar_t* rsIcarus_Basal_And_Bolus;
 extern const wchar_t* rsCarb_To_Insulin_Ratio;
+
+extern const wchar_t* rsWeighted_Moving_Average;
+extern const wchar_t* rsWeight_0;
+extern const wchar_t* rsWeight_5;
+extern const wchar_t* rsWeight_10;
+extern const wchar_t* rsWeight_15;
+extern const wchar_t* rsWeight_20;
+extern const wchar_t* rsWeight_25;
+extern const wchar_t* rsWeight_30;
+extern const wchar_t* rsWeight_35;
+extern const wchar_t* rsWeight_40;
+extern const wchar_t* rsWeight_45;
+extern const wchar_t* rsWeight_50;
+extern const wchar_t* rsWeight_55;
 
 extern const wchar_t* rsSignal_Id;
 extern const wchar_t* rsResponse_Window;

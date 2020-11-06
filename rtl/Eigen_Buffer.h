@@ -44,6 +44,11 @@
 using TVector1D = Eigen::Array<double, 1, Eigen::Dynamic, Eigen::RowMajor>;
 using TBlock1D = decltype(std::declval<TVector1D>().head(0));
 
+inline bool Is_Any_NaN(const TBlock1D &value) {
+	return (value == value).all();	
+}
+
+
 template <typename T>
 TBlock1D Reserve_Eigen_Buffer(T &vector, const size_t effective_size) {
 	if (vector.cols() < static_cast<int>(effective_size)) vector.resize(Eigen::NoChange, static_cast<int>(effective_size));

@@ -70,6 +70,7 @@
 	#define E_NOT_SET								((HRESULT)0x80070490L)
 	#define MK_E_CANTOPENFILE						((HRESULT)0x800401EAL)
 	#define CO_E_ERRORINDLL							((HRESULT)0x800401F9L)
+	#define MK_E_UNAVAILABLE						((HRESULT)0x800401E3L)
 #endif
 
 #ifdef __cplusplus
