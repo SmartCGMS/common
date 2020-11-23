@@ -61,6 +61,18 @@ namespace scgms {
 		scgms::TCreate_Discrete_Model create_discrete_model = scgms::factory::resolve_symbol<scgms::TCreate_Discrete_Model>("create_discrete_model");
 	}
 
+	SFilter::SFilter() : refcnt::SReferenced<IFilter>() {}
+
+	SFilter::SFilter(IFilter* filter) : refcnt::SReferenced<IFilter>(filter) {}
+
+	HRESULT SFilter::Send(scgms::UDevice_Event& event) {
+		if (!event) return E_INVALIDARG;		
+
+		scgms::IDevice_Event* raw_event = event.get();
+		event.release();
+		return get()->Execute(raw_event);
+	}
+
 	NParameter_Type SFilter_Parameter::type() {
 		NParameter_Type result = NParameter_Type::ptNull;
 		get()->Get_Type(&result);
@@ -332,21 +344,12 @@ namespace scgms {
 	}
 
 
-	HRESULT CBase_Filter::Send(scgms::UDevice_Event &event) {
-		if (!event) return E_INVALIDARG;
-
-		scgms::IDevice_Event *raw_event = event.get();
-		event.release();
-		return mOutput->Execute(raw_event);
-	}
-
-	
 	void CBase_Filter::Emit_Info(const scgms::NDevice_Event_Code code, const std::wstring& msg, const uint64_t segment_id) {
 		scgms::UDevice_Event event{ code };
 		event.device_id() = mDevice_ID;
 		event.info.set(msg.c_str());
 		event.segment_id() = segment_id;
-		Send(event);
+		mOutput.Send(event);
 	}
 
 	HRESULT IfaceCalling CBase_Filter::Configure(IFilter_Configuration* configuration, refcnt::wstr_list* error_description) {

@@ -49,7 +49,13 @@
 
 namespace scgms {
 
-	using SFilter = refcnt::SReferenced<IFilter>;
+	class SFilter : public virtual refcnt::SReferenced<IFilter> {
+	public:
+		SFilter();
+		SFilter(IFilter *filter);
+		virtual ~SFilter() {};
+		HRESULT Send(scgms::UDevice_Event& event);
+	};
 
 	class SFilter_Parameter : public virtual refcnt::SReferenced<scgms::IFilter_Parameter> {
 	public:
@@ -342,8 +348,7 @@ namespace scgms {
 
 	class CBase_Filter : public virtual scgms::IFilter, public virtual refcnt::CReferenced {
 	protected:
-		scgms::SFilter mOutput;	//aka the next_filter
-		HRESULT Send(scgms::UDevice_Event &event);
+		scgms::SFilter mOutput;	//aka the next_filter		
 	protected:
 		const GUID mDevice_ID = Invalid_GUID;
 		void Emit_Info(const scgms::NDevice_Event_Code code, const std::wstring &msg, const uint64_t segment_id = scgms::Invalid_Segment_Id);
