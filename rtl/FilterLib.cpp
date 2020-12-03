@@ -242,7 +242,7 @@ namespace scgms {
 		scgms::IFilter_Parameter *parameter;
 		if (imported::create_filter_parameter(type, conf_name, &parameter) == S_OK) {
 			if (get()->add(&parameter, &parameter + 1) == S_OK)
-				result = refcnt::make_shared_reference_ext< SFilter_Parameter, IFilter_Parameter>(parameter, false);
+				result = refcnt::make_shared_reference_ext<SFilter_Parameter, IFilter_Parameter>(parameter, false);
 		}
 
 		return result;

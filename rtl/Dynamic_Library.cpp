@@ -112,3 +112,7 @@ void CDynamic_Library::Set_Library_Base(const filesystem::path& base) {
 filesystem::path CDynamic_Library::Get_Library_Base() {	
 	return mLibrary_Base;
 }
+
+filesystem::path CDynamic_Library::Default_Extension() {
+	return rsShared_Object_Extension;
+}

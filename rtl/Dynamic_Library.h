@@ -85,4 +85,6 @@ class CDynamic_Library final {
 		static void Set_Library_Base(const filesystem::path& base);
 		// retrieves library base directory
 		static filesystem::path Get_Library_Base();
+
+		static filesystem::path Default_Extension();
 };
