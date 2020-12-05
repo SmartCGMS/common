@@ -219,6 +219,8 @@ const wchar_t *dsMasking_Filter = L"Signal value masking";
 const wchar_t *dsCalculated_Signal_Filter = L"Calculated signal";
 const wchar_t *dsDecoupling_Filter = L"Signal decoupling";
 
+const wchar_t* dsHealthKit_Dump_Reader_Filter = L"HealthKit dump reader filter";
+
 const wchar_t *dsDrawing_Filter_Period = L"Redraw period [ms]";
 const wchar_t *dsDiagnosis_Is_Type2 = L"Diabetes type 2? (1 = off)";
 const wchar_t *dsDrawing_Filter_Canvas_Width = L"Canvas width";
@@ -528,6 +530,7 @@ const wchar_t* dsSignal_GUI_Name_Electrodermal_Activity = L"Electrodermal activi
 const wchar_t* dsSignal_GUI_Name_Steps = L"Steps";
 const wchar_t* dsSignal_GUI_Name_Sleep_Quality = L"Sleep quality";
 const wchar_t* dsSignal_GUI_Name_Acceleration = L"Acceleration";
+const wchar_t* dsSignal_GUI_Name_Movement_Speed = L"Movement speed";
 const wchar_t* dsSignal_GUI_Name_Error_Metric = L"error metric";
 const wchar_t *dsSignal_GUI_Name_Insulin_Sensitivity = L"Insulin sensitivity factor";
 const wchar_t *dsSignal_GUI_Name_Carb_Ratio = L"CHO-to-insulin ratio";
@@ -557,7 +560,7 @@ const wchar_t *dsError_Column_Range_10pct = L"<=10% prob.";
 const wchar_t *dsError_Column_Range_25pct = L"<=25% prob.";
 const wchar_t *dsError_Column_Range_50pct = L"<=50% prob.";
 
-const wchar_t* rsInsert_New_Measured_Value = L"INSERT INTO measuredvalue (measuredat, blood, ist, isig, insulin_bolus, insulin_basal_rate, carbohydrates, calibration, segmentid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+const wchar_t* rsInsert_New_Measured_Value = L"INSERT INTO measuredvalue (measuredat, blood, ist, isig, insulin_bolus, insulin_basal_rate, carbohydrates, calibration, heartrate, steps, movement_speed, segmentid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 const wchar_t* rsInsert_Params_Base = L"INSERT INTO ";
 const wchar_t* rsInsert_Params_Segmentid_Column = L"segmentid";
@@ -762,6 +765,7 @@ const wchar_t* dsAsync_Sig_Gen_Req_Seg_Id = L"Asynchronously configured model re
 const wchar_t* dsFailed_To_Configure_Model = L"Failed to configure the model.";
 
 const wchar_t* dsImpulse_Response_Filter = L"Impulse response filter";
+const wchar_t* dsMedian_Response_Filter = L"Median filter";
 const wchar_t* dsSignal_Id = L"Signal ID";
 const wchar_t* dsResponse_Window = L"Response window (0 = infinite)";
 
@@ -1014,6 +1018,8 @@ const wchar_t *rsDrawing_Filter_Filename_Parkes = L"Parkes_File_Path";
 const wchar_t *rsDrawing_Filter_Filename_Clark = L"Clark_File_Path";
 const wchar_t *rsDrawing_Filter_Filename_ECDF = L"ECDF_File_Path";
 
+const wchar_t* rsFile_Path = L"File_Path";
+
 const wchar_t *rsCallback_Log_Message = L"CallbackLog_Message";
 const wchar_t *rsCallback_Drawing_Graph = L"CallbackDrawing_Graph";
 const wchar_t *rsCallback_Drawing_Day = L"CallbackDrawing_Day";
@@ -1047,7 +1053,7 @@ const char* rsFilter_Get_Errors = "get_error_metrics";
 
 const wchar_t* rsSelect_Subjects_And_Segments_For_Db_Reader_Filter = L"select timesegment.id, subject.name, timesegment.name, count(measuredvalue.id) from subject, timesegment, measuredvalue where subject.id = timesegment.subjectid and timesegment.id = measuredvalue.segmentid group by timesegment.id, subject.name order by subject.name, timesegment.name asc";
 const wchar_t* rsSelect_Subjects = L"select id, name from subject";
-const wchar_t* rsSelect_Timesegment_Values_Filter = L"select measuredat, blood, ist, isig, insulin_bolus, insulin_basal_rate, carbohydrates, calibration from measuredvalue where segmentid = ? order by measuredat asc";
+const wchar_t* rsSelect_Timesegment_Values_Filter = L"select measuredat, blood, ist, isig, insulin_bolus, insulin_basal_rate, carbohydrates, calibration, heartrate, steps, movement_speed from measuredvalue where segmentid = ? order by measuredat asc";
 const wchar_t* rsSelect_Params_Base = L"select ";
 const wchar_t* rsSelect_Params_From = L" from ";
 const wchar_t* rsSelect_Params_Condition = L" where segmentid = ?";

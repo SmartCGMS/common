@@ -214,6 +214,8 @@ extern const wchar_t *dsMasking_Filter;
 extern const wchar_t* dsCalculated_Signal_Filter;
 extern const wchar_t* dsDecoupling_Filter;
 
+extern const wchar_t* dsHealthKit_Dump_Reader_Filter;
+
 extern const wchar_t *dsDrawing_Filter_Period;
 extern const wchar_t *dsDiagnosis_Is_Type2;
 extern const wchar_t *dsDrawing_Filter_Canvas_Width;
@@ -522,6 +524,7 @@ extern const wchar_t* dsSignal_GUI_Name_Electrodermal_Activity;
 extern const wchar_t* dsSignal_GUI_Name_Steps;
 extern const wchar_t* dsSignal_GUI_Name_Sleep_Quality;
 extern const wchar_t* dsSignal_GUI_Name_Acceleration;
+extern const wchar_t* dsSignal_GUI_Name_Movement_Speed;
 extern const wchar_t* dsSignal_GUI_Name_Error_Metric;
 extern const wchar_t *dsSignal_GUI_Name_Insulin_Sensitivity;
 extern const wchar_t *dsSignal_GUI_Name_Carb_Ratio;
@@ -802,6 +805,7 @@ extern const wchar_t* dsAsync_Sig_Gen_Req_Seg_Id;
 extern const wchar_t* dsFailed_To_Configure_Model;
 
 extern const wchar_t* dsImpulse_Response_Filter;
+extern const wchar_t* dsMedian_Response_Filter;
 extern const wchar_t* dsSignal_Id;
 extern const wchar_t* dsResponse_Window;
 
@@ -981,6 +985,8 @@ extern const wchar_t *rsDrawing_Filter_Filename_AGP;
 extern const wchar_t *rsDrawing_Filter_Filename_Parkes;
 extern const wchar_t *rsDrawing_Filter_Filename_Clark;
 extern const wchar_t *rsDrawing_Filter_Filename_ECDF;
+
+extern const wchar_t* rsFile_Path;
 
 extern const wchar_t *rsCallback_Log_Message;
 extern const wchar_t *rsCallback_Drawing_Graph;
