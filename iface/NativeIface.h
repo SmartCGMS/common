@@ -43,7 +43,7 @@
 
 
 namespace native {
-	constexpr size_t required_signal_count = 10;
+	constexpr size_t max_signal_count = 10;
 
 	using TSend_Event = HRESULT(IfaceCalling*)(const GUID* sig_id, const double device_time, const double level, const char* msg);
 }
@@ -56,10 +56,10 @@ struct TNative_Environment {
 
 	size_t current_signal_index;
 	size_t level_count;									//number of levels to sanitize memory space - should be generated
-	GUID signal_id[native::required_signal_count];		//signal ids as configured
-	double device_time[native::required_signal_count];  //recent device times
-	double level[native::required_signal_count];		//recent levels
-	double slope[native::required_signal_count]; 		//recent slopes from the recent level to the preceding level, a linear line slope!
+	GUID signal_id[native::max_signal_count];		//signal ids as configured
+	double device_time[native::max_signal_count];  //recent device times
+	double level[native::max_signal_count];		//recent levels
+	double slope[native::max_signal_count]; 		//recent slopes from the recent level to the preceding level, a linear line slope!
 	
 	size_t* parameter_count;							//number of configurable parameters
 	double* parameters;									//configurable parameters
@@ -73,23 +73,27 @@ using TNative_Execute_Wrapper = HRESULT(IfaceCalling*)(
 
 
 #if defined(_WIN32) && defined(SCGMS_NATIVE)
-		#include <Windows.h>
+	#define DLL_EXPORT	__declspec(dllexport)
 
-		BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReserved) {
-			return TRUE;
-		}
+	#include <Windows.h>
 
+	BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReserved) {
+		return TRUE;
+	}
+#else
+	#define DLL_EXPORT
 #endif
 
-#ifdef SCMS_NATIVE
-		void execute(GUID &sig_id, double &device_time, double &level,
-			HRESULT &rc, const TNative_Environment &environment, const void* context);
+#ifdef SCGMS_NATIVE
+	void execute(GUID &sig_id, double &device_time, double &level,
+		HRESULT &rc, const TNative_Environment &environment, const void* context);
 
-		HRESULT inline IfaceCalling execute_wrapper(GUID* sig_id, double* device_time, double* level,
-			const TNative_Environment* environment, const void* context) {
+		//DLL_EXPORT so that this function needs no .cpp file and hence does not get ignored by the compiler
+		DLL_EXPORT HRESULT IfaceCalling execute_wrapper(GUID* sig_id, double* device_time, double* level,
+		const TNative_Environment* environment, const void* context) {
 			
-			HRESULT rc = S_OK;
-			execute(*sig_id, *device_time, *level, rc, *environment, context);
-			return rc;
-		}
+		HRESULT rc = S_OK;
+		execute(*sig_id, *device_time, *level, rc, *environment, context);
+		return rc;
+	}
 #endif
