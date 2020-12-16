@@ -44,8 +44,9 @@
 
 namespace native {
 	constexpr size_t max_signal_count = 10;
+	constexpr size_t max_parameter_count = 10; //number of configurable parameters
 
-	using TSend_Event = HRESULT(IfaceCalling*)(const GUID* sig_id, const double device_time, const double level, const char* msg);
+	using TSend_Event = HRESULT(IfaceCalling*)(const GUID* sig_id, const double device_time, const double level, const char* msg, const void* context);
 }
 
 
@@ -61,8 +62,7 @@ struct TNative_Environment {
 	double level[native::max_signal_count];		//recent levels
 	double slope[native::max_signal_count]; 		//recent slopes from the recent level to the preceding level, a linear line slope!
 	
-	size_t* parameter_count;							//number of configurable parameters
-	double* parameters;									//configurable parameters
+	double parameters[native::max_parameter_count];		//configurable parameters
 };
 
 
