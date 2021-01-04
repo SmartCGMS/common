@@ -72,7 +72,7 @@ using TNative_Execute_Wrapper = HRESULT(IfaceCalling*)(
 	);
 
 
-#if defined(_WIN32) && defined(SCGMS_NATIVE)
+#if defined(_WIN32) && defined(SCGMS_SCRIPT)
 	#define DLL_EXPORT	__declspec(dllexport)
 
 	#include <Windows.h>
@@ -84,7 +84,7 @@ using TNative_Execute_Wrapper = HRESULT(IfaceCalling*)(
 	#define DLL_EXPORT
 #endif
 
-#ifdef SCGMS_NATIVE
+#ifdef SCGMS_SCRIPT
 	void execute(GUID &sig_id, double &device_time, double &level,
 		HRESULT &rc, const TNative_Environment &environment, const void* context);
 

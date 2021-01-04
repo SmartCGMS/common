@@ -91,3 +91,5 @@ std::wstring Get_Padded_Number(uint32_t num, size_t places);
 
 
 std::wstring& trim(std::wstring& str);
+
+std::string quote(const std::string& str);

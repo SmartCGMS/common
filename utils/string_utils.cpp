@@ -324,3 +324,7 @@ std::wstring& rtrim(std::wstring& str) {
 std::wstring& trim(std::wstring& str) {
     return ltrim(rtrim(str));
 }
+
+std::string quote(const std::string& str) {
+    return '"' + str + '"';
+}
