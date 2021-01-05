@@ -41,32 +41,60 @@
 #include "DeviceIface.h"
 #include "../rtl/hresult.h"
 
+#include <type_traits>
+
 
 namespace native {
+
 	constexpr size_t max_signal_count = 10;
 	constexpr size_t max_parameter_count = 10; //number of configurable parameters
 
 	using TSend_Event = HRESULT(IfaceCalling*)(const GUID* sig_id, const double device_time, const double level, const char* msg, const void* context);
 }
 
+#ifdef SCGMS_SCRIPT
+	struct TCustom_Data;
 
+	//let custom_data_sizeof be the sizeof(T)
+	template<typename, typename = void>
+	constexpr size_t custom_data_sizeof = 0;
+
+	template<typename T>
+	constexpr size_t custom_data_sizeof<T, std::void_t<decltype(sizeof(T))>> = sizeof(T);
+
+	template<bool B, class T = void>
+	struct Complete_Custom_Data { using TCustom_Data_Ptr = void const *; };
+
+	template<class T>
+	struct Complete_Custom_Data<true, T> { using TCustom_Data_Ptr = TCustom_Data const *; };
+
+	using TCustom_Data_Ptr = Complete_Custom_Data<custom_data_sizeof<TCustom_Data> != 0, TCustom_Data>::TCustom_Data_Ptr;
+	#define DNEC const
+#else
+	#define DNEC 
+#endif
 
 struct TNative_Environment {
-	native::TSend_Event send;								//function to inject new events
-	void* custom_data;								//custom data pointer to implement a stateful processing
+	DNEC native::TSend_Event send;						//function to inject new events
+#ifdef SCGMS_SCRIPT
+	TCustom_Data_Ptr custom_data;						//custom data pointer to implement a stateful processing
+#else
+	DNEC void* custom_data;								//custom data pointer to implement a stateful processing
+#endif
 
-	size_t current_signal_index;
-	size_t level_count;									//number of levels to sanitize memory space - should be generated
-	GUID signal_id[native::max_signal_count];		//signal ids as configured
-	double device_time[native::max_signal_count];  //recent device times
-	double level[native::max_signal_count];		//recent levels
-	double slope[native::max_signal_count]; 		//recent slopes from the recent level to the preceding level, a linear line slope!
+	DNEC size_t current_signal_index;
+	DNEC size_t level_count;							//number of levels to sanitize memory space - should be generated
+	DNEC GUID signal_id[native::max_signal_count];		//signal ids as configured
+	DNEC double device_time[native::max_signal_count];  //recent device times
+	DNEC double level[native::max_signal_count];		//recent levels
+	DNEC double slope[native::max_signal_count]; 		//recent slopes from the recent level to the preceding level, a linear line slope!
 	
-	double parameters[native::max_parameter_count];		//configurable parameters
+	DNEC double parameters[native::max_parameter_count];//configurable parameters
 };
 
 
 using TNative_Execute_Wrapper = HRESULT(IfaceCalling*)(
+		const std::underlying_type_t<scgms::NDevice_Event_Code> reason,
 		GUID* sig_id, double *device_time, double *level,
 		const TNative_Environment*environment, const void* context
 	);
@@ -85,15 +113,88 @@ using TNative_Execute_Wrapper = HRESULT(IfaceCalling*)(
 #endif
 
 #ifdef SCGMS_SCRIPT
-	void execute(GUID &sig_id, double &device_time, double &level,
-		HRESULT &rc, const TNative_Environment &environment, const void* context);
+	//We need to allow stateful processing for certain tasks, such as time-in-range calculation.
+	//For that, we need to allocate and free memory with the segment start and stop.
+	//To simplify the coding, we do not want to force the programmer to declare respective functions,
+	//if they are not needed => let's use some template "magic" to detect, if the programmer declared such functions.
 
-		//DLL_EXPORT so that this function needs no .cpp file and hence does not get ignored by the compiler
-		DLL_EXPORT HRESULT IfaceCalling execute_wrapper(GUID* sig_id, double* device_time, double* level,
+	template <typename T, typename = void>
+	struct has_init_state : std::false_type {};
+
+	template <typename T>
+	struct has_init_state <T, std::void_t<decltype(Init_State(std::declval<T&>())) >> : std::true_type {};
+
+	template <typename T, typename = void>
+	struct has_release_state : std::false_type {};
+
+	template <typename T>
+	struct has_release_state<T, std::void_t<decltype(Release_State(std::declval<T&>())) >> : std::true_type {};
+
+	void Init_State(const void*&) {}
+	void Release_State(const void*&) {}
+	
+	//Let's declare the raw-execute function, from which we will call the syntactic-suger execute
+	void execute(GUID &sig_id, double &device_time, double &level,
+		HRESULT &rc, TNative_Environment &environment, const void* context);
+
+	//DLL_EXPORT so that this function needs no .cpp file and hence does not get ignored by the compiler
+	DLL_EXPORT HRESULT IfaceCalling execute_wrapper(
+		const std::underlying_type_t<scgms::NDevice_Event_Code> reason,
+		GUID* sig_id, double* device_time, double* level,
 		const TNative_Environment* environment, const void* context) {
 			
+
 		HRESULT rc = S_OK;
-		execute(*sig_id, *device_time, *level, rc, *environment, context);
+
+		auto Handle_Segment_Start = [&]() {
+			constexpr size_t sz = custom_data_sizeof<TCustom_Data>;
+			if constexpr (sz != 0) {
+				TNative_Environment* modifiable = const_cast<TNative_Environment*>(environment);
+				TCustom_Data_Ptr *ptr = &modifiable->custom_data;
+
+				*ptr = reinterpret_cast<TCustom_Data_Ptr>(std::malloc(sz));
+
+				if (*ptr != nullptr) {
+					if constexpr (has_init_state<TCustom_Data>::value) {
+						Init_State(*ptr);
+					}
+				} else
+					rc = E_FAIL;
+			}
+		};
+
+		auto Handle_Segment_Stop = [&]() {
+			if constexpr (custom_data_sizeof<TCustom_Data> != 0) {
+				
+				TNative_Environment* modifiable = const_cast<TNative_Environment*>(environment);
+
+				if constexpr (has_release_state<TCustom_Data>::value) {
+					Release_State((modifiable->custom_data));
+				}
+
+
+				std::free((void*)modifiable->custom_data);
+			}
+		};
+
+		
+		
+		switch (static_cast<scgms::NDevice_Event_Code>(reason)) {
+		
+			case scgms::NDevice_Event_Code::Time_Segment_Start: Handle_Segment_Start();
+				break;
+
+			case scgms::NDevice_Event_Code::Time_Segment_Stop: Handle_Segment_Stop();
+				break;
+
+
+			case scgms::NDevice_Event_Code::Level:
+				execute(*sig_id, *device_time, *level, rc, *const_cast<TNative_Environment*>(environment), context);
+				break;
+
+			default: break;
+		}
+
 		return rc;
 	}
 #endif
