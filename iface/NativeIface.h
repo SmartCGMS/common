@@ -63,10 +63,10 @@ namespace native {
 	constexpr size_t custom_data_sizeof<T, std::void_t<decltype(sizeof(T))>> = sizeof(T);
 
 	template<bool B, class T = void>
-	struct Complete_Custom_Data { using TCustom_Data_Ptr = void const *; };
+	struct Complete_Custom_Data { using TCustom_Data_Ptr = void *; };
 
 	template<class T>
-	struct Complete_Custom_Data<true, T> { using TCustom_Data_Ptr = TCustom_Data const *; };
+	struct Complete_Custom_Data<true, T> { using TCustom_Data_Ptr = TCustom_Data *; };
 
 	using TCustom_Data_Ptr = Complete_Custom_Data<custom_data_sizeof<TCustom_Data> != 0, TCustom_Data>::TCustom_Data_Ptr;
 	#define DNEC const
@@ -96,7 +96,7 @@ struct TNative_Environment {
 using TNative_Execute_Wrapper = HRESULT(IfaceCalling*)(
 		const std::underlying_type_t<scgms::NDevice_Event_Code> reason,
 		GUID* sig_id, double *device_time, double *level,
-		const TNative_Environment*environment, const void* context
+		TNative_Environment*environment, const void* context
 	);
 
 
@@ -122,17 +122,13 @@ using TNative_Execute_Wrapper = HRESULT(IfaceCalling*)(
 	struct has_init_state : std::false_type {};
 
 	template <typename T>
-	struct has_init_state <T, std::void_t<decltype(Init_State(std::declval<T&>())) >> : std::true_type {};
+	struct has_init_state <T, std::void_t<decltype(Init_State(std::declval<T*>, std::declval<const double>, std::declval<TNative_Environment&>(), std::declval<const void*>)) >> : std::true_type {};
 
-	template <typename T, typename = void>
-	struct has_release_state : std::false_type {};
-
-	template <typename T>
-	struct has_release_state<T, std::void_t<decltype(Release_State(std::declval<T&>())) >> : std::true_type {};
-
-	void Init_State(const void*&) {}
-	void Release_State(const void*&) {}
-	
+	/*
+	void Init_State(void *, const double, TNative_Environment&, const void*) {
+		return;
+	}
+	*/
 	//Let's declare the raw-execute function, from which we will call the syntactic-suger execute
 	void execute(GUID &sig_id, double &device_time, double &level,
 		HRESULT &rc, TNative_Environment &environment, const void* context);
@@ -141,7 +137,7 @@ using TNative_Execute_Wrapper = HRESULT(IfaceCalling*)(
 	DLL_EXPORT HRESULT IfaceCalling execute_wrapper(
 		const std::underlying_type_t<scgms::NDevice_Event_Code> reason,
 		GUID* sig_id, double* device_time, double* level,
-		const TNative_Environment* environment, const void* context) {
+		TNative_Environment* environment, const void* context) {
 			
 
 		HRESULT rc = S_OK;
@@ -150,14 +146,17 @@ using TNative_Execute_Wrapper = HRESULT(IfaceCalling*)(
 			constexpr size_t sz = custom_data_sizeof<TCustom_Data>;
 			if constexpr (sz != 0) {
 				TNative_Environment* modifiable = const_cast<TNative_Environment*>(environment);
-				TCustom_Data_Ptr *ptr = &modifiable->custom_data;
+				
+				using TEffective_Custom_Data = std::decay<TCustom_Data_Ptr>;
+				TEffective_Custom_Data* ptr = new TEffective_Custom_Data();				
+				
+				modifiable->custom_data = reinterpret_cast<TCustom_Data_Ptr>(ptr);
 
-				*ptr = reinterpret_cast<TCustom_Data_Ptr>(std::malloc(sz));
-
-				if (*ptr != nullptr) {
+				if (ptr != nullptr) {
 					if constexpr (has_init_state<TCustom_Data>::value) {
-						Init_State(*ptr);
-					}
+						Init_State(modifiable->custom_data, *device_time, *environment, context);
+						//ptr->
+					}					
 				} else
 					rc = E_FAIL;
 			}
@@ -165,15 +164,12 @@ using TNative_Execute_Wrapper = HRESULT(IfaceCalling*)(
 
 		auto Handle_Segment_Stop = [&]() {
 			if constexpr (custom_data_sizeof<TCustom_Data> != 0) {
-				
-				TNative_Environment* modifiable = const_cast<TNative_Environment*>(environment);
-
-				if constexpr (has_release_state<TCustom_Data>::value) {
-					Release_State((modifiable->custom_data));
-				}
-
-
-				std::free((void*)modifiable->custom_data);
+				if (environment->custom_data) {
+					using TEffective_Custom_Data = std::decay_t<TCustom_Data_Ptr>;
+					TNative_Environment* modifiable = const_cast<TNative_Environment*>(environment);
+					delete reinterpret_cast<TEffective_Custom_Data>(modifiable->custom_data);
+					modifiable->custom_data = nullptr;
+				}			
 			}
 		};
 
@@ -189,7 +185,7 @@ using TNative_Execute_Wrapper = HRESULT(IfaceCalling*)(
 
 
 			case scgms::NDevice_Event_Code::Level:
-				execute(*sig_id, *device_time, *level, rc, *const_cast<TNative_Environment*>(environment), context);
+				execute(*sig_id, *device_time, *level, rc, *environment, context);
 				break;
 
 			default: break;
