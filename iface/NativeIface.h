@@ -41,8 +41,6 @@
 #include "DeviceIface.h"
 #include "../rtl/hresult.h"
 
-#include <type_traits>
-
 
 namespace native {
 
@@ -52,46 +50,43 @@ namespace native {
 	using TSend_Event = HRESULT(IfaceCalling*)(const GUID* sig_id, const double device_time, const double level, const char* msg, const void* context);
 }
 
+	//In the native script, let's forbidd almost all values, except the state, from a modification,
+	//while allowing the modification in the SCGMS filter.
 #ifdef SCGMS_SCRIPT
-	struct TCustom_Data;
-
-	//let custom_data_sizeof be the sizeof(T)
-	template<typename, typename = void>
-	constexpr size_t custom_data_sizeof = 0;
-
-	template<typename T>
-	constexpr size_t custom_data_sizeof<T, std::void_t<decltype(sizeof(T))>> = sizeof(T);
-
-	template<bool B, class T = void>
-	struct Complete_Custom_Data { using TCustom_Data_Ptr = void *; };
-
-	template<class T>
-	struct Complete_Custom_Data<true, T> { using TCustom_Data_Ptr = TCustom_Data *; };
-
-	using TCustom_Data_Ptr = Complete_Custom_Data<custom_data_sizeof<TCustom_Data> != 0, TCustom_Data>::TCustom_Data_Ptr;
-	#define DNEC const
+	#define DCONST const
 #else
-	#define DNEC 
+	#define DCONST 
 #endif
+
+
+
+#if defined(SCGMS_SCRIPT) && defined(DCustom_Data_Name)
+	class DCustom_Data_Name;
+#endif	
 
 struct TNative_Environment {
-	DNEC native::TSend_Event send;						//function to inject new events
-#ifdef SCGMS_SCRIPT
-	TCustom_Data_Ptr custom_data;						//custom data pointer to implement a stateful processing
+	DCONST native::TSend_Event send;					//function to inject new events
+	
+#if defined(SCGMS_SCRIPT) && defined(DCustom_Data)
+	DCustom_Data * const custom_data;					//custom data pointer to implement a stateful processing
 #else
-	DNEC void* custom_data;								//custom data pointer to implement a stateful processing
+	const void* custom_data;							//custom data pointer to implement a stateful processing
 #endif
 
-	DNEC size_t current_signal_index;
-	DNEC size_t level_count;							//number of levels to sanitize memory space - should be generated
-	DNEC GUID signal_id[native::max_signal_count];		//signal ids as configured
-	DNEC double device_time[native::max_signal_count];  //recent device times
-	DNEC double level[native::max_signal_count];		//recent levels
-	DNEC double slope[native::max_signal_count]; 		//recent slopes from the recent level to the preceding level, a linear line slope!
+	DCONST size_t current_signal_index;
+	DCONST size_t level_count;							//number of levels to sanitize memory space - should be generated
+	DCONST GUID signal_id[native::max_signal_count];	//signal ids as configured
+	DCONST double device_time[native::max_signal_count];//recent device times
+	DCONST double level[native::max_signal_count];		//recent levels
+	DCONST double slope[native::max_signal_count]; 		//recent slopes from the recent level to the preceding level, a linear line slope!
 	
-	DNEC double parameters[native::max_parameter_count];//configurable parameters
+	DCONST double parameters[native::max_parameter_count];//configurable parameters
 };
 
+
+#if defined(SCGMS_SCRIPT) && defined(DCustom_Data_Name) && defined(DCustom_Data_Def)
+	DCustom_Data_Def
+#endif
 
 using TNative_Execute_Wrapper = HRESULT(IfaceCalling*)(
 		const std::underlying_type_t<scgms::NDevice_Event_Code> reason,
@@ -113,22 +108,7 @@ using TNative_Execute_Wrapper = HRESULT(IfaceCalling*)(
 #endif
 
 #ifdef SCGMS_SCRIPT
-	//We need to allow stateful processing for certain tasks, such as time-in-range calculation.
-	//For that, we need to allocate and free memory with the segment start and stop.
-	//To simplify the coding, we do not want to force the programmer to declare respective functions,
-	//if they are not needed => let's use some template "magic" to detect, if the programmer declared such functions.
-
-	template <typename T, typename = void>
-	struct has_init_state : std::false_type {};
-
-	template <typename T>
-	struct has_init_state <T, std::void_t<decltype(Init_State(std::declval<T*>, std::declval<const double>, std::declval<TNative_Environment&>(), std::declval<const void*>)) >> : std::true_type {};
-
-	/*
-	void Init_State(void *, const double, TNative_Environment&, const void*) {
-		return;
-	}
-	*/
+	
 	//Let's declare the raw-execute function, from which we will call the syntactic-suger execute
 	void execute(GUID &sig_id, double &device_time, double &level,
 		HRESULT &rc, TNative_Environment &environment, const void* context);
@@ -143,9 +123,29 @@ using TNative_Execute_Wrapper = HRESULT(IfaceCalling*)(
 		HRESULT rc = S_OK;
 
 		auto Handle_Segment_Start = [&]() {
+	#ifdef DCustom_Data
+
+			rc = E_FAIL;	//be ready for a catastrophe
+			std::unique_ptr<DCustom_Data> state = std::make_unique<DCustom_Data>();
+			if (state) {
+				if (state->Init(*device_time, *environment, context)) {
+		/*			//Init succeeded => move the pointer
+					using q = decltype(environment->custom_data);
+					using w = std::remove_cv<q>;
+					auto z = reinterpret_cast<w>(environment->custom_data);
+					reinterpret_cast<DCustom_Data*>(environment->custom_data) = state.get();
+					state.release();
+			*/		rc = S_OK;
+				}
+			
+			}
+			/*
+			DCustom_Data** modifiable = &(reinterpret_cast<DCustom_Data*>(environment->custom_data));
+			*modifiable = new DCustom_Data();
+
 			constexpr size_t sz = custom_data_sizeof<TCustom_Data>;
 			if constexpr (sz != 0) {
-				TNative_Environment* modifiable = const_cast<TNative_Environment*>(environment);
+				
 				
 				using TEffective_Custom_Data = std::decay<TCustom_Data_Ptr>;
 				TEffective_Custom_Data* ptr = new TEffective_Custom_Data();				
@@ -154,16 +154,18 @@ using TNative_Execute_Wrapper = HRESULT(IfaceCalling*)(
 
 				if (ptr != nullptr) {
 					if constexpr (has_init_state<TCustom_Data>::value) {
-						Init_State(modifiable->custom_data, *device_time, *environment, context);
+						Init_State(modifiable->custom_data, );
 						//ptr->
 					}					
 				} else
 					rc = E_FAIL;
 			}
+			*/
+	#endif
 		};
 
 		auto Handle_Segment_Stop = [&]() {
-			if constexpr (custom_data_sizeof<TCustom_Data> != 0) {
+			/*if constexpr (custom_data_sizeof<TCustom_Data> != 0) {
 				if (environment->custom_data) {
 					using TEffective_Custom_Data = std::decay_t<TCustom_Data_Ptr>;
 					TNative_Environment* modifiable = const_cast<TNative_Environment*>(environment);
@@ -171,6 +173,7 @@ using TNative_Execute_Wrapper = HRESULT(IfaceCalling*)(
 					modifiable->custom_data = nullptr;
 				}			
 			}
+			*/
 		};
 
 		
