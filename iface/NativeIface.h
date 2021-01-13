@@ -47,28 +47,56 @@ namespace native {
 	constexpr size_t max_parameter_count = 10; //number of configurable parameters
 
 	using TSend_Event = HRESULT(IfaceCalling*)(const GUID* sig_id, const double device_time, const double level, const char* msg, const void* context);
+	using TCustom_Data_Size = size_t(IfaceCalling*)();
 }
 
 
 
-struct TNative_Environment {
-	native::TSend_Event send;								//function to inject new events
-	void* custom_data;								//custom data pointer to implement a stateful processing
+#ifdef SCGMS_SCRIPT
+	struct TCustom_Data;
 
-	size_t current_signal_index;
-	size_t level_count;									//number of levels to sanitize memory space - should be generated
-	GUID signal_id[native::max_signal_count];		//signal ids as configured
-	double device_time[native::max_signal_count];  //recent device times
-	double level[native::max_signal_count];		//recent levels
-	double slope[native::max_signal_count]; 		//recent slopes from the recent level to the preceding level, a linear line slope!
-	
-	double parameters[native::max_parameter_count];		//configurable parameters
+	//let custom_data_sizeof be the sizeof(T)
+	template<typename, typename = void>
+	constexpr size_t custom_data_sizeof = 0;
+
+	template<typename T>
+	constexpr size_t custom_data_sizeof<T, std::void_t<decltype(sizeof(T))>> = sizeof(T);
+
+	template<bool B, class T = void>
+	struct Complete_Custom_Data { using TCustom_Data_Ptr = void*; };
+
+	template<class T>
+	struct Complete_Custom_Data<true, T> { using TCustom_Data_Ptr = TCustom_Data*; };
+
+	using TCustom_Data_Ptr = Complete_Custom_Data<custom_data_sizeof<TCustom_Data> != 0, TCustom_Data>::TCustom_Data_Ptr;
+	#define DNEC const
+#else
+	#define DNEC 
+#endif
+
+struct TNative_Environment {
+	DNEC native::TSend_Event send;						//function to inject new events
+#ifdef SCGMS_SCRIPT
+	TCustom_Data_Ptr custom_data;						//custom data pointer to implement a stateful processing
+#else
+	DNEC void* custom_data;								//custom data pointer to implement a stateful processing
+#endif
+
+	DNEC size_t current_signal_index;
+	DNEC size_t level_count;							//number of levels to sanitize memory space - should be generated
+	DNEC GUID signal_id[native::max_signal_count];		//signal ids as configured
+	DNEC double device_time[native::max_signal_count];  //recent device times
+	DNEC double level[native::max_signal_count];		//recent levels
+	DNEC double slope[native::max_signal_count]; 		//recent slopes from the recent level to the preceding level, a linear line slope!
+
+	DNEC double parameters[native::max_parameter_count];//configurable parameters
 };
+
 
 
 using TNative_Execute_Wrapper = HRESULT(IfaceCalling*)(
 		GUID* sig_id, double *device_time, double *level,
-		const TNative_Environment*environment, const void* context
+		TNative_Environment*environment, const void* context
 	);
 
 
@@ -80,17 +108,21 @@ using TNative_Execute_Wrapper = HRESULT(IfaceCalling*)(
 	BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReserved) {
 		return TRUE;
 	}
+
+	size_t custom_data_size() {
+		return custom_data_sizeof<TCustom_Data>;
+	}
 #else
 	#define DLL_EXPORT
 #endif
 
 #ifdef SCGMS_SCRIPT
 	void execute(GUID &sig_id, double &device_time, double &level,
-		HRESULT &rc, const TNative_Environment &environment, const void* context);
+		HRESULT &rc, TNative_Environment &environment, const void* context);
 
 		//DLL_EXPORT so that this function needs no .cpp file and hence does not get ignored by the compiler
 		DLL_EXPORT HRESULT IfaceCalling execute_wrapper(GUID* sig_id, double* device_time, double* level,
-		const TNative_Environment* environment, const void* context) {
+		TNative_Environment* environment, const void* context) {
 			
 		HRESULT rc = S_OK;
 		execute(*sig_id, *device_time, *level, rc, *environment, context);
