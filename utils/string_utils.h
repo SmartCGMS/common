@@ -59,7 +59,6 @@ std::string Narrow_WChar(const wchar_t *wstr);
 std::wstring Widen_Char(const char *str);
 std::wstring Widen_String(const std::string &str);
 
-std::wstring WString_To_Lower(const std::wstring& wstr);
 
 inline bool Is_Empty(const std::wstring& wstr) {
     return wstr.empty();
@@ -67,7 +66,7 @@ inline bool Is_Empty(const std::wstring& wstr) {
 
 template <typename... Args>
 bool Is_Empty(const std::wstring& wstr, const Args&... args) {
-    return Is_Empty(wstr) || IsEmpIs_Empty(args...);
+    return Is_Empty(wstr) || Is_Empty(args...);
 }
 
 
@@ -93,3 +92,7 @@ std::wstring Get_Padded_Number(uint32_t num, size_t places);
 std::wstring& trim(std::wstring& str);
 
 std::string quote(const std::string& str);
+
+
+std::wstring Lower_String(const std::wstring& wstr);
+std::string Lower_String(const std::string& wstr);

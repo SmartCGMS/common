@@ -45,6 +45,9 @@
 #include <array>
 #include <iostream>
 #include <iomanip>
+#include <map>
+#include <cwctype>
+#include <type_traits>
 
 std::string Narrow_WString(const std::wstring& wstr) {
 	return Narrow_WChar(wstr.c_str());
@@ -79,12 +82,117 @@ std::wstring Widen_String(const std::string& str) {
     return Widen_Char(str.c_str());
 }
 
-std::wstring WString_To_Lower(const std::wstring& wstr) {
-	std::wstring result;
 
-	std::transform(wstr.begin(), wstr.end(), std::back_inserter(result), std::towlower);
+std::wstring Lower_String(const std::wstring& wstr) {
+    std::wstring result;
+    std::transform(wstr.begin(), wstr.end(), std::back_inserter(result), std::towlower);
+    return result;
+}
 
-	return result;
+std::string Lower_String(const std::string& wstr) {
+    std::string result;
+    std::transform(wstr.begin(), wstr.end(), std::back_inserter(result), tolower);
+    return result;
+}
+
+const static std::map<std::string, double> known_symbols = {           
+           {"oo", std::numeric_limits<double>::infinity()},
+           {"inf", std::numeric_limits<double>::infinity()},
+           {"infinity", std::numeric_limits<double>::infinity()},
+
+           {"-oo", -std::numeric_limits<double>::infinity()},
+           {"-inf", -std::numeric_limits<double>::infinity()},
+           {"-infinity", -std::numeric_limits<double>::infinity()},
+
+           {"nan", std::numeric_limits<double>::quiet_NaN()},
+
+           {"min", std::numeric_limits<double>::min()},
+           {"-min", -std::numeric_limits<double>::min()},
+           {"max", std::numeric_limits<double>::max()},
+           {"-max", -std::numeric_limits<double>::max()}
+};
+
+const static std::map<std::wstring, double> known_symbols_w = {
+           {L"\x221e", std::numeric_limits<double>::infinity()},
+           {L"oo", std::numeric_limits<double>::infinity()},
+           {L"inf", std::numeric_limits<double>::infinity()},
+           {L"infinity", std::numeric_limits<double>::infinity()},
+
+           {L"-\x221e", -std::numeric_limits<double>::infinity()},
+           {L"-oo", -std::numeric_limits<double>::infinity()},
+           {L"-inf", -std::numeric_limits<double>::infinity()},
+           {L"-infinity", -std::numeric_limits<double>::infinity()},
+
+           {L"nan", std::numeric_limits<double>::quiet_NaN()},
+
+           {L"min", std::numeric_limits<double>::min()},
+           {L"-min", -std::numeric_limits<double>::min()},
+           {L"max", std::numeric_limits<double>::max()},
+           {L"-max", -std::numeric_limits<double>::max()}
+};
+
+template <typename wc>
+using str_2_dbl_string = std::basic_string<wc, std::char_traits<wc>, std::allocator<wc>>;
+
+
+template <typename wc>
+using Tstod = double(*)(const wc*, wc**);
+
+template <typename wc>
+struct TStr_2_Dbl {
+    wc dot;
+    wc colon;
+    Tstod<wc> stod;
+    std::map<str_2_dbl_string<wc>, double> symbols;
+};
+
+const TStr_2_Dbl<char> inf(char dummy) {
+    return { '.', ',', strtod, known_symbols };
+};
+
+const TStr_2_Dbl<wchar_t> inf(wchar_t dummy) {
+    return { L'.', L',', wcstod, known_symbols_w };
+};
+
+
+template <typename wc>
+double convert_str_2_double(const wc* wstr, bool& ok) {         
+
+    wc* end_char;
+    //double value = std::wcstod(wstr, &end_char);
+    const TStr_2_Dbl<wc> info = inf(*wstr);
+    double value = info.stod(wstr, &end_char);
+    ok = *end_char == 0;
+
+    //detecting local does not seems reliable in all cases we encountered
+    auto try_convert = [&](const wc old_point, const wc new_point) {
+        //could have made the number by properly combining mantisa and exponent
+        //but then, we would have to detect e.g.; 1.0e61 formatting
+        //does not seem worth the effort
+
+        str_2_dbl_string<wc> converted{ wstr };
+        std::replace(converted.begin(), converted.end(), old_point, new_point);
+        value = info.stod(converted.c_str(), &end_char);
+        ok = *end_char == 0;
+        return value;
+    };
+
+    if (*end_char == info.dot) value = try_convert(info.dot, info.colon);
+    else if (*end_char == info.colon) value = try_convert(info.colon, info.dot);
+
+
+    if (!ok) {
+        auto iter = info.symbols.find(Lower_String(wstr));
+        if (iter != info.symbols.end()) {
+            value = iter->second;
+            ok = true;
+        }
+        else {
+            value = std::numeric_limits<double>::quiet_NaN(); //sanity
+        }
+    }
+
+    return value;
 }
 
 double str_2_dbl(const char* str) {
@@ -92,15 +200,8 @@ double str_2_dbl(const char* str) {
     return str_2_dbl(str, tmp);
 }
 
-double str_2_dbl(const char *str, bool &ok) {
-    char* end_char;
-    double value = std::strtod(str, &end_char);
-    ok = *end_char == 0;
-
-    if (!ok) 
-        value = std::numeric_limits<double>::quiet_NaN(); //sanity
-        
-    return value;
+double str_2_dbl(const char* str, bool& ok) {
+    return convert_str_2_double<char>(str, ok);
 }
 
 
@@ -109,45 +210,31 @@ double wstr_2_dbl(const wchar_t* wstr) {
     return wstr_2_dbl(wstr, tmp);
 }
 
-double wstr_2_dbl(const wchar_t* wstr, bool& ok) {
 
-	wchar_t* end_char;
-	double value = std::wcstod(wstr, &end_char);
-	ok = *end_char == 0;
-
-	//detecting local does not seems reliable in all cases we encountered
-	auto try_convert = [&](const wchar_t old_point, const wchar_t new_point) {
-		//could have made the number by properly combining mantisa and exponent
-		//but then, we would have to detect e.g.; 1.0e61 formatting
-		//does not seem worth the effort
-
-		std::wstring converted{ wstr };
-		std::replace(converted.begin(), converted.end(), old_point, new_point);
-		value = std::wcstod(converted.c_str(), &end_char);
-		ok = *end_char == 0;
-		return value;
-	};
-
-	switch (*end_char) {
-		case L'.':	value = try_convert(L'.', L','); break;
-		case L',' :	value = try_convert(L',', L'.'); break;
-		default: break;
-	}
-	  
-
-    if (!ok)
-        value = std::numeric_limits<double>::quiet_NaN(); //sanity
-
-    return value;
+ double wstr_2_dbl(const wchar_t* wstr, bool& ok) {
+     return convert_str_2_double<wchar_t>(wstr, ok);	
 }
 
 std::wstring dbl_2_wstr(const double val) {
-    std::wstringstream  stream;
-    auto unused = stream.imbue(std::locale(std::wcout.getloc(), new CDecimal_Separator<wchar_t>{ L'.' })); //locale takes owner ship of dec_sep
 
-    stream << std::setprecision(std::numeric_limits<long double>::digits10 + 1) << val;
+    auto convert_normal = [](const double val)->std::wstring {
+        std::wstringstream  stream;
+        auto unused = stream.imbue(std::locale(std::wcout.getloc(), new CDecimal_Separator<wchar_t>{ L'.' })); //locale takes ownership of dec_sep
+        stream << std::setprecision(std::numeric_limits<long double>::digits10 + 1) << val;
+        return stream.str();
+    };
 
-    return stream.str();
+
+    switch (std::fpclassify(val)) {
+        case FP_INFINITE:  return std::signbit(val) ? L"-\x221e" : L"\x221e";
+        case FP_NAN:       return L"NaN";
+        case FP_NORMAL:    return convert_normal(val);                        
+        case FP_SUBNORMAL: return L"subnormal";
+        case FP_ZERO:      return L"0";
+        default:           return L"unknown";
+        
+    }
+    
 }
 
 template <typename T>

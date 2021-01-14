@@ -212,7 +212,7 @@ double Default_WStr_To_Rat_Time(const wchar_t *input, bool& converted_ok) {
 		while (pos >= plus_minus_pos) {
 			const wchar_t ch = input[pos];
 			if (ch == sep) break;
-			if (!isdigit(ch) && (ch != decimal)) return false;
+			if ((ch>255) || (!isdigit(ch) && (ch != decimal))) return false;	//ch>255 needed due to some C RTLs
 
 			pos--;
 		}
