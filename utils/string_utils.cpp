@@ -95,7 +95,27 @@ std::string Lower_String(const std::string& wstr) {
     return result;
 }
 
-const static std::map<std::string, double> known_symbols = {           
+
+
+template <typename C>
+using str_2_dbl_string = std::basic_string<C, std::char_traits<C>, std::allocator<C>>;
+
+
+template <typename C>
+struct TNumeric_Chars {
+    static constexpr char dot = '.';
+    static constexpr char coma = ',';    
+    const static std::map<const std::string, double> known_symbols;
+};
+
+template <>
+struct TNumeric_Chars<wchar_t> {
+    static constexpr wchar_t dot = '.';
+    static constexpr wchar_t coma = ',';
+    const static std::map<const std::wstring, double> known_symbols;
+};
+
+const std::map<const std::string, double> TNumeric_Chars<char>::known_symbols = {
            {"oo", std::numeric_limits<double>::infinity()},
            {"inf", std::numeric_limits<double>::infinity()},
            {"infinity", std::numeric_limits<double>::infinity()},
@@ -112,7 +132,8 @@ const static std::map<std::string, double> known_symbols = {
            {"-max", -std::numeric_limits<double>::max()}
 };
 
-const static std::map<std::wstring, double> known_symbols_w = {
+
+const std::map<const std::wstring, double> TNumeric_Chars<wchar_t>::known_symbols = {
            {L"\x221e", std::numeric_limits<double>::infinity()},
            {L"oo", std::numeric_limits<double>::infinity()},
            {L"inf", std::numeric_limits<double>::infinity()},
@@ -131,59 +152,37 @@ const static std::map<std::wstring, double> known_symbols_w = {
            {L"-max", -std::numeric_limits<double>::max()}
 };
 
-template <typename wc>
-using str_2_dbl_string = std::basic_string<wc, std::char_traits<wc>, std::allocator<wc>>;
+double rtl_str_dbl(const char* str, char** end_ptr) { return strtod(str, end_ptr); }
+double rtl_str_dbl(const wchar_t* str, wchar_t** end_ptr) { return wcstod(str, end_ptr); }
 
+template <typename C>
+double convert_str_2_double(const C* wstr, bool& ok) {         
 
-template <typename wc>
-using Tstod = double(*)(const wc*, wc**);
-
-template <typename wc>
-struct TStr_2_Dbl {
-    wc dot;
-    wc colon;
-    Tstod<wc> stod;
-    std::map<str_2_dbl_string<wc>, double> symbols;
-};
-
-const TStr_2_Dbl<char> inf(char dummy) {
-    return { '.', ',', strtod, known_symbols };
-};
-
-const TStr_2_Dbl<wchar_t> inf(wchar_t dummy) {
-    return { L'.', L',', wcstod, known_symbols_w };
-};
-
-
-template <typename wc>
-double convert_str_2_double(const wc* wstr, bool& ok) {         
-
-    wc* end_char;
-    //double value = std::wcstod(wstr, &end_char);
-    const TStr_2_Dbl<wc> info = inf(*wstr);
-    double value = info.stod(wstr, &end_char);
+    C* end_char;   
+    double value = rtl_str_dbl(wstr, &end_char);
     ok = *end_char == 0;
 
     //detecting local does not seems reliable in all cases we encountered
-    auto try_convert = [&](const wc old_point, const wc new_point) {
+    auto try_convert = [&](const C old_point, const C new_point) {
         //could have made the number by properly combining mantisa and exponent
         //but then, we would have to detect e.g.; 1.0e61 formatting
         //does not seem worth the effort
 
-        str_2_dbl_string<wc> converted{ wstr };
+        str_2_dbl_string<C> converted{ wstr };
         std::replace(converted.begin(), converted.end(), old_point, new_point);
-        value = info.stod(converted.c_str(), &end_char);
+        value = rtl_str_dbl(converted.c_str(), &end_char);
         ok = *end_char == 0;
         return value;
     };
 
-    if (*end_char == info.dot) value = try_convert(info.dot, info.colon);
-    else if (*end_char == info.colon) value = try_convert(info.colon, info.dot);
+    if (*end_char == TNumeric_Chars<C>::dot) value = try_convert(TNumeric_Chars<C>::dot, TNumeric_Chars<C>::coma);
+    else if (*end_char == TNumeric_Chars<C>::coma) value = try_convert(TNumeric_Chars<C>::coma, TNumeric_Chars<C>::dot);
 
 
     if (!ok) {
-        auto iter = info.symbols.find(Lower_String(wstr));
-        if (iter != info.symbols.end()) {
+        const auto symbols = TNumeric_Chars<C>::known_symbols;
+        auto iter = symbols.find(Lower_String(wstr));
+        if (iter != symbols.end()) {
             value = iter->second;
             ok = true;
         }
@@ -205,13 +204,13 @@ double str_2_dbl(const char* str, bool& ok) {
 }
 
 
-double wstr_2_dbl(const wchar_t* wstr) {
+double str_2_dbl(const wchar_t* wstr) {
     bool tmp;
-    return wstr_2_dbl(wstr, tmp);
+    return str_2_dbl(wstr, tmp);
 }
 
 
- double wstr_2_dbl(const wchar_t* wstr, bool& ok) {
+ double str_2_dbl(const wchar_t* wstr, bool& ok) {
      return convert_str_2_double<wchar_t>(wstr, ok);	
 }
 
@@ -388,6 +387,7 @@ std::wstring GUID_To_WString(const GUID& guid) {
     return result;
 }
 
+
 std::wstring Get_Padded_Number(uint32_t num, size_t places) {
     std::wstring tmp = std::to_wstring(num);
     while (tmp.length() < places)
@@ -414,4 +414,22 @@ std::wstring& trim(std::wstring& str) {
 
 std::string quote(const std::string& str) {
     return '"' + str + '"';
+}
+
+
+bool str_2_bool(const std::wstring& str, bool& ok) {
+    static std::map<std::wstring, bool> known_symbols = {
+        {L"true", true},
+        {L"false", false},
+        {L"1", true},
+        {L"0", false},
+        {L"yes", true},
+        {L"no", false},
+    };
+
+
+    auto iter = known_symbols.find(Lower_String(str));
+    ok = iter != known_symbols.end();
+    
+    return ok ? iter->second : false;
 }

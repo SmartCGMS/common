@@ -409,6 +409,23 @@ namespace scgms {
 			refcnt::Query_Interface<scgms::IFilter, scgms::IEvent_Export_Filter_Inspection>(event_export_filter.get(), IID_Event_Export_Filter_Inspection, *this);
 	}
 
+
+	std::tuple<bool, std::wstring> Is_Variable_Name(const std::wstring& str) {
+		std::wstring trimmed{ str };
+		trimmed = trim(trimmed);
+
+		bool is_var = false;
+		std::wstring var_name;
+		if (trimmed.size() > 3) {
+			if ((trimmed[0] == '$') && (trimmed[1] == L'(') && (trimmed[trimmed.size() - 1] == L')')) {
+				var_name = trimmed.substr(2, trimmed.size() - 3);
+				is_var = true;
+			}
+		}
+
+		return std::tuple<bool, std::wstring>{is_var, var_name};
+	}
+
 }
 
 
@@ -494,7 +511,7 @@ scgms::IModel_Parameter_Vector* WString_To_Model_Parameters(const wchar_t *str) 
 	wchar_t* str_val = wcstok_s(const_cast<wchar_t*>(str_copy.data()), delimiters, &buffer);
 	while (str_val != nullptr) {
 		bool ok;
-		const double value = wstr_2_dbl(str_val, ok);
+		const double value = str_2_dbl(str_val, ok);
 		if (!ok) return nullptr;
 		params.push_back(value);
 

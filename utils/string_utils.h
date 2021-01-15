@@ -73,8 +73,8 @@ bool Is_Empty(const std::wstring& wstr, const Args&... args) {
 
 double str_2_dbl(const char* str);
 double str_2_dbl(const char* str, bool& ok);
-double wstr_2_dbl(const wchar_t* wstr);
-double wstr_2_dbl(const wchar_t* wstr, bool& ok);
+double str_2_dbl(const wchar_t* wstr);
+double str_2_dbl(const wchar_t* wstr, bool& ok);
 
 std::wstring dbl_2_wstr(const double val);
 
@@ -87,6 +87,8 @@ uint64_t wstr_2_uint(const wchar_t* wstr, bool& ok);
 GUID WString_To_GUID(const std::wstring& str, bool& ok);
 std::wstring GUID_To_WString(const GUID& guid);
 std::wstring Get_Padded_Number(uint32_t num, size_t places);
+
+bool str_2_bool(const std::wstring& str, bool& ok);
 
 
 std::wstring& trim(std::wstring& str);

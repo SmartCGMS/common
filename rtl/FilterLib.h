@@ -46,6 +46,7 @@
 #include <vector>
 #include <string>
 #include <functional>
+#include <tuple>
 
 namespace scgms {
 
@@ -435,6 +436,10 @@ namespace scgms {
 		SEvent_Export_Filter_Inspection(const SFilter &event_export_filter);
 	};
 
+
+		//returns if, and what variable name encodes the string
+		//e.g.; 5 returns <false, empty> and $(var_name) returns <true, "var_name">
+	std::tuple<bool, std::wstring> Is_Variable_Name(const std::wstring& str);
 }
 
 
