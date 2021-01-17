@@ -266,33 +266,14 @@ int get_base(T* str) {
 }
 
 
-int64_t str_2_int(const char* str) {
+int64_t str_2_int(const wchar_t* wstr) {
     bool tmp;
-    return str_2_int(str, tmp);
+    return str_2_int(wstr, tmp);
 }
 
-
-int64_t str_2_int(const char* str, bool &ok) {
-    char* end_char;
-    int64_t value = std::strtol(str, &end_char, get_base(str));
-    ok = *end_char == 0;
-
-    if (!ok)
-        value = std::numeric_limits<int64_t>::max(); //sanity
-
-    return value;
-}
-
-
-
-int64_t wstr_2_int(const wchar_t* wstr) {
-    bool tmp;
-    return wstr_2_int(wstr, tmp);
-}
-
-template <typename I, typename W>
-I wstr_2_xint(const wchar_t* wstr, bool& ok, W func) {
-    wchar_t* end_char;
+template <typename I, typename C, typename W>
+I str_2_xint(const C* wstr, bool& ok, W func) {
+    C* end_char;
     I value = func(wstr, &end_char, get_base(wstr));
     ok = *end_char == 0;
 
@@ -303,14 +284,32 @@ I wstr_2_xint(const wchar_t* wstr, bool& ok, W func) {
 }
 
 
-
-int64_t wstr_2_int(const wchar_t* wstr, bool& ok) {
-    return wstr_2_xint<int64_t>(wstr, ok, std::wcstoll);  
+int64_t str_2_int(const char* str) {
+    bool tmp;
+    return str_2_int(str, tmp);
 }
 
 
-uint64_t wstr_2_uint(const wchar_t* wstr, bool& ok) {
-    return wstr_2_xint<uint64_t>(wstr, ok, std::wcstoull);
+int64_t str_2_int(const char* str, bool& ok) {
+    return str_2_xint<int64_t, char>(str, ok, std::strtol);
+}
+
+
+int64_t str_2_int(const wchar_t* wstr, bool& ok) {
+    return str_2_xint<int64_t, wchar_t>(wstr, ok, std::wcstoll);  
+}
+
+
+uint64_t str_2_uint(const wchar_t* wstr, bool& ok) {
+    return str_2_xint<uint64_t, wchar_t>(wstr, ok, std::wcstoull);
+}
+
+int64_t str_2_int(const std::string& str, bool& converted_ok) {
+    return str_2_int(str.c_str(), converted_ok);
+}
+
+int64_t str_2_int(const std::wstring& str, bool& converted_ok) {
+    return str_2_int(str.c_str(), converted_ok);
 }
 
 
@@ -425,6 +424,10 @@ bool str_2_bool(const std::wstring& str, bool& ok) {
         {L"0", false},
         {L"yes", true},
         {L"no", false},
+        {L"on", true},
+        {L"off", false},
+        {L"t", true},
+        {L"f", false},
     };
 
 

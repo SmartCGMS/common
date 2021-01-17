@@ -1228,3 +1228,5 @@ extern const wchar_t* rsWeight_55;
 
 extern const wchar_t* rsSignal_Id;
 extern const wchar_t* rsResponse_Window;
+
+extern const wchar_t* rsFailed_to_allocate_memory;

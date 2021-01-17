@@ -455,7 +455,7 @@ scgms::time_segment_id_container* WString_To_Select_Time_Segments_Id(const wchar
 	wchar_t* str_val = wcstok_s(const_cast<wchar_t*>(str_copy.data()), delimiters, &buffer);
 	while (str_val != nullptr) {
 		bool ok;
-		const int64_t value = wstr_2_int(str_val, ok);
+		const int64_t value = str_2_int(str_val, ok);
 		if (!ok) return nullptr;
 		ids.push_back(value);
 

@@ -1257,3 +1257,5 @@ const wchar_t* rsWeight_55 = L"Weight_55";
 
 const wchar_t* rsSignal_Id = L"Signal_ID";
 const wchar_t* rsResponse_Window = L"Response_Window";
+
+const wchar_t* rsFailed_to_allocate_memory = L"Failed to allocate memory!";
