@@ -72,8 +72,7 @@ namespace scgms {
 
 		double as_double(HRESULT &rc);		
 		std::vector<double> as_double_array(HRESULT &rc);
-		HRESULT set_double_array(const std::vector<double> &values);
-		HRESULT double_array_from_wstring(const wchar_t *str_value);
+		HRESULT set_double_array(const std::vector<double> &values);		
 
 		bool as_bool(HRESULT &rc);
 		HRESULT set_bool(const bool value);
@@ -83,7 +82,6 @@ namespace scgms {
 
 		std::vector<int64_t> as_int_array(HRESULT &rc);
 		HRESULT set_int_array(const std::vector<int64_t> &values);
-		HRESULT int_array_from_wstring(const wchar_t *str_value);	
 	};
 
 	bool add_filters(const std::vector<scgms::TFilter_Descriptor> &descriptors, scgms::TCreate_Filter create_filter);
@@ -441,9 +439,3 @@ namespace scgms {
 		//e.g.; 5 returns <false, empty> and $(var_name) returns <true, "var_name">
 	std::tuple<bool, std::wstring> Is_Variable_Name(const std::wstring& str);
 }
-
-
-std::wstring Select_Time_Segments_Id_To_WString(scgms::time_segment_id_container *container);
-scgms::time_segment_id_container* WString_To_Select_Time_Segments_Id(const wchar_t *str);
-std::wstring Model_Parameters_To_WString(scgms::IModel_Parameter_Vector *container);
-scgms::IModel_Parameter_Vector* WString_To_Model_Parameters(const wchar_t *str);
