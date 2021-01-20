@@ -81,6 +81,7 @@ namespace scgms {
 
 		//Get_WChar_Container also attempts to convert to string from a value of the Get_Type()'s type
 		virtual HRESULT IfaceCalling Get_WChar_Container(refcnt::wstr_container **wstr, BOOL read_interpreted) = 0;	//$(Variable_Name) reads system-variable with read_interpreted==true
+		//Set_WChar_Container attempts from_string conversion according to the Get_Type()'s type, hence it may fail
 		virtual HRESULT IfaceCalling Set_WChar_Container(refcnt::wstr_container *wstr) = 0;	
 		virtual HRESULT IfaceCalling Get_File_Path(refcnt::wstr_container **wstr) = 0;	//reads interpreted string as filepath, which is absolute-ed with the parent_path, when relative
 		virtual HRESULT IfaceCalling Set_Parent_Path(const wchar_t* parent_path) = 0;
