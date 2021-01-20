@@ -311,7 +311,7 @@ namespace refcnt {
 	template <typename T, typename C = std::vector<T>>
 	C Container_To_Vector(IVector_Container<T> *container) {
 		T *begin, *end;
-		if (container->get(&begin, &end) == S_OK) {
+		if ((container) && (container->get(&begin, &end) == S_OK)) {
 			return C{ begin, end };
 		}
 		else
