@@ -99,7 +99,7 @@ namespace refcnt {
 		I* manufactured;
 		S result;
 
-		if (Manufacture_Object<T, I>(&manufactured, args...) == S_OK)
+		if (Manufacture_Object<T, I>(&manufactured, args...).code == S_OK)
 			result = refcnt::make_shared_reference_ext<S, I>(manufactured, false);
 
 		return result;
@@ -119,13 +119,13 @@ namespace refcnt {
 		private:
 			template <typename D = typename std::remove_pointer<T>::type>
 			typename std::enable_if<!std::is_base_of<refcnt::IReferenced, D>::value && !std::is_base_of<refcnt::IUnique_Reference, D>::value, void>::type
-			Add_Content(T *begin, T *end) {
+			Add_Content(T *begin, T *end) noexcept {
 				std::copy(begin, end, std::back_inserter(*this));
 			};
 
 			template <typename D = typename std::remove_pointer<T>::type>
 			typename std::enable_if<std::is_base_of<refcnt::IReferenced, D>::value, void>::type
-			Add_Content(T *begin, T *end) {
+			Add_Content(T *begin, T *end) noexcept {
 				for (T* iter = begin; iter != end; iter++) {
 					T real_ptr = *iter;
 					TAligned_Vector<T>::push_back(real_ptr);
@@ -135,7 +135,7 @@ namespace refcnt {
 
 			template <typename D = typename std::remove_pointer<T>::type>
 			typename std::enable_if<std::is_base_of<refcnt::IUnique_Reference, D>::value, void>::type
-				Add_Content(T *begin, T *end) {
+				Add_Content(T *begin, T *end) noexcept {
 				for (T* iter = begin; iter != end; iter++) {
 					T real_ptr = *iter;
 					TAligned_Vector<T>::push_back(std::move(real_ptr));
@@ -146,36 +146,38 @@ namespace refcnt {
 
 			template <typename D = typename std::remove_pointer<T>::type>
 			typename std::enable_if<!std::is_base_of<refcnt::IReferenced, D>::value && !std::is_base_of<refcnt::IUnique_Reference, D>::value, void>::type
-			Release_Item(T &item) {};
+			Release_Item(T &item) noexcept {};
 
 			template <typename D = typename std::remove_pointer<T>::type>
 			typename std::enable_if<std::is_base_of<refcnt::IReferenced, D>::value || std::is_base_of<refcnt::IUnique_Reference, D>::value, void>::type
-			Release_Item(T &item) {				
+			Release_Item(T &item) noexcept {
 				item->Release();	//as we own both kind of references, we release them
 			}
 
-			void Release_Content() {
+			void Release_Content() noexcept {
 				for (T &item : *this)
 					Release_Item(item);	//as we own both kind of references, we release them
 			}
 			
 
 		public:
-			virtual ~CVector_Container() { Release_Content();  };
+			virtual ~CVector_Container() noexcept { Release_Content();  };
 
-			virtual HRESULT IfaceCalling set(T *begin, T *end) override final {
+			TEmbedded_Error Initialize() const noexcept { return { S_OK, nullptr }; };
+
+			virtual HRESULT IfaceCalling set(T *begin, T *end) noexcept override final {
 				Release_Content();
 				TAligned_Vector<T>::clear();
 				return add(begin, end);
 			}
 
-			virtual HRESULT IfaceCalling add(T *begin, T *end) override {
+			virtual HRESULT IfaceCalling add(T *begin, T *end) noexcept override {
 				if (begin != nullptr)
 					Add_Content(begin, end);
 				return S_OK;
 			}
 
-			virtual HRESULT IfaceCalling get(T **begin, T **end) const override final {
+			virtual HRESULT IfaceCalling get(T **begin, T **end) const noexcept override final {
 				if (!TAligned_Vector<T>::empty()) {
 					*begin = const_cast<T*>(TAligned_Vector<T>::data());
 					*end = const_cast<T*>(TAligned_Vector<T>::data()) + TAligned_Vector<T>::size();
@@ -186,7 +188,7 @@ namespace refcnt {
 				}
 			}
 		
-			virtual HRESULT IfaceCalling pop(T* value) override final {
+			virtual HRESULT IfaceCalling pop(T* value) noexcept override final {
 				if (TAligned_Vector<T>::empty()) return S_FALSE;
 
 				*value = TAligned_Vector<T>::back();
@@ -196,7 +198,7 @@ namespace refcnt {
 				return S_OK;
 			}
 
-			virtual HRESULT IfaceCalling remove(const size_t index) override {
+			virtual HRESULT IfaceCalling remove(const size_t index) noexcept override {
 				if (TAligned_Vector<T>::empty()) return S_FALSE;
 								
 				Release_Item(TAligned_Vector<T>::operator [](index) );
@@ -205,7 +207,7 @@ namespace refcnt {
 				return S_OK;
 			}
 
-			virtual HRESULT IfaceCalling move(const size_t from_index, const size_t to_index) override {
+			virtual HRESULT IfaceCalling move(const size_t from_index, const size_t to_index) noexcept override {
 				if ((from_index >= TAligned_Vector<T>::size()) ||
 					(to_index >= TAligned_Vector<T>::size()) ||
 					(from_index == to_index)) return E_INVALIDARG;
@@ -219,7 +221,7 @@ namespace refcnt {
 				return S_OK;
 			}
 
-			virtual HRESULT IfaceCalling empty() const override final {
+			virtual HRESULT IfaceCalling empty() const noexcept override final {
 				return TAligned_Vector<T>::empty() ? S_OK : S_FALSE;
 			}
 		};
@@ -230,15 +232,15 @@ namespace refcnt {
 		protected:
 			const T *mBegin, *mEnd;
 		public:
-			CVector_View(const T *begin, const T *end) : mBegin(begin), mEnd(end) {}
+			CVector_View(const T *begin, const T *end) noexcept : mBegin(begin), mEnd(end) {}
 
-			virtual HRESULT IfaceCalling set(T *begin, T *end) override final { return E_NOTIMPL; };
-			virtual HRESULT IfaceCalling add(T *begin, T *end) override final { return E_NOTIMPL; };
-			virtual HRESULT IfaceCalling get(T** begin, T** end) const override final { *begin = const_cast<T*>(mBegin); *end = const_cast<T*>(mEnd); return S_OK; }
-			virtual HRESULT IfaceCalling pop(T* value) override final { return E_NOTIMPL; };
-			virtual HRESULT IfaceCalling remove(const size_t index) override final { return E_NOTIMPL; };
-			virtual HRESULT IfaceCalling move(const size_t from_index, const size_t to_index) override final { return E_NOTIMPL; };
-			virtual HRESULT IfaceCalling empty() const override final { return mEnd <= mBegin ? S_OK : S_FALSE; };
+			virtual HRESULT IfaceCalling set(T *begin, T *end) noexcept override final { return E_NOTIMPL; };
+			virtual HRESULT IfaceCalling add(T *begin, T *end) noexcept override final { return E_NOTIMPL; };
+			virtual HRESULT IfaceCalling get(T** begin, T** end) const noexcept override final { *begin = const_cast<T*>(mBegin); *end = const_cast<T*>(mEnd); return S_OK; }
+			virtual HRESULT IfaceCalling pop(T* value) noexcept override final { return E_NOTIMPL; };
+			virtual HRESULT IfaceCalling remove(const size_t index) noexcept override final { return E_NOTIMPL; };
+			virtual HRESULT IfaceCalling move(const size_t from_index, const size_t to_index) noexcept  override final { return E_NOTIMPL; };
+			virtual HRESULT IfaceCalling empty() const noexcept override final { return mEnd <= mBegin ? S_OK : S_FALSE; };
 		};
 
 		#pragma warning( pop ) 
@@ -249,7 +251,7 @@ namespace refcnt {
 	template <typename T>
 	IVector_Container<T>* Create_Container(T *begin, T *end) {
 		IVector_Container<T> *obj = nullptr;
-		if (Manufacture_Object<internal::CVector_Container<T>, IVector_Container<T>>(&obj) == S_OK)
+		if (Manufacture_Object<internal::CVector_Container<T>, IVector_Container<T>>(&obj).code == S_OK)
 			obj->set(begin, end);
 		return obj;
 	}

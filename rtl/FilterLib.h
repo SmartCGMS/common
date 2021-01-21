@@ -342,6 +342,7 @@ namespace scgms {
 	}
 
 
+
 	#pragma warning( push )
 	#pragma warning( disable : 4250 ) // C4250 - 'class1' : inherits 'class2::member' via dominance
 
@@ -349,17 +350,20 @@ namespace scgms {
 	protected:
 		scgms::SFilter mOutput;	//aka the next_filter		
 	protected:
-		const GUID mDevice_ID = Invalid_GUID;
+		GUID mDevice_ID = Invalid_GUID;
 		void Emit_Info(const scgms::NDevice_Event_Code code, const std::wstring &msg, const uint64_t segment_id = scgms::Invalid_Segment_Id);
 	protected:
 		//Descending class is supposed to implement these two methods only
 		virtual HRESULT Do_Execute(scgms::UDevice_Event event) = 0;
 		virtual HRESULT Do_Configure(scgms::SFilter_Configuration configuration, refcnt::Swstr_list &error_description) = 0;
 	public:			
-		CBase_Filter(scgms::IFilter* output, const GUID &device_id = Invalid_GUID);
-		virtual ~CBase_Filter();
-		virtual HRESULT IfaceCalling Configure(IFilter_Configuration* configuration, refcnt::wstr_list* error_description) override final;
-		virtual HRESULT IfaceCalling Execute(scgms::IDevice_Event *event) override;
+		CBase_Filter() noexcept = default;
+		virtual ~CBase_Filter() noexcept {};
+
+		TEmbedded_Error Initialize(scgms::IFilter* output, const GUID& device_id = Invalid_GUID) noexcept;		//if HRESULT != S_OK, wchar_t* describes the error
+
+		virtual HRESULT IfaceCalling Configure(IFilter_Configuration* configuration, refcnt::wstr_list* error_description) noexcept override final;
+		virtual HRESULT IfaceCalling Execute(scgms::IDevice_Event *event) noexcept override;
 	};
 
 

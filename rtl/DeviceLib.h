@@ -160,6 +160,8 @@ namespace scgms {
 		CTime_Segment(const CTime_Segment& b) = delete;
 		virtual ~CTime_Segment();
 
+		TEmbedded_Error Initialize() const noexcept {return { S_OK, nullptr }; };
+
 		virtual HRESULT IfaceCalling Get_Signal(const GUID *signal_id, scgms::ISignal **signal) override;
 
 		// clones this segment into another; calls AddRef (passes ownership to caller)

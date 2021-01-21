@@ -310,16 +310,17 @@ namespace scgms {
 	}
 
 	
-	CBase_Filter::CBase_Filter(scgms::IFilter* output, const GUID& device_id) : mOutput(output), mDevice_ID(device_id) {
-		if (!mOutput) 
-			throw std::runtime_error{ "Attempted to construct a filter without valid output!" };
+	TEmbedded_Error CBase_Filter::Initialize(scgms::IFilter* output, const GUID& device_id) noexcept {
+		if (output) {
+			mOutput = output;
+			mDevice_ID = device_id;
+
+			return { S_OK, nullptr };
+		}
+		else
+			return { E_INVALIDARG, const_cast<wchar_t*>(L"Attempted to construct a filter without valid output!") };
+
 	}
-
-	CBase_Filter::~CBase_Filter() {
-		//
-
-	}
-
 
 	void CBase_Filter::Emit_Info(const scgms::NDevice_Event_Code code, const std::wstring& msg, const uint64_t segment_id) {
 		scgms::UDevice_Event event{ code };
@@ -329,13 +330,13 @@ namespace scgms {
 		mOutput.Send(event);
 	}
 
-	HRESULT IfaceCalling CBase_Filter::Configure(IFilter_Configuration* configuration, refcnt::wstr_list* error_description) {
+	HRESULT IfaceCalling CBase_Filter::Configure(IFilter_Configuration* configuration, refcnt::wstr_list* error_description) noexcept {
 		SFilter_Configuration shared_configuration = refcnt::make_shared_reference_ext<SFilter_Configuration, IFilter_Configuration> ( configuration, true);		
 		refcnt::Swstr_list shared_error_description = refcnt::make_shared_reference_ext<refcnt::Swstr_list, refcnt::wstr_list>(error_description, true);
 		return Do_Configure(shared_configuration, shared_error_description);
 	}
 
-	HRESULT IfaceCalling CBase_Filter::Execute(scgms::IDevice_Event *event) {
+	HRESULT IfaceCalling CBase_Filter::Execute(scgms::IDevice_Event *event) noexcept {
 		if (!event) return E_INVALIDARG;
 		return Do_Execute(scgms::UDevice_Event{event});
 	}
