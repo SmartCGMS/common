@@ -98,7 +98,6 @@ namespace scgms {
 			const char* rsCreate_Discrete_Model = "create_discrete_model";
 			const char* rsCreate_Approximator = "create_approximator";
 
-			const char* rsSolve_Model_Parameters = "solve_model_parameters";
 			const char* rsSolve_Generic = "solve_generic";
 
 			const char* rsAdd_Filters = "add_filters";
@@ -119,7 +118,6 @@ namespace scgms {
 			HRESULT IfaceCalling create_discrete_model_not_impl(void *model_id, void *parameters, void *output, void *model) { return E_NOTIMPL; };
 			HRESULT IfaceCalling create_approximator_not_impl(void* approx_id, void *signal, void* configuration, void* approx) { return E_NOTIMPL; }
 
-			HRESULT IfaceCalling solve_model_parameters_not_impl(void *setup) { return E_NOTIMPL; }
 			HRESULT IfaceCalling solve_generic_not_impl(void *solver_id, void *setup, void *progress) { return E_NOTIMPL; }
 
 			HRESULT IfaceCalling add_filters_not_impl(void *begin, void *end, void* create_filter) { return E_NOTIMPL; }
@@ -156,7 +154,6 @@ namespace scgms {
 			HRESULT IfaceCalling create_discrete_model_lazy(void *model_id, void *parameters, void *output, void *model) { return factory_lazy_load(rsCreate_Discrete_Model, model_id, parameters, output, model); };
 			HRESULT IfaceCalling create_approximator_lazy(void* approx_id, void *signal, void* configuration, void* approx) { return factory_lazy_load(rsCreate_Approximator, approx_id, signal, configuration, approx); }
 
-			HRESULT IfaceCalling solve_model_parameters_lazy(void *setup) { return factory_lazy_load(rsSolve_Model_Parameters, setup); }
 			HRESULT IfaceCalling solve_generic_lazy(void *solver_id, void *setup, void *progress) { return factory_lazy_load(rsSolve_Generic, solver_id, setup, progress); }
 
 			HRESULT IfaceCalling add_filters_lazy(void *begin, void *end, void* create_filter) { return factory_lazy_load(rsAdd_Filters, begin, end, create_filter); }
@@ -184,7 +181,6 @@ namespace scgms {
 				if (strcmp(symbol_name, rsCreate_Discrete_Model) == 0) return reinterpret_cast<void(*)>(internal::create_discrete_model_lazy);
 				if (strcmp(symbol_name, rsCreate_Approximator) == 0) return reinterpret_cast<void(*)>(internal::create_approximator_lazy);
 
-				if (strcmp(symbol_name, rsSolve_Model_Parameters) == 0) return reinterpret_cast<void(*)>(internal::solve_model_parameters_lazy);
 				if (strcmp(symbol_name, rsSolve_Generic) == 0) return reinterpret_cast<void(*)>(internal::solve_generic_lazy);
 				if (strcmp(symbol_name, rsAdd_Filters) == 0) return reinterpret_cast<void(*)>(internal::add_filters_lazy);
 				if (strcmp(symbol_name, rsExecute_Filter_Configuration) == 0) return reinterpret_cast<void(*)>(internal::execute_filter_configuration_lazy);
@@ -209,7 +205,6 @@ namespace scgms {
 				if (strcmp(symbol_name, rsCreate_Discrete_Model) == 0) return reinterpret_cast<void(*)>(internal::create_discrete_model_not_impl);
 				if (strcmp(symbol_name, rsCreate_Approximator) == 0) return reinterpret_cast<void(*)>(internal::create_approximator_not_impl);
 
-				if (strcmp(symbol_name, rsSolve_Model_Parameters) == 0) return reinterpret_cast<void(*)>(internal::solve_model_parameters_not_impl);
 				if (strcmp(symbol_name, rsSolve_Generic) == 0) return reinterpret_cast<void(*)>(internal::solve_generic_not_impl);
 				if (strcmp(symbol_name, rsAdd_Filters) == 0) return reinterpret_cast<void(*)>(internal::add_filters_not_impl);
 				if (strcmp(symbol_name, rsExecute_Filter_Configuration) == 0) return reinterpret_cast<void(*)>(internal::execute_filter_configuration_not_impl);
@@ -225,6 +220,6 @@ namespace scgms {
 	}
 
 	bool is_scgms_loaded() {
-		return factory::internal::resolve_factory_symbol("create_signal") != nullptr;
+		return factory::internal::resolve_factory_symbol(factory::internal::rsCreate_Filter) != nullptr;
 	}
 }

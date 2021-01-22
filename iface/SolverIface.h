@@ -71,7 +71,7 @@ namespace solver {
 
 
 	const TSolver_Setup Default_Solver_Setup = { 0, nullptr, nullptr, nullptr, 0, nullptr, nullptr, nullptr, 0, 0, std::numeric_limits<double>::min() };
-	using TGeneric_Solver = HRESULT(IfaceCalling*)(const GUID *solver_id, const TSolver_Setup *setup, TSolver_Progress *progress);		
+	using TGeneric_Solver = HRESULT(IfaceCalling*)(const GUID *solver_id, const TSolver_Setup *setup, TSolver_Progress *progress);
 }
 
 namespace scgms {
@@ -120,16 +120,6 @@ namespace scgms {
 	};
 
 	
-	struct TSolver_Setup {
-		const GUID solver_id; const GUID calculated_signal_id; const GUID reference_signal_id;
-		ITime_Segment **segments; const size_t segment_count;
-		IMetric *metric; const size_t levels_required; const unsigned char use_measured_levels;
-		IModel_Parameter_Vector *lower_bound, *upper_bound; 
-		IModel_Parameter_Vector **solution_hints; const size_t hint_count;
-		IModel_Parameter_Vector *solved_parameters;		//obtained result
-		solver::TSolver_Progress *progress;
-	};
-
 	constexpr GUID IID_Calculate_Filter_Inspection = { 0xec44cd18, 0x8d08, 0x46d1, { 0xa6, 0xcb, 0xc2, 0x43, 0x8e, 0x4, 0x19, 0x88 } };
 	class ICalculate_Filter_Inspection : public virtual refcnt::IReferenced {
 	public:
@@ -142,10 +132,6 @@ namespace scgms {
 	};
 
 	using TCreate_Metric = HRESULT(IfaceCalling*)(const TMetric_Parameters *parameters, IMetric **metric);
-	using TSolve_Model_Parameters = HRESULT(IfaceCalling*)(const TSolver_Setup *setup);
-		//generic, e.g., evolutionary, solver uses signal_id to calculate its metric function on the given list of segments
-		//specialized solver has the signal ids encoded - i.e., specialized inside
-		//the very first hint, if provided, has to be the best one
 
 	using TOptimize_Parameters = HRESULT(IfaceCalling*)(scgms::IFilter_Chain_Configuration *configuration, const size_t filter_index, const wchar_t *parameters_configuration_name,
 		scgms::TOn_Filter_Created on_filter_created, const void* on_filter_created_data,

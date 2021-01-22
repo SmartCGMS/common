@@ -45,6 +45,7 @@
 
 namespace solver {
 	solver::TSolver_Setup Check_Default_Parameters(const solver::TSolver_Setup &setup, const size_t default_max_generations, const size_t default_population_size);	
+	HRESULT Solve_Generic(const GUID& solver_id, const solver::TSolver_Setup& setup, solver::TSolver_Progress& progress) noexcept;
 }
 
 namespace scgms {
@@ -63,7 +64,6 @@ namespace scgms {
 		SCalculate_Filter_Inspection(const SFilter &calculate_filter);
 	};
 
-	HRESULT Solve_Model_Parameters(const scgms::TSolver_Setup &setup);
 
 	HRESULT Optimize_Parameters(scgms::SFilter_Chain_Configuration configuration, const size_t filter_index, const wchar_t *parameters_configuration_name,
 								scgms::TOn_Filter_Created on_filter_created, const void* on_filter_created_data,

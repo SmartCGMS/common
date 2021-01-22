@@ -42,10 +42,10 @@
 #include "scgmsLib.h"
 
 namespace imported {
-	scgms::TSolve_Model_Parameters solve_model_parameters = scgms::factory::resolve_symbol<scgms::TSolve_Model_Parameters>("solve_model_parameters");
 	scgms::TCreate_Metric create_metric = scgms::factory::resolve_symbol<scgms::TCreate_Metric>("create_metric");
 	scgms::TOptimize_Parameters optimize_parameters = scgms::factory::resolve_symbol<scgms::TOptimize_Parameters>("optimize_parameters");
 	scgms::TOptimize_Multiple_Parameters optimize_multiple_parameters = scgms::factory::resolve_symbol<scgms::TOptimize_Multiple_Parameters>("optimize_multiple_parameters");
+	solver::TGeneric_Solver generic_solver = scgms::factory::resolve_symbol<solver::TGeneric_Solver>("solve_generic");	
 }
 
 solver::TSolver_Setup solver::Check_Default_Parameters(const solver::TSolver_Setup &setup, const size_t default_max_generations, const size_t default_population_size) {
@@ -64,6 +64,11 @@ solver::TSolver_Setup solver::Check_Default_Parameters(const solver::TSolver_Set
 	};
 
 	return result;
+}
+
+
+HRESULT solver::Solve_Generic(const GUID &solver_id, const solver::TSolver_Setup &setup, solver::TSolver_Progress &progress) noexcept {
+	return imported::generic_solver(&solver_id, &setup, &progress);
 }
 
 scgms::SMetric::SMetric() : std::shared_ptr<scgms::IMetric>() {
@@ -102,10 +107,6 @@ scgms::SMetric scgms::SMetric::Clone()
 scgms::SCalculate_Filter_Inspection::SCalculate_Filter_Inspection(const scgms::SFilter &calculate_filter) {
 	if (calculate_filter)
 		refcnt::Query_Interface<scgms::IFilter, scgms::ICalculate_Filter_Inspection>(calculate_filter.get(), IID_Calculate_Filter_Inspection, *this);
-}
-
-HRESULT scgms::Solve_Model_Parameters(const scgms::TSolver_Setup &setup) {
-	return imported::solve_model_parameters(&setup);
 }
 
 
