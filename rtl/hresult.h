@@ -71,7 +71,6 @@
 	#define MK_E_CANTOPENFILE						((HRESULT)0x800401EAL)
 	#define CO_E_ERRORINDLL							((HRESULT)0x800401F9L)
 	#define MK_E_UNAVAILABLE						((HRESULT)0x800401E3L)
-	#define E_OUTOFMEMORY							((HRESULT)0x8007000EL)
 #endif
 
 #ifdef __cplusplus

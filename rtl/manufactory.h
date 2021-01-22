@@ -39,58 +39,22 @@
 #pragma once
 
 #include "hresult.h"
-#include "../iface/EmbeddedIface.h"
-#include "../lang/dstrings.h"
-
-template <typename T, typename... Args>
-T* Create_Raw_Object(Args... args) {
-	T* result = new T();
-	if (result) {
-		const auto err = result->Initialize(args...);
-		if (!Succeeded(err.code)) {
-			delete result;
-			result = nullptr;
-		}
-	}
-
-	return result;		
-}
-
-template <typename T, typename... Args>
-std::tuple <HRESULT, std::unique_ptr<T>, wchar_t*> Create_Unique_Object(Args... args) {
-	HRESULT rc E_UNEXPECTED;
-	wchar_t* desc = nullptr;
-	
-	std::unique_ptr<T> obj = std::make_unique<T>();
-	if (obj) {
-		const auto err = obj->Initialize(args...);
-
-		rc = err.code;
-		desc = err.description;
-	}
-	else {
-		rc = E_OUTOFMEMORY;
-		desc = const_cast<wchar_t*>(rsFailed_to_allocate_memory);
-	}
-
-	
-	return { rc, std::move(obj), desc };;
-}
 
 template <class T, class I, typename... Args>
-TEmbedded_Error Manufacture_Object(I** manufactured, Args... args) {
-	//As SCGMS is supposed to run on low-power devices and real-time systems, there's no exception handling
-	//and we provide the new operator has tor return nullptr instead of throwing.
-	//hence, we enforce the use of initialization method
+HRESULT Manufacture_Object(I** manufactured, Args... args) {
+	HRESULT rc = E_UNEXPECTED;
 
-	auto [rc, obj, desc] = Create_Unique_Object<T>(args...);
-
-	if (Succeeded(rc)) {
-		(*manufactured) = static_cast<I*>(obj.get());
+	try {
+		T *tmp = new T(args...);
+		(*manufactured) = static_cast<I*> (tmp);
 		(*manufactured)->AddRef();
-		obj.release();
+
+		rc = S_OK;
+	}
+	catch (...) {
+		rc = E_FAIL;
 	}
 
-	return { rc, desc };
-}
 
+	return rc;
+}

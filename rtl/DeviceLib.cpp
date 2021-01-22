@@ -288,7 +288,7 @@ scgms::STime_Segment scgms::CTime_Segment::Clone()
 {
 	// manufacture new segment
 	scgms::CTime_Segment* cloned;
-	if (Manufacture_Object<scgms::CTime_Segment>(&cloned).code != S_OK)
+	if (Manufacture_Object<scgms::CTime_Segment>(&cloned) != S_OK)
 		return {};
 
 	size_t count;

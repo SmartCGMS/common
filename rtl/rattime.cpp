@@ -102,18 +102,18 @@ std::wstring Rat_Time_To_Local_Time_WStr(const double rt, const wchar_t *fmt) {
 	return os.str();
 }
 
-double Local_Time_WStr_To_Rat_Time(const std::wstring& str, const wchar_t* fmt) noexcept {
+double Local_Time_WStr_To_Rat_Time(const std::wstring& str, const wchar_t* fmt) {
 
 	struct tm ptm;
 	std::wistringstream ss(str);
-	//try
-	//{
+	try
+	{
 		ss >> std::get_time(&ptm, fmt);
-	//}
-	//catch (...)
-	//{
-	//		return std::numeric_limits<double>::quiet_NaN();
-	//}
+	}
+	catch (...)
+	{
+		return std::numeric_limits<double>::quiet_NaN();
+	}
 
 	time_t ltim = mktime(&ptm);
 
