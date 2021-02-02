@@ -53,9 +53,9 @@ CDb_Connector db_connector{};
 
 CDb_Query::CDb_Query(QSqlDatabase &db, const wchar_t *statement) : mQuery(QSqlQuery{ db }) {
 	if (!mQuery.prepare(QString::fromWCharArray(statement))) {
-                const auto msg = mQuery.lastError().databaseText().toStdString();
-                dprintf(msg.c_str());
-		dprintf("\n");
+		const auto msg = mQuery.lastError().databaseText().toStdString();
+		const auto msg2 = mQuery.lastError().driverText().toStdString();
+		dprintf("Query error: %s\r\nAssociated driver error: %s\r\n", msg.c_str(), msg2.c_str());
 		throw std::invalid_argument{ "Malformed SQL statement." };
 	}
 }
