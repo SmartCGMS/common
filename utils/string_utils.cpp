@@ -48,6 +48,7 @@
 #include <map>
 #include <cwctype>
 #include <type_traits>
+#include <cmath>
 
 std::string Narrow_WString(const std::wstring& wstr) {
 	return Narrow_WChar(wstr.c_str());
@@ -115,6 +116,7 @@ struct TNumeric_Chars<wchar_t> {
     const static std::map<const std::wstring, double> known_symbols;
 };
 
+template <>
 const std::map<const std::string, double> TNumeric_Chars<char>::known_symbols = {
            {"oo", std::numeric_limits<double>::infinity()},
            {"inf", std::numeric_limits<double>::infinity()},
