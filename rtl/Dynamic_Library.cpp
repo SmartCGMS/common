@@ -37,6 +37,7 @@
  */
 
 #include "Dynamic_Library.h"
+#include "../utils/string_utils.h"
 
 #include <algorithm>
 #include <cwchar>
@@ -114,5 +115,5 @@ filesystem::path CDynamic_Library::Get_Library_Base() {
 }
 
 filesystem::path CDynamic_Library::Default_Extension() {
-	return filesystem::path{rsShared_Object_Extension};
+	return filesystem::path{ Narrow_WChar(rsShared_Object_Extension) };
 }
