@@ -186,9 +186,9 @@ namespace scgms {
 	static constexpr decltype(TDevice_Event::segment_id) Invalid_Segment_Id = std::numeric_limits<decltype(Invalid_Segment_Id)>::max();
 	static constexpr decltype(TDevice_Event::segment_id) All_Segments_Id = std::numeric_limits<decltype(All_Segments_Id)>::max() - 1;
 
-	typedef struct {
+	struct TBounds {
 		double Min, Max;
-	} TBounds;
+	};
 
 	class ISignal : public virtual refcnt::IReferenced {
 	public:

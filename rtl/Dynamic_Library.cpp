@@ -114,5 +114,5 @@ filesystem::path CDynamic_Library::Get_Library_Base() {
 }
 
 filesystem::path CDynamic_Library::Default_Extension() {
-	return rsShared_Object_Extension;
+	return filesystem::path{rsShared_Object_Extension};
 }
