@@ -558,9 +558,7 @@ extern const wchar_t *dsError_Column_Range_50pct;
 
 extern const wchar_t* rsInsert_New_Measured_Value;
 
-extern const wchar_t* rsInsert_Params_Base;
-extern const wchar_t* rsInsert_Params_Segmentid_Column;
-extern const wchar_t* rsInsert_Params_Values_Stmt;
+extern const wchar_t* rsInsert_Params;
 
 extern const wchar_t* rsCreated_Segment_Identifier_Base;
 extern const wchar_t* rsInsert_New_Time_Segment;
@@ -1022,9 +1020,7 @@ extern const char* rsFilter_Get_Errors;
 extern const wchar_t* rsSelect_Subjects_And_Segments_For_Db_Reader_Filter;
 extern const wchar_t* rsSelect_Subjects;
 extern const wchar_t* rsSelect_Timesegment_Values_Filter;
-extern const wchar_t* rsSelect_Params_Base;
-extern const wchar_t* rsSelect_Params_From;
-extern const wchar_t* rsSelect_Params_Condition;
+extern const wchar_t* rsSelect_Params_Filter;
 
 
 // ---- drawing-related constants

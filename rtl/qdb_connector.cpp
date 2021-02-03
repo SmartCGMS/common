@@ -81,6 +81,12 @@ HRESULT IfaceCalling CDb_Query::Bind_Parameters(const db::TParameter *values, co
 
 			case db::NParameter_Type::ptBool:		mQuery.addBindValue(values[i].boolean != FALSE ? true : false);
 													break;
+
+			case db::NParameter_Type::ptGuid:		mQuery.addBindValue(QUuid(values[i].id));
+													break;
+
+			case db::NParameter_Type::ptBinaryObect:mQuery.addBindValue(QByteArray(reinterpret_cast<const char*>(values[i].binary_object.data), static_cast<int>(values[i].binary_object.size)));
+													break;
 		}
 	}
 
@@ -110,25 +116,40 @@ HRESULT IfaceCalling CDb_Query::Get_Next(db::TParameter* const values, const siz
 
 				bool ok_test;
 				QString tmp_str;
+				QByteArray tmp_byte_arr;
 
 				switch (values[i].type) {
 					case db::NParameter_Type::ptInt64:		values[i].integer = static_cast<int64_t>(db_value.toLongLong(&ok_test));
-															if (!ok_test) values[i].type = db::NParameter_Type::ptNull;
+															if (!ok_test)
+																values[i].type = db::NParameter_Type::ptNull;
 															break;
 
 					case db::NParameter_Type::ptDouble:		values[i].dbl = db_value.toDouble(&ok_test);
-															if (!ok_test) values[i].type = db::NParameter_Type::ptNull;
+															if (!ok_test)
+																values[i].type = db::NParameter_Type::ptNull;
 															break;
 
 					case db::NParameter_Type::ptWChar:		tmp_str = db_value.toString();
 															if (tmp_str.count() > 0) {
 																mResult_String_Row[i] = tmp_str.toStdWString();
 																values[i].str = const_cast<wchar_t*>(mResult_String_Row[i].c_str());
-															} else
+															}
+															else
 																values[i].type = db::NParameter_Type::ptNull;
-                                                                                                                        break;
+															break;
 
 					case db::NParameter_Type::ptBool:		values[i].boolean = db_value.toBool() ? TRUE : FALSE;
+															break;
+
+					case db::NParameter_Type::ptGuid:		values[i].id = db_value.toUuid();
+															break;
+
+					case db::NParameter_Type::ptBinaryObect:	// this might be potentially dangerous as we are assigning temporary object
+																// but the result will be valid as long as the query is in memory
+																// TODO: solve this better (COM-compatible binary object representation)
+															tmp_byte_arr = db_value.toByteArray();
+															values[i].binary_object.data = reinterpret_cast<uint8_t*>(tmp_byte_arr.data());
+															values[i].binary_object.size = tmp_byte_arr.size();
 															break;
 
 					default: break;

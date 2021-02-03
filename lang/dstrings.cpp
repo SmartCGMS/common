@@ -560,18 +560,16 @@ const wchar_t *dsError_Column_Range_10pct = L"<=10% prob.";
 const wchar_t *dsError_Column_Range_25pct = L"<=25% prob.";
 const wchar_t *dsError_Column_Range_50pct = L"<=50% prob.";
 
-const wchar_t* rsInsert_New_Measured_Value = L"INSERT INTO measuredvalue (measuredat, blood, ist, isig, insulin_bolus, insulin_basal_rate, carbohydrates, calibration, heartrate, steps, movement_speed, segmentid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+const wchar_t* rsInsert_New_Measured_Value = L"INSERT INTO measured_value (measured_at, time_segment_id, signal_id, value) VALUES (?, ?, ?, ?)";
 
-const wchar_t* rsInsert_Params_Base = L"INSERT INTO ";
-const wchar_t* rsInsert_Params_Segmentid_Column = L"segmentid";
-const wchar_t* rsInsert_Params_Values_Stmt = L"VALUES";
+const wchar_t* rsInsert_Params = L"INSERT INTO model_parameters (time_segment_id, model_id, signal_id, recorded_at, parameters) VALUES (?, ?, ?, ?, ?)";
 
 const wchar_t* rsCreated_Segment_Identifier_Base = L"New_Segment_Marker_";
-const wchar_t* rsInsert_New_Time_Segment = L"INSERT INTO timesegment (name, comment, deleted, subjectid, parallel_id) VALUES (?, ?, ?, ?, ?)";
-const wchar_t* rsSelect_Time_Segment_Id_By_Name = L"SELECT id FROM timesegment WHERE name = ?";
-const wchar_t* rsRename_Time_Segment = L"UPDATE timesegment SET name = ? WHERE id = ?";
+const wchar_t* rsInsert_New_Time_Segment = L"INSERT INTO time_segment (name, comment, subject_id) VALUES (?, ?, ?)";
+const wchar_t* rsSelect_Time_Segment_Id_By_Name = L"SELECT id FROM time_segment WHERE name = ?";
+const wchar_t* rsRename_Time_Segment = L"UPDATE time_segment SET name = ? WHERE id = ?";
 const wchar_t* rsDelete_Parameters_Of_Segment_Base = L"DELETE FROM ";
-const wchar_t* rsDelete_Parameters_Of_Segment_Stmt = L" WHERE segmentid = ?";
+const wchar_t* rsDelete_Parameters_Of_Segment_Stmt = L" WHERE time_segment_id = ?";
 
 const wchar_t* rsInsulin_Regulation = L"insulin-regulation";
 const wchar_t* rsInsulin_PID_Regulation = L"insulin-pid-regulation";
@@ -1051,12 +1049,10 @@ const char* rsFilter_Get_SVG_Parkes_Type2 = "get_svg_parkes_type2";
 
 const char* rsFilter_Get_Errors = "get_error_metrics";
 
-const wchar_t* rsSelect_Subjects_And_Segments_For_Db_Reader_Filter = L"select timesegment.id, subject.name, timesegment.name, count(measuredvalue.id) from subject, timesegment, measuredvalue where subject.id = timesegment.subjectid and timesegment.id = measuredvalue.segmentid group by timesegment.id, subject.name order by subject.name, timesegment.name asc";
+const wchar_t* rsSelect_Subjects_And_Segments_For_Db_Reader_Filter = L"select time_segment.id, subject.name, time_segment.name, count(measured_value.id) from subject, time_segment, measured_value where subject.id = time_segment.subject_id and time_segment.id = measured_value.time_segment_id group by time_segment.id, subject.name order by subject.name, time_segment.name asc";
 const wchar_t* rsSelect_Subjects = L"select id, name from subject";
-const wchar_t* rsSelect_Timesegment_Values_Filter = L"select measuredat, blood, ist, isig, insulin_bolus, insulin_basal_rate, carbohydrates, calibration, heartrate, steps, movement_speed from measuredvalue where segmentid = ? order by measuredat asc";
-const wchar_t* rsSelect_Params_Base = L"select ";
-const wchar_t* rsSelect_Params_From = L" from ";
-const wchar_t* rsSelect_Params_Condition = L" where segmentid = ?";
+const wchar_t* rsSelect_Timesegment_Values_Filter = L"select measured_at, signal_id, value from measured_value where time_segment_id = ? order by measured_at asc";
+const wchar_t* rsSelect_Params_Filter = L"select recorded_at, model_id, signal_id, parameters from model_parameters where time_segment_id = ? order by recorded_at asc";
 
 // ---- drawing-related constants
 
@@ -1118,14 +1114,14 @@ const wchar_t *rsStore_Parameters = L"Store_Parameters";
 const wchar_t *rsSubject_Id = L"Subject_Id";
 
 const wchar_t* rsReserved_Segment_Name = L"RESERVED_SEGMENT_NAME";
-const wchar_t* rsFound_New_Segment = L"insert into timesegment (name, comment, deleted) values (?, ?, ?)";
-const wchar_t* rsSelect_Founded_Segment = L"select id from timesegment where name = ?";
-const wchar_t* rsUpdate_Founded_Segment = L"update timesegment set name = ?, comment = ?, deleted=?, subjectid=?, parallel_id=? where id=?";
+const wchar_t* rsFound_New_Segment = L"insert into time_segment (name) values (?)";
+const wchar_t* rsSelect_Founded_Segment = L"select id from time_segment where name = ?";
+const wchar_t* rsUpdate_Founded_Segment = L"update time_segment set name = ?, subject_id = ? where id = ?";
 
 const wchar_t* rsReserved_Subject_Name = L"RESERVED_SUBJECT_NAME";
-const wchar_t* rsFound_New_Subject = L"insert into subject (name, comments, sex, weight) values (?, ?, ?, ?)";
+const wchar_t* rsFound_New_Subject = L"insert into subject (name, comment) values (?, ?)";
 const wchar_t* rsSelect_Founded_Subject = L"select id from subject where name = ?";
-const wchar_t* rsUpdate_Founded_Subject = L"update subject set name = ?, comments = ?, sex = ?, weight = ? where id=?";
+const wchar_t* rsUpdate_Founded_Subject = L"update subject set name = ?, comment = ? where id = ?";
 
 const wchar_t* rsPrediction_Window = L"Prediction_Window";
 const wchar_t* rsSolve_Parameters = L"Solve_Parameters";
