@@ -571,6 +571,25 @@ const wchar_t* rsRename_Time_Segment = L"UPDATE time_segment SET name = ? WHERE 
 const wchar_t* rsDelete_Parameters_Of_Segment_Base = L"DELETE FROM ";
 const wchar_t* rsDelete_Parameters_Of_Segment_Stmt = L" WHERE time_segment_id = ?";
 
+const wchar_t* rsLegacy_Db_Insert_New_Measured_Value = L"INSERT INTO measuredvalue (measuredat, blood, ist, isig, insulin_bolus, insulin_basal_rate, carbohydrates, calibration, heartrate, steps, movement_speed, segmentid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+const wchar_t* rsLegacy_Db_Insert_Params_Base = L"INSERT INTO ";
+const wchar_t* rsLegacy_Db_Insert_Params_Segmentid_Column = L"segmentid";
+const wchar_t* rsLegacy_Db_Insert_Params_Values_Stmt = L"VALUES";
+const wchar_t* rsLegacy_Db_Insert_New_Time_Segment = L"INSERT INTO timesegment (name, comment, deleted, subjectid, parallel_id) VALUES (?, ?, ?, ?, ?)";
+const wchar_t* rsLegacy_Db_Select_Time_Segment_Id_By_Name = L"SELECT id FROM timesegment WHERE name = ?";
+const wchar_t* rsLegacy_Db_Rename_Time_Segment = L"UPDATE timesegment SET name = ? WHERE id = ?";
+const wchar_t* rsLegacy_Db_Delete_Parameters_Of_Segment_Stmt = L" WHERE segmentid = ?";
+const wchar_t* rsLegacy_Db_Select_Subjects_And_Segments_For_Db_Reader_Filter = L"select timesegment.id, subject.name, timesegment.name, count(measuredvalue.id) from subject, timesegment, measuredvalue where subject.id = timesegment.subjectid and timesegment.id = measuredvalue.segmentid group by timesegment.id, subject.name order by subject.name, timesegment.name asc";
+const wchar_t* rsLegacy_Db_Select_Timesegment_Values_Filter = L"select measuredat, blood, ist, isig, insulin_bolus, insulin_basal_rate, carbohydrates, calibration, heartrate, steps, movement_speed from measuredvalue where segmentid = ? order by measuredat asc";
+const wchar_t* rsLegacy_Db_Select_Params_Base = L"select ";
+const wchar_t* rsLegacy_Db_Select_Params_From = L" from ";
+const wchar_t* rsLegacy_Db_Select_Params_Condition = L" where segmentid = ?";
+const wchar_t* rsLegacy_Db_Found_New_Segment = L"insert into timesegment (name, comment, deleted) values (?, ?, ?)";
+const wchar_t* rsLegacy_Db_Select_Founded_Segment = L"select id from timesegment where name = ?";
+const wchar_t* rsLegacy_Db_Update_Founded_Segment = L"update timesegment set name = ?, comment = ?, deleted=?, subjectid=?, parallel_id=? where id=?";
+const wchar_t* rsLegacy_Db_Found_New_Subject = L"insert into subject (name, comments, sex, weight) values (?, ?, ?, ?)";
+const wchar_t* rsLegacy_Db_Update_Founded_Subject = L"update subject set name = ?, comments = ?, sex = ?, weight = ? where id=?";
+
 const wchar_t* rsInsulin_Regulation = L"insulin-regulation";
 const wchar_t* rsInsulin_PID_Regulation = L"insulin-pid-regulation";
 const wchar_t* rsBetaPID = L"betapid";

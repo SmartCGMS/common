@@ -567,6 +567,25 @@ extern const wchar_t* rsRename_Time_Segment;
 extern const wchar_t* rsDelete_Parameters_Of_Segment_Base;
 extern const wchar_t* rsDelete_Parameters_Of_Segment_Stmt;
 
+extern const wchar_t* rsLegacy_Db_Insert_Params_Base;
+extern const wchar_t* rsLegacy_Db_Insert_Params_Segmentid_Column;
+extern const wchar_t* rsLegacy_Db_Insert_Params_Values_Stmt;
+extern const wchar_t* rsLegacy_Db_Select_Params_Base;
+extern const wchar_t* rsLegacy_Db_Select_Params_From;
+extern const wchar_t* rsLegacy_Db_Select_Params_Condition;
+extern const wchar_t* rsLegacy_Db_Insert_New_Measured_Value;
+extern const wchar_t* rsLegacy_Db_Insert_New_Time_Segment;
+extern const wchar_t* rsLegacy_Db_Select_Time_Segment_Id_By_Name;
+extern const wchar_t* rsLegacy_Db_Rename_Time_Segment;
+extern const wchar_t* rsLegacy_Db_Delete_Parameters_Of_Segment_Stmt;
+extern const wchar_t* rsLegacy_Db_Select_Subjects_And_Segments_For_Db_Reader_Filter;
+extern const wchar_t* rsLegacy_Db_Select_Timesegment_Values_Filter;
+extern const wchar_t* rsLegacy_Db_Found_New_Segment;
+extern const wchar_t* rsLegacy_Db_Select_Founded_Segment;
+extern const wchar_t* rsLegacy_Db_Update_Founded_Segment;
+extern const wchar_t* rsLegacy_Db_Found_New_Subject;
+extern const wchar_t* rsLegacy_Db_Update_Founded_Subject;
+
 extern const wchar_t* rsT1DMS_Receiver_Filter;
 extern const wchar_t* rsT1DMS_Sender_Filter;
 
