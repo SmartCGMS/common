@@ -313,6 +313,7 @@ namespace scgms {
 	class SPersistent_Filter_Chain_Configuration : public virtual internal::CInternal_Filter_Chain_Configuration<scgms::IPersistent_Filter_Chain_Configuration> {
 	public:
 		SPersistent_Filter_Chain_Configuration();
+		virtual ~SPersistent_Filter_Chain_Configuration() {};
 		operator SFilter_Chain_Configuration();
 	};
 
