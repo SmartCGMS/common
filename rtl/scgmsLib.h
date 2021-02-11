@@ -49,12 +49,12 @@ namespace scgms {
 
             constexpr bool import_test_fails = false;
 
-            void* resolve_factory_symbol(const char* symbol_name);
-            void* resolve_not_impl_symbol(const char* symbol_name);
+            void* resolve_factory_symbol(const char* symbol_name) noexcept;
+            void* resolve_not_impl_symbol(const char* symbol_name) noexcept;
         }
 
         template <typename T>
-        T resolve_symbol(const char* symbol_name) {
+        T resolve_symbol(const char* symbol_name) noexcept {
             if (internal::import_test_fails)
                 return reinterpret_cast<T>(internal::resolve_not_impl_symbol(symbol_name));
 

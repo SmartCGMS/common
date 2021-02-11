@@ -115,7 +115,7 @@ filesystem::path Get_Dll_Dir() {
 bool Is_Directory(const filesystem::path& path) {
 	std::error_code ec;
 	const bool result = filesystem::is_directory(path, ec);
-	return result && !ec;
+	return result && (!ec);
 }
 
 bool Is_Regular_File_Or_Symlink(const filesystem::path& path) {
@@ -126,5 +126,45 @@ bool Is_Regular_File_Or_Symlink(const filesystem::path& path) {
 	if (is_reg) return true;
 
 	bool is_sym = filesystem::is_symlink(path, ec);
-	return is_sym & !ec;
+	return is_sym && (!ec);
+}
+
+std::wstring& Ensure_Uniform_Dir_Separator(std::wstring& path) noexcept {
+	bool forward_slash = false;
+	bool back_slash = false;
+
+	//check if the string has uniform separator
+	for (const auto& e : path) {
+		switch (e) {
+			case L'\\' : back_slash = true;
+						  break;
+
+			case L'/': forward_slash = true;
+						break;
+
+			default:
+				break;
+		}
+	}
+
+	//if there's a mismatch, attempt to correct it
+	if (forward_slash && back_slash) {
+#ifdef _WIN32
+		const wchar_t sep = L'\\';
+#else
+		const wchar_t sep = L'/';
+#endif
+
+		for (auto& e : path) {
+			switch (e) {
+				case L'\\': 				
+				case L'/': e = sep;
+					break;
+			default:
+				break;
+			}
+		}
+	}
+
+	return path;
 }

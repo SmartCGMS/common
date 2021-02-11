@@ -61,12 +61,12 @@ CDynamic_Library::CDynamic_Library(CDynamic_Library&& other) noexcept : mHandle(
     mLibrary_Base = std::move(other.mLibrary_Base);
 }
 
-CDynamic_Library::~CDynamic_Library() {
+CDynamic_Library::~CDynamic_Library() noexcept {
 	if (mHandle)
 		Unload();
 }
 
-bool CDynamic_Library::Load(const filesystem::path &file_path) {
+bool CDynamic_Library::Load(const filesystem::path &file_path) noexcept {
     if (mLibrary_Base.empty()) mLib_Path = file_path;
 		else mLib_Path = mLibrary_Base / file_path;
          
@@ -77,43 +77,43 @@ bool CDynamic_Library::Load(const filesystem::path &file_path) {
 	return mHandle != NULL;
 }
 
-filesystem::path CDynamic_Library::Lib_Path() const {
+filesystem::path CDynamic_Library::Lib_Path() const noexcept {
     return mLib_Path;
 }
 
-bool CDynamic_Library::Is_Loaded() const {
+bool CDynamic_Library::Is_Loaded() const noexcept {
 	return (mHandle != nullptr);
 }
 
-void CDynamic_Library::Unload() {
+void CDynamic_Library::Unload() noexcept {
 	if (mHandle) {
 		FreeLibrary(mHandle);
 		mHandle = NULL;
 	}
 }
 
-void* CDynamic_Library::Resolve(const char* symbolName) {
+void* CDynamic_Library::Resolve(const char* symbolName) noexcept {
 	if (!mHandle)
 		return nullptr;
 
 	return GetProcAddress(mHandle, symbolName);
 }
 
-bool CDynamic_Library::Is_Library(const filesystem::path& path) {
+bool CDynamic_Library::Is_Library(const filesystem::path& path) noexcept {
 	const auto ext = path.extension();
 
 	if (ext.empty()) return false;
 	return ext.wstring() == rsShared_Object_Extension;
 }
 
-void CDynamic_Library::Set_Library_Base(const filesystem::path& base) {
+void CDynamic_Library::Set_Library_Base(const filesystem::path& base) noexcept {
 	mLibrary_Base = base;
 }
 
-filesystem::path CDynamic_Library::Get_Library_Base() {	
+filesystem::path CDynamic_Library::Get_Library_Base() noexcept {
 	return mLibrary_Base;
 }
 
-filesystem::path CDynamic_Library::Default_Extension() {
+filesystem::path CDynamic_Library::Default_Extension() noexcept {
 	return filesystem::path{ Narrow_WChar(rsShared_Object_Extension) };
 }

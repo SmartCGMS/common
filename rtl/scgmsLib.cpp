@@ -68,7 +68,7 @@ namespace scgms {
 
 			CDynamic_Library gFactory_Library;
 
-			void* resolve_factory_symbol(const char* symbol_name) {			
+			void* resolve_factory_symbol(const char* symbol_name) noexcept {
 
 				if (!gFactory_Library.Is_Loaded()) {
 					filesystem::path path = Get_Application_Dir();
@@ -163,7 +163,7 @@ namespace scgms {
 			HRESULT IfaceCalling optimize_parameters_lazy(void *cfg, size_t idx, void *parameters_cfg_name, void* on_filter_created, void* data, void *solver_id, size_t population_size, size_t max_generations, void *progress, void *error_description) { return factory_lazy_load(rsOptimize_Parameters, cfg, idx, parameters_cfg_name, on_filter_created, data, solver_id, population_size, max_generations, progress, error_description); }
 			HRESULT IfaceCalling optimize_multiple_parameters_lazy(void *cfg, size_t *idx, void *parameters_cfg_name, size_t count, void* on_filter_created, void* data, void *solver_id, size_t population_size, size_t max_generations, void *progress, void *error_description) { return factory_lazy_load(rsOptimize_Multiple_Parameters, cfg, idx, parameters_cfg_name, count, on_filter_created, data, solver_id, population_size, max_generations, progress, error_description); }
 
-			void* resolve_not_impl_symbol(const char* symbol_name) {
+			void* resolve_not_impl_symbol(const char* symbol_name) noexcept {
 	#if defined(__ARM_ARCH_7A__) || defined(__aarch64__)
 				if (strcmp(symbol_name, rsGet_Filter_Descriptors) == 0) return reinterpret_cast<void(*)>(internal::get_filter_desc_lazy);
 				if (strcmp(symbol_name, rsGet_Model_Descriptors) == 0) return reinterpret_cast<void(*)>(internal::get_model_desc_lazy);
