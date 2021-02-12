@@ -108,24 +108,26 @@ using TNative_Execute_Wrapper = HRESULT(IfaceCalling*)(
 	BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReserved) {
 		return TRUE;
 	}
-
-	size_t custom_data_size() {
-		return custom_data_sizeof<TCustom_Data>;
-	}
 #else
 	#define DLL_EXPORT
 #endif
+
 
 #ifdef SCGMS_SCRIPT
 	void execute(GUID &sig_id, double &device_time, double &level,
 		HRESULT &rc, TNative_Environment &environment, const void* context);
 
-		//DLL_EXPORT so that this function needs no .cpp file and hence does not get ignored by the compiler
-		DLL_EXPORT HRESULT IfaceCalling execute_wrapper(GUID* sig_id, double* device_time, double* level,
-		TNative_Environment* environment, const void* context) {
+	//DLL_EXPORT so that this function needs no .cpp file and hence does not get ignored by the compiler
+	extern "C" DLL_EXPORT HRESULT IfaceCalling execute_wrapper(GUID* sig_id, double* device_time, double* level,
+	TNative_Environment* environment, const void* context) {
 			
 		HRESULT rc = S_OK;
 		execute(*sig_id, *device_time, *level, rc, *environment, context);
 		return rc;
 	}
+
+	extern "C" size_t custom_data_size() {
+		return custom_data_sizeof<TCustom_Data>;
+	}
+
 #endif
