@@ -65,7 +65,9 @@ namespace scgms {
 		ptModel_Produced_Signal_Id,	// signal dependend on model selection
 		ptSignal_Id,		// any signal available (measured, calculated)
 		ptDouble_Array,		// three parameter sets in one container - lower bound, default values, higher bound
-		ptSubject_Id		// int64_t, but with additional functionality in GUI
+		ptSubject_Id,		// int64_t, but with additional functionality in GUI
+
+		ptInvalid				//a guardian value to indicate that something went wrong
 	}; 
 
 	class IFilter_Parameter : public virtual refcnt::IReferenced {
@@ -77,9 +79,11 @@ namespace scgms {
 		//read-write
 		virtual HRESULT IfaceCalling Set_Variable(const wchar_t* name, const wchar_t* value) = 0;
 
+		//Get_WChar_Container also attempts to convert to string from a value of the Get_Type()'s type
 		virtual HRESULT IfaceCalling Get_WChar_Container(refcnt::wstr_container **wstr, BOOL read_interpreted) = 0;	//$(Variable_Name) reads system-variable with read_interpreted==true
+		//Set_WChar_Container attempts from_string conversion according to the Get_Type()'s type, hence it may fail
 		virtual HRESULT IfaceCalling Set_WChar_Container(refcnt::wstr_container *wstr) = 0;	
-		virtual HRESULT IfaceCalling Get_File_Path(refcnt::wstr_container **wstr) = 0;	//reads interpreted string as filpath, which is absolute-ed with the parent_path, when relative
+		virtual HRESULT IfaceCalling Get_File_Path(refcnt::wstr_container **wstr) = 0;	//reads interpreted string as filepath, which is absolute-ed with the parent_path, when relative
 		virtual HRESULT IfaceCalling Set_Parent_Path(const wchar_t* parent_path) = 0;
 
 		virtual HRESULT IfaceCalling Get_Time_Segment_Id_Container(time_segment_id_container **ids) = 0;
@@ -100,8 +104,8 @@ namespace scgms {
 		virtual HRESULT IfaceCalling Get_Model_Parameters(scgms::IModel_Parameter_Vector **parameters) = 0;
 		virtual HRESULT IfaceCalling Set_Model_Parameters(scgms::IModel_Parameter_Vector *parameters) = 0;
 
+		//management
 		virtual HRESULT IfaceCalling Clone(scgms::IFilter_Parameter **deep_copy) = 0;
-		
 	};
 	
 

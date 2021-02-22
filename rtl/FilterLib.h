@@ -46,10 +46,17 @@
 #include <vector>
 #include <string>
 #include <functional>
+#include <tuple>
 
 namespace scgms {
 
-	using SFilter = refcnt::SReferenced<IFilter>;
+	class SFilter : public virtual refcnt::SReferenced<IFilter> {
+	public:
+		SFilter();
+		SFilter(IFilter *filter);
+		virtual ~SFilter() {};
+		HRESULT Send(scgms::UDevice_Event& event);
+	};
 
 	class SFilter_Parameter : public virtual refcnt::SReferenced<scgms::IFilter_Parameter> {
 	public:
@@ -65,8 +72,7 @@ namespace scgms {
 
 		double as_double(HRESULT &rc);		
 		std::vector<double> as_double_array(HRESULT &rc);
-		HRESULT set_double_array(const std::vector<double> &values);
-		HRESULT double_array_from_wstring(const wchar_t *str_value);
+		HRESULT set_double_array(const std::vector<double> &values);		
 
 		bool as_bool(HRESULT &rc);
 		HRESULT set_bool(const bool value);
@@ -76,7 +82,6 @@ namespace scgms {
 
 		std::vector<int64_t> as_int_array(HRESULT &rc);
 		HRESULT set_int_array(const std::vector<int64_t> &values);
-		HRESULT int_array_from_wstring(const wchar_t *str_value);	
 	};
 
 	bool add_filters(const std::vector<scgms::TFilter_Descriptor> &descriptors, scgms::TCreate_Filter create_filter);
@@ -312,6 +317,7 @@ namespace scgms {
 	class SPersistent_Filter_Chain_Configuration : public virtual internal::CInternal_Filter_Chain_Configuration<scgms::IPersistent_Filter_Chain_Configuration> {
 	public:
 		SPersistent_Filter_Chain_Configuration();
+		virtual ~SPersistent_Filter_Chain_Configuration() {};
 		operator SFilter_Chain_Configuration();
 	};
 
@@ -346,20 +352,19 @@ namespace scgms {
 
 	class CBase_Filter : public virtual scgms::IFilter, public virtual refcnt::CReferenced {
 	protected:
-		scgms::SFilter mOutput;	//aka the next_filter
-		HRESULT Send(scgms::UDevice_Event &event);
+		scgms::SFilter mOutput;	//aka the next_filter		
 	protected:
 		const GUID mDevice_ID = Invalid_GUID;
-		void Emit_Info(const scgms::NDevice_Event_Code code, const std::wstring &msg, const uint64_t segment_id = scgms::Invalid_Segment_Id);
+		void Emit_Info(const scgms::NDevice_Event_Code code, const std::wstring &msg, const uint64_t segment_id = scgms::Invalid_Segment_Id) noexcept;
 	protected:
 		//Descending class is supposed to implement these two methods only
 		virtual HRESULT Do_Execute(scgms::UDevice_Event event) = 0;
 		virtual HRESULT Do_Configure(scgms::SFilter_Configuration configuration, refcnt::Swstr_list &error_description) = 0;
 	public:			
-		CBase_Filter(scgms::IFilter* output, const GUID &device_id = Invalid_GUID);
-		virtual ~CBase_Filter();
-		virtual HRESULT IfaceCalling Configure(IFilter_Configuration* configuration, refcnt::wstr_list* error_description) override final;
-		virtual HRESULT IfaceCalling Execute(scgms::IDevice_Event *event) override;
+		CBase_Filter(scgms::IFilter* output, const GUID &device_id = Invalid_GUID) noexcept;
+		virtual ~CBase_Filter() noexcept;
+		virtual HRESULT IfaceCalling Configure(IFilter_Configuration* configuration, refcnt::wstr_list* error_description) noexcept override final;
+		virtual HRESULT IfaceCalling Execute(scgms::IDevice_Event *event) noexcept override;
 	};
 
 
@@ -368,18 +373,18 @@ namespace scgms {
 	protected:
 		TParameters mParameters;
 		const double* mDefault_Parameters;
-		virtual bool On_Changing_Parameters(const TParameters &parameters) {
-			return true;	//override and return false, when to p
+		virtual bool On_Changing_Parameters(const TParameters &parameters) noexcept {
+			return true;	//override and return false, when to refuse the parameters
 		}
 	public:
-		CDiscrete_Model(scgms::IModel_Parameter_Vector* current_parameters, const double *default_parameters, scgms::IFilter* output, const GUID& device_id = Invalid_GUID) : 
+		CDiscrete_Model(scgms::IModel_Parameter_Vector* current_parameters, const double *default_parameters, scgms::IFilter* output, const GUID& device_id = Invalid_GUID) noexcept : 
 			CBase_Filter(output, device_id),
 			mParameters(scgms::Convert_Parameters<TParameters>(current_parameters, default_parameters)),
 			mDefault_Parameters(default_parameters) {
 		}
-		virtual ~CDiscrete_Model() {}
+		virtual ~CDiscrete_Model() noexcept {}
 
-		virtual HRESULT IfaceCalling Execute(scgms::IDevice_Event* event) override final {
+		virtual HRESULT IfaceCalling Execute(scgms::IDevice_Event* event) noexcept override final {
 			if (!event) return E_INVALIDARG;
 			
 			scgms::TDevice_Event *raw_event;
@@ -434,10 +439,8 @@ namespace scgms {
 		SEvent_Export_Filter_Inspection(const SFilter &event_export_filter);
 	};
 
+
+		//returns if, and what variable name encodes the string
+		//e.g.; 5 returns <false, empty> and $(var_name) returns <true, "var_name">
+	std::tuple<bool, std::wstring> Is_Variable_Name(const std::wstring& str);
 }
-
-
-std::wstring Select_Time_Segments_Id_To_WString(scgms::time_segment_id_container *container);
-scgms::time_segment_id_container* WString_To_Select_Time_Segments_Id(const wchar_t *str);
-std::wstring Model_Parameters_To_WString(scgms::IModel_Parameter_Vector *container);
-scgms::IModel_Parameter_Vector* WString_To_Model_Parameters(const wchar_t *str);

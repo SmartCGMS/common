@@ -42,19 +42,22 @@
 
 template <class T, class I, typename... Args>
 HRESULT Manufacture_Object(I** manufactured, Args... args) {
+
+	//As SCGMS is supposed to run on embedded devices and real-time systems, there's no exception handling
+	//and we provide the new operator has tor return nullptr instead of throwing.
+
+
 	HRESULT rc = E_UNEXPECTED;
 
-	try {
-		T *tmp = new T(args...);
+	T *tmp = new T(args...);
+	if (tmp) {
 		(*manufactured) = static_cast<I*> (tmp);
 		(*manufactured)->AddRef();
 
 		rc = S_OK;
 	}
-	catch (...) {
-		rc = E_FAIL;
-	}
-
-
+	else
+		rc = E_OUTOFMEMORY;
+	
 	return rc;
 }

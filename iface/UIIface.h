@@ -83,13 +83,13 @@ namespace scgms {
 		Discrete_Model	= 1 << 1,
 	};
 
-	using TModel_Flags = std::underlying_type<NModel_Flags>::type;
-
 	inline NModel_Flags operator|(const NModel_Flags lhs, const NModel_Flags rhs) {
+		using TModel_Flags = std::underlying_type<NModel_Flags>::type;
 		return static_cast<NModel_Flags>(static_cast<TModel_Flags>(lhs) | static_cast<TModel_Flags>(rhs));
 	}
 
 	inline NModel_Flags operator&(const NModel_Flags lhs, const NModel_Flags rhs) {
+		using TModel_Flags = std::underlying_type<NModel_Flags>::type;
 		return static_cast<NModel_Flags>(static_cast<TModel_Flags>(lhs) & static_cast<TModel_Flags>(rhs));
 	}
 
@@ -103,7 +103,8 @@ namespace scgms {
 	};
 
 	struct TModel_Descriptor {
-		const GUID id;
+		const GUID id;									//this could equal to a filter id to indicate that 
+														//such a filter has a fixed-selection of its parameters
 		const NModel_Flags flags;
 		const wchar_t *description;
 		const wchar_t *db_table_name;

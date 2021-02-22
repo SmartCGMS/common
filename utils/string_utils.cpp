@@ -45,6 +45,10 @@
 #include <array>
 #include <iostream>
 #include <iomanip>
+#include <map>
+#include <cwctype>
+#include <type_traits>
+#include <cmath>
 
 std::string Narrow_WString(const std::wstring& wstr) {
 	return Narrow_WChar(wstr.c_str());
@@ -79,12 +83,117 @@ std::wstring Widen_String(const std::string& str) {
     return Widen_Char(str.c_str());
 }
 
-std::wstring WString_To_Lower(const std::wstring& wstr) {
-	std::wstring result;
 
-	std::transform(wstr.begin(), wstr.end(), std::back_inserter(result), std::towlower);
+std::wstring Lower_String(const std::wstring& wstr) {
+    std::wstring result;
+    std::transform(wstr.begin(), wstr.end(), std::back_inserter(result), std::towlower);
+    return result;
+}
 
-	return result;
+std::string Lower_String(const std::string& wstr) {
+    std::string result;
+    std::transform(wstr.begin(), wstr.end(), std::back_inserter(result), tolower);
+    return result;
+}
+
+
+
+template <typename C>
+using str_2_dbl_string = std::basic_string<C, std::char_traits<C>, std::allocator<C>>;
+
+
+template <typename C>
+struct TNumeric_Chars {
+    static constexpr char dot = '.';
+    static constexpr char coma = ',';    
+    const static std::map<const std::string, double> known_symbols;
+};
+
+template <>
+struct TNumeric_Chars<wchar_t> {
+    static constexpr wchar_t dot = '.';
+    static constexpr wchar_t coma = ',';
+    const static std::map<const std::wstring, double> known_symbols;
+};
+
+template <>
+const std::map<const std::string, double> TNumeric_Chars<char>::known_symbols = {
+           {"oo", std::numeric_limits<double>::infinity()},
+           {"inf", std::numeric_limits<double>::infinity()},
+           {"infinity", std::numeric_limits<double>::infinity()},
+
+           {"-oo", -std::numeric_limits<double>::infinity()},
+           {"-inf", -std::numeric_limits<double>::infinity()},
+           {"-infinity", -std::numeric_limits<double>::infinity()},
+
+           {"nan", std::numeric_limits<double>::quiet_NaN()},
+
+           {"min", std::numeric_limits<double>::min()},
+           {"-min", -std::numeric_limits<double>::min()},
+           {"max", std::numeric_limits<double>::max()},
+           {"-max", -std::numeric_limits<double>::max()}
+};
+
+
+const std::map<const std::wstring, double> TNumeric_Chars<wchar_t>::known_symbols = {
+           {L"\x221e", std::numeric_limits<double>::infinity()},
+           {L"oo", std::numeric_limits<double>::infinity()},
+           {L"inf", std::numeric_limits<double>::infinity()},
+           {L"infinity", std::numeric_limits<double>::infinity()},
+
+           {L"-\x221e", -std::numeric_limits<double>::infinity()},
+           {L"-oo", -std::numeric_limits<double>::infinity()},
+           {L"-inf", -std::numeric_limits<double>::infinity()},
+           {L"-infinity", -std::numeric_limits<double>::infinity()},
+
+           {L"nan", std::numeric_limits<double>::quiet_NaN()},
+
+           {L"min", std::numeric_limits<double>::min()},
+           {L"-min", -std::numeric_limits<double>::min()},
+           {L"max", std::numeric_limits<double>::max()},
+           {L"-max", -std::numeric_limits<double>::max()}
+};
+
+double rtl_str_dbl(const char* str, char** end_ptr) { return strtod(str, end_ptr); }
+double rtl_str_dbl(const wchar_t* str, wchar_t** end_ptr) { return wcstod(str, end_ptr); }
+
+template <typename C>
+double convert_str_2_double(const C* wstr, bool& ok) {         
+
+    C* end_char;   
+    double value = rtl_str_dbl(wstr, &end_char);
+    ok = *end_char == 0;
+
+    //detecting local does not seems reliable in all cases we encountered
+    auto try_convert = [&](const C old_point, const C new_point) {
+        //could have made the number by properly combining mantisa and exponent
+        //but then, we would have to detect e.g.; 1.0e61 formatting
+        //does not seem worth the effort
+
+        str_2_dbl_string<C> converted{ wstr };
+        std::replace(converted.begin(), converted.end(), old_point, new_point);
+        value = rtl_str_dbl(converted.c_str(), &end_char);
+        ok = *end_char == 0;
+        return value;
+    };
+
+    if (*end_char == TNumeric_Chars<C>::dot) value = try_convert(TNumeric_Chars<C>::dot, TNumeric_Chars<C>::coma);
+    else if (*end_char == TNumeric_Chars<C>::coma) value = try_convert(TNumeric_Chars<C>::coma, TNumeric_Chars<C>::dot);
+
+
+    if (!ok) {
+        const auto symbols = TNumeric_Chars<C>::known_symbols;
+        auto iter = symbols.find(Lower_String(wstr));
+        if (iter != symbols.end()) {
+            value = iter->second;
+            ok = true;
+        }
+        else {
+            value = std::numeric_limits<double>::quiet_NaN(); //sanity
+        }
+    }
+
+    return value;
 }
 
 double str_2_dbl(const char* str) {
@@ -92,62 +201,41 @@ double str_2_dbl(const char* str) {
     return str_2_dbl(str, tmp);
 }
 
-double str_2_dbl(const char *str, bool &ok) {
-    char* end_char;
-    double value = std::strtod(str, &end_char);
-    ok = *end_char == 0;
-
-    if (!ok) 
-        value = std::numeric_limits<double>::quiet_NaN(); //sanity
-        
-    return value;
+double str_2_dbl(const char* str, bool& ok) {
+    return convert_str_2_double<char>(str, ok);
 }
 
 
-double wstr_2_dbl(const wchar_t* wstr) {
+double str_2_dbl(const wchar_t* wstr) {
     bool tmp;
-    return wstr_2_dbl(wstr, tmp);
+    return str_2_dbl(wstr, tmp);
 }
 
-double wstr_2_dbl(const wchar_t* wstr, bool& ok) {
 
-	wchar_t* end_char;
-	double value = std::wcstod(wstr, &end_char);
-	ok = *end_char == 0;
-
-	//detecting local does not seems reliable in all cases we encountered
-	auto try_convert = [&](const wchar_t old_point, const wchar_t new_point) {
-		//could have made the number by properly combining mantisa and exponent
-		//but then, we would have to detect e.g.; 1.0e61 formatting
-		//does not seem worth the effort
-
-		std::wstring converted{ wstr };
-		std::replace(converted.begin(), converted.end(), old_point, new_point);
-		value = std::wcstod(converted.c_str(), &end_char);
-		ok = *end_char == 0;
-		return value;
-	};
-
-	switch (*end_char) {
-		case L'.':	value = try_convert(L'.', L','); break;
-		case L',' :	value = try_convert(L',', L'.'); break;
-		default: break;
-	}
-	  
-
-    if (!ok)
-        value = std::numeric_limits<double>::quiet_NaN(); //sanity
-
-    return value;
+ double str_2_dbl(const wchar_t* wstr, bool& ok) {
+     return convert_str_2_double<wchar_t>(wstr, ok);	
 }
 
 std::wstring dbl_2_wstr(const double val) {
-    std::wstringstream  stream;
-    auto unused = stream.imbue(std::locale(std::wcout.getloc(), new CDecimal_Separator<wchar_t>{ L'.' })); //locale takes owner ship of dec_sep
 
-    stream << std::setprecision(std::numeric_limits<long double>::digits10 + 1) << val;
+    auto convert_normal = [](const double val)->std::wstring {
+        std::wstringstream  stream;
+        auto unused = stream.imbue(std::locale(std::wcout.getloc(), new CDecimal_Separator<wchar_t>{ L'.' })); //locale takes ownership of dec_sep
+        stream << std::setprecision(std::numeric_limits<long double>::digits10 + 1) << val;
+        return stream.str();
+    };
 
-    return stream.str();
+
+    switch (std::fpclassify(val)) {
+        case FP_INFINITE:  return std::signbit(val) ? L"-\x221e" : L"\x221e";
+        case FP_NAN:       return L"NaN";
+        case FP_NORMAL:    return convert_normal(val);                        
+        case FP_SUBNORMAL: return L"subnormal";
+        case FP_ZERO:      return L"0";
+        default:           return L"unknown";
+        
+    }
+    
 }
 
 template <typename T>
@@ -180,33 +268,14 @@ int get_base(T* str) {
 }
 
 
-int64_t str_2_int(const char* str) {
+int64_t str_2_int(const wchar_t* wstr) {
     bool tmp;
-    return str_2_int(str, tmp);
+    return str_2_int(wstr, tmp);
 }
 
-
-int64_t str_2_int(const char* str, bool &ok) {
-    char* end_char;
-    int64_t value = std::strtol(str, &end_char, get_base(str));
-    ok = *end_char == 0;
-
-    if (!ok)
-        value = std::numeric_limits<int64_t>::max(); //sanity
-
-    return value;
-}
-
-
-
-int64_t wstr_2_int(const wchar_t* wstr) {
-    bool tmp;
-    return wstr_2_int(wstr, tmp);
-}
-
-template <typename I, typename W>
-I wstr_2_xint(const wchar_t* wstr, bool& ok, W func) {
-    wchar_t* end_char;
+template <typename I, typename C, typename W>
+I str_2_xint(const C* wstr, bool& ok, W func) {
+    C* end_char;
     I value = func(wstr, &end_char, get_base(wstr));
     ok = *end_char == 0;
 
@@ -217,14 +286,32 @@ I wstr_2_xint(const wchar_t* wstr, bool& ok, W func) {
 }
 
 
-
-int64_t wstr_2_int(const wchar_t* wstr, bool& ok) {
-    return wstr_2_xint<int64_t>(wstr, ok, std::wcstoll);  
+int64_t str_2_int(const char* str) {
+    bool tmp;
+    return str_2_int(str, tmp);
 }
 
 
-uint64_t wstr_2_uint(const wchar_t* wstr, bool& ok) {
-    return wstr_2_xint<uint64_t>(wstr, ok, std::wcstoull);
+int64_t str_2_int(const char* str, bool& ok) {
+    return str_2_xint<int64_t, char>(str, ok, std::strtol);
+}
+
+
+int64_t str_2_int(const wchar_t* wstr, bool& ok) {
+    return str_2_xint<int64_t, wchar_t>(wstr, ok, std::wcstoll);  
+}
+
+
+uint64_t str_2_uint(const wchar_t* wstr, bool& ok) {
+    return str_2_xint<uint64_t, wchar_t>(wstr, ok, std::wcstoull);
+}
+
+int64_t str_2_int(const std::string& str, bool& converted_ok) {
+    return str_2_int(str.c_str(), converted_ok);
+}
+
+int64_t str_2_int(const std::wstring& str, bool& converted_ok) {
+    return str_2_int(str.c_str(), converted_ok);
 }
 
 
@@ -301,6 +388,7 @@ std::wstring GUID_To_WString(const GUID& guid) {
     return result;
 }
 
+
 std::wstring Get_Padded_Number(uint32_t num, size_t places) {
     std::wstring tmp = std::to_wstring(num);
     while (tmp.length() < places)
@@ -323,4 +411,30 @@ std::wstring& rtrim(std::wstring& str) {
 
 std::wstring& trim(std::wstring& str) {
     return ltrim(rtrim(str));
+}
+
+std::string quote(const std::string& str) {
+    return '"' + str + '"';
+}
+
+
+bool str_2_bool(const std::wstring& str, bool& ok) {
+    static std::map<std::wstring, bool> known_symbols = {
+        {L"true", true},
+        {L"false", false},
+        {L"1", true},
+        {L"0", false},
+        {L"yes", true},
+        {L"no", false},
+        {L"on", true},
+        {L"off", false},
+        {L"t", true},
+        {L"f", false},
+    };
+
+
+    auto iter = known_symbols.find(Lower_String(str));
+    ok = iter != known_symbols.end();
+    
+    return ok ? iter->second : false;
 }

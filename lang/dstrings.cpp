@@ -784,7 +784,6 @@ const wchar_t* dsAsync_Sig_Gen_Req_Seg_Id = L"Asynchronously configured model re
 const wchar_t* dsFailed_To_Configure_Model = L"Failed to configure the model.";
 
 const wchar_t* dsImpulse_Response_Filter = L"Impulse response filter";
-const wchar_t* dsMedian_Response_Filter = L"Median filter";
 const wchar_t* dsSignal_Id = L"Signal ID";
 const wchar_t* dsResponse_Window = L"Response window (0 = infinite)";
 
@@ -819,6 +818,20 @@ const wchar_t* dsPattern_Prediction_Signal = L"Pattern ist. prediction";
 const wchar_t* dsParameters_File = L"Parameters file";
 const wchar_t* dsDo_Not_Update_Parameters_File = L"Do not update the parameters file";
 const wchar_t* dsDo_Not_Learn = L"Do not learn";
+
+const wchar_t* dsWeighted_Moving_Average = L"Weighted Moving Average";
+const wchar_t* dsWeight_0 = L"Weight t-00";
+const wchar_t* dsWeight_5 = L"Weight t-05";
+const wchar_t* dsWeight_10 = L"Weight t-10";
+const wchar_t* dsWeight_15 = L"Weight t-15";
+const wchar_t* dsWeight_20 = L"Weight t-20";
+const wchar_t* dsWeight_25 = L"Weight t-25";
+const wchar_t* dsWeight_30 = L"Weight t-30";
+const wchar_t* dsWeight_35 = L"Weight t-35";
+const wchar_t* dsWeight_40 = L"Weight t-40";
+const wchar_t* dsWeight_45 = L"Weight t-45";
+const wchar_t* dsWeight_50 = L"Weight t-50";
+const wchar_t* dsWeight_55 = L"Weight t-55";
 
 const wchar_t* dsExtModel_Unknown_Opcode = L"Unknown opcode received";
 const wchar_t* dsExtModel_Invalid_Opcode_Direction = L"Received an opcode in unexpected direction";
@@ -1251,3 +1264,23 @@ const wchar_t* rsBolus_Amount = L"Bolus_Amount_";
 
 const wchar_t* rsIcarus_Basal_And_Bolus = L"Icarus_Fixed_Basal_And_Bolus";
 const wchar_t* rsCarb_To_Insulin_Ratio = L"Carb_To_Insulin_Ratio";
+
+
+const wchar_t* rsWeighted_Moving_Average = L"Weighted_Moving_Average";
+const wchar_t* rsWeight_0 = L"Weight_0";
+const wchar_t* rsWeight_5 = L"Weight_5";
+const wchar_t* rsWeight_10 = L"Weight_10";
+const wchar_t* rsWeight_15 = L"Weight_15";
+const wchar_t* rsWeight_20 = L"Weight_20";
+const wchar_t* rsWeight_25 = L"Weight_25";
+const wchar_t* rsWeight_30 = L"Weight_30";
+const wchar_t* rsWeight_35 = L"Weight_35";
+const wchar_t* rsWeight_40 = L"Weight_40";
+const wchar_t* rsWeight_45 = L"Weight_45";
+const wchar_t* rsWeight_50 = L"Weight_50";
+const wchar_t* rsWeight_55 = L"Weight_55";
+
+const wchar_t* rsSignal_Id = L"Signal_ID";
+const wchar_t* rsResponse_Window = L"Response_Window";
+
+const wchar_t* rsFailed_to_allocate_memory = L"Failed to allocate memory!";

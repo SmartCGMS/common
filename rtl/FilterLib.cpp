@@ -43,9 +43,6 @@
 
 
 #include <wchar.h>
-#include <iostream>
-#include <iomanip>
-#include <sstream>
 #include "manufactory.h"
 
 namespace scgms {
@@ -61,8 +58,20 @@ namespace scgms {
 		scgms::TCreate_Discrete_Model create_discrete_model = scgms::factory::resolve_symbol<scgms::TCreate_Discrete_Model>("create_discrete_model");
 	}
 
+	SFilter::SFilter() : refcnt::SReferenced<IFilter>() {}
+
+	SFilter::SFilter(IFilter* filter) : refcnt::SReferenced<IFilter>(filter) {}
+
+	HRESULT SFilter::Send(scgms::UDevice_Event& event) {
+		if (!event) return E_INVALIDARG;		
+
+		scgms::IDevice_Event* raw_event = event.get();
+		event.release();
+		return get()->Execute(raw_event);
+	}
+
 	NParameter_Type SFilter_Parameter::type() {
-		NParameter_Type result = NParameter_Type::ptNull;
+		NParameter_Type result = NParameter_Type::ptInvalid;
 		get()->Get_Type(&result);
 		return result;
 	}
@@ -81,8 +90,12 @@ namespace scgms {
 		refcnt::wstr_container* wstr;
 		rc = get()->Get_WChar_Container(&wstr, read_interpreted);
 		if (rc == S_OK) {
-			result = refcnt::WChar_Container_To_WString(wstr);
+			//if the WChar_Container_To_WString should fail, e.g. on bad alloc, the wstr could leak
+			//if not guarded with RAII
+			refcnt::Swstr_container mem_guard = refcnt::make_shared_reference_ext<refcnt::Swstr_container, refcnt::wstr_container>(wstr, true);
 			wstr->Release();
+
+			result = refcnt::WChar_Container_To_WString(mem_guard.get());
 		}
 
 		return result;
@@ -141,18 +154,6 @@ namespace scgms {
 	}
 
 
-	HRESULT SFilter_Parameter::double_array_from_wstring(const wchar_t *str_value) {
-		HRESULT rc = E_FAIL;
-		scgms::IModel_Parameter_Vector *parameters = WString_To_Model_Parameters(str_value);
-		if (parameters) {
-			rc = get()->Set_Model_Parameters(parameters);
-			parameters->Release();
-		}
-
-		return rc;
-	}
-
-
 	bool SFilter_Parameter::as_bool(HRESULT &rc) {
 		bool result = false;
 		BOOL uint8;
@@ -189,18 +190,6 @@ namespace scgms {
 			else return E_FAIL;
 	}
 
-
-	HRESULT SFilter_Parameter::int_array_from_wstring(const wchar_t *str_value) {
-		HRESULT rc = E_FAIL;
-		scgms::time_segment_id_container *container = WString_To_Select_Time_Segments_Id(str_value);
-		if (container) {
-			rc = get()->Set_Time_Segment_Id_Container(container);
-			container->Release();
-		}
-		
-		return rc;
-	}
-
 	
 	GUID SFilter_Parameter::as_guid(HRESULT &rc) {
 		GUID result;
@@ -230,7 +219,7 @@ namespace scgms {
 		scgms::IFilter_Parameter *parameter;
 		if (imported::create_filter_parameter(type, conf_name, &parameter) == S_OK) {
 			if (get()->add(&parameter, &parameter + 1) == S_OK)
-				result = refcnt::make_shared_reference_ext< SFilter_Parameter, IFilter_Parameter>(parameter, false);
+				result = refcnt::make_shared_reference_ext<SFilter_Parameter, IFilter_Parameter>(parameter, false);
 		}
 
 		return result;
@@ -321,41 +310,38 @@ namespace scgms {
 	}
 
 	
-	CBase_Filter::CBase_Filter(scgms::IFilter* output, const GUID& device_id) : mOutput(output), mDevice_ID(device_id) {
-		if (!mOutput) 
-			throw std::runtime_error{ "Attempted to construct a filter without valid output!" };
+	CBase_Filter::CBase_Filter(scgms::IFilter* output, const GUID& device_id) noexcept : mOutput(output), mDevice_ID(device_id) {
+		//ctor must be non-throwing to allow real-time and/or embedded development! Hence, we'll detect the error during the configuration.
+		//if (!mOutput) 
+		//	throw std::runtime_error{ "Attempted to construct a filter without valid output!" };
 	}
 
-	CBase_Filter::~CBase_Filter() {
+	CBase_Filter::~CBase_Filter() noexcept {
 		//
-
 	}
 
 
-	HRESULT CBase_Filter::Send(scgms::UDevice_Event &event) {
-		if (!event) return E_INVALIDARG;
-
-		scgms::IDevice_Event *raw_event = event.get();
-		event.release();
-		return mOutput->Execute(raw_event);
-	}
-
-	
-	void CBase_Filter::Emit_Info(const scgms::NDevice_Event_Code code, const std::wstring& msg, const uint64_t segment_id) {
+	void CBase_Filter::Emit_Info(const scgms::NDevice_Event_Code code, const std::wstring& msg, const uint64_t segment_id) noexcept {
 		scgms::UDevice_Event event{ code };
 		event.device_id() = mDevice_ID;
 		event.info.set(msg.c_str());
 		event.segment_id() = segment_id;
-		Send(event);
+		mOutput.Send(event);
 	}
 
-	HRESULT IfaceCalling CBase_Filter::Configure(IFilter_Configuration* configuration, refcnt::wstr_list* error_description) {
-		SFilter_Configuration shared_configuration = refcnt::make_shared_reference_ext<SFilter_Configuration, IFilter_Configuration> ( configuration, true);		
+	HRESULT IfaceCalling CBase_Filter::Configure(IFilter_Configuration* configuration, refcnt::wstr_list* error_description) noexcept {		
 		refcnt::Swstr_list shared_error_description = refcnt::make_shared_reference_ext<refcnt::Swstr_list, refcnt::wstr_list>(error_description, true);
-		return Do_Configure(shared_configuration, shared_error_description);
+		if (mOutput) {
+			SFilter_Configuration shared_configuration = refcnt::make_shared_reference_ext<SFilter_Configuration, IFilter_Configuration>(configuration, true);
+			return Do_Configure(shared_configuration, shared_error_description);
+		}
+		else {
+			shared_error_description.push(L"Attempted to construct a filter without valid output!");
+			return E_HANDLE;
+		}
 	}
 
-	HRESULT IfaceCalling CBase_Filter::Execute(scgms::IDevice_Event *event) {
+	HRESULT IfaceCalling CBase_Filter::Execute(scgms::IDevice_Event *event) noexcept {
 		if (!event) return E_INVALIDARG;
 		return Do_Execute(scgms::UDevice_Event{event});
 	}
@@ -406,107 +392,21 @@ namespace scgms {
 			refcnt::Query_Interface<scgms::IFilter, scgms::IEvent_Export_Filter_Inspection>(event_export_filter.get(), IID_Event_Export_Filter_Inspection, *this);
 	}
 
-}
 
+	std::tuple<bool, std::wstring> Is_Variable_Name(const std::wstring& str) {
+		std::wstring trimmed{ str };
+		trimmed = trim(trimmed);
 
-
-std::wstring Select_Time_Segments_Id_To_WString(scgms::time_segment_id_container *container) {
-	int64_t *begin, *end;
-	if (container->get(&begin, &end) == S_OK) {
-		std::wstring result;
-		for (auto iter = begin; iter != end; iter++) {
-			if (result.size() > 0) result.append(L" ");
-
-			result.append(std::to_wstring(*iter));
+		bool is_var = false;
+		std::wstring var_name;
+		if (trimmed.size() > 3) {
+			if ((trimmed[0] == '$') && (trimmed[1] == L'(') && (trimmed[trimmed.size() - 1] == L')')) {
+				var_name = trimmed.substr(2, trimmed.size() - 3);
+				is_var = true;
+			}
 		}
-		return result;
-	}
-	else
-		return std::wstring{};
-}
 
-scgms::time_segment_id_container* WString_To_Select_Time_Segments_Id(const wchar_t *str) {
-	if (!str) return nullptr;
-
-	std::vector<int64_t> ids;
-	std::wstring str_copy{ str };	//wcstok modifies the input string
-	const wchar_t* delimiters = L" ";	//string of chars, which designate individual delimiters
-	wchar_t* buffer = nullptr;
-	wchar_t* str_val = wcstok_s(const_cast<wchar_t*>(str_copy.data()), delimiters, &buffer);
-	while (str_val != nullptr) {
-		bool ok;
-		const int64_t value = wstr_2_int(str_val, ok);
-		if (!ok) return nullptr;
-		ids.push_back(value);
-
-		str_val = wcstok_s(nullptr, delimiters, &buffer);
+		return std::tuple<bool, std::wstring>{is_var, var_name};
 	}
 
-
-	scgms::time_segment_id_container *obj = nullptr;
-	if (Manufacture_Object<refcnt::internal::CVector_Container<int64_t>, scgms::time_segment_id_container>(&obj) == S_OK) {		
-		if (obj->set(ids.data(), ids.data() + ids.size()) != S_OK) {
-			obj->Release();
-			obj = nullptr;
-		};		
-	}
-	
-	return obj;
-}
-
-std::wstring Model_Parameters_To_WString(scgms::IModel_Parameter_Vector *container) {
-	
-	std::wstringstream result;
-
-	//unused keeps static analysis happy about creating an unnamed object
-	auto unused = result.imbue(std::locale(std::wcout.getloc(), new CDecimal_Separator<wchar_t>{ L'.'})); //locale takes owner ship of dec_sep
-	result << std::setprecision(std::numeric_limits<long double>::digits10 + 1);
-
-	bool not_empty = false;
-
-	double *begin, *end;
-	if (container->get(&begin, &end) == S_OK)
-	{
-		for (auto iter = begin; iter != end; iter++)
-		{
-			if (not_empty)
-				result << L" ";
-			else
-				not_empty = true;
-
-			result << *iter;
-		}
-	}
-
-	return result.str();
-}
-
-scgms::IModel_Parameter_Vector* WString_To_Model_Parameters(const wchar_t *str) {
-	if (!str) return nullptr;
-
-	std::vector<double> params;
-	std::wstring str_copy{ str };	//wcstok modifies the input string
-	const wchar_t* delimiters = L" ";	//string of chars, which designate individual delimiters
-	wchar_t* buffer = nullptr;
-	wchar_t* str_val = wcstok_s(const_cast<wchar_t*>(str_copy.data()), delimiters, &buffer);
-	while (str_val != nullptr) {
-		bool ok;
-		const double value = wstr_2_dbl(str_val, ok);
-		if (!ok) return nullptr;
-		params.push_back(value);
-
-		str_val = wcstok_s(nullptr, delimiters, &buffer);
-	}
-
-
-
-	scgms::IModel_Parameter_Vector* obj = nullptr;
-	if (Manufacture_Object<refcnt::internal::CVector_Container<double>, scgms::IModel_Parameter_Vector>(&obj) == S_OK) {
-		if (obj->set(params.data(), params.data() + params.size()) != S_OK) {
-			obj->Release();
-			obj = nullptr;
-		};
-	}
-
-	return obj;
 }

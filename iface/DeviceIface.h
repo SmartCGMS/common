@@ -156,19 +156,19 @@ namespace scgms {
 
 
 	struct TDevice_Event {
-		NDevice_Event_Code event_code;
+		NDevice_Event_Code event_code = NDevice_Event_Code::Nothing;
 
-		GUID device_id;					//supporting parallel measurements
-		GUID signal_id;					//blood, ist, isig, model id aka e.g, calculated blood, etc.
-										//discrete_model is also allowed as it may produce multiple signals
+		GUID device_id = Invalid_GUID;					//supporting parallel measurements
+		GUID signal_id = Invalid_GUID;					//blood, ist, isig, model id aka e.g, calculated blood, etc.
+														//discrete_model is also allowed as it may produce multiple signals
 
-		double device_time;				//signal with multiple values are aggregated by device_time with the same signal_id and device_id
-		int64_t logical_time;
+		double device_time = std::numeric_limits<double>::quiet_NaN();	//signal with multiple values are aggregated by device_time with the same signal_id and device_id
+		int64_t logical_time = std::numeric_limits<int64_t>::max();
 
-		uint64_t segment_id;			// segment identifier or Invalid_Segment_Id
+		uint64_t segment_id = std::numeric_limits<uint64_t>::max();			// segment identifier or Invalid_Segment_Id
 
 		union {
-			double level;
+			double level = 0.0;
 			IModel_Parameter_Vector* parameters;		//this will have to be marshalled
 														//as different models have different number of parameters, statically sized field would case over-complicated code later on
 			refcnt::wstr_container* info;				//information, warning, error 
@@ -188,9 +188,9 @@ namespace scgms {
 	static constexpr decltype(TDevice_Event::segment_id) Invalid_Segment_Id = std::numeric_limits<decltype(Invalid_Segment_Id)>::max();
 	static constexpr decltype(TDevice_Event::segment_id) All_Segments_Id = std::numeric_limits<decltype(All_Segments_Id)>::max() - 1;
 
-	typedef struct {
+	struct TBounds {
 		double Min, Max;
-	} TBounds;
+	};
 
 	class ISignal : public virtual refcnt::IReferenced {
 	public:

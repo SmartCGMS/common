@@ -35,36 +35,14 @@
  *       Tomas Koutny and Martin Ubl, "Parallel software architecture for the next generation of glucose
  *       monitoring", Procedia Computer Science, Volume 141C, pp. 279-286, 2018
  */
+/*
+#include <cstdlib>
 
-#pragma once
-
-#include "../iface/DeviceIface.h"
-#include "../iface/FilterIface.h"
-#include "Dynamic_Library.h"
-
-namespace scgms {
-
-    namespace factory {
-        namespace internal {
-
-            constexpr bool import_test_fails = false;
-
-            void* resolve_factory_symbol(const char* symbol_name) noexcept;
-            void* resolve_not_impl_symbol(const char* symbol_name) noexcept;
-        }
-
-        template <typename T>
-        T resolve_symbol(const char* symbol_name) noexcept {
-            if (internal::import_test_fails)
-                return reinterpret_cast<T>(internal::resolve_not_impl_symbol(symbol_name));
-
-            void* resolution = internal::resolve_factory_symbol(symbol_name);
-            if (!resolution) resolution = internal::resolve_not_impl_symbol(symbol_name);	//still returning not_impl if cannot load the symbol
-
-            return reinterpret_cast<T>(resolution);
-        }
-    }
-
-
-	bool is_scgms_loaded();
+void* operator new(size_t size) noexcept {
+	return std::malloc(size);
 }
+
+void operator delete(void* p) noexcept { 
+    std::free(p);
+}
+*/

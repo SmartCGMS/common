@@ -59,7 +59,6 @@ std::string Narrow_WChar(const wchar_t *wstr);
 std::wstring Widen_Char(const char *str);
 std::wstring Widen_String(const std::string &str);
 
-std::wstring WString_To_Lower(const std::wstring& wstr);
 
 inline bool Is_Empty(const std::wstring& wstr) {
     return wstr.empty();
@@ -67,27 +66,37 @@ inline bool Is_Empty(const std::wstring& wstr) {
 
 template <typename... Args>
 bool Is_Empty(const std::wstring& wstr, const Args&... args) {
-    return Is_Empty(wstr) || IsEmpIs_Empty(args...);
+    return Is_Empty(wstr) || Is_Empty(args...);
 }
 
 
 
 double str_2_dbl(const char* str);
 double str_2_dbl(const char* str, bool& ok);
-double wstr_2_dbl(const wchar_t* wstr);
-double wstr_2_dbl(const wchar_t* wstr, bool& ok);
+double str_2_dbl(const wchar_t* wstr);
+double str_2_dbl(const wchar_t* wstr, bool& ok);
 
 std::wstring dbl_2_wstr(const double val);
 
 int64_t str_2_int(const char* str);
 int64_t str_2_int(const char* str, bool& ok);
-int64_t wstr_2_int(const wchar_t* wstr);
-int64_t wstr_2_int(const wchar_t* wstr, bool& ok);
-uint64_t wstr_2_uint(const wchar_t* wstr, bool& ok);
+int64_t str_2_int(const std::string& str, bool& converted_ok);
+int64_t str_2_int(const wchar_t* wstr);
+int64_t str_2_int(const wchar_t* wstr, bool& ok);
+int64_t str_2_int(const std::wstring& str, bool& converted_ok);
+uint64_t str_2_uint(const wchar_t* wstr, bool& ok);
 
 GUID WString_To_GUID(const std::wstring& str, bool& ok);
 std::wstring GUID_To_WString(const GUID& guid);
 std::wstring Get_Padded_Number(uint32_t num, size_t places);
 
+bool str_2_bool(const std::wstring& str, bool& ok);
+
 
 std::wstring& trim(std::wstring& str);
+
+std::string quote(const std::string& str);
+
+
+std::wstring Lower_String(const std::wstring& wstr);
+std::string Lower_String(const std::string& wstr);

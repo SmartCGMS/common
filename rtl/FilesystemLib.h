@@ -65,3 +65,5 @@ bool Is_Directory(const filesystem::path& path);
 
 // does given path point to a directory or is a symbolic link?
 bool Is_Regular_File_Or_Symlink(const filesystem::path& path);
+
+std::wstring& Ensure_Uniform_Dir_Separator(std::wstring& path) noexcept;	//some std libs still fail to make_preferred

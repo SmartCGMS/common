@@ -60,31 +60,30 @@ class CDynamic_Library final {
 		// disallow copying - the handle has to be unique
 		CDynamic_Library(const CDynamic_Library&) = delete;
 		CDynamic_Library(CDynamic_Library&& other) noexcept;
-		virtual ~CDynamic_Library();
+		virtual ~CDynamic_Library() noexcept;
 
 		// loads module and returns result
-		bool Load(const filesystem::path &file_path);
+		bool Load(const filesystem::path &file_path) noexcept;
 		// unloads module if loaded
-		void Unload();
+		void Unload() noexcept;
 		// resolves symbol from loaded module; returns nullptr if no such symbol found or no module loaded
-		void* Resolve(const char* symbolName);
+		void* Resolve(const char* symbolName) noexcept;
 
 		template<typename T>
-		T Resolve(const char* symbolName)
-		{
+		T Resolve(const char* symbolName) noexcept {
 			return reinterpret_cast<T>(Resolve(symbolName));
 		}
 
 		// is module (properly) loaded?
-		bool Is_Loaded() const;
-        filesystem::path Lib_Path() const;
+		bool Is_Loaded() const noexcept;
+        filesystem::path Lib_Path() const noexcept;
 
 		// checks extension of supplied path to verify, if it's a library (platform-dependent check)
-		static bool Is_Library(const filesystem::path& path);
+		static bool Is_Library(const filesystem::path& path) noexcept;
 		// sets library base
-		static void Set_Library_Base(const filesystem::path& base);
+		static void Set_Library_Base(const filesystem::path& base) noexcept;
 		// retrieves library base directory
-		static filesystem::path Get_Library_Base();
-		// appends platform-dependent library/shared object extension (.dll, .so, .dylib, ...)
-		static filesystem::path Append_Library_Extension(const filesystem::path& path);
+		static filesystem::path Get_Library_Base() noexcept;
+
+		static filesystem::path Default_Extension() noexcept;
 };

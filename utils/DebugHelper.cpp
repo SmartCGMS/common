@@ -71,24 +71,29 @@ CMemory_Leak_Tracker::~CMemory_Leak_Tracker() {
 	#ifdef TrackLeaks
 		#if defined(_MSC_VER) && defined(_DEBUG)
 	
-			//wchar_t *fileName = (wchar_t*) malloc(1024*sizeof(wchar_t));
-			//wchar_t *buf = (wchar_t*) malloc(2048*sizeof(wchar_t));
-			//can't be on the heap, otherwise they will be reported as leaks
-			wchar_t fileName[1024];
-			wchar_t buf[2048];
-			GetModuleFileNameW(((HINSTANCE)&__ImageBase), fileName, 1024);
+		try {
+				//wchar_t *fileName = (wchar_t*) malloc(1024*sizeof(wchar_t));
+				//wchar_t *buf = (wchar_t*) malloc(2048*sizeof(wchar_t));
+				//can't be on the heap, otherwise they will be reported as leaks
+				static wchar_t fileName[1024];
+				static wchar_t buf[2048];
+				GetModuleFileNameW(((HINSTANCE)&__ImageBase), fileName, 1024);
 
-			swprintf_s(buf, 2048, L"========== Dumping leaks for: %s ==========\n", fileName);
-			OutputDebugStringW(buf);
+				swprintf_s(buf, 2048, L"========== Dumping leaks for: %s ==========\n", fileName);
+				OutputDebugStringW(buf);
 
-			#ifdef prefer_vld
-				VLDReportLeaks();
-			#else
-				_CrtDumpMemoryLeaks();
-			#endif
+				#ifdef prefer_vld
+					VLDReportLeaks();
+				#else
+					_CrtDumpMemoryLeaks();
+				#endif
 
-			swprintf_s(buf, 2048, L"========== Leaks dumped for: %s ==========\n", fileName);
-			OutputDebugStringW(buf);
+				swprintf_s(buf, 2048, L"========== Leaks dumped for: %s ==========\n", fileName);
+				OutputDebugStringW(buf);
+		}
+		catch (...) {
+			OutputDebugStringW(L"Something went wrong while trying to print the leaks!");
+		}
 
 
 		#endif

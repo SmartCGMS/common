@@ -102,18 +102,11 @@ std::wstring Rat_Time_To_Local_Time_WStr(const double rt, const wchar_t *fmt) {
 	return os.str();
 }
 
-double Local_Time_WStr_To_Rat_Time(const std::wstring& str, const wchar_t* fmt) {
+double Local_Time_WStr_To_Rat_Time(const std::wstring& str, const wchar_t* fmt) noexcept {
 
 	struct tm ptm;
 	std::wistringstream ss(str);
-	try
-	{
-		ss >> std::get_time(&ptm, fmt);
-	}
-	catch (...)
-	{
-		return std::numeric_limits<double>::quiet_NaN();
-	}
+	ss >> std::get_time(&ptm, fmt);	
 
 	time_t ltim = mktime(&ptm);
 
@@ -184,11 +177,43 @@ std::wstring Rat_Time_To_Default_WStr(double rattime) {
 }
 
 
-double Default_WStr_To_Rat_Time(const std::wstring& input, bool& converted_ok) {
-	return Default_WStr_To_Rat_Time(input.c_str(), converted_ok);
+bool is_digit(const char ch) {
+	switch (ch) {
+		case '0': case '1': case '2': case '3': case '4':
+		case '5': case '6': case '7': case '8': case '9': return true;
+		default: return false;
+	}
 }
 
-double Default_WStr_To_Rat_Time(const wchar_t *input, bool& converted_ok) {
+bool is_digit(const wchar_t ch) {
+	switch (ch) {
+		case L'0': case L'1': case L'2': case L'3': case L'4':
+		case L'5': case L'6': case L'7': case L'8': case L'9': return true;
+		default: return false;
+	}
+}
+
+size_t str_len(const char* str) { return strlen(str); }
+size_t str_len(const wchar_t* str) { return wcslen(str); }
+
+template <typename T>
+struct TTime_Chars {
+	static constexpr T minus = '-';
+	static constexpr T colon = ':';
+	static constexpr T dot = '-';
+	static constexpr T space = ' ';
+};
+
+template <>
+struct TTime_Chars<wchar_t>{
+	static constexpr wchar_t minus = L'-';
+	static constexpr wchar_t colon = L':';
+	static constexpr wchar_t dot = L'-';
+	static constexpr wchar_t space = L' ';
+};
+
+template <typename C>
+double Convert_Str_To_Rat_Time(const C* input, bool& converted_ok) {
 	converted_ok = false;	//assume an error (and simplify the exit code)
 
 	double days = 0.0, hours = 0.0, minutes = 0.0, seconds = 0.0;
@@ -198,29 +223,30 @@ double Default_WStr_To_Rat_Time(const wchar_t *input, bool& converted_ok) {
 	
 	if (!input || (*input == 0))  return std::numeric_limits<double>::quiet_NaN();	
 		
-	if (input[0] == L'-') {
+	if (input[0] == TTime_Chars<C>::minus) {
 		plus_minus_sign = -1.0;
 		plus_minus_pos = 1;
 	}
 
 
-	int pos, last_pos = static_cast<int>(wcslen(input));
+	int pos, last_pos = static_cast<int>(str_len(input));
+	
 
-	auto fetch_number = [&](const wchar_t sep, const wchar_t decimal, double& result, const double result_max) {
+	auto fetch_number = [&](const C sep, const C decimal, double& result, const double result_max) {
 		pos = last_pos - 1;
 
 		while (pos >= plus_minus_pos) {
-			const wchar_t ch = input[pos];
+			const C ch = input[pos];
 			if (ch == sep) break;
-			if (!isdigit(ch) && (ch != decimal)) return false;
+			if (!is_digit(ch) && (ch != decimal)) return false;	
 
 			pos--;
 		}
 
 		pos++;
-		std::wstring substring(&input[pos], static_cast<size_t>(last_pos) - static_cast<size_t>(pos));	//must be a string to add the terminating zero
+		std::basic_string<C, std::char_traits<C>, std::allocator<C>> substring(&input[pos], static_cast<size_t>(last_pos) - static_cast<size_t>(pos));	//must be a string to add the terminating zero
 		bool ok;
-		result = wstr_2_dbl(substring.c_str(), ok);			
+		result = str_2_dbl(substring.c_str(), ok);			
 
 		if ((!ok) || (result >= result_max)) return false;
 
@@ -231,16 +257,16 @@ double Default_WStr_To_Rat_Time(const wchar_t *input, bool& converted_ok) {
 
 	//search for seconds, minutes, hours and days
 
-	if (!fetch_number(L':', L'.', seconds, 60.0)) return false;
+	if (!fetch_number(TTime_Chars<C>::colon, TTime_Chars<C>::dot, seconds, 60.0)) return false;
 
 	if (last_pos > plus_minus_pos) {
-		if (!fetch_number(L':', 0, minutes, 60.0)) return false;
+		if (!fetch_number(TTime_Chars<C>::colon, 0, minutes, 60.0)) return false;
 
 		if (last_pos > plus_minus_pos) {
-			if (!fetch_number(L' ', 0, hours, 24.0)) return false;
+			if (!fetch_number(TTime_Chars<C>::space, 0, hours, 24.0)) return false;
 
 			if (last_pos > plus_minus_pos)
-				if (!fetch_number(L'-', 0, days, std::numeric_limits<double>::max())) 					
+				if (!fetch_number(TTime_Chars<C>::minus, 0, days, std::numeric_limits<double>::max()))
 					return std::numeric_limits<double>::quiet_NaN();				
 		}
 	}
@@ -249,4 +275,16 @@ double Default_WStr_To_Rat_Time(const wchar_t *input, bool& converted_ok) {
 	return plus_minus_sign * (days + scgms::One_Hour * hours + scgms::One_Minute * minutes + scgms::One_Second * seconds);
 
 	return true;
+}
+
+double Default_Str_To_Rat_Time(const std::wstring& input, bool& converted_ok) {
+	return Default_Str_To_Rat_Time(input.c_str(), converted_ok);
+}
+
+double Default_Str_To_Rat_Time(const wchar_t* input, bool& converted_ok) {
+	return Convert_Str_To_Rat_Time(input, converted_ok);
+}
+
+double Default_Str_To_Rat_Time(const char* input, bool& converted_ok) {
+	return Convert_Str_To_Rat_Time(input, converted_ok);
 }
