@@ -146,11 +146,12 @@ namespace scgms {
 	constexpr TApprox_Descriptor Null_Approx_Descriptor = { Invalid_GUID, nullptr };
 
 	//Units used for displayed signals
+	//Units with assigned numbers are already in-use outside this source code.
 	enum class NSignal_Unit : uint16_t {
 		Unitless = 0,
 		Percent,
 		datetime,	//The time is encoded as the number of days since January 0, 1900 00:00 UTC, see http://en.wikipedia.org/wiki/January_0
-		mmol_per_L, //mmol/l - instead of mol/L due to historical reasons
+		mmol_per_L =3, //mmol/l - instead of mol/L due to historical reasons
 		U_insulin,	//insulin units, not UI nor IU
 		U_per_Hr,
 		Celsius,
