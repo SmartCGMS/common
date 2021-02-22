@@ -129,6 +129,8 @@ extern const char* dsParameters_Optimization_Use;
 
 extern const wchar_t *dsDb_Reader;
 extern const wchar_t *dsDb_Writer;
+extern const wchar_t* dsDb_Reader_Legacy;
+extern const wchar_t* dsDb_Writer_Legacy;
 extern const wchar_t *dsSinCos_Generator;
 extern const wchar_t *dsDummy_Generator;
 

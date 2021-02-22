@@ -129,8 +129,10 @@ const char* dsParameters_Optimization_Use = "To enable parameters' optimization,
 											"  c) exactly one filter must emit Shutdown, and any feedback receiver cannot precede this filter\n"
 											"Parameters with improved fitness are applied automatically.";
 
-const wchar_t *dsDb_Reader = L"Db Reader";
-const wchar_t *dsDb_Writer = L"Db Writer";
+const wchar_t* dsDb_Reader = L"Db Reader";
+const wchar_t* dsDb_Writer = L"Db Writer";
+const wchar_t* dsDb_Reader_Legacy = L"Db Reader (legacy)";
+const wchar_t* dsDb_Writer_Legacy = L"Db Writer (legacy)";
 const wchar_t *dsSinCos_Generator = L"Sin/Cos IG/BG generator";
 const wchar_t *dsDummy_Generator = L"Dummy IG/BG generator";
 
