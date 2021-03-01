@@ -48,15 +48,39 @@
 
 namespace scgms {
 
-	// constant to convert mg/dL to mmol/L
-	extern const double mgdL_2_mmolL;	//we assume mmol/L, so to make a conversion possible
-	extern const double mmolL_2_mgdL;
-	// constant to convert pmol (calculation unit of insulin) to U ("human-readable" unit of insulin)
-	extern const double pmol_2_U;
- 
-	extern const double One_Hour;
-	extern const double One_Minute;
-	extern const double One_Second;
+	// mg/dL -> mmol/L; source: http://www.soc-bdr.org/rds/authors/unit_tables_conversions_and_genetic_dictionaries/conversion_glucose_mg_dl_to_mmol_l/index_en.html
+	constexpr double mgdL_2_mmolL = 1.0 / 18.0182;
+	constexpr double mmolL_2_mgdL = 18.0182;
+	// pmol -> U; source: http://www.soc-bdr.org/content/rds/authors/unit_tables_conversions_and_genetic_dictionaries/e5196/index_en.html
+	constexpr double pmol_2_U = 1.0 / 6000.0;
+
+	constexpr double One_Hour = 1.0 / (24.0);
+	constexpr double One_Minute = 1.0 / (24.0 * 60.0);
+	constexpr double One_Second = 1.0 / (24.0 * 60.0 * 60.0);
+
+	inline namespace literals {
+
+		inline constexpr long double operator ""_hr(long double val) {
+			return val * ::scgms::One_Hour;
+		}
+		inline constexpr long double operator ""_min(long double val) {
+			return val * ::scgms::One_Minute;
+		}
+		inline constexpr long double operator ""_sec(long double val) {
+			return val * ::scgms::One_Second;
+		}
+
+		inline constexpr long double operator ""_hr(unsigned long long val) {
+			return static_cast<long double>(val) * ::scgms::One_Hour;
+		}
+		inline constexpr long double operator ""_min(unsigned long long val) {
+			return static_cast<long double>(val) * ::scgms::One_Minute;
+		}
+		inline constexpr long double operator ""_sec(unsigned long long val) {
+			return static_cast<long double>(val) * ::scgms::One_Second;
+		}
+
+	}
 
 	const size_t apxNo_Derivation = 0;
 	const size_t apxFirst_Order_Derivation = 1;
