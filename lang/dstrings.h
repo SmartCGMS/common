@@ -356,6 +356,17 @@ extern const wchar_t* dsUVa_Padova_S2017_Delivered_Insulin;
 extern const wchar_t* dsUVa_Padova_S2017_IOB;
 extern const wchar_t* dsUVa_Padova_S2017_COB;
 
+extern const wchar_t* dsGCT_Model_v1;
+extern const wchar_t* dsGCT_Model_v1_IG;
+extern const wchar_t* dsGCT_Model_v1_BG;
+extern const wchar_t* dsGCT_Model_v1_Delivered_Insulin;
+extern const wchar_t* dsGCT_Model_v1_IOB;
+extern const wchar_t* dsGCT_Model_v1_COB;
+
+extern const wchar_t* dsPhysical_Activity_Detection_Model;
+extern const wchar_t* dsPhysical_Activity_Detected_Signal;
+extern const wchar_t* dsHeart_Rate_Resting;
+
 extern const wchar_t* dsOref0_Solver;
 
 extern const wchar_t* dsIOB_Model;
@@ -917,6 +928,9 @@ extern const wchar_t* rsOref0_BG_COB_Prediction;
 extern const wchar_t* rsOref0_BG_UAM_Prediction;
 extern const wchar_t* rsOref0_BG_ZT_Prediction;
 extern const wchar_t* rsConstant_Model;
+
+extern const wchar_t* rsPhysical_Activity_Detection_Model;
+extern const wchar_t* rsHeart_Rate_Resting;
 
 extern const wchar_t* rsP_Column;
 extern const wchar_t* rsCg_Column;

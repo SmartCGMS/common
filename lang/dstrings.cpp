@@ -357,6 +357,17 @@ const wchar_t* dsUVa_Padova_S2017_Delivered_Insulin = L"UVa/Padova S2017 - Deliv
 const wchar_t* dsUVa_Padova_S2017_IOB = L"UVa/Padova S2017 - IOB";
 const wchar_t* dsUVa_Padova_S2017_COB = L"UVa/Padova S2017 - COB";
 
+const wchar_t* dsGCT_Model_v1 = L"GCT model v1";
+const wchar_t* dsGCT_Model_v1_IG = L"GCT model v1 - Interstitial glucose";
+const wchar_t* dsGCT_Model_v1_BG = L"GCT model v1 - Blood glucose";
+const wchar_t* dsGCT_Model_v1_Delivered_Insulin = L"GCT model v1 - Delivered insulin";
+const wchar_t* dsGCT_Model_v1_IOB = L"GCT model v1 - IOB";
+const wchar_t* dsGCT_Model_v1_COB = L"GCT model v1 - COB";
+
+const wchar_t* dsPhysical_Activity_Detection_Model = L"Physical activity detection";
+const wchar_t* dsPhysical_Activity_Detected_Signal = L"Detected physical activity";
+const wchar_t* dsHeart_Rate_Resting = L"HeartRate_resting";
+
 const wchar_t* dsOref0_Solver = L"oref0 solver";
 
 const wchar_t* dsIOB_Model = L"IOB";
@@ -950,6 +961,9 @@ const wchar_t* rsOref0_BG_COB_Prediction = L"oref0_bg_cob_prediction";
 const wchar_t* rsOref0_BG_UAM_Prediction = L"oref0_bg_uam_prediction";
 const wchar_t* rsOref0_BG_ZT_Prediction = L"oref0_bg_zt_prediction";
 const wchar_t* rsConstant_Model = L"constant_model";
+
+const wchar_t* rsPhysical_Activity_Detection_Model = L"Physical_activity_detection";
+const wchar_t* rsHeart_Rate_Resting = L"heartrate_Resting";
 
 const wchar_t* rsP_Column = L"p";
 const wchar_t* rsCg_Column = L"cg";
