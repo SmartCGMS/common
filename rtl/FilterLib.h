@@ -355,7 +355,8 @@ namespace scgms {
 		scgms::SFilter mOutput;	//aka the next_filter		
 	protected:
 		const GUID mDevice_ID = Invalid_GUID;
-		void Emit_Info(const scgms::NDevice_Event_Code code, const std::wstring &msg, const uint64_t segment_id = scgms::Invalid_Segment_Id) noexcept;
+		void Emit_Info(const scgms::NDevice_Event_Code code, const std::wstring& msg, const uint64_t segment_id = scgms::Invalid_Segment_Id) noexcept;
+		void Emit_Marker(const scgms::NDevice_Event_Code code, const double event_time, const uint64_t segment_id = scgms::Invalid_Segment_Id) noexcept;
 	protected:
 		//Descending class is supposed to implement these two methods only
 		virtual HRESULT Do_Execute(scgms::UDevice_Event event) = 0;
@@ -418,6 +419,12 @@ namespace scgms {
 	public:
 		SDrawing_Filter_Inspection() noexcept {};
 		SDrawing_Filter_Inspection(const SFilter &drawing_filter);
+	};
+
+	class SDrawing_Filter_Inspection_v2 : public std::shared_ptr<IDrawing_Filter_Inspection_v2> {
+	public:
+		SDrawing_Filter_Inspection_v2() noexcept {};
+		SDrawing_Filter_Inspection_v2(const SFilter& drawing_filter);
 	};
 
 	class SLog_Filter_Inspection : public std::shared_ptr<ILog_Filter_Inspection> {
