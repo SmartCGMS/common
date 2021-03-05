@@ -372,28 +372,43 @@ namespace scgms {
 	constexpr GUID IID_Drawing_Filter_Inspection_v2 = { 0x80c23438, 0x8eb8, 0x4e45, { 0xac, 0x35, 0x6f, 0x4e, 0xa8, 0xdc, 0xfc, 0xad } }; //{80C23438-8EB8-4E45-AC35-6F4EA8DCFCAD}
 	class IDrawing_Filter_Inspection_v2 : public virtual ILogical_Clock {
 	public:
-		//id identifies what to draw, e.g. graph, AGP or CEG for T2D. name is localization of what it displays
-		//as the renderer might not know the id beforehand 
-		//with IPlot_Drawing specialized drawers, scgms would supersede this
-		//virtual HRESULT IfaceCalling Get_Capabilities(GUID* const *plot_id, wchar_t* const *plot_name, size_t const *plot_count) const = 0;		
+		/**
+		 * Retrieves an array of supported plots
+		 * descs - a vector container of plot descriptors
+		 */
+		virtual HRESULT IfaceCalling Get_Capabilities(refcnt::IVector_Container<const TPlot_Descriptor>* descs) const = 0;
 
-		virtual HRESULT IfaceCalling Get_Available_Segments(refcnt::IVector_Container<uint64_t> *segments) = 0;
+		/**
+		 * Retrieves an array of supported segments
+		 * segments - container to be filled with segment IDs; the target must exist and point to a valid (preferably empty) container
+		 */
+		virtual HRESULT IfaceCalling Get_Available_Segments(refcnt::IVector_Container<uint64_t> *segments) const = 0;
 
-		//per given segment, it obtains a vector of avilable signals
-		virtual HRESULT IfaceCalling Get_Available_Signals(const uint64_t segment_id, refcnt::IVector_Container<GUID> *signal) = 0;
+		/**
+		 * Obtains a vector of available signals for given segment
+		 * segment_id - an ID of a segment of interest
+		 * out_signals - container to be filled with signal GUIDs; the target must exist and point to a valid (preferably empty) container
+		 */
+		virtual HRESULT IfaceCalling Get_Available_Signals(uint64_t segment_id, refcnt::IVector_Container<GUID> *out_signals) = 0;
 
-		// retrieves generated SVG for a given type of the plot
-		virtual HRESULT IfaceCalling Draw(const GUID *plot_id, refcnt::str_container *svg,									//what, how and where to draw 
-										  const uint64_t *segment, const size_t segment_count,								//which segments to draw
-										  const GUID *signal, const GUID *reference_signal, const size_t signal_count) = 0; //which signals to draw, optional, may be null depending on type
-										  //reference signal is optional and may be null - needed for e.g.; for error grids, then its size must match with signal size
-										  //when using reference signal to draw e.g.; an error grid, the filter is assumed take discrete levels
-										  //of the reference signal, while plotting them against continous levels of the signal
+		/**
+		 * Retrieves generated SVG for a given type of the plot
+		 * plot_id - ID of a plot to be drawn; this must be one of IDs advertised in Get_Capabilities
+		 * svg - a container to render result into; the target must exist and point to a valid empty container
+		 * segments - an array of segment IDs to draw; nullptr = all segments
+		 * segment_count - a size of segments array; if segments == nullptr, this has no effect
+		 * in_signals - an array of signal IDs to draw; nullptr = all signals
+		 * reference_signals - an array of reference signal IDs; reference signal is optional and may be null - needed for e.g.; for error grids, then its size must match with signal size
+		 *                     when using reference signal to draw e.g.; an error grid, the filter is assumed take discrete levels
+		 *                     of the reference signal, while plotting them against continous levels of the signal
+		 * signal_count - size of signals and reference_signals array; if in_signals == nullptr, this has no effect
+		 */
+		virtual HRESULT IfaceCalling Draw(const GUID *plot_id, refcnt::str_container *svg, const uint64_t *segments, const size_t segment_count, const GUID *in_signals, const GUID *reference_signals, const size_t signal_count) = 0;
 	};
 
 	class IPlot_Drawer : public virtual refcnt::IReferenced {
-		virtual HRESULT IfaceCalling Draw(refcnt::str_container *svg,			
-										const ITime_Segment **segment, const size_t segment_count,								
+		virtual HRESULT IfaceCalling Draw(refcnt::str_container *svg,
+										const ITime_Segment **segment, const size_t segment_count,
 										const GUID *signal, const GUID *reference_signal, const size_t signal_count) = 0;
 	};
 
