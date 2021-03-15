@@ -71,8 +71,7 @@ namespace scgms {
 			void* resolve_factory_symbol(const char* symbol_name) noexcept {
 
 				if (!gFactory_Library.Is_Loaded()) {
-					filesystem::path path = Get_Application_Dir();
-					path /= Get_Platform_Library_Name(factory_dynamic_lib_name);
+					std::wstring path = Get_Platform_Library_Name(factory_dynamic_lib_name);
 		
 					if (!gFactory_Library.Load(path)) {
 						return nullptr;
