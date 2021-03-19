@@ -60,6 +60,12 @@ namespace std
 		for (It itr = begin; itr != end; itr++)
 			fnc(*itr);
 	}
+
+	template<typename Fnc, typename It>
+	auto min_element(const execution ex, const It& begin, const It& end, Fnc fnc)
+	{
+		return std::min_element(begin, end, fnc);
+	}
 }
 #endif
 
