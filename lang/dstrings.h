@@ -234,6 +234,7 @@ extern const wchar_t *dsEmit_Shutdown_Msg;
 extern const wchar_t *dsLog_Header;
 extern const wchar_t *dsLog_Filter_Replay;
 extern const wchar_t* dsInterpret_Filename_As_Segment_Id;
+extern const wchar_t* dsEmit_All_Events_Before_Shutdown;
 extern const wchar_t* dsProcessing_File;
 extern const wchar_t* dsFile_Has_Not_Expected_Header;
 extern const wchar_t* dsUnexpected_Error_While_Parsing;
@@ -981,6 +982,7 @@ extern const wchar_t *rsRecalculate_On_Calibration;
 extern const wchar_t *rsLog_Output_File;
 extern const wchar_t *rsEmit_Shutdown_Msg;
 extern const wchar_t* rsInterpret_Filename_As_Segment_Id;
+extern const wchar_t* rsEmit_All_Events_Before_Shutdown;
 
 extern const wchar_t *rsDrawing_Filter_Period;
 extern const wchar_t *rsDiagnosis_Is_Type2;
