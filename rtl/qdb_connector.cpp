@@ -40,6 +40,7 @@
 
 #include "../rtl/manufactory.h"
 #include "../utils/DebugHelper.h"
+#include "../utils/QtUtils.h"
 #include <QtCore/QUuid>
 #include <QtCore/QVariant>
 #include <QtSql/QSqlError>
@@ -82,7 +83,7 @@ HRESULT IfaceCalling CDb_Query::Bind_Parameters(const db::TParameter *values, co
 			case db::NParameter_Type::ptBool:		mQuery.addBindValue(values[i].boolean != FALSE ? true : false);
 													break;
 
-			case db::NParameter_Type::ptGuid:		mQuery.addBindValue(QUuid(values[i].id));
+			case db::NParameter_Type::ptGuid:		mQuery.addBindValue(GUID_To_QUuid(values[i].id));
 													break;
 
 			case db::NParameter_Type::ptBinaryObect:mQuery.addBindValue(QByteArray(reinterpret_cast<const char*>(values[i].binary_object.data), static_cast<int>(values[i].binary_object.size)));
@@ -141,7 +142,7 @@ HRESULT IfaceCalling CDb_Query::Get_Next(db::TParameter* const values, const siz
 					case db::NParameter_Type::ptBool:		values[i].boolean = db_value.toBool() ? TRUE : FALSE;
 															break;
 
-					case db::NParameter_Type::ptGuid:		values[i].id = db_value.toUuid();
+					case db::NParameter_Type::ptGuid:		values[i].id = QUuid_To_GUID(db_value.toUuid());
 															break;
 
 					case db::NParameter_Type::ptBinaryObect:	// this might be potentially dangerous as we are assigning temporary object
