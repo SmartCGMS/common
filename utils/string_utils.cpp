@@ -101,23 +101,15 @@ std::string Lower_String(const std::string& wstr) {
 template <typename C>
 using str_2_dbl_string = std::basic_string<C, std::char_traits<C>, std::allocator<C>>;
 
-
 template <typename C>
 struct TNumeric_Chars {
-    static constexpr char dot = '.';
-    static constexpr char coma = ',';    
-    const static std::map<const std::string, double> known_symbols;
+    static constexpr C dot = char_type_selector<C>('.', L'.');
+    static constexpr C coma = char_type_selector<C>(',', L',');
+    static const std::map<const std::basic_string<C>, double> known_symbols;
 };
 
 template <>
-struct TNumeric_Chars<wchar_t> {
-    static constexpr wchar_t dot = '.';
-    static constexpr wchar_t coma = ',';
-    const static std::map<const std::wstring, double> known_symbols;
-};
-
-template <>
-const std::map<const std::string, double> TNumeric_Chars<char>::known_symbols = {
+const std::map<const std::basic_string<char>, double> TNumeric_Chars<char>::known_symbols = {
            {"oo", std::numeric_limits<double>::infinity()},
            {"inf", std::numeric_limits<double>::infinity()},
            {"infinity", std::numeric_limits<double>::infinity()},
@@ -134,8 +126,8 @@ const std::map<const std::string, double> TNumeric_Chars<char>::known_symbols = 
            {"-max", -std::numeric_limits<double>::max()}
 };
 
-
-const std::map<const std::wstring, double> TNumeric_Chars<wchar_t>::known_symbols = {
+template <>
+const std::map<const std::basic_string<wchar_t>, double> TNumeric_Chars<wchar_t>::known_symbols = {
            {L"\x221e", std::numeric_limits<double>::infinity()},
            {L"oo", std::numeric_limits<double>::infinity()},
            {L"inf", std::numeric_limits<double>::infinity()},

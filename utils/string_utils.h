@@ -43,6 +43,26 @@
 #include <string>
 #include <locale>
 
+ // compile-time type+value selector - ending part
+template<typename T, typename A0>
+static constexpr T char_type_selector(A0 arg0)
+{
+    if constexpr (std::is_same_v<T, A0>)
+        return arg0;
+    else
+        return static_cast<T>(arg0); // fallback to static cast of last parameter in pack
+}
+
+// compile-time type+value selector - recursive part
+template<typename T, typename A0, typename... Args>
+static constexpr T char_type_selector(A0 arg0, Args... args)
+{
+    if constexpr (std::is_same_v<T, A0>)
+        return arg0;
+    else
+        return char_type_selector<T>(args...);
+}
+
 template<typename CharT>
 class CDecimal_Separator : public std::numpunct<CharT> {
 protected:
