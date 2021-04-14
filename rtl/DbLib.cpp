@@ -39,6 +39,7 @@
 #include "DbLib.h"
 
 #include <set>
+#include <limits>
 
 namespace db {
 
