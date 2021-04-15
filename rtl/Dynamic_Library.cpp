@@ -73,6 +73,15 @@ bool CDynamic_Library::Load(const filesystem::path &file_path) noexcept {
     const auto converted_path = mLib_Path.wstring();
     mHandle = LoadLibraryW(converted_path.c_str());
 
+	// if the library was not found, and is requested by a relative path without leading dot, explicitly try to search in "current" directory;
+	// GNU/Linux and macOS does not do so automatically, so when "libname.so" is requested, we need to explicitly try "./libname.so"
+	// to find it in current location; the same applies to other relative paths, such as "filters/libname.so" --> "./filters/libname.so"
+	if (mHandle == NULL && mLib_Path.is_relative() && !converted_path.empty() && converted_path[0] != '.') {
+		mLib_Path = filesystem::path{ L"." } / mLib_Path;
+		const auto converted_path2 = mLib_Path.wstring();
+		mHandle = LoadLibraryW(converted_path2.c_str());
+	}
+
 	return mHandle != NULL;
 }
 
