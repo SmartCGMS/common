@@ -1232,3 +1232,5 @@ extern const wchar_t* rsSignal_Id;
 extern const wchar_t* rsResponse_Window;
 
 extern const wchar_t* rsFailed_to_allocate_memory;
+
+extern const wchar_t* rsUnused_Variable_Name;

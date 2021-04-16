@@ -839,7 +839,7 @@ const wchar_t* dsPeriod = L"period";
 const wchar_t* dsInvalid_Section_Name = L"Configuration, invalid section name: ";
 const wchar_t* dsCannot_Resolve_Filter_Descriptor = L"Cannot resolve filter descriptor by id: ";
 const wchar_t* dsMalformed_Filter_Parameter_Value = L"Malformed filter(1)-parameter(2)'s value(3): (1)";
-const wchar_t* dsFilter_Parameter_Not_Configured = L"Filter(1)-parameter(2) is not configured, default value will be used. Configure it, and save the configuration to fix it.\n(1)";
+const wchar_t* dsFilter_Parameter_Not_Configured = L"Filter(1)-parameter(2) is not configured, default value will be used.\nEither set it to $([[maybe_unused]]), or configure it, and save the configuration to remove whis warning.\n(1)";
 
 const wchar_t* dsParameters_to_optimize_not_found = L"Parameters to optimize were not found.";
 const wchar_t* dsParameters_to_optimize_could_not_be_read_bounds_including = L"Parameters to optimize could not be read, bounds including.";
@@ -1261,3 +1261,5 @@ const wchar_t* rsSignal_Id = L"Signal_ID";
 const wchar_t* rsResponse_Window = L"Response_Window";
 
 const wchar_t* rsFailed_to_allocate_memory = L"Failed to allocate memory!";
+
+const wchar_t* rsUnused_Variable_Name = L"$([[maybe_unused]])";
