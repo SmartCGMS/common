@@ -52,8 +52,7 @@ class CDynamic_Library final {
 	private:
 		// stored module handle (nullptr if invalid)
 		HMODULE mHandle;
-		// library base for given platform (sometimes needs to be set in runtime, on e.g. Android)
-		static filesystem::path mLibrary_Base;	// to avoid a memory leak due to TBB allocator
+		// loaded library path
 		filesystem::path mLib_Path;
 	public:
 		CDynamic_Library() noexcept;
@@ -80,10 +79,6 @@ class CDynamic_Library final {
 
 		// checks extension of supplied path to verify, if it's a library (platform-dependent check)
 		static bool Is_Library(const filesystem::path& path) noexcept;
-		// sets library base
-		static void Set_Library_Base(const filesystem::path& base) noexcept;
-		// retrieves library base directory
-		static filesystem::path Get_Library_Base() noexcept;
 
 		static filesystem::path Default_Extension() noexcept;
 };

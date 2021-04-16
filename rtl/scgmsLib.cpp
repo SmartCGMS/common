@@ -45,35 +45,20 @@ namespace scgms {
 
 		namespace internal {
 
-			const wchar_t *factory_dynamic_lib_name = L"scgms";
-
 		#ifdef _WIN32
-				const wchar_t* rsShared_Object_Prefix = L"";
-				const wchar_t* rsShared_Object_Extension = L".dll";
+			const wchar_t* factory_dynamic_lib_name = L"scgms.dll";
 		#elif __APPLE__
-				const wchar_t* rsShared_Object_Prefix = L"lib";
-				const wchar_t* rsShared_Object_Extension = L".dylib";
+			const wchar_t* factory_dynamic_lib_name = L"libscgms.dylib";
 		#else
-				const wchar_t* rsShared_Object_Prefix = L"lib";
-				const wchar_t* rsShared_Object_Extension = L".so";
+			const wchar_t* factory_dynamic_lib_name = L"libscgms.so";
 		#endif
-
-			std::wstring Get_Platform_Library_Name(const wchar_t* library_name) {
-				std::wstring name = rsShared_Object_Prefix;
-				name += library_name;
-				name += rsShared_Object_Extension;
-
-				return name;
-			}
 
 			CDynamic_Library gFactory_Library;
 
 			void* resolve_factory_symbol(const char* symbol_name) noexcept {
 
 				if (!gFactory_Library.Is_Loaded()) {
-					std::wstring path = Get_Platform_Library_Name(factory_dynamic_lib_name);
-		
-					if (!gFactory_Library.Load(path)) {
+					if (!gFactory_Library.Load(std::wstring{ factory_dynamic_lib_name })) {
 						return nullptr;
 					}
 				}
