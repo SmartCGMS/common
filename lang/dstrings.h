@@ -363,6 +363,13 @@ extern const wchar_t* dsGCT_Model_v1_Delivered_Insulin;
 extern const wchar_t* dsGCT_Model_v1_IOB;
 extern const wchar_t* dsGCT_Model_v1_COB;
 
+extern const wchar_t* dsGCT_Model_v2;
+extern const wchar_t* dsGCT_Model_v2_IG;
+extern const wchar_t* dsGCT_Model_v2_BG;
+extern const wchar_t* dsGCT_Model_v2_Delivered_Insulin;
+extern const wchar_t* dsGCT_Model_v2_IOB;
+extern const wchar_t* dsGCT_Model_v2_COB;
+
 extern const wchar_t* dsPhysical_Activity_Detection_Model;
 extern const wchar_t* dsPhysical_Activity_Detected_Signal;
 extern const wchar_t* dsHeart_Rate_Resting;

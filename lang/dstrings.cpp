@@ -364,6 +364,13 @@ const wchar_t* dsGCT_Model_v1_Delivered_Insulin = L"GCT model v1 - Delivered ins
 const wchar_t* dsGCT_Model_v1_IOB = L"GCT model v1 - IOB";
 const wchar_t* dsGCT_Model_v1_COB = L"GCT model v1 - COB";
 
+const wchar_t* dsGCT_Model_v2 = L"GCT model v2";
+const wchar_t* dsGCT_Model_v2_IG = L"GCT model v2 - Interstitial glucose";
+const wchar_t* dsGCT_Model_v2_BG = L"GCT model v2 - Blood glucose";
+const wchar_t* dsGCT_Model_v2_Delivered_Insulin = L"GCT model v2 - Delivered insulin";
+const wchar_t* dsGCT_Model_v2_IOB = L"GCT model v2 - IOB";
+const wchar_t* dsGCT_Model_v2_COB = L"GCT model v2 - COB";
+
 const wchar_t* dsPhysical_Activity_Detection_Model = L"Physical activity detection";
 const wchar_t* dsPhysical_Activity_Detected_Signal = L"Detected physical activity";
 const wchar_t* dsHeart_Rate_Resting = L"HeartRate_resting";

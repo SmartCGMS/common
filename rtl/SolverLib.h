@@ -51,6 +51,9 @@ namespace std
 	// minimal substitute for missing execution header (for pre C++20 compilers)
 
 	enum class execution {
+		seq,
+		unseq,
+		par,
 		par_unseq
 	};
 
