@@ -797,6 +797,7 @@ const wchar_t* dsPattern_Prediction_Signal = L"Pattern ist. prediction";
 const wchar_t* dsParameters_File = L"Parameters file";
 const wchar_t* dsDo_Not_Update_Parameters_File = L"Do not update the parameters file";
 const wchar_t* dsDo_Not_Learn = L"Do not learn";
+const wchar_t* dsUse_Config_parameters = L"Use config parameters";
 
 const wchar_t* dsWeighted_Moving_Average = L"Weighted Moving Average";
 const wchar_t* dsWeight_0 = L"Weight t-00";
@@ -1234,6 +1235,7 @@ const wchar_t* rsPattern_Prediction_Model = L"Pattern_IG_Prediction";
 const wchar_t* rsParameters_File = L"Parameters_File";
 const wchar_t* rsDo_Not_Update_Parameters_File = L"Do_Not_Update_Parameters_File";
 const wchar_t* rsDo_Not_Learn = L"Do_Not_Learn";
+const wchar_t* rsUse_Config_parameters = L"Use_Config_Parameters";
 
 const wchar_t* rsIcarus_v1_AI_Boluses = L"Icarus_v1_AI_Boluses";
 const wchar_t* rsBolus_Offset = L"Bolus_Offset_";
