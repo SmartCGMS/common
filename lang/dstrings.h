@@ -424,17 +424,13 @@ extern const wchar_t* dsMT_MetaDE;
 extern const wchar_t* dsHalton_MetaDE;
 extern const wchar_t* dsRnd_MetaDE;
 extern const wchar_t* dsBOBYQA;
-extern const wchar_t* dsHalton_Zooming;
-//extern const wchar_t* dsPathfinder;
 extern const wchar_t* dsPathfinder_Spiral;
 extern const wchar_t* dsPathfinder_Landscape;
-/*extern const wchar_t* dsPathfinder_LD_Directions;
-extern const wchar_t* dsPathfinder_LD_Population;
-extern const wchar_t* dsPathfinder_LD_Directions_Population;
-*/
+
 extern const wchar_t* dsPathfinder_Fast;
 extern const wchar_t* dsSequential_Brute_Force_Scan;
 extern const wchar_t* dsSequential_Convex_Scan;
+extern const wchar_t* dsPSO_Halton;
 extern const wchar_t* dsPSO;
 extern const wchar_t* dsSADE;
 extern const wchar_t* dsDE1220;
@@ -531,8 +527,6 @@ extern const wchar_t *dsSignal_GUI_Name_Carb_Ratio;
 extern const wchar_t *dsSignal_GUI_Name_Unknown;
 
 extern const wchar_t *dsSolver_Progress_Box_Title;
-//extern const wchar_t *dsError_Absolute;
-//extern const wchar_t *dsError_Relative;
 
 extern const wchar_t *dsCould_Not_Init_Network;
 extern const wchar_t *dsInvalid_Network_Port;
