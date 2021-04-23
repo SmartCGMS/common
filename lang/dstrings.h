@@ -850,6 +850,7 @@ extern const wchar_t* dsFailed_to_execute_first_filters;
 extern const wchar_t* dsCannot_read_configuration;
 extern const wchar_t* dsCannot_read_filter_id;
 extern const wchar_t* dsFailed_to_configure_filter;
+extern const wchar_t* dsLast_RC;
 extern const wchar_t* dsFeedback_sender_not_connected;
 extern const wchar_t* dsFilter_configuration_param_value_error;
 extern const wchar_t* dsStored_Parameters_Corrupted_Not_Loaded;

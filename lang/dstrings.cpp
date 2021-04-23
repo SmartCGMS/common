@@ -848,6 +848,7 @@ const wchar_t* dsFailed_to_execute_first_filters = L"Failed to execute first fil
 const wchar_t* dsCannot_read_configuration = L"Cannot read configuration";
 const wchar_t* dsCannot_read_filter_id = L"Cannot read filter id.";
 const wchar_t* dsFailed_to_configure_filter = L"Failed to configure filter with id: ";
+const wchar_t* dsLast_RC = L"Error code: ";
 const wchar_t* dsFeedback_sender_not_connected = L"Feedback-sender not connected, sender's name: ";
 const wchar_t* dsFilter_configuration_param_value_error = L"Filter(1)-parameter(2) value(3) error: (1)";
 const wchar_t* dsStored_Parameters_Corrupted_Not_Loaded = L"Stored parameters are corruped and were not loaded.";
