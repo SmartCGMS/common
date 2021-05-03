@@ -55,7 +55,7 @@ static constexpr T char_type_selector(A0 arg0)
 
 // compile-time type+value selector - recursive part
 template<typename T, typename A0, typename... Args>
-static constexpr T char_type_selector(A0 arg0, Args... args)
+static constexpr T char_type_selector([[maybe_unused]] A0 arg0, Args... args)
 {
     if constexpr (std::is_same_v<T, A0>)
         return arg0;
