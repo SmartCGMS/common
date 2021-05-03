@@ -238,6 +238,7 @@ extern const wchar_t *dsEmit_Shutdown_Msg;
 extern const wchar_t *dsLog_Header;
 extern const wchar_t *dsLog_Filter_Replay;
 extern const wchar_t* dsInterpret_Filename_As_Segment_Id;
+extern const wchar_t* dsEmit_All_Events_Before_Shutdown;
 extern const wchar_t* dsProcessing_File;
 extern const wchar_t* dsFile_Has_Not_Expected_Header;
 extern const wchar_t* dsUnexpected_Error_While_Parsing;
@@ -445,16 +446,13 @@ extern const wchar_t* dsMT_MetaDE;
 extern const wchar_t* dsHalton_MetaDE;
 extern const wchar_t* dsRnd_MetaDE;
 extern const wchar_t* dsBOBYQA;
-extern const wchar_t* dsHalton_Zooming;
-//extern const wchar_t* dsPathfinder;
 extern const wchar_t* dsPathfinder_Spiral;
 extern const wchar_t* dsPathfinder_Landscape;
-/*extern const wchar_t* dsPathfinder_LD_Directions;
-extern const wchar_t* dsPathfinder_LD_Population;
-extern const wchar_t* dsPathfinder_LD_Directions_Population;
-*/
+
 extern const wchar_t* dsPathfinder_Fast;
 extern const wchar_t* dsSequential_Brute_Force_Scan;
+extern const wchar_t* dsSequential_Convex_Scan;
+extern const wchar_t* dsPSO_Halton;
 extern const wchar_t* dsPSO;
 extern const wchar_t* dsSADE;
 extern const wchar_t* dsDE1220;
@@ -552,8 +550,6 @@ extern const wchar_t *dsSignal_GUI_Name_Carb_Ratio;
 extern const wchar_t *dsSignal_GUI_Name_Unknown;
 
 extern const wchar_t *dsSolver_Progress_Box_Title;
-//extern const wchar_t *dsError_Absolute;
-//extern const wchar_t *dsError_Relative;
 
 extern const wchar_t *dsCould_Not_Init_Network;
 extern const wchar_t *dsInvalid_Network_Port;
@@ -636,6 +632,7 @@ extern const wchar_t* dsPattern_Prediction_Signal;
 extern const wchar_t* dsParameters_File;
 extern const wchar_t* dsDo_Not_Update_Parameters_File;
 extern const wchar_t* dsDo_Not_Learn;
+extern const wchar_t* dsUse_Config_parameters;
 
 extern const wchar_t* dsWeighted_Moving_Average;
 extern const wchar_t* dsWeight_0;
@@ -893,6 +890,7 @@ extern const wchar_t* dsFailed_to_execute_first_filters;
 extern const wchar_t* dsCannot_read_configuration;
 extern const wchar_t* dsCannot_read_filter_id;
 extern const wchar_t* dsFailed_to_configure_filter;
+extern const wchar_t* dsLast_RC;
 extern const wchar_t* dsFeedback_sender_not_connected;
 extern const wchar_t* dsFilter_configuration_param_value_error;
 extern const wchar_t* dsStored_Parameters_Corrupted_Not_Loaded;
@@ -1027,6 +1025,7 @@ extern const wchar_t *rsRecalculate_On_Calibration;
 extern const wchar_t *rsLog_Output_File;
 extern const wchar_t *rsEmit_Shutdown_Msg;
 extern const wchar_t* rsInterpret_Filename_As_Segment_Id;
+extern const wchar_t* rsEmit_All_Events_Before_Shutdown;
 
 extern const wchar_t *rsDrawing_Filter_Period;
 extern const wchar_t *rsDiagnosis_Is_Type2;
@@ -1250,6 +1249,7 @@ extern const wchar_t* rsPattern_Prediction_Model;
 extern const wchar_t* rsParameters_File;
 extern const wchar_t* rsDo_Not_Update_Parameters_File;
 extern const wchar_t* rsDo_Not_Learn;
+extern const wchar_t* rsUse_Config_parameters;
 
 extern const wchar_t* rsIcarus_v1_AI_Boluses;
 extern const wchar_t* rsBolus_Offset;
@@ -1276,3 +1276,5 @@ extern const wchar_t* rsSignal_Id;
 extern const wchar_t* rsResponse_Window;
 
 extern const wchar_t* rsFailed_to_allocate_memory;
+
+extern const wchar_t* rsUnused_Variable_Name;

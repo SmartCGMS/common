@@ -110,6 +110,10 @@ using TNative_Execute_Wrapper = HRESULT(IfaceCalling*)(
 	}
 #else
 	#define DLL_EXPORT
+
+	#ifndef APIENTRY
+		#define APIENTRY
+	#endif
 #endif
 
 

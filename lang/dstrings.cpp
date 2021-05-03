@@ -241,6 +241,7 @@ const wchar_t *dsEmit_Shutdown_Msg = L"Emit the shutdown message";
 const wchar_t *dsLog_Header = L"Logical Clock; Device Time; Event Code; Signal; Info; Segment Id; Event Code Id; Device Id; Signal Id";
 const wchar_t *dsLog_Filter_Replay = L"CSV File Log Replay";
 const wchar_t* dsInterpret_Filename_As_Segment_Id = L"Interpret filename as segment id";
+const wchar_t* dsEmit_All_Events_Before_Shutdown = L"Emit all events before shutdown";
 const wchar_t* dsProcessing_File = L"Processing file: ";
 const wchar_t* dsFile_Has_Not_Expected_Header = L"Expected header not found, will assume standard one. Filename: ";
 const wchar_t* dsUnexpected_Error_While_Parsing = L"Unexpected error while parsing file: ";
@@ -452,16 +453,13 @@ const wchar_t* dsHalton_MetaDE = L"Halton MetaDE";
 const wchar_t* dsRnd_MetaDE = L"RND MetaDE";
 const wchar_t* dsMetaDE = L"MetaDE";
 const wchar_t* dsBOBYQA = L"BOBYQA";
-const wchar_t* dsHalton_Zooming = L"Halton Zooming";
-/*const wchar_t* dsPathfinder = L"Pathfinder";
-const wchar_t* dsPathfinder_LD_Directions = L"Pathfinder, LD Dir";
-const wchar_t* dsPathfinder_LD_Population = L"Pathfinder, LD Pop";
-const wchar_t* dsPathfinder_LD_Directions_Population = L"Pathfinder, LD Dir Pop";
-*/
+
 const wchar_t* dsPathfinder_Fast = L"Pathfinder, fast";
 const wchar_t* dsPathfinder_Spiral = L"Pathfinder, spiral";
 const wchar_t* dsPathfinder_Landscape = L"Pathfinder, landscape";
 const wchar_t* dsSequential_Brute_Force_Scan = L"Sequential Brute Force Scan";
+const wchar_t* dsSequential_Convex_Scan = L"Sequential Convex Scan";
+const wchar_t* dsPSO_Halton = L"Halton PSO";
 const wchar_t* dsPSO = L"PSO";
 const wchar_t* dsSADE = L"SADE";
 const wchar_t* dsDE1220 = L"DE1220";
@@ -836,6 +834,7 @@ const wchar_t* dsPattern_Prediction_Signal = L"Pattern ist. prediction";
 const wchar_t* dsParameters_File = L"Parameters file";
 const wchar_t* dsDo_Not_Update_Parameters_File = L"Do not update the parameters file";
 const wchar_t* dsDo_Not_Learn = L"Do not learn";
+const wchar_t* dsUse_Config_parameters = L"Use config parameters";
 
 const wchar_t* dsWeighted_Moving_Average = L"Weighted Moving Average";
 const wchar_t* dsWeight_0 = L"Weight t-00";
@@ -878,7 +877,7 @@ const wchar_t* dsPeriod = L"period";
 const wchar_t* dsInvalid_Section_Name = L"Configuration, invalid section name: ";
 const wchar_t* dsCannot_Resolve_Filter_Descriptor = L"Cannot resolve filter descriptor by id: ";
 const wchar_t* dsMalformed_Filter_Parameter_Value = L"Malformed filter(1)-parameter(2)'s value(3): (1)";
-const wchar_t* dsFilter_Parameter_Not_Configured = L"Filter(1)-parameter(2) is not configured, default value will be used. Configure it, and save the configuration to fix it.\n(1)";
+const wchar_t* dsFilter_Parameter_Not_Configured = L"Filter(1)-parameter(2) is not configured, default value will be used.\nEither set it to $([[maybe_unused]]), or configure it, and save the configuration to remove whis warning.\n(1)";
 
 const wchar_t* dsParameters_to_optimize_not_found = L"Parameters to optimize were not found.";
 const wchar_t* dsParameters_to_optimize_could_not_be_read_bounds_including = L"Parameters to optimize could not be read, bounds including.";
@@ -889,6 +888,7 @@ const wchar_t* dsFailed_to_execute_first_filters = L"Failed to execute first fil
 const wchar_t* dsCannot_read_configuration = L"Cannot read configuration";
 const wchar_t* dsCannot_read_filter_id = L"Cannot read filter id.";
 const wchar_t* dsFailed_to_configure_filter = L"Failed to configure filter with id: ";
+const wchar_t* dsLast_RC = L"Error code: ";
 const wchar_t* dsFeedback_sender_not_connected = L"Feedback-sender not connected, sender's name: ";
 const wchar_t* dsFilter_configuration_param_value_error = L"Filter(1)-parameter(2) value(3) error: (1)";
 const wchar_t* dsStored_Parameters_Corrupted_Not_Loaded = L"Stored parameters are corruped and were not loaded.";
@@ -1059,6 +1059,7 @@ const wchar_t *rsRecalculate_On_Calibration = L"Recalculate_On_Calibration";
 const wchar_t *rsLog_Output_File = L"Log_File";
 const wchar_t *rsEmit_Shutdown_Msg = L"Emit_Shutdown";
 const wchar_t *rsInterpret_Filename_As_Segment_Id = L"Filename_as_segment_id";
+const wchar_t *rsEmit_All_Events_Before_Shutdown = L"Emit_All_Events_Before_Shutdown";
 
 const wchar_t *rsDrawing_Filter_Period = L"Redraw_Period";
 const wchar_t *rsDiagnosis_Is_Type2 = L"Diabetes_Type_2";
@@ -1278,6 +1279,7 @@ const wchar_t* rsPattern_Prediction_Model = L"Pattern_IG_Prediction";
 const wchar_t* rsParameters_File = L"Parameters_File";
 const wchar_t* rsDo_Not_Update_Parameters_File = L"Do_Not_Update_Parameters_File";
 const wchar_t* rsDo_Not_Learn = L"Do_Not_Learn";
+const wchar_t* rsUse_Config_parameters = L"Use_Config_Parameters";
 
 const wchar_t* rsIcarus_v1_AI_Boluses = L"Icarus_v1_AI_Boluses";
 const wchar_t* rsBolus_Offset = L"Bolus_Offset_";
@@ -1301,4 +1303,9 @@ const wchar_t* rsWeight_45 = L"Weight_45";
 const wchar_t* rsWeight_50 = L"Weight_50";
 const wchar_t* rsWeight_55 = L"Weight_55";
 
+const wchar_t* rsSignal_Id = L"Signal_ID";
+const wchar_t* rsResponse_Window = L"Response_Window";
+
 const wchar_t* rsFailed_to_allocate_memory = L"Failed to allocate memory!";
+
+const wchar_t* rsUnused_Variable_Name = L"$([[maybe_unused]])";
