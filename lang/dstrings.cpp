@@ -1018,9 +1018,6 @@ const wchar_t* rsRemove_From_Source = L"Remove_from_source";
 const wchar_t* rsCondition = L"Condition";
 const wchar_t* rsCollect_Statistics = L"Collect_statistics";
 
-const wchar_t* rsSignal_Id = L"Signal_ID";
-const wchar_t* rsResponse_Window = L"Response_Window";
-
 const wchar_t *rsRecalculate_Past_On_Params = L"Recalculate_Past_On_Params";
 
 const wchar_t *rsGen_IG_Offset = L"IG_Level_Offset";
