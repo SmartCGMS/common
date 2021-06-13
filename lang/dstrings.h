@@ -185,9 +185,9 @@ extern const wchar_t *dsRecalculate_On_Calibration;
 
 extern const wchar_t *dsFile_Reader;
 extern const wchar_t *dsInput_Values_File;
-extern const wchar_t *dsInput_Segment_Spacing;
-extern const wchar_t *dsMinimum_Segment_Levels;
-extern const wchar_t *dsRequire_IG_BG;
+extern const wchar_t *dsMaximum_IG_Interval;
+extern const wchar_t *dsMinimum_Required_IGs;
+extern const wchar_t *dsRequire_BG;
 extern const wchar_t* dsFailed_To_Send_Event;
 
 extern const wchar_t *dsHold_Values_Delay;
@@ -930,7 +930,7 @@ extern const wchar_t *rsNet_Port;
 extern const wchar_t *rsNet_RecvSide;
 
 extern const wchar_t *rsInput_Values_File;
-extern const wchar_t *rsInput_Segment_Spacing;
+extern const wchar_t *rsMaximum_IG_Interval;
 
 extern const wchar_t *rsHold_Values_Delay;
 
@@ -1083,8 +1083,8 @@ extern const wchar_t* rsConstantParam;
 
 extern const char* rsRattime_Edit_Mask;
 extern const wchar_t *rsShutdown_After_Last;
-extern const wchar_t *rsMinimum_Segment_Levels;
-extern const wchar_t *rsRequire_IG_BG;
+extern const wchar_t *rsMinimum_Required_IGs;
+extern const wchar_t *rsRequire_BG;
 
 extern const wchar_t *rsGenerate_Primary_Keys;
 extern const wchar_t *rsStore_Data;

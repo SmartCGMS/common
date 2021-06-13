@@ -186,9 +186,9 @@ const wchar_t *dsRecalculate_On_Calibration = L"Recalculate on calibration";
 
 const wchar_t *dsFile_Reader = L"File Reader";
 const wchar_t *dsInput_Values_File = L"Input file";
-const wchar_t *dsInput_Segment_Spacing = L"Segment spacing [s]";
-const wchar_t *dsMinimum_Segment_Levels = L"Segment value minimum count";
-const wchar_t *dsRequire_IG_BG = L"Require both IG and BG values";
+const wchar_t *dsMaximum_IG_Interval = L"Maximum IG interval";
+const wchar_t *dsMinimum_Required_IGs = L"Minimum IG levels";
+const wchar_t *dsRequire_BG = L"Require BG levels";
 const wchar_t* dsFailed_To_Send_Event = L" failed to send event. Return code: ";
 
 const wchar_t *dsHold_Values_Delay = L"Hold delay [ms] (0 for real-time)";
@@ -965,7 +965,7 @@ const wchar_t *rsNet_Port = L"Port";
 const wchar_t *rsNet_RecvSide = L"Is_Recv";
 
 const wchar_t *rsInput_Values_File = L"Input_File";
-const wchar_t *rsInput_Segment_Spacing = L"Segment_Spacing";
+const wchar_t *rsMaximum_IG_Interval = L"Maximum_IG_Interval";
 
 const wchar_t *rsHold_Values_Delay = L"Hold_Delay";
 
@@ -1113,8 +1113,8 @@ const wchar_t* rsLog_Date_Time_Format = L"%Y-%m-%d %H:%M:%S";
 const wchar_t* rsLog_CSV_Separator = L"; ";
 const char* rsRattime_Edit_Mask = "h:mm:ss.zzz";
 const wchar_t *rsShutdown_After_Last = L"Shutdown_After_Last";
-const wchar_t *rsMinimum_Segment_Levels = L"Minimum_Segment_Levels";
-const wchar_t *rsRequire_IG_BG = L"Require_IG_BG";
+const wchar_t *rsMinimum_Required_IGs = L"Minimum_Required_IGs";
+const wchar_t *rsRequire_BG = L"Require_BG";
 
 const wchar_t* rsConstantParam = L"c";
 
