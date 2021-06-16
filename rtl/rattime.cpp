@@ -104,7 +104,7 @@ std::wstring Rat_Time_To_Local_Time_WStr(const double rt, const wchar_t *fmt) {
 
 double Local_Time_WStr_To_Rat_Time(const std::wstring& str, const wchar_t* fmt) noexcept {
 
-	struct tm ptm;
+	struct tm ptm {};	//zero initialized, otherwise a ranomd value may randomly trigger daylight saving offset on/off
 	std::wistringstream ss(str);
 	ss >> std::get_time(&ptm, fmt);	
 
