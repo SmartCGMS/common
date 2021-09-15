@@ -795,6 +795,9 @@ const wchar_t* dsParameters_File = L"Parameters file";
 const wchar_t* dsDo_Not_Update_Parameters_File = L"Do not update the parameters file";
 const wchar_t* dsDo_Not_Learn = L"Do not learn";
 const wchar_t* dsUse_Config_parameters = L"Use config parameters";
+const wchar_t* dsSliding_Window_Length = L"Sliding Window Length";
+const wchar_t* dsLearned_Data_Filename_Prefix = L"Learned Data Filename Prefix";
+const wchar_t* dsExperimental = L"Experimental";
 
 const wchar_t* dsWeighted_Moving_Average = L"Weighted Moving Average";
 const wchar_t* dsWeight_0 = L"Weight t-00";
@@ -1234,6 +1237,8 @@ const wchar_t* rsParameters_File = L"Parameters_File";
 const wchar_t* rsDo_Not_Update_Parameters_File = L"Do_Not_Update_Parameters_File";
 const wchar_t* rsDo_Not_Learn = L"Do_Not_Learn";
 const wchar_t* rsUse_Config_parameters = L"Use_Config_Parameters";
+const wchar_t* rsSliding_Window_Length = L"Sliding_Window_Length";
+const wchar_t* rsLearned_Data_Filename_Prefix = L"Learned_Data_Filename_Prefix";
 
 const wchar_t* rsIcarus_v1_AI_Boluses = L"Icarus_v1_AI_Boluses";
 const wchar_t* rsBolus_Offset = L"Bolus_Offset_";
