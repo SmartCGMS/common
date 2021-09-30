@@ -316,6 +316,7 @@ extern const wchar_t* dsIntegral_CDF;
 extern const wchar_t* dsAvg_Plus_Bessel_Std_Dev;
 extern const wchar_t* dsRMSE;
 extern const wchar_t* dsExpWtDiffPolar;
+extern const wchar_t* dsAvg_Pow_StdDev_Metric;
 
 extern const wchar_t* dsBlood;
 extern const wchar_t* dsInterstitial;

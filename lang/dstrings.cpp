@@ -316,6 +316,7 @@ const wchar_t* dsIntegral_CDF = L"area under ECDF";
 const wchar_t* dsAvg_Plus_Bessel_Std_Dev = L"average plus standard deviation with Bessel's correction, within threshold to 1-threshold percentiles";
 const wchar_t* dsRMSE = L"RMSE";
 const wchar_t* dsExpWtDiffPolar = L"weighted average error preferring positive differences";
+const wchar_t* dsAvg_Pow_StdDev_Metric = L"avg^sd";
 
 const wchar_t* dsBlood = L"blood";
 const wchar_t* dsInterstitial = L"interstitial fluid";
