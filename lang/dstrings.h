@@ -594,6 +594,9 @@ extern const wchar_t* dsParameters_File;
 extern const wchar_t* dsDo_Not_Update_Parameters_File;
 extern const wchar_t* dsDo_Not_Learn;
 extern const wchar_t* dsUse_Config_parameters;
+extern const wchar_t* dsSliding_Window_Length;
+extern const wchar_t* dsLearned_Data_Filename_Prefix;
+extern const wchar_t* dsExperimental;
 
 extern const wchar_t* dsWeighted_Moving_Average;
 extern const wchar_t* dsWeight_0;
@@ -1205,6 +1208,8 @@ extern const wchar_t* rsParameters_File;
 extern const wchar_t* rsDo_Not_Update_Parameters_File;
 extern const wchar_t* rsDo_Not_Learn;
 extern const wchar_t* rsUse_Config_parameters;
+extern const wchar_t* rsSliding_Window_Length;
+extern const wchar_t* rsLearned_Data_Filename_Prefix;
 
 extern const wchar_t* rsIcarus_v1_AI_Boluses;
 extern const wchar_t* rsBolus_Offset;
