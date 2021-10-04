@@ -130,7 +130,7 @@ using TNative_Execute_Wrapper = HRESULT(IfaceCalling*)(
 		return rc;
 	}
 
-	extern "C" size_t custom_data_size() {
+	extern "C" DLL_EXPORT size_t custom_data_size() {
 		return custom_data_sizeof<TCustom_Data>;
 	}
 

@@ -188,9 +188,9 @@ const wchar_t *dsRecalculate_On_Calibration = L"Recalculate on calibration";
 
 const wchar_t *dsFile_Reader = L"File Reader";
 const wchar_t *dsInput_Values_File = L"Input file";
-const wchar_t *dsInput_Segment_Spacing = L"Segment spacing [s]";
-const wchar_t *dsMinimum_Segment_Levels = L"Segment value minimum count";
-const wchar_t *dsRequire_IG_BG = L"Require both IG and BG values";
+const wchar_t *dsMaximum_IG_Interval = L"Maximum IG interval";
+const wchar_t *dsMinimum_Required_IGs = L"Minimum IG levels";
+const wchar_t *dsRequire_BG = L"Require BG levels";
 const wchar_t* dsFailed_To_Send_Event = L" failed to send event. Return code: ";
 
 const wchar_t *dsHold_Values_Delay = L"Hold delay [ms] (0 for real-time)";
@@ -320,6 +320,7 @@ const wchar_t* dsIntegral_CDF = L"area under ECDF";
 const wchar_t* dsAvg_Plus_Bessel_Std_Dev = L"average plus standard deviation with Bessel's correction, within threshold to 1-threshold percentiles";
 const wchar_t* dsRMSE = L"RMSE";
 const wchar_t* dsExpWtDiffPolar = L"weighted average error preferring positive differences";
+const wchar_t* dsAvg_Pow_StdDev_Metric = L"avg^sd";
 
 const wchar_t* dsBlood = L"blood";
 const wchar_t* dsInterstitial = L"interstitial fluid";
@@ -835,6 +836,9 @@ const wchar_t* dsParameters_File = L"Parameters file";
 const wchar_t* dsDo_Not_Update_Parameters_File = L"Do not update the parameters file";
 const wchar_t* dsDo_Not_Learn = L"Do not learn";
 const wchar_t* dsUse_Config_parameters = L"Use config parameters";
+const wchar_t* dsSliding_Window_Length = L"Sliding Window Length";
+const wchar_t* dsLearned_Data_Filename_Prefix = L"Learned Data Filename Prefix";
+const wchar_t* dsExperimental = L"Experimental";
 
 const wchar_t* dsWeighted_Moving_Average = L"Weighted Moving Average";
 const wchar_t* dsWeight_0 = L"Weight t-00";
@@ -1008,7 +1012,7 @@ const wchar_t *rsNet_Port = L"Port";
 const wchar_t *rsNet_RecvSide = L"Is_Recv";
 
 const wchar_t *rsInput_Values_File = L"Input_File";
-const wchar_t *rsInput_Segment_Spacing = L"Segment_Spacing";
+const wchar_t *rsMaximum_IG_Interval = L"Maximum_IG_Interval";
 
 const wchar_t *rsHold_Values_Delay = L"Hold_Delay";
 
@@ -1156,8 +1160,8 @@ const wchar_t* rsLog_Date_Time_Format = L"%Y-%m-%d %H:%M:%S";
 const wchar_t* rsLog_CSV_Separator = L"; ";
 const char* rsRattime_Edit_Mask = "h:mm:ss.zzz";
 const wchar_t *rsShutdown_After_Last = L"Shutdown_After_Last";
-const wchar_t *rsMinimum_Segment_Levels = L"Minimum_Segment_Levels";
-const wchar_t *rsRequire_IG_BG = L"Require_IG_BG";
+const wchar_t *rsMinimum_Required_IGs = L"Minimum_Required_IGs";
+const wchar_t *rsRequire_BG = L"Require_BG";
 
 const wchar_t* rsConstantParam = L"c";
 
@@ -1277,6 +1281,8 @@ const wchar_t* rsParameters_File = L"Parameters_File";
 const wchar_t* rsDo_Not_Update_Parameters_File = L"Do_Not_Update_Parameters_File";
 const wchar_t* rsDo_Not_Learn = L"Do_Not_Learn";
 const wchar_t* rsUse_Config_parameters = L"Use_Config_Parameters";
+const wchar_t* rsSliding_Window_Length = L"Sliding_Window_Length";
+const wchar_t* rsLearned_Data_Filename_Prefix = L"Learned_Data_Filename_Prefix";
 
 const wchar_t* rsIcarus_v1_AI_Boluses = L"Icarus_v1_AI_Boluses";
 const wchar_t* rsBolus_Offset = L"Bolus_Offset_";

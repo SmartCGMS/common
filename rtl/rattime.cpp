@@ -53,7 +53,7 @@
 int Get_UTC_Offset()
 {
 	time_t gmt, rawtime = time(nullptr);
-	struct tm ptm;
+	struct tm ptm {}; //zero initalize all possibly non-set elements like daylight saving
 
 	gmtime_s(&ptm, &rawtime);
 
@@ -79,7 +79,7 @@ time_t Rat_Time_To_Unix_Time(const double rt)
 
 std::string Rat_Time_To_Local_Time_Str(const double rt, const char *fmt) {
 	time_t ltim = Rat_Time_To_Unix_Time(rt);
-	struct tm ptm;
+	struct tm ptm {}; //zero initalize all possibly non-set elements like daylight saving
 	localtime_s(&ptm, &ltim);
 
 	std::ostringstream os;
@@ -93,7 +93,7 @@ std::wstring Rat_Time_To_Local_Time_WStr(const double rt, const wchar_t *fmt) {
 
 	time_t ltim = Rat_Time_To_Unix_Time(rt);
 
-	struct tm ptm;
+	struct tm ptm {}; //zero initalize all possibly non-set elements like daylight saving
 	localtime_s(&ptm, &ltim);
 
 	std::wostringstream os;
@@ -109,6 +109,8 @@ double Local_Time_WStr_To_Rat_Time(const std::wstring& str, const wchar_t* fmt) 
 	std::wistringstream ss(str);
 	ss >> std::get_time(&ptm, fmt);
 
+	ptm.tm_isdst = -1;					//because Rat_Time_To_Local_Time_WStr is the inverse function to this one, and it ses localtime_s which makes automatic correction
+										//hence, we need to let the system to decide
 	time_t ltim = mktime(&ptm);
 
 	return ltim != -1 ? Unix_Time_To_Rat_Time(ltim) : std::numeric_limits<double>::quiet_NaN();
