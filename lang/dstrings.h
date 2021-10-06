@@ -212,7 +212,8 @@ extern const wchar_t *dsSignal_Value_Bitmask;
 extern const wchar_t *dsHold_Filter;
 extern const wchar_t *dsDrawing_Filter;
 extern const wchar_t *dsMapping_Filter;
-extern const wchar_t *dsMasking_Filter;
+extern const wchar_t* dsMasking_Filter;
+extern const wchar_t* dsUnmasking_Filter;
 extern const wchar_t* dsCalculated_Signal_Filter;
 extern const wchar_t* dsDecoupling_Filter;
 
@@ -574,6 +575,10 @@ extern const wchar_t *dsError_Column_Range_25pct;
 extern const wchar_t *dsError_Column_Range_50pct;
 
 extern const wchar_t* rsInsert_New_Measured_Value;
+
+extern const wchar_t* rsInsert_Params_Base;
+extern const wchar_t* rsInsert_Params_Segmentid_Column;
+extern const wchar_t* rsInsert_Params_Values_Stmt;
 
 extern const wchar_t* rsInsert_Params;
 

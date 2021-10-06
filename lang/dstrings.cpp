@@ -218,6 +218,7 @@ const wchar_t *dsHold_Filter = L"Hold";
 const wchar_t *dsDrawing_Filter = L"Drawing";
 const wchar_t *dsMapping_Filter = L"Signal mapping";
 const wchar_t *dsMasking_Filter = L"Signal value masking";
+const wchar_t *dsUnmasking_Filter = L"Signal value unmasking";
 const wchar_t *dsCalculated_Signal_Filter = L"Calculated signal";
 const wchar_t *dsDecoupling_Filter = L"Signal decoupling";
 
@@ -580,6 +581,10 @@ const wchar_t *dsError_Column_Range_25pct = L"<=25% prob.";
 const wchar_t *dsError_Column_Range_50pct = L"<=50% prob.";
 
 const wchar_t* rsInsert_New_Measured_Value = L"INSERT INTO measured_value (measured_at, time_segment_id, signal_id, value) VALUES (?, ?, ?, ?)";
+
+const wchar_t* rsInsert_Params_Base = L"INSERT INTO ";
+const wchar_t* rsInsert_Params_Segmentid_Column = L"segmentid";
+const wchar_t* rsInsert_Params_Values_Stmt = L"VALUES";
 
 const wchar_t* rsInsert_Params = L"INSERT INTO model_parameters (time_segment_id, model_id, signal_id, recorded_at, parameters) VALUES (?, ?, ?, ?, ?)";
 
