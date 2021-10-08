@@ -40,6 +40,9 @@
 
 //UI strings used by the entire application
 
+extern const wchar_t* dsGPredict3_App_Name;
+extern const wchar_t* dsGPredict3_App_Domain;
+
 extern const wchar_t* dsNaN;
 
 extern const wchar_t* dsmmol_per_L;
