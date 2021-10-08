@@ -54,6 +54,7 @@ extern const char* dsSCGMS_Not_Loaded;
 extern const char* dsFile;
 extern const char* dsNew_Experimental_Setup;
 extern const char* dsOpen_Experimental_Setup;
+extern const char* dsOpen_Recent_Experimental_Setup;
 extern const char* dsSave_Experimental_Setup;
 extern const char* dsSave_Experimental_Setup_As;
 extern const char* dsExperimental_Setup_File_Mask;
@@ -63,6 +64,8 @@ extern const char* dsTools;
 extern const char* dsFilters;
 extern const char* dsSimulation;
 extern const char* dsOptimize_Parameters;
+
+extern const char* dsNo_Recent_Files;
 
 extern const char* dsLog_Tab;
 extern const char* dsErrors_Tab;
@@ -133,6 +136,8 @@ extern const wchar_t* dsDb_Reader_Legacy;
 extern const wchar_t* dsDb_Writer_Legacy;
 extern const wchar_t *dsSinCos_Generator;
 extern const wchar_t *dsDummy_Generator;
+
+extern const wchar_t* dsRecent_Files_Filename;
 
 extern const wchar_t *dsDb_Host;
 extern const wchar_t *dsDb_Port;

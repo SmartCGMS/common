@@ -52,6 +52,7 @@ const char* dsSCGMS_Not_Loaded = "SmartCGMS library is not loaded!";
 const char* dsFile = "File";
 const char* dsNew_Experimental_Setup = "New";
 const char* dsOpen_Experimental_Setup = "Open";
+const char* dsOpen_Recent_Experimental_Setup = "Open recent";
 const char* dsSave_Experimental_Setup = "Save";
 const char* dsSave_Experimental_Setup_As = "Save As...";
 const char* dsExperimental_Setup_File_Mask = "Experimental Setup (*.ini)";
@@ -61,6 +62,8 @@ const char* dsTools = "Tools";
 const char* dsFilters = "Filters";
 const char* dsSimulation = "Simulation";
 const char* dsOptimize_Parameters = "Optimize Parameters";
+
+const char* dsNo_Recent_Files = "No recent files";
 
 const char* dsLog_Tab = "Log";
 const char* dsErrors_Tab = "Errors";
@@ -135,6 +138,8 @@ const wchar_t* dsDb_Reader_Legacy = L"Db Reader (legacy)";
 const wchar_t* dsDb_Writer_Legacy = L"Db Writer (legacy)";
 const wchar_t *dsSinCos_Generator = L"Sin/Cos IG/BG generator";
 const wchar_t *dsDummy_Generator = L"Dummy IG/BG generator";
+
+const wchar_t* dsRecent_Files_Filename = L"recent_files";
 
 const wchar_t *dsDb_Host = L"Host";
 const wchar_t *dsDb_Port = L"Port";
