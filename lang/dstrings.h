@@ -211,6 +211,7 @@ extern const wchar_t *dsHold_Filter;
 extern const wchar_t *dsDrawing_Filter;
 extern const wchar_t *dsMapping_Filter;
 extern const wchar_t *dsMasking_Filter;
+extern const wchar_t* dsUnmasking_Filter;
 extern const wchar_t* dsCalculated_Signal_Filter;
 extern const wchar_t* dsDecoupling_Filter;
 

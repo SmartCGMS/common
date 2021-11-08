@@ -216,8 +216,10 @@ const wchar_t *dsHold_Filter = L"Hold";
 const wchar_t *dsDrawing_Filter = L"Drawing";
 const wchar_t *dsMapping_Filter = L"Signal mapping";
 const wchar_t *dsMasking_Filter = L"Signal value masking";
+const wchar_t* dsUnmasking_Filter = L"Signal value unmasking";
 const wchar_t *dsCalculated_Signal_Filter = L"Calculated signal";
 const wchar_t *dsDecoupling_Filter = L"Signal decoupling";
+
 
 const wchar_t *dsDrawing_Filter_Period = L"Redraw period [ms]";
 const wchar_t *dsDiagnosis_Is_Type2 = L"Diabetes type 2? (1 = off)";
