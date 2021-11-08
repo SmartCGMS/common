@@ -53,7 +53,7 @@ std::wstring QStringToStdWString(const QString &str) {
 QString StdWStringToQString(const std::wstring &str) {
 
 #ifdef _MSC_VER
-    return QString::fromUtf16((const ushort *)str.c_str());
+    return QString::fromUtf16((const char16_t *)str.c_str());
 #else
     return QString::fromStdWString(str);
 #endif
