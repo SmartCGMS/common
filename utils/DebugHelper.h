@@ -45,7 +45,7 @@
 
 	//Visual Leak Detector - vld.codeplex.com
 	//This will cause problems, if a dll enabling VLD is loaded in a thread that does not finish as the last one.
-	#define prefer_vld
+//	#define prefer_vld
 
 	#if defined(_MSC_VER) && defined(_DEBUG)
 		#ifdef prefer_vld
