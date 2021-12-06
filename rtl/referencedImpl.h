@@ -135,7 +135,7 @@ namespace refcnt {
 
 			template <typename D = typename std::remove_pointer<T>::type>
 			typename std::enable_if<std::is_base_of<refcnt::IUnique_Reference, D>::value, void>::type
-				Add_Content(T *begin, T *end) {
+			Add_Content(T *begin, T *end) {
 				for (T* iter = begin; iter != end; iter++) {
 					T real_ptr = *iter;
 					TAligned_Vector<T>::push_back(std::move(real_ptr));

@@ -111,8 +111,10 @@ namespace refcnt {
 	void Swstr_container::set(const wchar_t *str) {
 		if (operator bool()) {
 			wchar_t *str_ptr = const_cast<wchar_t*>(str);
-			if (str != nullptr) get()->set(str_ptr, str_ptr + wcslen(str));
-			else get()->set(nullptr, nullptr);
+			const size_t str_len = str == nullptr ? 0 : wcslen(str);
+
+			if (str_len>0) get()->set(str_ptr, str_ptr + str_len);
+				else get()->set(nullptr, nullptr);
 		}
 	}
 

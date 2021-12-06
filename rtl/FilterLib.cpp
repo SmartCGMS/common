@@ -320,13 +320,16 @@ namespace scgms {
 		//
 	}
 
-
-	void CBase_Filter::Emit_Info(const scgms::NDevice_Event_Code code, const std::wstring& msg, const uint64_t segment_id) noexcept {
+	void CBase_Filter::Emit_Info(const scgms::NDevice_Event_Code code, const wchar_t *msg, const uint64_t segment_id) noexcept {
 		scgms::UDevice_Event event{ code };
 		event.device_id() = mDevice_ID;
-		event.info.set(msg.c_str());
+		event.info.set(msg);
 		event.segment_id() = segment_id;
 		mOutput.Send(event);
+	}
+
+	void CBase_Filter::Emit_Info(const scgms::NDevice_Event_Code code, const std::wstring& msg, const uint64_t segment_id) noexcept {				
+		Emit_Info(code, msg.c_str(), segment_id);
 	}
 
 	HRESULT IfaceCalling CBase_Filter::Configure(IFilter_Configuration* configuration, refcnt::wstr_list* error_description) noexcept {		
