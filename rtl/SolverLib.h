@@ -43,6 +43,35 @@
 
 #include <memory>
 
+#ifdef __cpp_lib_execution
+#include <execution>
+#else
+namespace std
+{
+	// minimal substitute for missing execution header (for pre C++20 compilers)
+
+	enum class execution {
+		seq,
+		unseq,
+		par,
+		par_unseq
+	};
+
+	template<typename Fnc, typename It>
+	void for_each(const execution ex, const It& begin, const It& end, Fnc fnc)
+	{
+		for (It itr = begin; itr != end; itr++)
+			fnc(*itr);
+	}
+
+	template<typename Fnc, typename It>
+	auto min_element(const execution ex, const It& begin, const It& end, Fnc fnc)
+	{
+		return std::min_element(begin, end, fnc);
+	}
+}
+#endif
+
 namespace solver {
 	solver::TSolver_Setup Check_Default_Parameters(const solver::TSolver_Setup &setup, const size_t default_max_generations, const size_t default_population_size);	
 	HRESULT Solve_Generic(const GUID& solver_id, const solver::TSolver_Setup& setup, solver::TSolver_Progress& progress) noexcept;

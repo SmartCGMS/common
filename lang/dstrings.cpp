@@ -38,6 +38,9 @@
 
 #include "dstrings.h"
 
+const wchar_t* dsGPredict3_App_Name = L"gpredict3-desktop";
+const wchar_t* dsGPredict3_App_Domain = L"diabetes.zcu.cz";
+
 const wchar_t* dsNaN = L"NaN";
 
 const wchar_t* dsmmol_per_L = L"mmol/L";
@@ -52,6 +55,7 @@ const char* dsSCGMS_Not_Loaded = "SmartCGMS library is not loaded!";
 const char* dsFile = "File";
 const char* dsNew_Experimental_Setup = "New";
 const char* dsOpen_Experimental_Setup = "Open";
+const char* dsOpen_Recent_Experimental_Setup = "Open recent";
 const char* dsSave_Experimental_Setup = "Save";
 const char* dsSave_Experimental_Setup_As = "Save As...";
 const char* dsExperimental_Setup_File_Mask = "Experimental Setup (*.ini)";
@@ -61,6 +65,8 @@ const char* dsTools = "Tools";
 const char* dsFilters = "Filters";
 const char* dsSimulation = "Simulation";
 const char* dsOptimize_Parameters = "Optimize Parameters";
+
+const char* dsNo_Recent_Files = "No recent files";
 
 const char* dsLog_Tab = "Log";
 const char* dsErrors_Tab = "Errors";
@@ -129,10 +135,14 @@ const char* dsParameters_Optimization_Use = "To enable parameters' optimization,
 											"  c) exactly one filter must emit Shutdown, and any feedback receiver cannot precede this filter\n"
 											"Parameters with improved fitness are applied automatically.";
 
-const wchar_t *dsDb_Reader = L"Db Reader";
-const wchar_t *dsDb_Writer = L"Db Writer";
+const wchar_t* dsDb_Reader = L"Db Reader";
+const wchar_t* dsDb_Writer = L"Db Writer";
+const wchar_t* dsDb_Reader_Legacy = L"Db Reader (legacy)";
+const wchar_t* dsDb_Writer_Legacy = L"Db Writer (legacy)";
 const wchar_t *dsSinCos_Generator = L"Sin/Cos IG/BG generator";
 const wchar_t *dsDummy_Generator = L"Dummy IG/BG generator";
+
+const wchar_t* dsRecent_Files_Filename = L"recent_files";
 
 const wchar_t *dsDb_Host = L"Host";
 const wchar_t *dsDb_Port = L"Port";
@@ -216,10 +226,11 @@ const wchar_t *dsHold_Filter = L"Hold";
 const wchar_t *dsDrawing_Filter = L"Drawing";
 const wchar_t *dsMapping_Filter = L"Signal mapping";
 const wchar_t *dsMasking_Filter = L"Signal value masking";
-const wchar_t* dsUnmasking_Filter = L"Signal value unmasking";
+const wchar_t *dsUnmasking_Filter = L"Signal value unmasking";
 const wchar_t *dsCalculated_Signal_Filter = L"Calculated signal";
 const wchar_t *dsDecoupling_Filter = L"Signal decoupling";
 
+const wchar_t* dsHealthKit_Dump_Reader_Filter = L"HealthKit dump reader filter";
 
 const wchar_t *dsDrawing_Filter_Period = L"Redraw period [ms]";
 const wchar_t *dsDiagnosis_Is_Type2 = L"Diabetes type 2? (1 = off)";
@@ -356,6 +367,24 @@ const wchar_t* dsUVa_Padova_S2017_BG = L"UVa/Padova S2017 - Blood glucose";
 const wchar_t* dsUVa_Padova_S2017_Delivered_Insulin = L"UVa/Padova S2017 - Delivered insulin";
 const wchar_t* dsUVa_Padova_S2017_IOB = L"UVa/Padova S2017 - IOB";
 const wchar_t* dsUVa_Padova_S2017_COB = L"UVa/Padova S2017 - COB";
+
+const wchar_t* dsGCT_Model_v1 = L"GCT model v1";
+const wchar_t* dsGCT_Model_v1_IG = L"GCT model v1 - Interstitial glucose";
+const wchar_t* dsGCT_Model_v1_BG = L"GCT model v1 - Blood glucose";
+const wchar_t* dsGCT_Model_v1_Delivered_Insulin = L"GCT model v1 - Delivered insulin";
+const wchar_t* dsGCT_Model_v1_IOB = L"GCT model v1 - IOB";
+const wchar_t* dsGCT_Model_v1_COB = L"GCT model v1 - COB";
+
+const wchar_t* dsGCT_Model_v2 = L"GCT model v2";
+const wchar_t* dsGCT_Model_v2_IG = L"GCT model v2 - Interstitial glucose";
+const wchar_t* dsGCT_Model_v2_BG = L"GCT model v2 - Blood glucose";
+const wchar_t* dsGCT_Model_v2_Delivered_Insulin = L"GCT model v2 - Delivered insulin";
+const wchar_t* dsGCT_Model_v2_IOB = L"GCT model v2 - IOB";
+const wchar_t* dsGCT_Model_v2_COB = L"GCT model v2 - COB";
+
+const wchar_t* dsPhysical_Activity_Detection_Model = L"Physical activity detection";
+const wchar_t* dsPhysical_Activity_Detected_Signal = L"Detected physical activity";
+const wchar_t* dsHeart_Rate_Resting = L"HeartRate_resting";
 
 const wchar_t* dsOref0_Solver = L"oref0 solver";
 
@@ -529,6 +558,7 @@ const wchar_t* dsSignal_GUI_Name_Electrodermal_Activity = L"Electrodermal activi
 const wchar_t* dsSignal_GUI_Name_Steps = L"Steps";
 const wchar_t* dsSignal_GUI_Name_Sleep_Quality = L"Sleep quality";
 const wchar_t* dsSignal_GUI_Name_Acceleration = L"Acceleration";
+const wchar_t* dsSignal_GUI_Name_Movement_Speed = L"Movement speed";
 const wchar_t* dsSignal_GUI_Name_Error_Metric = L"error metric";
 const wchar_t *dsSignal_GUI_Name_Insulin_Sensitivity = L"Insulin sensitivity factor";
 const wchar_t *dsSignal_GUI_Name_Carb_Ratio = L"CHO-to-insulin ratio";
@@ -558,18 +588,39 @@ const wchar_t *dsError_Column_Range_10pct = L"<=10% prob.";
 const wchar_t *dsError_Column_Range_25pct = L"<=25% prob.";
 const wchar_t *dsError_Column_Range_50pct = L"<=50% prob.";
 
-const wchar_t* rsInsert_New_Measured_Value = L"INSERT INTO measuredvalue (measuredat, blood, ist, isig, insulin_bolus, insulin_basal_rate, carbohydrates, calibration, segmentid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+const wchar_t* rsInsert_New_Measured_Value = L"INSERT INTO measured_value (measured_at, time_segment_id, signal_id, value) VALUES (?, ?, ?, ?)";
 
 const wchar_t* rsInsert_Params_Base = L"INSERT INTO ";
 const wchar_t* rsInsert_Params_Segmentid_Column = L"segmentid";
 const wchar_t* rsInsert_Params_Values_Stmt = L"VALUES";
 
+const wchar_t* rsInsert_Params = L"INSERT INTO model_parameters (time_segment_id, model_id, signal_id, recorded_at, parameters) VALUES (?, ?, ?, ?, ?)";
+
 const wchar_t* rsCreated_Segment_Identifier_Base = L"New_Segment_Marker_";
-const wchar_t* rsInsert_New_Time_Segment = L"INSERT INTO timesegment (name, comment, deleted, subjectid, parallel_id) VALUES (?, ?, ?, ?, ?)";
-const wchar_t* rsSelect_Time_Segment_Id_By_Name = L"SELECT id FROM timesegment WHERE name = ?";
-const wchar_t* rsRename_Time_Segment = L"UPDATE timesegment SET name = ? WHERE id = ?";
+const wchar_t* rsInsert_New_Time_Segment = L"INSERT INTO time_segment (name, comment, subject_id) VALUES (?, ?, ?)";
+const wchar_t* rsSelect_Time_Segment_Id_By_Name = L"SELECT id FROM time_segment WHERE name = ?";
+const wchar_t* rsRename_Time_Segment = L"UPDATE time_segment SET name = ? WHERE id = ?";
 const wchar_t* rsDelete_Parameters_Of_Segment_Base = L"DELETE FROM ";
-const wchar_t* rsDelete_Parameters_Of_Segment_Stmt = L" WHERE segmentid = ?";
+const wchar_t* rsDelete_Parameters_Of_Segment_Stmt = L" WHERE time_segment_id = ?";
+
+const wchar_t* rsLegacy_Db_Insert_New_Measured_Value = L"INSERT INTO measuredvalue (measuredat, blood, ist, isig, insulin_bolus, insulin_basal_rate, carbohydrates, calibration, heartrate, steps, movement_speed, segmentid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+const wchar_t* rsLegacy_Db_Insert_Params_Base = L"INSERT INTO ";
+const wchar_t* rsLegacy_Db_Insert_Params_Segmentid_Column = L"segmentid";
+const wchar_t* rsLegacy_Db_Insert_Params_Values_Stmt = L"VALUES";
+const wchar_t* rsLegacy_Db_Insert_New_Time_Segment = L"INSERT INTO timesegment (name, comment, deleted, subjectid, parallel_id) VALUES (?, ?, ?, ?, ?)";
+const wchar_t* rsLegacy_Db_Select_Time_Segment_Id_By_Name = L"SELECT id FROM timesegment WHERE name = ?";
+const wchar_t* rsLegacy_Db_Rename_Time_Segment = L"UPDATE timesegment SET name = ? WHERE id = ?";
+const wchar_t* rsLegacy_Db_Delete_Parameters_Of_Segment_Stmt = L" WHERE segmentid = ?";
+const wchar_t* rsLegacy_Db_Select_Subjects_And_Segments_For_Db_Reader_Filter = L"select timesegment.id, subject.name, timesegment.name, count(measuredvalue.id) from subject, timesegment, measuredvalue where subject.id = timesegment.subjectid and timesegment.id = measuredvalue.segmentid group by timesegment.id, subject.name order by subject.name, timesegment.name asc";
+const wchar_t* rsLegacy_Db_Select_Timesegment_Values_Filter = L"select measuredat, blood, ist, isig, insulin_bolus, insulin_basal_rate, carbohydrates, calibration, heartrate, steps, movement_speed from measuredvalue where segmentid = ? order by measuredat asc";
+const wchar_t* rsLegacy_Db_Select_Params_Base = L"select ";
+const wchar_t* rsLegacy_Db_Select_Params_From = L" from ";
+const wchar_t* rsLegacy_Db_Select_Params_Condition = L" where segmentid = ?";
+const wchar_t* rsLegacy_Db_Found_New_Segment = L"insert into timesegment (name, comment, deleted) values (?, ?, ?)";
+const wchar_t* rsLegacy_Db_Select_Founded_Segment = L"select id from timesegment where name = ?";
+const wchar_t* rsLegacy_Db_Update_Founded_Segment = L"update timesegment set name = ?, comment = ?, deleted=?, subjectid=?, parallel_id=? where id=?";
+const wchar_t* rsLegacy_Db_Found_New_Subject = L"insert into subject (name, comments, sex, weight) values (?, ?, ?, ?)";
+const wchar_t* rsLegacy_Db_Update_Founded_Subject = L"update subject set name = ?, comments = ?, sex = ?, weight = ? where id=?";
 
 const wchar_t* rsInsulin_Regulation = L"insulin-regulation";
 const wchar_t* rsInsulin_PID_Regulation = L"insulin-pid-regulation";
@@ -877,7 +928,7 @@ const char* rsAbout_Text = R"CLC(
 <a href="https://diabetes.zcu.cz/smartcgms">https://diabetes.zcu.cz/</a><br>
 &nbsp;<br>
 Copyright&copy; since 2018 University of West Bohemia.<br>
-Release date: June 9, 2020<br>
+Release date: June 12, 2020<br>
 &nbsp;<br>
 <i>Contact:</i><br>
 <a href="mailto:diabetes@mail.kiv.zcu.cz?Subject=SmartCGMS">diabetes@mail.kiv.zcu.cz</a><br>
@@ -934,6 +985,9 @@ const wchar_t* rsOref0_BG_COB_Prediction = L"oref0_bg_cob_prediction";
 const wchar_t* rsOref0_BG_UAM_Prediction = L"oref0_bg_uam_prediction";
 const wchar_t* rsOref0_BG_ZT_Prediction = L"oref0_bg_zt_prediction";
 const wchar_t* rsConstant_Model = L"constant_model";
+
+const wchar_t* rsPhysical_Activity_Detection_Model = L"Physical_activity_detection";
+const wchar_t* rsHeart_Rate_Resting = L"heartrate_Resting";
 
 const wchar_t* rsP_Column = L"p";
 const wchar_t* rsCg_Column = L"cg";
@@ -1032,6 +1086,8 @@ const wchar_t *rsDrawing_Filter_Filename_Parkes = L"Parkes_File_Path";
 const wchar_t *rsDrawing_Filter_Filename_Clark = L"Clark_File_Path";
 const wchar_t *rsDrawing_Filter_Filename_ECDF = L"ECDF_File_Path";
 
+const wchar_t* rsFile_Path = L"File_Path";
+
 const wchar_t *rsCallback_Log_Message = L"CallbackLog_Message";
 const wchar_t *rsCallback_Drawing_Graph = L"CallbackDrawing_Graph";
 const wchar_t *rsCallback_Drawing_Day = L"CallbackDrawing_Day";
@@ -1063,12 +1119,10 @@ const char* rsFilter_Get_SVG_Parkes_Type2 = "get_svg_parkes_type2";
 
 const char* rsFilter_Get_Errors = "get_error_metrics";
 
-const wchar_t* rsSelect_Subjects_And_Segments_For_Db_Reader_Filter = L"select timesegment.id, subject.name, timesegment.name, count(measuredvalue.id) from subject, timesegment, measuredvalue where subject.id = timesegment.subjectid and timesegment.id = measuredvalue.segmentid group by timesegment.id, subject.name order by subject.name, timesegment.name asc";
+const wchar_t* rsSelect_Subjects_And_Segments_For_Db_Reader_Filter = L"select time_segment.id, subject.name, time_segment.name, count(measured_value.id) from subject, time_segment, measured_value where subject.id = time_segment.subject_id and time_segment.id = measured_value.time_segment_id group by time_segment.id, subject.name order by subject.name, time_segment.name asc";
 const wchar_t* rsSelect_Subjects = L"select id, name from subject";
-const wchar_t* rsSelect_Timesegment_Values_Filter = L"select measuredat, blood, ist, isig, insulin_bolus, insulin_basal_rate, carbohydrates, calibration from measuredvalue where segmentid = ? order by measuredat asc";
-const wchar_t* rsSelect_Params_Base = L"select ";
-const wchar_t* rsSelect_Params_From = L" from ";
-const wchar_t* rsSelect_Params_Condition = L" where segmentid = ?";
+const wchar_t* rsSelect_Timesegment_Values_Filter = L"select measured_at, signal_id, value from measured_value where time_segment_id = ? order by measured_at asc";
+const wchar_t* rsSelect_Params_Filter = L"select recorded_at, model_id, signal_id, parameters from model_parameters where time_segment_id = ? order by recorded_at asc";
 
 // ---- drawing-related constants
 
@@ -1130,14 +1184,14 @@ const wchar_t *rsStore_Parameters = L"Store_Parameters";
 const wchar_t *rsSubject_Id = L"Subject_Id";
 
 const wchar_t* rsReserved_Segment_Name = L"RESERVED_SEGMENT_NAME";
-const wchar_t* rsFound_New_Segment = L"insert into timesegment (name, comment, deleted) values (?, ?, ?)";
-const wchar_t* rsSelect_Founded_Segment = L"select id from timesegment where name = ?";
-const wchar_t* rsUpdate_Founded_Segment = L"update timesegment set name = ?, comment = ?, deleted=?, subjectid=?, parallel_id=? where id=?";
+const wchar_t* rsFound_New_Segment = L"insert into time_segment (name) values (?)";
+const wchar_t* rsSelect_Founded_Segment = L"select id from time_segment where name = ?";
+const wchar_t* rsUpdate_Founded_Segment = L"update time_segment set name = ?, subject_id = ? where id = ?";
 
 const wchar_t* rsReserved_Subject_Name = L"RESERVED_SUBJECT_NAME";
-const wchar_t* rsFound_New_Subject = L"insert into subject (name, comments, sex, weight) values (?, ?, ?, ?)";
+const wchar_t* rsFound_New_Subject = L"insert into subject (name, comment) values (?, ?)";
 const wchar_t* rsSelect_Founded_Subject = L"select id from subject where name = ?";
-const wchar_t* rsUpdate_Founded_Subject = L"update subject set name = ?, comments = ?, sex = ?, weight = ? where id=?";
+const wchar_t* rsUpdate_Founded_Subject = L"update subject set name = ?, comment = ? where id = ?";
 
 const wchar_t* rsPrediction_Window = L"Prediction_Window";
 const wchar_t* rsSolve_Parameters = L"Solve_Parameters";

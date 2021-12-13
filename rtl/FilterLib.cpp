@@ -332,6 +332,14 @@ namespace scgms {
 		Emit_Info(code, msg.c_str(), segment_id);
 	}
 
+	void CBase_Filter::Emit_Marker(const scgms::NDevice_Event_Code code, const double event_time, const uint64_t segment_id) noexcept {
+		scgms::UDevice_Event event{ code };
+		event.device_id() = mDevice_ID;
+		event.device_time() = event_time;
+		event.segment_id() = segment_id;
+		mOutput.Send(event);
+	}
+
 	HRESULT IfaceCalling CBase_Filter::Configure(IFilter_Configuration* configuration, refcnt::wstr_list* error_description) noexcept {		
 		refcnt::Swstr_list shared_error_description = refcnt::make_shared_reference_ext<refcnt::Swstr_list, refcnt::wstr_list>(error_description, true);
 		if (mOutput) {
@@ -364,6 +372,11 @@ namespace scgms {
 	SDrawing_Filter_Inspection::SDrawing_Filter_Inspection(const SFilter &drawing_filter) {
 		if (drawing_filter)
 			refcnt::Query_Interface<scgms::IFilter, scgms::IDrawing_Filter_Inspection>(drawing_filter.get(), IID_Drawing_Filter_Inspection, *this);
+	}
+
+	SDrawing_Filter_Inspection_v2::SDrawing_Filter_Inspection_v2(const SFilter& drawing_filter) {
+		if (drawing_filter)
+			refcnt::Query_Interface<scgms::IFilter, scgms::IDrawing_Filter_Inspection_v2>(drawing_filter.get(), IID_Drawing_Filter_Inspection_v2, *this);
 	}
 
 	SLog_Filter_Inspection::SLog_Filter_Inspection(const SFilter &log_filter) {

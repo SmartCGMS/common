@@ -49,7 +49,14 @@ namespace db {
 		ptInt64,
 		ptDouble,
 		ptWChar,
-		ptBool
+		ptBool,
+		ptGuid,
+		ptBinaryObect
+	};
+
+	struct TBinary_Object {
+		size_t size;
+		uint8_t* data;
 	};
 
 	struct TParameter {
@@ -59,6 +66,8 @@ namespace db {
 			double dbl;
 			wchar_t *str;
 			BOOL boolean;
+			GUID id;
+			TBinary_Object binary_object;
 		};
 	};
 

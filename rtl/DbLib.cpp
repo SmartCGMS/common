@@ -39,6 +39,7 @@
 #include "DbLib.h"
 
 #include <set>
+#include <limits>
 
 namespace db {
 
@@ -70,6 +71,14 @@ namespace db {
 
 					case db::NParameter_Type::ptBool:
 						*(reinterpret_cast<BOOL*>(mRow_Bindings[i].str)) = mRow_Storage[i].type != db::NParameter_Type::ptNull ? mRow_Storage[i].boolean : FALSE;
+						break;
+
+					case db::NParameter_Type::ptGuid:
+						*(reinterpret_cast<GUID*>(mRow_Bindings[i].str)) = mRow_Storage[i].type != db::NParameter_Type::ptNull ? mRow_Storage[i].id : Invalid_GUID;
+						break;
+
+					case db::NParameter_Type::ptBinaryObect:
+						*(reinterpret_cast<TBinary_Object*>(mRow_Bindings[i].str)) = mRow_Storage[i].type != db::NParameter_Type::ptNull ? mRow_Storage[i].binary_object : TBinary_Object{ 0, nullptr };
 						break;
 
 					default:

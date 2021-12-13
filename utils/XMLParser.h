@@ -68,7 +68,7 @@ struct CXML_Element
 	std::map<S, S> parameters;
 	std::map<S, std::vector<CXML_Element<T>>> children;
 
-	S const& Get_Parameter(const S& key) {
+	S const& Get_Parameter(const S& key) const {
 		const auto& itr = parameters.find(key);
 		if (itr == parameters.end())
 			throw std::runtime_error("Requested parameter not found");

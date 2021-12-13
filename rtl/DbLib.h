@@ -105,6 +105,20 @@ namespace db {
 			return true;
 		}
 
+		template <typename TParam1, typename std::enable_if_t<std::is_same_v<std::remove_const_t<TParam1>, GUID>, TParam1>* = nullptr>
+		bool Bind_Parameter(TParam1 param1, TParameter& desc) {
+			desc.type = db::NParameter_Type::ptGuid;
+			desc.id = static_cast<decltype(desc.id)>(param1);
+			return true;
+		}
+
+		template <typename TParam1, typename std::enable_if_t<std::is_same_v<std::remove_const_t<TParam1>, TBinary_Object>, TParam1>* = nullptr>
+		bool Bind_Parameter(TParam1 param1, TParameter& desc) {
+			desc.type = db::NParameter_Type::ptBinaryObect;
+			desc.binary_object = static_cast<decltype(desc.binary_object)>(param1);
+			return true;
+		}
+
 		template <typename TParam1 = std::nullptr_t, typename std::enable_if_t<std::is_null_pointer_v<TParam1>, TParam1>* = nullptr>
 		bool Bind_Parameter(TParam1 param1, TParameter &desc) {
 			desc.type = db::NParameter_Type::ptNull;
@@ -127,6 +141,8 @@ namespace db {
 			else if (std::is_same<TParam1, double>::value) desc.type = db::NParameter_Type::ptDouble;
 			else if (std::is_same<TParam1, bool>::value) desc.type = db::NParameter_Type::ptBool;
 			else if (std::is_same<TParam1, wchar_t*>::value) desc.type = db::NParameter_Type::ptWChar;
+			else if (std::is_same<TParam1, GUID>::value) desc.type = db::NParameter_Type::ptGuid;
+			else if (std::is_same<TParam1, TBinary_Object>::value) desc.type = db::NParameter_Type::ptBinaryObect;
 			else return false;
 			
 			desc.str = reinterpret_cast<wchar_t*>(&param1);	//intentionally missusing wchar_t* as void* (pointer as a pointer;)

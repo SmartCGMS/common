@@ -86,7 +86,7 @@ void CSVG_Renderer::Render_Default_Params(drawing::Element& shape)
 		mSvg_Target << " stroke=\"" << Color_To_String(shape.Get_Stroke_Color()) << "\"";
 		mSvg_Target << " stroke-linejoin=\"round\""; // TODO: line join parameter
 		mSvg_Target << " stroke-linecap=\"round\""; // TODO: line cap parameter
-		mSvg_Target << " stroke-opacity=\"" << shape.Get_Stroke_Opacity() << "\""; // TODO: separate opacity for stroke
+		mSvg_Target << " stroke-opacity=\"" << shape.Get_Stroke_Opacity() << "\"";
 	}
 
 	const auto& dashArray = shape.Get_Stroke_Dash_Array();

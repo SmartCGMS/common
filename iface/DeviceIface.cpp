@@ -42,16 +42,6 @@
 
 namespace scgms {
 
-	// mg/dL -> mmol/L; source: http://www.soc-bdr.org/rds/authors/unit_tables_conversions_and_genetic_dictionaries/conversion_glucose_mg_dl_to_mmol_l/index_en.html
-	const double mgdL_2_mmolL = 1.0 / 18.0182;
-	const double mmolL_2_mgdL = 18.0182;
-	// pmol -> U; source: http://www.soc-bdr.org/content/rds/authors/unit_tables_conversions_and_genetic_dictionaries/e5196/index_en.html
-	const double pmol_2_U = 1.0 / 6000.0; 
-
-	const double One_Hour = 1.0 / (24.0);
-	const double One_Minute = 1.0 / (24.0*60.0);
-	const double One_Second = 1.0 / (24.0*60.0*60.0);
-
 	const std::array<GUID, 100> signal_Virtual{ {
 			{ 0xd4ddb8c4, 0xe48c, 0x4757,{ 0xbf, 0xe6, 0x26, 0x15, 0xc5, 0x79, 0x8f, 0xd3 } },
 			{ 0x1a3254af, 0x8430, 0x426c,{ 0xa1, 0x21, 0x7d, 0xbc, 0xe7, 0x9d, 0x6a, 0x30 } },

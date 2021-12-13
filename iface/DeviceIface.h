@@ -48,15 +48,39 @@
 
 namespace scgms {
 
-	// constant to convert mg/dL to mmol/L
-	extern const double mgdL_2_mmolL;	//we assume mmol/L, so to make a conversion possible
-	extern const double mmolL_2_mgdL;
-	// constant to convert pmol (calculation unit of insulin) to U ("human-readable" unit of insulin)
-	extern const double pmol_2_U;
- 
-	extern const double One_Hour;
-	extern const double One_Minute;
-	extern const double One_Second;
+	// mg/dL -> mmol/L; source: http://www.soc-bdr.org/rds/authors/unit_tables_conversions_and_genetic_dictionaries/conversion_glucose_mg_dl_to_mmol_l/index_en.html
+	constexpr double mgdL_2_mmolL = 1.0 / 18.0182;
+	constexpr double mmolL_2_mgdL = 18.0182;
+	// pmol -> U; source: http://www.soc-bdr.org/content/rds/authors/unit_tables_conversions_and_genetic_dictionaries/e5196/index_en.html
+	constexpr double pmol_2_U = 1.0 / 6000.0;
+
+	constexpr double One_Hour = 1.0 / (24.0);
+	constexpr double One_Minute = 1.0 / (24.0 * 60.0);
+	constexpr double One_Second = 1.0 / (24.0 * 60.0 * 60.0);
+
+	inline namespace literals {
+
+		inline constexpr long double operator ""_hr(long double val) {
+			return val * ::scgms::One_Hour;
+		}
+		inline constexpr long double operator ""_min(long double val) {
+			return val * ::scgms::One_Minute;
+		}
+		inline constexpr long double operator ""_sec(long double val) {
+			return val * ::scgms::One_Second;
+		}
+
+		inline constexpr long double operator ""_hr(unsigned long long val) {
+			return static_cast<long double>(val) * ::scgms::One_Hour;
+		}
+		inline constexpr long double operator ""_min(unsigned long long val) {
+			return static_cast<long double>(val) * ::scgms::One_Minute;
+		}
+		inline constexpr long double operator ""_sec(unsigned long long val) {
+			return static_cast<long double>(val) * ::scgms::One_Second;
+		}
+
+	}
 
 	const size_t apxNo_Derivation = 0;
 	const size_t apxFirst_Order_Derivation = 1;
@@ -79,6 +103,8 @@ namespace scgms {
 	constexpr GUID signal_All = { 0xffffffff, 0xffff, 0xffff, { 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff } };	// {FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF}
 	constexpr GUID signal_Null = { 0x706e7fdb, 0x8f22, 0x486f, { 0xbf, 0xa5, 0x6a, 0x56, 0xd3, 0x51, 0x42, 0x9 } }; // {706E7FDB-8F22-486F-BFA5-6A56D3514209}
 
+	//Synchronization signal - used in DoD trainer, Icarus and similar frontends, where the whole chain is synchronized to an external clock-like signal
+	constexpr GUID signal_Synchronization = { 0x97f2d189, 0x2319, 0x4a4a, { 0x8c, 0xbe, 0x5d, 0xdd, 0xd6, 0x0, 0x5f, 0x81 } };	// {97F2D189-2319-4A4A-8CBE-5DDDD6005F81}
 
 	//Measured signals
 	constexpr GUID signal_BG = { 0xf666f6c2, 0xd7c0, 0x43e8,{ 0x8e, 0xe1, 0xc8, 0xca, 0xa8, 0xf8, 0x60, 0xe5 } };	// {F666F6C2-D7C0-43E8-8EE1-C8CAA8F860E5}
@@ -115,8 +141,8 @@ namespace scgms {
 	constexpr GUID signal_Steps = { 0xd0d33895, 0xfbe8, 0x462a, { 0xb4, 0x5a, 0xaf, 0x2e, 0xe9, 0x7f, 0xe6, 0x81 } };// {D0D33895-FBE8-462A-B45A-AF2EE97FE681}
 	constexpr GUID signal_Sleep_Quality = { 0xb4fc34ad, 0xb65a, 0x4775, { 0x82, 0xc5, 0x16, 0xa4, 0x7b, 0x33, 0xe9, 0xb6 } };	// {B4FC34AD-B65A-4775-82C5-16A47B33E9B6}
 	constexpr GUID signal_Acceleration = { 0xc22ef521, 0xf5a4, 0x49de, { 0xa8, 0x8e, 0xf4, 0x46, 0x59, 0xc, 0x99, 0x75 } }; // {C22EF521-F5A4-49DE-A88E-F446590C9975}
-	   
-	
+	constexpr GUID signal_Movement_Speed = { 0xa42c3bde, 0x5d45, 0x4671, { 0x9a, 0x72, 0x39, 0x52, 0x55, 0xc1, 0x42, 0x45 } }; // {A42C3BDE-5D45-4671-9A72-395255C14245}
+
 	//virtual signals used for temporal remapping
 	extern const std::array<GUID, 100> signal_Virtual;
 

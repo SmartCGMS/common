@@ -104,10 +104,10 @@ std::wstring Rat_Time_To_Local_Time_WStr(const double rt, const wchar_t *fmt) {
 
 double Local_Time_WStr_To_Rat_Time(const std::wstring& str, const wchar_t* fmt) noexcept {
 
-	struct tm ptm {};	//zero initialized, otherwise a random value may randomly trigger daylight saving offset on/off
-
+	struct tm ptm;
+	memset(&ptm, 0, sizeof(ptm)); // mktime may use fields, that may not be filled by std::get_time; to make valgrind happy, let us initialize the whole memory
 	std::wistringstream ss(str);
-	ss >> std::get_time(&ptm, fmt);	
+	ss >> std::get_time(&ptm, fmt);
 
 	ptm.tm_isdst = -1;					//because Rat_Time_To_Local_Time_WStr is the inverse function to this one, and it ses localtime_s which makes automatic correction
 										//hence, we need to let the system to decide

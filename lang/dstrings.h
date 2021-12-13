@@ -40,6 +40,9 @@
 
 //UI strings used by the entire application
 
+extern const wchar_t* dsGPredict3_App_Name;
+extern const wchar_t* dsGPredict3_App_Domain;
+
 extern const wchar_t* dsNaN;
 
 extern const wchar_t* dsmmol_per_L;
@@ -54,6 +57,7 @@ extern const char* dsSCGMS_Not_Loaded;
 extern const char* dsFile;
 extern const char* dsNew_Experimental_Setup;
 extern const char* dsOpen_Experimental_Setup;
+extern const char* dsOpen_Recent_Experimental_Setup;
 extern const char* dsSave_Experimental_Setup;
 extern const char* dsSave_Experimental_Setup_As;
 extern const char* dsExperimental_Setup_File_Mask;
@@ -63,6 +67,8 @@ extern const char* dsTools;
 extern const char* dsFilters;
 extern const char* dsSimulation;
 extern const char* dsOptimize_Parameters;
+
+extern const char* dsNo_Recent_Files;
 
 extern const char* dsLog_Tab;
 extern const char* dsErrors_Tab;
@@ -129,8 +135,12 @@ extern const char* dsParameters_Optimization_Use;
 
 extern const wchar_t *dsDb_Reader;
 extern const wchar_t *dsDb_Writer;
+extern const wchar_t* dsDb_Reader_Legacy;
+extern const wchar_t* dsDb_Writer_Legacy;
 extern const wchar_t *dsSinCos_Generator;
 extern const wchar_t *dsDummy_Generator;
+
+extern const wchar_t* dsRecent_Files_Filename;
 
 extern const wchar_t *dsDb_Host;
 extern const wchar_t *dsDb_Port;
@@ -210,10 +220,12 @@ extern const wchar_t *dsSignal_Value_Bitmask;
 extern const wchar_t *dsHold_Filter;
 extern const wchar_t *dsDrawing_Filter;
 extern const wchar_t *dsMapping_Filter;
-extern const wchar_t *dsMasking_Filter;
+extern const wchar_t* dsMasking_Filter;
 extern const wchar_t* dsUnmasking_Filter;
 extern const wchar_t* dsCalculated_Signal_Filter;
 extern const wchar_t* dsDecoupling_Filter;
+
+extern const wchar_t* dsHealthKit_Dump_Reader_Filter;
 
 extern const wchar_t *dsDrawing_Filter_Period;
 extern const wchar_t *dsDiagnosis_Is_Type2;
@@ -354,6 +366,24 @@ extern const wchar_t* dsUVa_Padova_S2017_BG;
 extern const wchar_t* dsUVa_Padova_S2017_Delivered_Insulin;
 extern const wchar_t* dsUVa_Padova_S2017_IOB;
 extern const wchar_t* dsUVa_Padova_S2017_COB;
+
+extern const wchar_t* dsGCT_Model_v1;
+extern const wchar_t* dsGCT_Model_v1_IG;
+extern const wchar_t* dsGCT_Model_v1_BG;
+extern const wchar_t* dsGCT_Model_v1_Delivered_Insulin;
+extern const wchar_t* dsGCT_Model_v1_IOB;
+extern const wchar_t* dsGCT_Model_v1_COB;
+
+extern const wchar_t* dsGCT_Model_v2;
+extern const wchar_t* dsGCT_Model_v2_IG;
+extern const wchar_t* dsGCT_Model_v2_BG;
+extern const wchar_t* dsGCT_Model_v2_Delivered_Insulin;
+extern const wchar_t* dsGCT_Model_v2_IOB;
+extern const wchar_t* dsGCT_Model_v2_COB;
+
+extern const wchar_t* dsPhysical_Activity_Detection_Model;
+extern const wchar_t* dsPhysical_Activity_Detected_Signal;
+extern const wchar_t* dsHeart_Rate_Resting;
 
 extern const wchar_t* dsOref0_Solver;
 
@@ -522,6 +552,7 @@ extern const wchar_t* dsSignal_GUI_Name_Electrodermal_Activity;
 extern const wchar_t* dsSignal_GUI_Name_Steps;
 extern const wchar_t* dsSignal_GUI_Name_Sleep_Quality;
 extern const wchar_t* dsSignal_GUI_Name_Acceleration;
+extern const wchar_t* dsSignal_GUI_Name_Movement_Speed;
 extern const wchar_t* dsSignal_GUI_Name_Error_Metric;
 extern const wchar_t *dsSignal_GUI_Name_Insulin_Sensitivity;
 extern const wchar_t *dsSignal_GUI_Name_Carb_Ratio;
@@ -557,12 +588,33 @@ extern const wchar_t* rsInsert_Params_Base;
 extern const wchar_t* rsInsert_Params_Segmentid_Column;
 extern const wchar_t* rsInsert_Params_Values_Stmt;
 
+extern const wchar_t* rsInsert_Params;
+
 extern const wchar_t* rsCreated_Segment_Identifier_Base;
 extern const wchar_t* rsInsert_New_Time_Segment;
 extern const wchar_t* rsSelect_Time_Segment_Id_By_Name;
 extern const wchar_t* rsRename_Time_Segment;
 extern const wchar_t* rsDelete_Parameters_Of_Segment_Base;
 extern const wchar_t* rsDelete_Parameters_Of_Segment_Stmt;
+
+extern const wchar_t* rsLegacy_Db_Insert_Params_Base;
+extern const wchar_t* rsLegacy_Db_Insert_Params_Segmentid_Column;
+extern const wchar_t* rsLegacy_Db_Insert_Params_Values_Stmt;
+extern const wchar_t* rsLegacy_Db_Select_Params_Base;
+extern const wchar_t* rsLegacy_Db_Select_Params_From;
+extern const wchar_t* rsLegacy_Db_Select_Params_Condition;
+extern const wchar_t* rsLegacy_Db_Insert_New_Measured_Value;
+extern const wchar_t* rsLegacy_Db_Insert_New_Time_Segment;
+extern const wchar_t* rsLegacy_Db_Select_Time_Segment_Id_By_Name;
+extern const wchar_t* rsLegacy_Db_Rename_Time_Segment;
+extern const wchar_t* rsLegacy_Db_Delete_Parameters_Of_Segment_Stmt;
+extern const wchar_t* rsLegacy_Db_Select_Subjects_And_Segments_For_Db_Reader_Filter;
+extern const wchar_t* rsLegacy_Db_Select_Timesegment_Values_Filter;
+extern const wchar_t* rsLegacy_Db_Found_New_Segment;
+extern const wchar_t* rsLegacy_Db_Select_Founded_Segment;
+extern const wchar_t* rsLegacy_Db_Update_Founded_Segment;
+extern const wchar_t* rsLegacy_Db_Found_New_Subject;
+extern const wchar_t* rsLegacy_Db_Update_Founded_Subject;
 
 extern const wchar_t* rsT1DMS_Receiver_Filter;
 extern const wchar_t* rsT1DMS_Sender_Filter;
@@ -899,6 +951,9 @@ extern const wchar_t* rsOref0_BG_UAM_Prediction;
 extern const wchar_t* rsOref0_BG_ZT_Prediction;
 extern const wchar_t* rsConstant_Model;
 
+extern const wchar_t* rsPhysical_Activity_Detection_Model;
+extern const wchar_t* rsHeart_Rate_Resting;
+
 extern const wchar_t* rsP_Column;
 extern const wchar_t* rsCg_Column;
 extern const wchar_t* rsC_Column;
@@ -944,6 +999,9 @@ extern const wchar_t *rsSignal_Destination_Id;
 extern const wchar_t* rsRemove_From_Source;
 extern const wchar_t* rsCondition;
 extern const wchar_t* rsCollect_Statistics;
+
+extern const wchar_t* rsSignal_Id;
+extern const wchar_t* rsResponse_Window;
 
 extern const wchar_t *rsSignal_Masked_Id;
 extern const wchar_t *rsSignal_Value_Bitmask;
@@ -997,6 +1055,8 @@ extern const wchar_t *rsDrawing_Filter_Filename_Parkes;
 extern const wchar_t *rsDrawing_Filter_Filename_Clark;
 extern const wchar_t *rsDrawing_Filter_Filename_ECDF;
 
+extern const wchar_t* rsFile_Path;
+
 extern const wchar_t *rsCallback_Log_Message;
 extern const wchar_t *rsCallback_Drawing_Graph;
 extern const wchar_t *rsCallback_Drawing_Day;
@@ -1031,9 +1091,7 @@ extern const char* rsFilter_Get_Errors;
 extern const wchar_t* rsSelect_Subjects_And_Segments_For_Db_Reader_Filter;
 extern const wchar_t* rsSelect_Subjects;
 extern const wchar_t* rsSelect_Timesegment_Values_Filter;
-extern const wchar_t* rsSelect_Params_Base;
-extern const wchar_t* rsSelect_Params_From;
-extern const wchar_t* rsSelect_Params_Condition;
+extern const wchar_t* rsSelect_Params_Filter;
 
 
 // ---- drawing-related constants

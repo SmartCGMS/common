@@ -42,8 +42,6 @@
 #include <algorithm>
 #include <cwchar>
 
-filesystem::path CDynamic_Library::mLibrary_Base{};
-
 #ifdef _WIN32
 	const wchar_t* rsShared_Object_Extension = L".dll";
 #elif __APPLE__
@@ -57,8 +55,7 @@ CDynamic_Library::CDynamic_Library() noexcept : mHandle(nullptr) {
 
 CDynamic_Library::CDynamic_Library(CDynamic_Library&& other) noexcept : mHandle(nullptr) {
 	std::swap(mHandle, other.mHandle);
-    mLib_Path = std::move(other.mLib_Path);
-    mLibrary_Base = std::move(other.mLibrary_Base);
+	mLib_Path = std::move(other.mLib_Path);
 }
 
 CDynamic_Library::~CDynamic_Library() noexcept {
@@ -67,12 +64,21 @@ CDynamic_Library::~CDynamic_Library() noexcept {
 }
 
 bool CDynamic_Library::Load(const filesystem::path &file_path) noexcept {
-    if (mLibrary_Base.empty()) mLib_Path = file_path;
-		else mLib_Path = mLibrary_Base / file_path;
-         
+	mLib_Path = file_path;
 
     const auto converted_path = mLib_Path.wstring();
     mHandle = LoadLibraryW(converted_path.c_str());
+
+	// if the library was not found, and is requested by a relative path without leading dot, explicitly try to search in "current" directory;
+	// GNU/Linux and macOS does not do so automatically, so when "libname.so" is requested, we need to explicitly try "./libname.so"
+	// to find it in current location; the same applies to other relative paths, such as "filters/libname.so" --> "./filters/libname.so"
+	if (mHandle == NULL && mLib_Path.is_relative() && !converted_path.empty() && converted_path[0] != '.') {
+		// construct temporary path instance due to bug in assignment operator of filesystem lib (valgrind reports invalid reads and writes)
+		const filesystem::path npath = filesystem::path{ std::wstring{ L"." } } / mLib_Path;
+		mLib_Path = npath;
+		const auto converted_path2 = mLib_Path.wstring();
+		mHandle = LoadLibraryW(converted_path2.c_str());
+	}
 
 	return mHandle != NULL;
 }
@@ -89,6 +95,7 @@ void CDynamic_Library::Unload() noexcept {
 	if (mHandle) {
 		FreeLibrary(mHandle);
 		mHandle = NULL;
+		mLib_Path.clear();
 	}
 }
 
@@ -104,14 +111,6 @@ bool CDynamic_Library::Is_Library(const filesystem::path& path) noexcept {
 
 	if (ext.empty()) return false;
 	return ext.wstring() == rsShared_Object_Extension;
-}
-
-void CDynamic_Library::Set_Library_Base(const filesystem::path& base) noexcept {
-	mLibrary_Base = base;
-}
-
-filesystem::path CDynamic_Library::Get_Library_Base() noexcept {
-	return mLibrary_Base;
 }
 
 filesystem::path CDynamic_Library::Default_Extension() noexcept {

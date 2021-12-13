@@ -117,7 +117,11 @@ namespace scgms {
 			}
 
 			filesystem::path Read_File_Path(const wchar_t* name, const filesystem::path& default_value = {}) {
+#ifndef ANDROID
 				return Read_Parameter<filesystem::path>(name, &SFilter_Parameter::as_filepath, default_value);
+#else
+				return filesystem::path{ Read_String(name, false, default_value.wstring()) };
+#endif
 			}
 
 			int64_t Read_Int(const wchar_t* name, const int64_t default_value = std::numeric_limits<int64_t>::max()) const {
@@ -353,6 +357,7 @@ namespace scgms {
 		const GUID mDevice_ID = Invalid_GUID;
 		void Emit_Info(const scgms::NDevice_Event_Code code, const wchar_t* msg, const uint64_t segment_id) noexcept;
 		void Emit_Info(const scgms::NDevice_Event_Code code, const std::wstring &msg, const uint64_t segment_id = scgms::Invalid_Segment_Id) noexcept;
+		void Emit_Marker(const scgms::NDevice_Event_Code code, const double event_time, const uint64_t segment_id = scgms::Invalid_Segment_Id) noexcept;
 	protected:
 		//Descending class is supposed to implement these two methods only
 		virtual HRESULT Do_Execute(scgms::UDevice_Event event) = 0;
@@ -415,6 +420,12 @@ namespace scgms {
 	public:
 		SDrawing_Filter_Inspection() noexcept {};
 		SDrawing_Filter_Inspection(const SFilter &drawing_filter);
+	};
+
+	class SDrawing_Filter_Inspection_v2 : public std::shared_ptr<IDrawing_Filter_Inspection_v2> {
+	public:
+		SDrawing_Filter_Inspection_v2() noexcept {};
+		SDrawing_Filter_Inspection_v2(const SFilter& drawing_filter);
 	};
 
 	class SLog_Filter_Inspection : public std::shared_ptr<ILog_Filter_Inspection> {

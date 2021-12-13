@@ -158,6 +158,7 @@ namespace scgms {
 		BPM,		//beats per minute, e.g.; heart rate
 		S,			//Siemens e.g.; for galvanic skin response aka electrodermal activity
 		A,			//nano ampers
+		m_per_s,	//speed
 		m_per_s2,	//acceleration
 		g,			//grams - - instead of SI kg due to historical reasons
 
