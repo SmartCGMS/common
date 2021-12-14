@@ -66,7 +66,7 @@ CDynamic_Library::~CDynamic_Library() noexcept {
 bool CDynamic_Library::Load(const filesystem::path &file_path) noexcept {
 	mLib_Path = file_path;
 
-    const auto converted_path = mLib_Path.wstring();
+	const std::wstring converted_path{ mLib_Path.wstring() }; //we need to make a deep copy
     mHandle = LoadLibraryW(converted_path.c_str());
 
 	// if the library was not found, and is requested by a relative path without leading dot, explicitly try to search in "current" directory;
@@ -76,7 +76,7 @@ bool CDynamic_Library::Load(const filesystem::path &file_path) noexcept {
 		// construct temporary path instance due to bug in assignment operator of filesystem lib (valgrind reports invalid reads and writes)
 		const filesystem::path npath = filesystem::path{ std::wstring{ L"." } } / mLib_Path;
 		mLib_Path = npath;
-		const auto converted_path2 = mLib_Path.wstring();
+		const std::wstring converted_path2{ mLib_Path.wstring() };
 		mHandle = LoadLibraryW(converted_path2.c_str());
 	}
 
