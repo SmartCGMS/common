@@ -40,6 +40,7 @@
 
 #define TrackLeaks	
 	//Sometimes, e.g. SaveFileDialog with Qt causes hangup
+	//not that new(std::nothrow) will not compile with CrtDbg-like new_operator_replacement
 
 #ifdef TrackLeaks
 
@@ -95,7 +96,7 @@
 #endif
 
 	template <typename... Args>
-	void dprintf(char *format, Args... args) {
+	void dprintf(const char *format, Args... args) {
 		const size_t bufsize=2048;
 		char buf[bufsize];
 		sprintf_s(buf, bufsize, format, args...);
@@ -103,7 +104,7 @@
 	}
 
 	template <typename... Args>
-	void dprintf(wchar_t *format, Args... args) {
+	void dprintf(const wchar_t *format, Args... args) {
 		const size_t bufsize=2048;
 		wchar_t buf[bufsize];
 		swprintf_s(buf, bufsize, format, args...);

@@ -1373,7 +1373,7 @@ CSimpleIniTempl<SI_CHAR,SI_STRLESS,SI_CONVERTER>::LoadFile(
 #endif // _WIN32
 }
 #endif // SI_HAS_WIDE_FILE
-
+#include <new>
 template<class SI_CHAR, class SI_STRLESS, class SI_CONVERTER>
 SI_Error
 CSimpleIniTempl<SI_CHAR,SI_STRLESS,SI_CONVERTER>::LoadFile(
@@ -1445,7 +1445,7 @@ CSimpleIniTempl<SI_CHAR,SI_STRLESS,SI_CONVERTER>::LoadData(
     if (uLen == (size_t)(-1)) {
         return SI_Error::SI_FAIL;
     }
-
+    
     // allocate memory for the data, ensure that there is a NULL
     // terminator wherever the converted data ends
     SI_CHAR * pData = new(std::nothrow) SI_CHAR[uLen+1];

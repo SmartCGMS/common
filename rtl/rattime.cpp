@@ -104,7 +104,7 @@ std::wstring Rat_Time_To_Local_Time_WStr(const double rt, const wchar_t *fmt) {
 
 double Local_Time_WStr_To_Rat_Time(const std::wstring& str, const wchar_t* fmt) noexcept {
 
-	struct tm ptm;
+	struct tm ptm {}; //zero initalize all possibly non-set elements like daylight saving
 	memset(&ptm, 0, sizeof(ptm)); // mktime may use fields, that may not be filled by std::get_time; to make valgrind happy, let us initialize the whole memory
 	std::wistringstream ss(str);
 	ss >> std::get_time(&ptm, fmt);
