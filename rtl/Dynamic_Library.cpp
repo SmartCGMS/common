@@ -67,7 +67,8 @@ bool CDynamic_Library::Load(const filesystem::path &file_path) noexcept {
 	mLib_Path = file_path;
 
 	const std::wstring converted_path{ mLib_Path.wstring() }; //we need to make a deep copy
-    mHandle = LoadLibraryW(converted_path.c_str());
+	const auto cstr = converted_path.c_str();
+    mHandle = LoadLibraryW(cstr);
 
 	// if the library was not found, and is requested by a relative path without leading dot, explicitly try to search in "current" directory;
 	// GNU/Linux and macOS does not do so automatically, so when "libname.so" is requested, we need to explicitly try "./libname.so"

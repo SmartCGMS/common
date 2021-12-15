@@ -109,7 +109,8 @@ namespace scgms {
 		const wchar_t *description;
 		const wchar_t *db_table_name;
 
-		const size_t number_of_parameters;				//cannot be zero
+		const size_t total_number_of_parameters;				//cannot be zero
+		const size_t number_of_segment_specific_parameters;	//can be zero, number_of_parameters less number_of_segment_specific_parameters is the number of segment-agnostic/common parameters
 		const NModel_Parameter_Value *parameter_types;	//array of mptConstants
 		const wchar_t **parameter_ui_names;
 		const wchar_t **parameter_db_column_names;
@@ -124,7 +125,7 @@ namespace scgms {
 		const GUID* reference_signal_ids;
 	};
 
-	constexpr TModel_Descriptor Null_Model_Descriptor = { Invalid_GUID, NModel_Flags::None, nullptr, nullptr, 0, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, 0, nullptr, nullptr };
+	constexpr TModel_Descriptor Null_Model_Descriptor = { Invalid_GUID, NModel_Flags::None, nullptr, nullptr, 0, 0, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, 0, nullptr, nullptr };
 
 	struct TSolver_Descriptor {
 		const GUID id;

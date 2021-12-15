@@ -48,6 +48,8 @@
 
 class CMemory_Leak_Tracker {
 	//just a class-helper that correctly catches memory allocated with global const variable
+protected:
+	_CrtMemState mStart = { 0 }, mStop = { 0 }, mDiff = { 0 };
 public:
 	CMemory_Leak_Tracker();
 	~CMemory_Leak_Tracker();
@@ -61,7 +63,8 @@ CMemory_Leak_Tracker::CMemory_Leak_Tracker() {
 			#ifdef prefer_vld
 				VLDEnable();
 			#else
-				_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF | _CRTDBG_CHECK_ALWAYS_DF);
+				_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF | _CRTDBG_CHECK_ALWAYS_DF | _CRTDBG_CHECK_CRT_DF | _CRTDBG_DELAY_FREE_MEM_DF);
+				_CrtMemCheckpoint(&mStart); //take the initial snapshot
 			#endif
 		#endif
 	#endif
@@ -71,7 +74,11 @@ CMemory_Leak_Tracker::~CMemory_Leak_Tracker() {
 	#ifdef TrackLeaks
 		#if defined(_MSC_VER) && defined(_DEBUG)
 	
+#ifndef _KERNEL_MODE
 		try {
+#endif
+				_CrtMemCheckpoint(&mStop); //take the stop snapshot
+
 				//wchar_t *fileName = (wchar_t*) malloc(1024*sizeof(wchar_t));
 				//wchar_t *buf = (wchar_t*) malloc(2048*sizeof(wchar_t));
 				//can't be on the heap, otherwise they will be reported as leaks
@@ -84,16 +91,28 @@ CMemory_Leak_Tracker::~CMemory_Leak_Tracker() {
 
 				#ifdef prefer_vld
 					VLDReportLeaks();
-				#else
+				#else				
+				if (_CrtMemDifference(&mDiff, &mStart, &mStop) == TRUE) {
+					OutputDebugStringW(L"-----------_CrtMemDumpStatistics ---------\n");
+					_CrtMemDumpStatistics(&mDiff);
+					OutputDebugStringW(L"-----------_CrtMemDumpAllObjectsSince ---------\n");
+					_CrtMemDumpAllObjectsSince(&mStart);
+					OutputDebugStringW(L"-----------_CrtDumpMemoryLeaks ---------\n");
 					_CrtDumpMemoryLeaks();
+				}
+				else {
+					OutputDebugStringW(L"No leaks detected:)\n");
+				}							
 				#endif
 
 				swprintf_s(buf, 2048, L"========== Leaks dumped for: %s ==========\n", fileName);
 				OutputDebugStringW(buf);
+#ifndef _KERNEL_MODE
 		}
 		catch (...) {
 			OutputDebugStringW(L"Something went wrong while trying to print the leaks!");
 		}
+#endif
 
 
 		#endif
