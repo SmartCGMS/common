@@ -44,6 +44,7 @@ extern const wchar_t* dsGPredict3_App_Name;
 extern const wchar_t* dsGPredict3_App_Domain;
 
 extern const wchar_t* dsNaN;
+extern const wchar_t* dsCommon;
 
 extern const wchar_t* dsmmol_per_L;
 extern const wchar_t* dsU;

@@ -42,6 +42,7 @@ const wchar_t* dsGPredict3_App_Name = L"gpredict3-desktop";
 const wchar_t* dsGPredict3_App_Domain = L"diabetes.zcu.cz";
 
 const wchar_t* dsNaN = L"NaN";
+const wchar_t* dsCommon = L"Common";
 
 const wchar_t* dsmmol_per_L = L"mmol/L";
 const wchar_t* dsU = L"U";
