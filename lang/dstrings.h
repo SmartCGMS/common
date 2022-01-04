@@ -803,12 +803,14 @@ extern const wchar_t *dsUse_Opened_Segments_Only_Tooltip;
 extern const wchar_t *dsParameter_Configuration_Failed_RC;
 
 extern const wchar_t* dsSignal_Error;
+extern const wchar_t* dsFast_Signal_Error;
 extern const wchar_t* dsReference_Signal;
 extern const wchar_t* dsError_Signal;
 extern const wchar_t* dsError;
 extern const wchar_t* dsDescription;
 extern const wchar_t* dsAbsolute;
 extern const wchar_t* dsRelative;
+extern const wchar_t* dsUnsupported_Metric_Configuration;
 
 extern const wchar_t* dsDiabetes_Grid_Filter;
 extern const wchar_t* dsClarke_Error_Grid;

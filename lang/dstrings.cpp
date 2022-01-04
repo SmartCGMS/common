@@ -826,12 +826,14 @@ const wchar_t* dsRemote_Model_Id = L"Remote model";
 const wchar_t* dsRemote_Subject_Name = L"Remote subject name";
 
 const wchar_t* dsSignal_Error = L"Signal error";
+const wchar_t* dsFast_Signal_Error = L"Fast signal error";
 const wchar_t* dsReference_Signal = L"Reference signal";
 const wchar_t* dsError_Signal = L"Error signal";
 const wchar_t* dsError = L"Error";
 const wchar_t* dsDescription = L"Description";
 const wchar_t* dsAbsolute = L"Absolute [mmol/l]";
 const wchar_t* dsRelative = L"Relative [%]";
+const wchar_t* dsUnsupported_Metric_Configuration = L"Unsupported metric configuration.";
 
 const wchar_t* dsDiabetes_Grid_Filter = L"Diabetes Error Grids";
 const wchar_t* dsClarke_Error_Grid = L"Clarke Error Grid";
