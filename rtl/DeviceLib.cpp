@@ -138,6 +138,7 @@ scgms::TDevice_Event* Get_Raw_Event(scgms::IDevice_Event *event) {
 scgms::IDevice_Event* Create_Event(const scgms::NDevice_Event_Code code) {
 	scgms::IDevice_Event *result;
 	if (imported::create_device_event(code, &result) != S_OK) result = nullptr;
+	assert(result != nullptr);
 	return result;
 }
 
