@@ -126,7 +126,8 @@ namespace refcnt {
 	}
 
 	Swstr_list::Swstr_list() : SReferenced<refcnt::wstr_list>{ Create_Container<refcnt::wstr_container*>(nullptr, nullptr) } {
-		get()->Release();	//both ctor and Create_Container called AddRef => one AddRef is excessive
+		if (operator bool())
+			get()->Release();	//both ctor and Create_Container called AddRef => one AddRef is excessive
 	}
 
 

@@ -249,8 +249,12 @@ namespace refcnt {
 	template <typename T>
 	IVector_Container<T>* Create_Container(T *begin, T *end) {
 		IVector_Container<T> *obj = nullptr;
-		if (Manufacture_Object<internal::CVector_Container<T>, IVector_Container<T>>(&obj) == S_OK)
-			obj->set(begin, end);
+		if (Manufacture_Object<internal::CVector_Container<T>, IVector_Container<T>>(&obj) == S_OK) {
+			if (!Succeeded(obj->set(begin, end))) {
+				obj->Release();
+				obj = nullptr;
+			};
+		}
 		return obj;
 	}
 
@@ -291,6 +295,20 @@ namespace refcnt {
 			T *begin, *end;
 			if (src->get(&begin, &end) == S_OK)
 				result = Create_Container<T>(begin, end);
+		}
+
+		return result;
+	}
+
+	template <typename T, typename S = SVector_Container<T>>
+	S Copy_Container_shared(IVector_Container<T>* src) {
+		S result;
+	
+		if (src) {
+			// copy parameter hint to internal vector
+			T* begin, * end;
+			if (src->get(&begin, &end) == S_OK)
+				result = Create_Container_shared<T, S>(begin, end);
 		}
 
 		return result;
