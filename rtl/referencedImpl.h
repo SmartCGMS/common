@@ -89,9 +89,13 @@ namespace refcnt {
 		SReferenced(I *obj) {			
 			if (obj) obj->AddRef();
 			std::shared_ptr<I>::reset(obj, [](I* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });
-		}
+		}		
 
 		virtual ~SReferenced() {}
+
+		SReferenced& operator=(I*) = delete;
+		template< class Y, class Deleter >
+		SReferenced& operator=(std::unique_ptr<Y, Deleter>&& r) = delete;
 	};
 
 	template <class T, class I, class S, typename... Args>

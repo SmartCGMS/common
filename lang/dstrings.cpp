@@ -53,10 +53,10 @@ const wchar_t* dsm_per_s2 = L"m/s2";
 
 const char* dsSCGMS_Not_Loaded = "SmartCGMS library is not loaded!";
 
-const char* dsFile = "File";
+const char* dsFile = "&File";
 const char* dsNew_Experimental_Setup = "New";
 const char* dsOpen_Experimental_Setup = "Open";
-const char* dsOpen_Recent_Experimental_Setup = "Open recent";
+const char* dsOpen_Recent_Experimental_Setup = "Open &recent";
 const char* dsSave_Experimental_Setup = "Save";
 const char* dsSave_Experimental_Setup_As = "Save As...";
 const char* dsExperimental_Setup_File_Mask = "Experimental Setup (*.ini)";
