@@ -49,7 +49,9 @@
 class CMemory_Leak_Tracker {
 	//just a class-helper that correctly catches memory allocated with global const variable
 protected:
+#if defined(_MSC_VER) && defined(_DEBUG)
 	_CrtMemState mStart = { 0 }, mStop = { 0 }, mDiff = { 0 };
+#endif
 public:
 	CMemory_Leak_Tracker();
 	~CMemory_Leak_Tracker();
