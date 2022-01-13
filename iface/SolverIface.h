@@ -135,9 +135,13 @@ namespace scgms {
 
 	using TOptimize_Parameters = HRESULT(IfaceCalling*)(scgms::IFilter_Chain_Configuration *configuration, const size_t filter_index, const wchar_t *parameters_configuration_name,
 		scgms::TOn_Filter_Created on_filter_created, const void* on_filter_created_data,
-		const GUID *solver_id, const size_t population_size, const size_t max_generations, solver::TSolver_Progress *progress, refcnt::wstr_list *error_description);
+		const GUID *solver_id, const size_t population_size, const size_t max_generations, 
+		const double** hints, const size_t hint_count,
+		solver::TSolver_Progress *progress, refcnt::wstr_list *error_description);
 
 	using TOptimize_Multiple_Parameters = HRESULT(IfaceCalling*)(scgms::IFilter_Chain_Configuration *configuration, const size_t *filter_indices, const wchar_t **parameters_configuration_names, size_t filter_count,
 		scgms::TOn_Filter_Created on_filter_created, const void* on_filter_created_data,
-		const GUID *solver_id, const size_t population_size, const size_t max_generations, solver::TSolver_Progress *progress, refcnt::wstr_list *error_description);
+		const GUID *solver_id, const size_t population_size, const size_t max_generations, 
+		const double** hints, const size_t hint_count,
+		solver::TSolver_Progress *progress, refcnt::wstr_list *error_description);
 }

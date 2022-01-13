@@ -185,8 +185,8 @@ bool Match_Wildcard(const std::wstring fname, const std::wstring wcard, const bo
 		case L'*':
 			//skip everything in the filename until extension or dir separator
 			while (f < fname.size()) {
-				if ((fname[f] == L'.') || (fname[f] == filesystem::path::preferred_separator))
-					break;
+				if ((fname[f] == L'.') || (fname[f] == filesystem::path::preferred_separator)) 
+					break;				
 
 				f++;
 			}

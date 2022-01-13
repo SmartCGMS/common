@@ -97,6 +97,8 @@ double str_2_dbl(const char* str, bool& ok);
 double str_2_dbl(const wchar_t* wstr);
 double str_2_dbl(const wchar_t* wstr, bool& ok);
 
+std::vector<double> str_2_dbls(const wchar_t* wstr, bool& ok);
+
 std::wstring dbl_2_wstr(const double val);
 
 template <typename C>

@@ -112,18 +112,26 @@ scgms::SCalculate_Filter_Inspection::SCalculate_Filter_Inspection(const scgms::S
 
 HRESULT scgms::Optimize_Parameters(scgms::SFilter_Chain_Configuration configuration, const size_t filter_index, const wchar_t *parameters_configuration_name,
 									 scgms::TOn_Filter_Created on_filter_created, const void* on_filter_created_data,
-									 const GUID &solver_id, const size_t population_size, const size_t max_generations, solver::TSolver_Progress &progress,
+									 const GUID &solver_id, const size_t population_size, const size_t max_generations, 
+									 const double** hints, const size_t hint_count,
+									 solver::TSolver_Progress &progress,
 									 refcnt::Swstr_list error_description) {
 	
 	return imported::optimize_parameters(configuration.get(), filter_index, parameters_configuration_name,
-									 	on_filter_created, on_filter_created_data, &solver_id, population_size, max_generations, &progress, error_description.get());
+									 	on_filter_created, on_filter_created_data, &solver_id, population_size, max_generations, 
+										hints, hint_count,
+										&progress, error_description.get());
 }
 
 HRESULT scgms::Optimize_Multiple_Parameters(scgms::SFilter_Chain_Configuration configuration, const size_t *filter_indices, const wchar_t **parameters_configuration_names, size_t filter_count,
 	scgms::TOn_Filter_Created on_filter_created, const void* on_filter_created_data,
-	const GUID &solver_id, const size_t population_size, const size_t max_generations, solver::TSolver_Progress &progress,
+	const GUID &solver_id, const size_t population_size, const size_t max_generations, 
+	const double** hints, const size_t hint_count, 
+	solver::TSolver_Progress &progress,
 	refcnt::Swstr_list error_description) {
 
 	return imported::optimize_multiple_parameters(configuration.get(), filter_indices, parameters_configuration_names, filter_count,
-		on_filter_created, on_filter_created_data, &solver_id, population_size, max_generations, &progress, error_description.get());
+		on_filter_created, on_filter_created_data, &solver_id, population_size, max_generations, 
+		hints, hint_count,
+		&progress, error_description.get());
 }

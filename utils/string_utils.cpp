@@ -208,6 +208,27 @@ double str_2_dbl(const wchar_t* wstr) {
      return convert_str_2_double<wchar_t>(wstr, ok);	
 }
 
+ std::vector<double> str_2_dbls(const wchar_t* wstr, bool& ok) {     
+     std::wstring str_copy{ wstr };	//wcstok modifies the input string
+     const wchar_t* delimiters = L" ";	//string of chars, which designate individual delimiters
+     wchar_t* buffer = nullptr;
+     wchar_t* str_val = wcstok_s(const_cast<wchar_t*>(str_copy.data()), delimiters, &buffer);
+     std::vector<double> result;
+     
+     while (str_val != nullptr) {
+        
+        //and store the real value
+        const double value = str_2_dbl(str_val, ok);
+        if (!ok)
+            return decltype(result){}; ;
+        result.push_back(value);
+        
+        str_val = wcstok_s(nullptr, delimiters, &buffer);        
+     }
+     
+     return result;
+ }
+
 std::wstring dbl_2_wstr(const double val) {
 
     auto convert_normal = [](const double val)->std::wstring {
