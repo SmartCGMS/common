@@ -42,6 +42,7 @@
 
 #include <string>
 #include <locale>
+#include <vector>
 
  // compile-time type+value selector - ending part
 template<typename T, typename A0>
@@ -98,6 +99,19 @@ double str_2_dbl(const wchar_t* wstr, bool& ok);
 
 std::wstring dbl_2_wstr(const double val);
 
+template <typename C>
+std::wstring dbl_2_str(const C& container) {
+    std::wstring result;
+    for (auto iter = container.begin(); iter != container.end(); iter++) {
+        if (!result.empty())
+            result += L' ';
+        result += dbl_2_wstr(*iter);
+    }
+
+    return result;
+}
+
+
 int64_t str_2_int(const char* str);
 int64_t str_2_int(const char* str, bool& ok);
 int64_t str_2_int(const std::string& str, bool& converted_ok);
@@ -120,3 +134,4 @@ std::string quote(const std::string& str);
 
 std::wstring Lower_String(const std::wstring& wstr);
 std::string Lower_String(const std::string& wstr);
+

@@ -67,3 +67,5 @@ bool Is_Directory(const filesystem::path& path);
 bool Is_Regular_File_Or_Symlink(const filesystem::path& path);
 
 std::wstring& Ensure_Uniform_Dir_Separator(std::wstring& path) noexcept;	//some std libs still fail to make_preferred
+
+bool Match_Wildcard(const std::wstring fname, const std::wstring wcard, const bool case_sensitive);

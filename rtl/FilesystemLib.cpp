@@ -54,6 +54,7 @@
 
 #include <cstring>
 #include <algorithm>
+#include <cwctype>
 
 // PATH_MAX is fixed on several platforms (e.g. Android) to a fairly big number (4096). We don't need so long paths on a regular system,
 // so we define it to be lower. However, Android-NDK verifies the length of an input buffer to be >= PATH_MAX, so we have to be consistent
@@ -167,4 +168,50 @@ std::wstring& Ensure_Uniform_Dir_Separator(std::wstring& path) noexcept {
 	}
 
 	return path;
+}
+
+
+bool Match_Wildcard(const std::wstring fname, const std::wstring wcard, const bool case_sensitive) {
+	size_t f = 0;
+	for (size_t w = 0; w < wcard.size(); w++) {
+		switch (wcard[w]) {
+		case L'?':
+			if (f >= fname.size()) return false;
+			//there is one char to eat, let's continue
+			f++;
+			break;
+
+
+		case L'*':
+			//skip everything in the filename until extension or dir separator
+			while (f < fname.size()) {
+				if ((fname[f] == L'.') || (fname[f] == filesystem::path::preferred_separator))
+					break;
+
+				f++;
+			}
+			break;
+
+
+		default:
+			if (f >= fname.size())
+				return false;
+			if (case_sensitive) {
+				if (wcard[w] != fname[f])
+					return false;
+			}
+			else {
+				if (std::towupper(wcard[w]) != std::towupper(fname[f]))
+					return false;
+			}
+			//wild card and name still matches, continue
+			f++;
+			break;
+
+		}
+
+
+	}
+
+	return f < fname.size() ? false : true;	//return false if some chars in the fname were not eaten
 }
