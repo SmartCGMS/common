@@ -198,9 +198,10 @@ namespace scgms {
 		const NSignal_Visualization visualization;
 		const NSignal_Mark mark;
 		const NSignal_Mark *stroke_pattern;	//NSignal_Mark::none terminated stroke pattern, nullptr means solid line
+		const double value_scale;
 	};
 
-	constexpr TSignal_Descriptor Null_Signal_Descriptor = { Invalid_GUID, nullptr, nullptr, NSignal_Unit::Unitless, 0, 0, NSignal_Visualization::smooth, NSignal_Mark::none, nullptr};
+	constexpr TSignal_Descriptor Null_Signal_Descriptor = { Invalid_GUID, nullptr, nullptr, NSignal_Unit::Unitless, 0, 0, NSignal_Visualization::smooth, NSignal_Mark::none, nullptr, 1.0 };
 
 	using TGet_Filter_Descriptors = HRESULT(IfaceCalling*)(TFilter_Descriptor **begin, TFilter_Descriptor **end);
 	using TGet_Metric_Descriptors = HRESULT(IfaceCalling*)(TMetric_Descriptor **begin, TMetric_Descriptor **end);

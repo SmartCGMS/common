@@ -357,6 +357,34 @@ namespace scgms {
 		wchar_t* name;
 	};
 
+	// drawing options - passed as an input parameter to Draw method of IDrawing_Filter_Inspection_v2
+	struct TDraw_Options {
+
+		/* an array of segment IDs to draw; nullptr = all segments */
+		uint64_t* segments = nullptr;
+
+		/* a size of segments array; if segments == nullptr, this has no effect */
+		size_t segment_count = 0;
+
+		/* an array of signal IDs to draw; nullptr = all signals */
+		GUID* in_signals = nullptr;
+
+		/* an array of reference signal IDs; reference signal is optional and may be null - needed for e.g.; for error grids, then its size must match with signal size
+		 *                     when using reference signal to draw e.g.; an error grid, the filter is assumed take discrete levels
+		 *                     of the reference signal, while plotting them against continous levels of the signal
+		 */
+		GUID* reference_signals = nullptr;
+
+		/* size of signals and reference_signals array; if in_signals == nullptr, this has no effect */
+		size_t signal_count = 0;
+
+		/* width of the resulting drawing; 0 = use default value for given drawing type (defined by implementation) */
+		int width = 0;
+
+		/* height of the resulting drawing; 0 = use default value for given drawing type (defined by implementation) */
+		int height = 0;
+	};
+
 	//knonw drawing capability
 	constexpr GUID dcGraph =		{ 0xb7ca6ed4, 0xfb05, 0x4b16, { 0x91, 0x4c, 0x3f, 0xdd, 0xed, 0x23, 0x22, 0xa0 } }; // {B7CA6ED4-FB05-4B16-914C-3FDDED2322A0}
 	constexpr GUID dcDaily_Graph =  { 0x1564bc55, 0xcb1b, 0x4f4a, { 0x82, 0x4b, 0xef, 0x41, 0x52, 0x34, 0xc2, 0x10 } } ;// {1564BC55-CB1B-4F4A-824B-EF415234C210}
@@ -376,7 +404,7 @@ namespace scgms {
 		 * Retrieves an array of supported plots
 		 * descs - a vector container of plot descriptors
 		 */
-		virtual HRESULT IfaceCalling Get_Capabilities(refcnt::IVector_Container<const TPlot_Descriptor>* descs) const = 0;
+		virtual HRESULT IfaceCalling Get_Capabilities(refcnt::IVector_Container<TPlot_Descriptor>* descs) const = 0;
 
 		/**
 		 * Retrieves an array of supported segments
@@ -395,15 +423,9 @@ namespace scgms {
 		 * Retrieves generated SVG for a given type of the plot
 		 * plot_id - ID of a plot to be drawn; this must be one of IDs advertised in Get_Capabilities
 		 * svg - a container to render result into; the target must exist and point to a valid empty container
-		 * segments - an array of segment IDs to draw; nullptr = all segments
-		 * segment_count - a size of segments array; if segments == nullptr, this has no effect
-		 * in_signals - an array of signal IDs to draw; nullptr = all signals
-		 * reference_signals - an array of reference signal IDs; reference signal is optional and may be null - needed for e.g.; for error grids, then its size must match with signal size
-		 *                     when using reference signal to draw e.g.; an error grid, the filter is assumed take discrete levels
-		 *                     of the reference signal, while plotting them against continous levels of the signal
-		 * signal_count - size of signals and reference_signals array; if in_signals == nullptr, this has no effect
+		 * options - a structure of options used for rendering the result
 		 */
-		virtual HRESULT IfaceCalling Draw(const GUID *plot_id, refcnt::str_container *svg, const uint64_t *segments, const size_t segment_count, const GUID *in_signals, const GUID *reference_signals, const size_t signal_count) = 0;
+		virtual HRESULT IfaceCalling Draw(const GUID *plot_id, refcnt::str_container *svg, const TDraw_Options* options) = 0;
 	};
 
 	class IPlot_Drawer : public virtual refcnt::IReferenced {

@@ -50,6 +50,8 @@ struct RGBColor
 	uint8_t g;
 	uint8_t b;
 
+	uint8_t a = 255;
+
 	static constexpr uint8_t Hex_Lookup(char c) {
 		if (c >= '0' && c <= '9')
 			return c - '0';
@@ -61,13 +63,35 @@ struct RGBColor
 	}
 
 	static RGBColor From_HTML_Color(const std::string& col) {
-		if (col.length() != 7) // we expect "#RRGGBB" format
-			return { 0,0,0 };
+
+		if (col.length() == 9) // in case of "#AARRGGBB" format (used in our color descriptors)
+		{
+			return {
+				static_cast<uint8_t>(Hex_Lookup(col[3]) * 16 + Hex_Lookup(col[4])),
+				static_cast<uint8_t>(Hex_Lookup(col[5]) * 16 + Hex_Lookup(col[6])),
+				static_cast<uint8_t>(Hex_Lookup(col[7]) * 16 + Hex_Lookup(col[8])),
+				static_cast<uint8_t>(Hex_Lookup(col[1]) * 16 + Hex_Lookup(col[2]))
+				};
+		}
+
+		if (col.length() != 7) // otherwise we expect "#RRGGBB" format
+			return { 0,0,0,255 };
 
 		return {
 			static_cast<uint8_t>(Hex_Lookup(col[1]) * 16 + Hex_Lookup(col[2])),
 			static_cast<uint8_t>(Hex_Lookup(col[3]) * 16 + Hex_Lookup(col[4])),
-			static_cast<uint8_t>(Hex_Lookup(col[5]) * 16 + Hex_Lookup(col[6]))
+			static_cast<uint8_t>(Hex_Lookup(col[5]) * 16 + Hex_Lookup(col[6])),
+			255
+		};
+	}
+
+	static RGBColor From_UInt32(const uint32_t col, bool has_alpha = false)
+	{
+		return {
+			static_cast<uint8_t>(col >> 16),
+			static_cast<uint8_t>(col >> 8),
+			static_cast<uint8_t>(col),
+			has_alpha ? static_cast<uint8_t>(col >> 24) : static_cast<uint8_t>(255),
 		};
 	}
 };
