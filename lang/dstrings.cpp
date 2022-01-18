@@ -211,7 +211,7 @@ const wchar_t* dsCondition = L"Condition";
 const wchar_t* dsExpression_Parse_Error = L"Error parsing the expression: ";
 const char* dsInvalid_expression_character = "Invalid character in the expression: ";
 const wchar_t* dsCollect_Statistics = L"Collect statistics";
-const wchar_t* dsOutput_to_file_enabled_but_no_filename_given = L"Ouput to file enabled, but not filename given.";
+const wchar_t* dsOutput_to_file_enabled_but_no_filename_given = L"Ouput to file enabled, but no filename given.";
 const wchar_t* dsInvalid_Argument_Value_per_Parameter = L"Invalid argument value, parameter name: ";
 const wchar_t* dsCannot_Open_File = L"Cannot open file: ";
 const wchar_t* dsCannot_Read_File = L"Cannot read file: ";
@@ -246,6 +246,7 @@ const wchar_t *dsDrawing_Filter_Filename_ECDF = L"ECDF file path";
 
 const wchar_t *dsLog_Filter = L"Log";
 const wchar_t *dsLog_Output_File = L"Save log to CSV file";
+const wchar_t* dsLog_Segments_Individually = L"Save each segment to a dedicated file";
 const wchar_t* dsLog_Input_File_Or_Dir = L"Log file or dir with log files";
 const wchar_t *dsEmit_Shutdown_Msg = L"Emit the shutdown message";
 const wchar_t *dsLog_Header = L"Logical Clock; Device Time; Event Code; Signal; Info; Segment Id; Event Code Id; Device Id; Signal Id";
@@ -1076,6 +1077,7 @@ const wchar_t *rsRecalculate_On_Segment_End = L"Recalculate_At_Segment_End";
 const wchar_t *rsRecalculate_On_Calibration = L"Recalculate_On_Calibration";
 
 const wchar_t *rsLog_Output_File = L"Log_File";
+const wchar_t* rsLog_Segments_Individually = L"Log_Segments_Individually";
 const wchar_t *rsEmit_Shutdown_Msg = L"Emit_Shutdown";
 const wchar_t *rsInterpret_Filename_As_Segment_Id = L"Filename_as_segment_id";
 const wchar_t *rsEmit_All_Events_Before_Shutdown = L"Emit_All_Events_Before_Shutdown";
