@@ -215,6 +215,7 @@ const wchar_t* dsOutput_to_file_enabled_but_no_filename_given = L"Ouput to file 
 const wchar_t* dsInvalid_Argument_Value_per_Parameter = L"Invalid argument value, parameter name: ";
 const wchar_t* dsCannot_Open_File = L"Cannot open file: ";
 const wchar_t* dsCannot_Read_File = L"Cannot read file: ";
+const wchar_t* dsCannot_Write_File = L"Cannot write to file: ";
 
 
 const wchar_t *rsSignal_Masked_Id = L"Signal";

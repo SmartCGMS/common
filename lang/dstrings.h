@@ -214,6 +214,7 @@ extern const wchar_t* dsOutput_to_file_enabled_but_no_filename_given;
 extern const wchar_t* dsInvalid_Argument_Value_per_Parameter;
 extern const wchar_t* dsCannot_Open_File;
 extern const wchar_t* dsCannot_Read_File;
+extern const wchar_t* dsCannot_Write_File;
 
 extern const wchar_t *dsSignal_Masked_Id;
 extern const wchar_t *dsSignal_Value_Bitmask;
