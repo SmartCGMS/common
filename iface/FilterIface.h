@@ -87,11 +87,6 @@ namespace scgms {
 		virtual HRESULT IfaceCalling Get_File_Path(refcnt::wstr_container **wstr) = 0;	//reads interpreted string as filepath, which is absolute-ed with the parent_path, when relative
 		virtual HRESULT IfaceCalling Set_Parent_Path(const wchar_t* parent_path) = 0;
 		
-		virtual HRESULT IfaceCalling Defer_To_File(const wchar_t* path) = 0;
-		virtual HRESULT IfaceCalling Get_Deferred_File(wchar_t** path) = 0;			//returns read-only pointer, never modify this memory
-			//relative path is resolved with respect to teh parent path
-			//the contents gets deferred when saving loading the entire configuration, no relevant I/O is done when calling any IFilter_Parameter's method
-
 		virtual HRESULT IfaceCalling Get_Time_Segment_Id_Container(time_segment_id_container **ids) = 0;
 		virtual HRESULT IfaceCalling Set_Time_Segment_Id_Container(time_segment_id_container *ids) = 0;
 
