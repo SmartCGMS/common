@@ -214,6 +214,7 @@ extern const wchar_t* dsOutput_to_file_enabled_but_no_filename_given;
 extern const wchar_t* dsInvalid_Argument_Value_per_Parameter;
 extern const wchar_t* dsCannot_Open_File;
 extern const wchar_t* dsCannot_Read_File;
+extern const wchar_t* dsCannot_Write_File;
 
 extern const wchar_t *dsSignal_Masked_Id;
 extern const wchar_t *dsSignal_Value_Bitmask;
@@ -243,6 +244,7 @@ extern const wchar_t *dsInterop_Export_Filter;
 
 extern const wchar_t *dsLog_Filter;
 extern const wchar_t *dsLog_Output_File;
+extern const wchar_t* dsLog_Segments_Individually;
 extern const wchar_t* dsLog_Input_File_Or_Dir;
 extern const wchar_t *dsEmit_Shutdown_Msg;
 extern const wchar_t *dsLog_Header;
@@ -1045,6 +1047,7 @@ extern const wchar_t *rsRecalculate_On_Segment_End;
 extern const wchar_t *rsRecalculate_On_Calibration;
 
 extern const wchar_t *rsLog_Output_File;
+extern const wchar_t* rsLog_Segments_Individually;
 extern const wchar_t *rsEmit_Shutdown_Msg;
 extern const wchar_t* rsInterpret_Filename_As_Segment_Id;
 extern const wchar_t* rsEmit_All_Events_Before_Shutdown;

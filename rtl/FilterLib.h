@@ -154,7 +154,8 @@ namespace scgms {
 				bool success = false;
 
 				const auto parameter = Resolve_Parameter(name);
-				if (parameter) {					
+				if (parameter) {										
+
 					scgms::IModel_Parameter_Vector *raw_parameters;
 					if (parameter->Get_Model_Parameters(&raw_parameters) == S_OK) {
 						
