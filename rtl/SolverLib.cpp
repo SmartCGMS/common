@@ -52,6 +52,7 @@ solver::TSolver_Setup solver::Check_Default_Parameters(const solver::TSolver_Set
 	//fill in the default values
 	solver::TSolver_Setup result{
 			setup.problem_size,
+			std::min(setup.objectives_count, solver::Maximum_Objectives_Count),
 			setup.lower_bound, setup.upper_bound,
 			setup.hints, setup.hint_count,
 			setup.solution,

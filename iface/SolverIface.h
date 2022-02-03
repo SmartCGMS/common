@@ -43,6 +43,8 @@
 #undef min
 
 namespace solver {
+	constexpr size_t Maximum_Objectives_Count = 10;
+
 	//solver sets these values to indicate its progress
 	struct TSolver_Progress {
 		size_t current_progress, max_progress;	//minimum progress is zero
@@ -52,10 +54,15 @@ namespace solver {
 
 	const TSolver_Progress Null_Solver_Progress = { 0, 0, 0.0, 0 };
 	
-	using TObjective_Function = double(IfaceCalling*)(const void *data, const double *solution);
+	using TObjective_Function = BOOL(IfaceCalling*)(const void *data, const double *solution, double * const fitness);
+		//data is an opaque handler
+		//solution points to the current candidate solution
+		//fitness is an array where to store up to Maximum_Objective_Count
+		//returns TRUE or FALSE
 
 	struct TSolver_Setup {
 		const size_t problem_size;
+		const size_t objectives_count;			//1 for single objective, else the number of objectives
 		const double *lower_bound, *upper_bound;
 		const double **hints;
 		const size_t hint_count;
@@ -70,7 +77,7 @@ namespace solver {
 	};
 
 
-	const TSolver_Setup Default_Solver_Setup = { 0, nullptr, nullptr, nullptr, 0, nullptr, nullptr, nullptr, 0, 0, std::numeric_limits<double>::min() };
+	const TSolver_Setup Default_Solver_Setup = { 0, 0, nullptr, nullptr, nullptr, 0, nullptr, nullptr, nullptr, 0, 0, std::numeric_limits<double>::min() };
 	using TGeneric_Solver = HRESULT(IfaceCalling*)(const GUID *solver_id, const TSolver_Setup *setup, TSolver_Progress *progress);
 }
 
