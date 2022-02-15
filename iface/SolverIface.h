@@ -44,15 +44,17 @@
 
 namespace solver {
 	constexpr size_t Maximum_Objectives_Count = 10;
+	using TFitness = std::array<double, solver::Maximum_Objectives_Count>;
 
 	//solver sets these values to indicate its progress
 	struct TSolver_Progress {
 		size_t current_progress, max_progress;	//minimum progress is zero
-		double best_metric;
+		TFitness best_metric;
 		BOOL cancelled;	//just cast it to bool, if set to true, solver cancels the current operation
 	};
 
-	const TSolver_Progress Null_Solver_Progress = { 0, 0, 0.0, 0 };
+	const TFitness Nan_Fitness = { std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN() };
+	const TSolver_Progress Null_Solver_Progress = { 0, 0,Nan_Fitness, 0 };
 	
 	using TObjective_Function = BOOL(IfaceCalling*)(const void *data, const double *solution, double * const fitness);
 		//data is an opaque handler
