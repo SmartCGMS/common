@@ -132,7 +132,7 @@ const char* dsExport_CSV_Dialog_Title = "Export to CSV";
 
 const char* dsParameters_Optimization_Use = "To enable parameters' optimization, the filter chain must contain:\n"
 											"  a) at least one filter with configured and saved parameters (configure, commit and save)\n"
-											"  b) exactly one, configured Signal Error filter\n"
+											"  b) at least one (maximum %1), configured Signal Error filter(s) (higher priority first)\n"
 											"  c) exactly one filter must emit Shutdown, and any feedback receiver cannot precede this filter\n"
 											"Parameters with improved fitness are applied automatically.";
 
