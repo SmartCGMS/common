@@ -37,6 +37,7 @@
  */
 
 #include "string_utils.h"
+#include "winapi_mapping.h"
 
 #include <sstream>
 #include <algorithm>
@@ -49,6 +50,9 @@
 #include <cwctype>
 #include <type_traits>
 #include <cmath>
+
+#undef min
+#undef max
 
 std::string Narrow_WString(const std::wstring& wstr) {
 	return Narrow_WChar(wstr.c_str());
