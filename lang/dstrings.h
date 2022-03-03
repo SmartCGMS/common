@@ -930,6 +930,11 @@ extern const wchar_t* dsBolus_Amount;
 extern const wchar_t* dsIcarus_Basal_And_Bolus;
 extern const wchar_t* dsCarb_To_Insulin_Ratio;
 
+extern const wchar_t* dsBasal_2_Bolus;
+extern const wchar_t* dsMinimum_Volume;
+extern const wchar_t* dsPPeriod;
+
+
 //--------------------------------- do not translate any of the rs-prefixed texts --
 
 extern const char* rsAbout_Text;
@@ -1306,3 +1311,6 @@ extern const wchar_t* rsResponse_Window;
 extern const wchar_t* rsFailed_to_allocate_memory;
 
 extern const wchar_t* rsUnused_Variable_Name;
+
+extern const wchar_t* rsMinimum;
+extern const wchar_t* rsPeriod;

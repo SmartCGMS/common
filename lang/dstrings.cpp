@@ -928,6 +928,12 @@ const wchar_t* dsBolus_Amount = L"Bolus Amount ";
 const wchar_t* dsIcarus_Basal_And_Bolus = L"Icarus Fixed Basal and Boluses";
 const wchar_t* dsCarb_To_Insulin_Ratio = L"Carb to Insulin Ratio";
 
+
+const wchar_t* dsBasal_2_Bolus = L"Basal to bolus";
+const wchar_t* dsMinimum_Volume = L"Minimum volume";
+const wchar_t* dsPPeriod = L"Period";	//PPeriod is not a typo, we already have dsPeriod with small P
+
+
 //--------------------------------- do not translate any of the rs-prefixed texts --
 
 const char* rsAbout_Text = R"CLC(
@@ -1334,3 +1340,6 @@ const wchar_t* rsResponse_Window = L"Response_Window";
 const wchar_t* rsFailed_to_allocate_memory = L"Failed to allocate memory!";
 
 const wchar_t* rsUnused_Variable_Name = L"$([[maybe_unused]])";
+
+const wchar_t* rsMinimum = L"Minimum";
+const wchar_t* rsPeriod = L"Period";
