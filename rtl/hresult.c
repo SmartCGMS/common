@@ -48,7 +48,8 @@ wchar_t* Describe_Error(const HRESULT error) {
 		case S_FALSE: return L"Succeeded, but no result"; break;
 		case ERROR_FILE_NOT_FOUND: return L"File not found"; break;
 		case ERROR_READ_FAULT: return L"Cannot read from the given source"; break;
-		case E_INVALIDARG: return L"One or more invalid argument(s)"; break;
+		case ERROR_DS_DRA_EXTN_CONNECTION_FAILED: return L"No object to complete the operation"; break;
+
 		case E_NOTIMPL: return L"Not implemented"; break;
 		case E_UNEXPECTED: return L"Catastrophic failure"; break;
 		case E_FAIL: return L"Unspecified error"; break;
@@ -56,11 +57,17 @@ wchar_t* Describe_Error(const HRESULT error) {
 		case E_ABORT: return L"Operation aborted"; break;
 		case E_ILLEGAL_METHOD_CALL: return L"Method cannot be called at this time"; break;
 		case E_ILLEGAL_STATE_CHANGE: return L"Attempted illegal state change"; break;
-		case ERROR_DS_DRA_EXTN_CONNECTION_FAILED: return L"No object to complete the operation"; break;
 		case E_ACCESSDENIED: return L"Access denied"; break;
-		case /*E_NOT_SET*/((HRESULT)0x80070490L): return L"Not set/found"; break;	//otherwise fails to compile on Win
+		case TYPE_E_AMBIGUOUSNAME: return L"Ambiguous name"; break;
+		case E_INVALIDARG: return L"One or more invalid argument(s)"; break;
 		case MK_E_CANTOPENFILE: return L"Cannot open file"; break;
+		case MK_E_UNAVAILABLE: return L"Operation unavailable"; break;
 		case CO_E_ERRORINDLL: return L"Dynamic-libray error"; break;
+		case EVENT_E_TOO_MANY_METHODS: return L"Too many methods invoked to complete the operation"; break;
+		case E_HANDLE: return L"Invalid object"; break;
+		case E_OUTOFMEMORY: return L"Out of memory"; break;
+		case /*E_NOT_SET*/((HRESULT)0x80070490L): return L"Not set/found"; break;	//otherwise fails to compile on Win
+
 		default:	return L"Error description is not available"; break;
 	}
 }
