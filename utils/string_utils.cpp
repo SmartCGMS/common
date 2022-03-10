@@ -220,7 +220,7 @@ double str_2_dbl(const wchar_t* wstr) {
         //and store the real value
         const double value = str_2_dbl(str_val, ok);
         if (!ok)
-            return decltype(result){}; ;
+            return decltype(result){};
         result.push_back(value);
         
         str_val = wcstok_s(nullptr, delimiters, &buffer);        
