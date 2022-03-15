@@ -256,7 +256,7 @@ namespace scgms {
 		if (reminder != 0)
 			return 0;		//check failed, the reminder must be positive
 
-		return reminder = total_specific_count / desc.number_of_segment_specific_parameters;
+		return total_specific_count / desc.number_of_segment_specific_parameters;
 	}
 
 }
