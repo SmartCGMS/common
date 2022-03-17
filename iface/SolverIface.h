@@ -68,7 +68,7 @@ namespace solver {
 		const double *lower_bound, *upper_bound;
 		const double **hints;
 		const size_t hint_count;
-		double * const solution;
+		double * const solution;		//where to store the found solution
 
 		const void *data;
 		const TObjective_Function objective;
