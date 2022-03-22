@@ -36,6 +36,7 @@
  *       monitoring", Procedia Computer Science, Volume 141C, pp. 279-286, 2018
  */
 
+#include "winapi_mapping.h"
 #include "string_utils.h"
 
 #include <sstream>
