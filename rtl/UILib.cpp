@@ -241,4 +241,22 @@ namespace scgms {
 		}
 	}
 
+
+
+	size_t Segment_Count(const size_t parameters_count, const TModel_Descriptor& desc) {
+		if (parameters_count == 0)
+			return 0;
+
+		if (desc.number_of_segment_specific_parameters == 0)
+			return parameters_count == desc.total_number_of_parameters ? 1 : 0;
+
+		const size_t segment_agnostic_parameters = desc.total_number_of_parameters - desc.number_of_segment_specific_parameters;
+		const size_t total_specific_count = parameters_count - segment_agnostic_parameters;
+		const size_t reminder = total_specific_count % desc.number_of_segment_specific_parameters;
+		if (reminder != 0)
+			return 0;		//check failed, the reminder must be positive
+
+		return total_specific_count / desc.number_of_segment_specific_parameters;
+	}
+
 }

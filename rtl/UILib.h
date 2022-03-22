@@ -71,5 +71,9 @@ namespace scgms {
 
         void for_each(std::function<void(scgms::TSignal_Descriptor)> callback) const;
 	};
-	
+
+
+
+	size_t Segment_Count(const size_t parameters_count, const TModel_Descriptor& desc);	//non-zero parameters_count and zero result means corrupted data
+
 }
