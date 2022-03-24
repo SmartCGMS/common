@@ -319,6 +319,11 @@ uint64_t str_2_uint(const wchar_t* wstr, bool& ok) {
     return str_2_xint<uint64_t, wchar_t>(wstr, ok, std::wcstoull);
 }
 
+uint64_t str_2_uint(const char* wstr, bool& ok) {
+    return str_2_xint<uint64_t, char>(wstr, ok, std::strtol);
+}
+
+
 int64_t str_2_int(const std::string& str, bool& converted_ok) {
     return str_2_int(str.c_str(), converted_ok);
 }
