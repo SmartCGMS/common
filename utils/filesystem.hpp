@@ -200,6 +200,8 @@
 #error "Can't raise unicode errors whith exception support disabled"
 #endif
 
+#include "string_utils.h"
+
 namespace ghc {
 namespace filesystem {
 
@@ -292,6 +294,13 @@ public:
     path(const path& p);
     path(path&& p) noexcept;
     path(string_type&& source, format fmt = auto_format);
+#ifdef GHC_USE_WCHAR_T
+	path(const char* src, format fmt = auto_format) : path(Widen_String(src), fmt) {}
+	path(const std::string& src, format fmt = auto_format) : path(Widen_String(src), fmt) {}
+#else
+	path(const wchar_t* src, format fmt = auto_format) : path(Narrow_WString(src), fmt) {}
+	path(const std::wstring& src, format fmt = auto_format) : path(Narrow_WString(src), fmt) {}
+#endif
     template <class Source, typename = path_from_string<Source>>
     path(const Source& source, format fmt = auto_format);
     template <class InputIterator>
