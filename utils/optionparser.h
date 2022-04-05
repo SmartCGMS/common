@@ -248,7 +248,7 @@ class Option;
  * In the case that no argument is provided for an option that takes an
  * optional argument, return codes @c ARG_OK and @c ARG_IGNORE are equivalent.
  */
-enum ArgStatus
+enum class ArgStatus 
 {
   //! The option does not take an argument.
   ARG_NONE,
@@ -925,16 +925,16 @@ struct Arg
   //! @brief For options that don't take an argument: Returns ARG_NONE.
   static ArgStatus None(const Option&, bool)
   {
-    return ARG_NONE;
+    return ArgStatus::ARG_NONE;
   }
 
   //! @brief Returns ARG_OK if the argument is attached and ARG_IGNORE otherwise.
   static ArgStatus Optional(const Option& option, bool)
   {
     if (option.arg && option.name[option.namelen] != 0)
-      return ARG_OK;
+      return ArgStatus::ARG_OK;
     else
-      return ARG_IGNORE;
+      return ArgStatus::ARG_IGNORE;
   }
 };
 
@@ -1669,9 +1669,9 @@ inline bool Parser::workhorse(bool gnu, const Descriptor usage[], int numargs, c
         Option option(descriptor, param, optarg);
         switch (descriptor->check_arg(option, print_errors))
         {
-          case ARG_ILLEGAL:
+          case ArgStatus::ARG_ILLEGAL:
             return false; // fatal
-          case ARG_OK:
+          case ArgStatus::ARG_OK:
             // skip one element of the argument vector, if it's a separated argument
             if (optarg != 0 && have_more_args && optarg == args[1])
             {
@@ -1685,8 +1685,8 @@ inline bool Parser::workhorse(bool gnu, const Descriptor usage[], int numargs, c
             handle_short_options = false;
 
             break;
-          case ARG_IGNORE:
-          case ARG_NONE:
+          case ArgStatus::ARG_IGNORE:
+          case ArgStatus::ARG_NONE:
             option.arg = 0;
             break;
         }
@@ -1955,7 +1955,7 @@ struct PrintUsageImplementation
     const char* ptr; //!< Ptr to current part within the current row.
     int col; //!< Index of current column.
     int len; //!< Length of the current part (that ptr points at) in BYTES
-    int screenlen; //!< Length of the current part in screen columns (taking narrow/wide chars into account).
+    int screenlen = 0; //!< Length of the current part in screen columns (taking narrow/wide chars into account).
     int max_line_in_block; //!< Greatest index of a line within the block. This is the number of \\v within the cell with the most \\vs.
     int line_in_block; //!< Line index within the current cell of the current part.
     int target_line_in_block; //!< Line index of the parts we should return to the user on this iteration.
