@@ -56,10 +56,11 @@ namespace solver {
 	const TFitness Nan_Fitness = { std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN() };
 	const TSolver_Progress Null_Solver_Progress = { 0, 0,Nan_Fitness, 0 };
 	
-	using TObjective_Function = BOOL(IfaceCalling*)(const void *data, const double *solution, double * const fitness);
+	using TObjective_Function = BOOL(IfaceCalling*)(const void *data, const size_t count, const double *solution, double * const fitness);
 		//data is an opaque handler
-		//solution points to the current candidate solution
-		//fitness is an array where to store up to Maximum_Objective_Count
+		//count is the number of solutions - they are laid one after one in 1D/fixed-size array
+		//solution points to the first candidate solution, increase the pointer by n*sizeof(double)*problem_size bytes to read n-th solution
+		//fitness is an array where to store up to Maximum_Objective_Count, also laid in 1D/fixed-size array, thus increase the pointer by n*solver::Maximum_Objectives_Count*sizeof(double) bytes to write n-th fitness
 		//returns TRUE or FALSE
 
 	struct TSolver_Setup {
