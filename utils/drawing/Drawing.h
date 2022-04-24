@@ -122,6 +122,7 @@ namespace drawing
 			std::string mId{ };
 			std::string mClass{ };
 			std::vector<double> mStroke_Dash_Array{ };
+			std::string mTransform{ };
 
 		public:
 			Element() = default;
@@ -158,6 +159,7 @@ namespace drawing
 			const std::string& Get_Id() const { return mId; }
 			const std::string& Get_Class() const { return mClass; }
 			const std::vector<double>& Get_Stroke_Dash_Array() { return mStroke_Dash_Array; }
+			const std::string& Get_Transform() const { return mTransform; }
 
 			Element& Set_Stroke_Width(double width) { mStroke_Width = width; return *this; }
 			Element& Set_Stroke_Color(RGBColor color) { mStroke_Color = color; return *this; }
@@ -167,6 +169,7 @@ namespace drawing
 			Element& Set_Id(const std::string& id) { mId = id; return *this; }
 			Element& Set_Class(const std::string& clss) { mClass = clss; return *this; }
 			Element& Set_Stroke_Dash_Array(const std::vector<double>& dashArray) { mStroke_Dash_Array = dashArray; return *this; }
+			Element& Set_Transform(const std::string& transform) { mTransform = transform; return *this; }
 
 			// clone settings to another Shape
 			void CloneTo(Element& target) const {
