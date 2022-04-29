@@ -210,7 +210,7 @@ double str_2_dbl(const wchar_t* wstr) {
 
  std::vector<double> str_2_dbls(const wchar_t* wstr, bool& ok) {     
      std::wstring str_copy{ wstr };	//wcstok modifies the input string
-     const wchar_t* delimiters = L" ";	//string of chars, which designate individual delimiters
+     const wchar_t* delimiters = L" \n\r";	//string of chars, which designate individual delimiters
      wchar_t* buffer = nullptr;
      wchar_t* str_val = wcstok_s(const_cast<wchar_t*>(str_copy.data()), delimiters, &buffer);
      std::vector<double> result;
@@ -218,9 +218,15 @@ double str_2_dbl(const wchar_t* wstr) {
      while (str_val != nullptr) {
         
         //and store the real value
-        const double value = str_2_dbl(str_val, ok);
-        if (!ok)
-            return decltype(result){};
+        double value = str_2_dbl(str_val, ok);
+        if (!ok) {
+            //let's round subnormals to zero aka flush to zero
+            if (Lower_String(str_val) == L"subnormal") {
+                ok = true;
+                value = 0.0;
+            } else 
+             return decltype(result){};
+        }
         result.push_back(value);
         
         str_val = wcstok_s(nullptr, delimiters, &buffer);        
