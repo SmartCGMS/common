@@ -53,7 +53,7 @@ void Set_Error_To_No_Data(scgms::TSignal_Stats& signal_error) {
 		signal_error.ecdf[ECDF_offset + i] = std::numeric_limits<double>::quiet_NaN();
 		*/
 
-	for (scgms::NECDF i = scgms::NECDF::min_value; i <= scgms::NECDF::max_value; ++i)
+	for (scgms::NECDF i = scgms::NECDF::min_value; i <= scgms::NECDF::max_value; i++)
 		signal_error.ecdf[i] = std::numeric_limits<double>::quiet_NaN();
 }
 

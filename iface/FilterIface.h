@@ -271,10 +271,17 @@ namespace scgms {
 	};
 
 
-	inline NECDF operator++(const NECDF val) {
-		return static_cast<NECDF>(static_cast<std::underlying_type_t<NECDF>>(val) + 1);
+	inline NECDF operator++(NECDF& subj, int val) {	//postfix		
+		const auto old_value = subj;
+		const auto new_value = static_cast<std::underlying_type_t<NECDF>>(subj) + static_cast<std::underlying_type_t<NECDF>>(val == 0 ? 1 : val);
+		subj = static_cast<NECDF>(new_value);
+		return old_value;
 	}
 
+	inline NECDF& operator++(NECDF& subj) {
+		subj = operator++(subj, 1);
+		return subj;
+	}
 
 	struct TECDF : std::array<double, static_cast<size_t>(NECDF::max_value) + 1> {
 		double operator[] (const NECDF idx) const {
@@ -290,7 +297,6 @@ namespace scgms {
 	struct TSignal_Stats {
 		double avg, stddev, sum;	//standard deviation with Bessel's correction
 		size_t count;				//number of elements on which we calculate the metrics
-		//std::array<double, static_cast<size_t>(NECDF::max_value) + 1> ecdf;
 		TECDF ecdf;
 	};
 
