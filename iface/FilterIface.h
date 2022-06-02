@@ -268,13 +268,37 @@ namespace scgms {
 		p75 = 74,
 		p95 = 94,
 		p99 = 98,
-		max_value = 99
+		max_value = 99		
 	};
+
+
+	inline NECDF operator++(NECDF& subj, int val) {	//postfix		
+		const auto old_value = subj;
+		const auto new_value = static_cast<std::underlying_type_t<NECDF>>(subj) + static_cast<std::underlying_type_t<NECDF>>(val == 0 ? 1 : val);
+		subj = static_cast<NECDF>(new_value);
+		return old_value;
+	}
+
+	inline NECDF& operator++(NECDF& subj) {
+		subj = operator++(subj, 1);
+		return subj;
+	}
+
+	struct TECDF : std::array<double, static_cast<size_t>(NECDF::max_value) + 1> {
+		double operator[] (const NECDF idx) const {
+			return this->std::array<double, static_cast<size_t>(NECDF::max_value) + 1>::operator[](static_cast<size_t>(idx));
+		}
+
+		double& operator[] (const NECDF idx) {
+			return this->std::array<double, static_cast<size_t>(NECDF::max_value) + 1>::operator[](static_cast<size_t>(idx));
+		}
+	};
+
 
 	struct TSignal_Stats {
 		double avg, stddev, sum;	//standard deviation with Bessel's correction
 		size_t count;				//number of elements on which we calculate the metrics
-		std::array<double, static_cast<size_t>(NECDF::max_value) + 1> ecdf;
+		TECDF ecdf;
 	};
 
 	// error types

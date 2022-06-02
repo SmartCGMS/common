@@ -123,6 +123,13 @@ namespace scgms {
 		const size_t number_of_calculated_signals;	//cannot be zero
 		const GUID* calculated_signal_ids;
 		const GUID* reference_signal_ids;
+		
+#ifdef __cplusplus
+		inline TModel_Descriptor& operator= (const TModel_Descriptor& other) {
+			memcpy(this, &other, sizeof(TModel_Descriptor));
+			return *this;
+		}
+#endif
 	};
 
 	constexpr TModel_Descriptor Null_Model_Descriptor = { Invalid_GUID, NModel_Flags::None, nullptr, nullptr, 0, 0, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, 0, nullptr, nullptr };

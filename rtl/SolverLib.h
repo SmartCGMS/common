@@ -73,6 +73,36 @@ namespace std
 #endif
 
 namespace solver {
+	template <typename T>
+	class CInt_Iterator {
+	protected:
+		T mVal = 0;
+	public:
+		using iterator_category = std::forward_iterator_tag;
+		using value_type = T;
+		using difference_type = T;
+		using pointer = std::add_pointer_t<T>;
+		using reference = T&;
+	public:
+		CInt_Iterator(const T val) : mVal(val) {};
+
+		CInt_Iterator& operator++() { ++mVal; return *this; }
+		CInt_Iterator operator++(int) { CInt_Iterator tmp(*this); ++mVal; return tmp; }
+
+		bool operator==(CInt_Iterator const& other) const { return mVal == other.mVal; }
+		bool operator!=(CInt_Iterator const& other) const { return mVal != other.mVal; }
+
+		T operator*() const { return mVal; }
+		pointer operator->() const { return &mVal; }
+	public:
+		CInt_Iterator() = default;
+		CInt_Iterator(CInt_Iterator&&) = default;
+		CInt_Iterator(CInt_Iterator const&) = default;
+		CInt_Iterator& operator=(CInt_Iterator&&) = default;
+		CInt_Iterator& operator=(CInt_Iterator const&) = default;
+
+	};
+
 	solver::TSolver_Setup Check_Default_Parameters(const solver::TSolver_Setup &setup, const size_t default_max_generations, const size_t default_population_size);	
 	HRESULT Solve_Generic(const GUID& solver_id, const solver::TSolver_Setup& setup, solver::TSolver_Progress& progress) noexcept;
 }

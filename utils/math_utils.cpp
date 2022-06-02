@@ -48,9 +48,13 @@ void Set_Error_To_No_Data(scgms::TSignal_Stats& signal_error) {
 	signal_error.avg = std::numeric_limits<double>::quiet_NaN();
 	signal_error.stddev = std::numeric_limits<double>::quiet_NaN();
 
-	const size_t ECDF_offset = static_cast<size_t>(scgms::NECDF::min_value);
+	/*const size_t ECDF_offset = static_cast<size_t>(scgms::NECDF::min_value);
 	for (size_t i = 0; i <= static_cast<size_t>(scgms::NECDF::max_value) - ECDF_offset; i++)
 		signal_error.ecdf[ECDF_offset + i] = std::numeric_limits<double>::quiet_NaN();
+		*/
+
+	for (scgms::NECDF i = scgms::NECDF::min_value; i <= scgms::NECDF::max_value; i++)
+		signal_error.ecdf[i] = std::numeric_limits<double>::quiet_NaN();
 }
 
 bool Calculate_Signal_Stats(std::vector<double>& series, scgms::TSignal_Stats& signal_error) {
@@ -66,13 +70,13 @@ bool Calculate_Signal_Stats(std::vector<double>& series, scgms::TSignal_Stats& s
 	std::sort(series.begin(), series.end());
 
 	//fill min and max precisely as we will be rounding for the other values
-	signal_error.ecdf[0] = series[0];
-	signal_error.ecdf[static_cast<size_t>(scgms::NECDF::max_value)] = series[series.size() - 1];
+	signal_error.ecdf[scgms::NECDF::min_value] = series[0];
+	signal_error.ecdf[scgms::NECDF::max_value] = series[series.size() - 1];
 
 	const double stepping = static_cast<double>(signal_error.count - 1) / (static_cast<double>(scgms::NECDF::max_value) + 1.0);
-	const size_t ECDF_offset = static_cast<size_t>(scgms::NECDF::min_value);
+	constexpr size_t ECDF_offset = static_cast<size_t>(scgms::NECDF::min_value);
 	for (size_t i = 1; i < static_cast<size_t>(scgms::NECDF::max_value) - ECDF_offset; i++)
-		signal_error.ecdf[i + ECDF_offset] = series[static_cast<size_t>(std::round(static_cast<double>(i)* stepping))];
+		signal_error.ecdf[static_cast<scgms::NECDF>(i + ECDF_offset)] = series[static_cast<size_t>(std::round(static_cast<double>(i)* stepping))];
 
 
 	//3. calculate count, sum and avg
