@@ -214,10 +214,10 @@ namespace refcnt {
 					(to_index >= TAligned_Vector<T>::size()) ||
 					(from_index == to_index)) return E_INVALIDARG;
 
-				if (from_index < to_index)  
-					std::rotate(TAligned_Vector<T>::begin() + from_index, TAligned_Vector<T>::begin() + to_index, TAligned_Vector<T>::begin() + to_index + 1);
-				else  //to_index < from_index
-					std::rotate(TAligned_Vector<T>::begin() + to_index, TAligned_Vector<T>::begin() + from_index, TAligned_Vector<T>::begin() + from_index+1);
+				if (from_index < to_index)	// move down = rotate left by 1 element on given range
+					std::rotate(TAligned_Vector<T>::begin() + from_index, TAligned_Vector<T>::begin() + from_index + 1, TAligned_Vector<T>::begin() + to_index + 1);
+				else						// move up = rotate right by 1 element on given range = rotate left by whole range minus 1
+					std::rotate(TAligned_Vector<T>::begin() + to_index, TAligned_Vector<T>::begin() + from_index, TAligned_Vector<T>::begin() + from_index + 1);
 				
 
 				return S_OK;
