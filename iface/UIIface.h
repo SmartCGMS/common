@@ -44,7 +44,9 @@
 namespace scgms {
 
 	enum class NFilter_Flags : uint8_t {
-		None = 0
+		None = 0,
+		Encapsulated_Model = 1 << 0,		// the filter itself defines a model with the same GUID
+		Presentation_Only = 1 << 1,			// the filter is used only during a presentation phase, i.e. it does not get instantiated during parameters optimalization and similar processes
 	};
 
 	using TFilter_Flags = std::underlying_type<NFilter_Flags>::type;
