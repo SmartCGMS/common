@@ -105,6 +105,20 @@ namespace solver {
 
 	solver::TSolver_Setup Check_Default_Parameters(const solver::TSolver_Setup &setup, const size_t default_max_generations, const size_t default_population_size);	
 	HRESULT Solve_Generic(const GUID& solver_id, const solver::TSolver_Setup& setup, solver::TSolver_Progress& progress) noexcept;
+
+	template <typename T>
+	inline double Solution_Distance(const size_t objective_count, const T solution) {
+		if (objective_count == 1)
+			return solution[0];
+
+		double result = 0.0;
+		for (size_t i = 0; i < objective_count; i++) {
+			result += solution[i] * solution[i];
+		}
+
+		return result;
+	}
+
 }
 
 namespace scgms {

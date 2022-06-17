@@ -54,8 +54,9 @@ namespace solver {
 	};
 
 	const TFitness Nan_Fitness = { std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN() };
-	const TSolver_Progress Null_Solver_Progress = { 0, 0,Nan_Fitness, 0 };
+	const TSolver_Progress Null_Solver_Progress = { 0, 0, Nan_Fitness, 0 };
 	
+	using TFitness_Comparator = BOOL(IfaceCalling*)(const double* better, const double* worse, const size_t objective_count);
 	using TObjective_Function = BOOL(IfaceCalling*)(const void *data, const size_t count, const double *solution, double * const fitness);
 		//data is an opaque handler
 		//count is the number of solutions - they are laid one after one in 1D/fixed-size array
@@ -72,7 +73,8 @@ namespace solver {
 		double * const solution;		//where to store the found solution
 
 		const void *data;
-		const TObjective_Function objective;
+		const TObjective_Function objective;	//cannot be null
+		const TFitness_Comparator comparator;	//can be null and then, solver will use its default one - however, this is a suggestion only and the solver can use whatever it wants
 
 		const size_t max_generations;	//where relevant, maximum number of generations - zero for default value
 		const size_t population_size;	//where relevant, maximum number of population - zero for default value
@@ -80,7 +82,7 @@ namespace solver {
 	};
 
 
-	const TSolver_Setup Default_Solver_Setup = { 0, 0, nullptr, nullptr, nullptr, 0, nullptr, nullptr, nullptr, 0, 0, std::numeric_limits<double>::min() };
+	const TSolver_Setup Default_Solver_Setup = { 0, 0, nullptr, nullptr, nullptr, 0, nullptr, nullptr, nullptr, nullptr, 0, 0, std::numeric_limits<double>::min() };
 	using TGeneric_Solver = HRESULT(IfaceCalling*)(const GUID *solver_id, const TSolver_Setup *setup, TSolver_Progress *progress);
 }
 
