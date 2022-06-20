@@ -57,7 +57,7 @@ solver::TSolver_Setup solver::Check_Default_Parameters(const solver::TSolver_Set
 			setup.hints, setup.hint_count,
 			setup.solution,
 
-			setup.data, setup.objective,
+			setup.data, setup.objective, setup.comparator,
 
 			setup.max_generations == 0 ? default_max_generations : setup.max_generations,
 			setup.population_size == 0 ? default_population_size : setup.population_size,

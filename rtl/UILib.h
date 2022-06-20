@@ -58,7 +58,7 @@ namespace scgms {
 	extern const std::array<const wchar_t*, static_cast<size_t>(scgms::NDevice_Event_Code::count)> event_code_text;
 	
 	class CSignal_Description {
-			//should we replace this conversion class with a simple function, the map would have to use TBB allocator to avoid memory leaks
+			//should we replace this conversion_factor class with a simple function, the map would have to use TBB allocator to avoid memory leaks
 			//and because we don't want TBB to be a required component to compile all filters, we rather ask the programmer to instantitate
 			//this class and disposes once unneeded to prevent memory leaks
 	protected:
