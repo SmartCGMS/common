@@ -206,7 +206,7 @@ namespace scgms {
 	public:
 		// provides pointer to the contained TDevice_Event (free to modify as needed)
 		virtual HRESULT IfaceCalling Raw(TDevice_Event **raw) = 0;
-		virtual HRESULT IfaceCalling Clone(IDevice_Event** event) = 0;
+		virtual HRESULT IfaceCalling Clone(IDevice_Event** event) const = 0;
 	};
 
 	static constexpr decltype(TDevice_Event::segment_id) Invalid_Segment_Id = std::numeric_limits<decltype(Invalid_Segment_Id)>::max();
