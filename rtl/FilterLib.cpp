@@ -320,24 +320,32 @@ namespace scgms {
 		//
 	}
 
-	void CBase_Filter::Emit_Info(const scgms::NDevice_Event_Code code, const wchar_t *msg, const uint64_t segment_id) noexcept {
+	HRESULT CBase_Filter::Emit_Info(const scgms::NDevice_Event_Code code, const wchar_t *msg, const uint64_t segment_id) noexcept {
 		scgms::UDevice_Event event{ code };
-		event.device_id() = mDevice_ID;
-		event.info.set(msg);
-		event.segment_id() = segment_id;
-		mOutput.Send(event);
+		if (event) {
+			event.device_id() = mDevice_ID;
+			event.info.set(msg);
+			event.segment_id() = segment_id;
+			return mOutput.Send(event);
+		}
+		else
+			return E_OUTOFMEMORY;
 	}
 
-	void CBase_Filter::Emit_Info(const scgms::NDevice_Event_Code code, const std::wstring& msg, const uint64_t segment_id) noexcept {				
-		Emit_Info(code, msg.c_str(), segment_id);
+	HRESULT CBase_Filter::Emit_Info(const scgms::NDevice_Event_Code code, const std::wstring& msg, const uint64_t segment_id) noexcept {				
+		return Emit_Info(code, msg.c_str(), segment_id);
 	}
 
-	void CBase_Filter::Emit_Marker(const scgms::NDevice_Event_Code code, const double event_time, const uint64_t segment_id) noexcept {
+	HRESULT CBase_Filter::Emit_Marker(const scgms::NDevice_Event_Code code, const double event_time, const uint64_t segment_id) noexcept {
 		scgms::UDevice_Event event{ code };
-		event.device_id() = mDevice_ID;
-		event.device_time() = event_time;
-		event.segment_id() = segment_id;
-		mOutput.Send(event);
+		if (event) {
+			event.device_id() = mDevice_ID;
+			event.device_time() = event_time;
+			event.segment_id() = segment_id;
+			return mOutput.Send(event);
+		}
+		else
+			return E_OUTOFMEMORY;
 	}
 
 	HRESULT IfaceCalling CBase_Filter::Configure(IFilter_Configuration* configuration, refcnt::wstr_list* error_description) noexcept {		

@@ -356,9 +356,9 @@ namespace scgms {
 		scgms::SFilter mOutput;	//aka the next_filter		
 	protected:
 		const GUID mDevice_ID = Invalid_GUID;
-		void Emit_Info(const scgms::NDevice_Event_Code code, const wchar_t* msg, const uint64_t segment_id) noexcept;
-		void Emit_Info(const scgms::NDevice_Event_Code code, const std::wstring &msg, const uint64_t segment_id = scgms::Invalid_Segment_Id) noexcept;
-		void Emit_Marker(const scgms::NDevice_Event_Code code, const double event_time, const uint64_t segment_id = scgms::Invalid_Segment_Id) noexcept;
+		HRESULT Emit_Info(const scgms::NDevice_Event_Code code, const wchar_t* msg, const uint64_t segment_id) noexcept;
+		HRESULT Emit_Info(const scgms::NDevice_Event_Code code, const std::wstring &msg, const uint64_t segment_id = scgms::Invalid_Segment_Id) noexcept;
+		HRESULT Emit_Marker(const scgms::NDevice_Event_Code code, const double event_time, const uint64_t segment_id = scgms::Invalid_Segment_Id) noexcept;
 	protected:
 		//Descending class is supposed to implement these two methods only
 		virtual HRESULT Do_Execute(scgms::UDevice_Event event) = 0;
