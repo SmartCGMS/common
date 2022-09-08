@@ -178,6 +178,16 @@ namespace scgms {
 			std::transform(desc_begin, desc_end, std::inserter(mSignal_Descriptors, mSignal_Descriptors.end()), [](const TSignal_Descriptor& desc) {return std::make_pair(desc.id, desc); });
 		}
 
+		// parse reference signal IDs - this is needed for the default settings in GUI
+		TModel_Descriptor *model_begin, *model_end;
+		if (imported::get_model_descriptors(&model_begin, &model_end) == S_OK) {
+			for (auto* desc = model_begin; desc != model_end; desc++) {
+				for (size_t i = 0; i < desc->number_of_calculated_signals; i++) {
+					mSignal_Reference_Signal_Ids[desc->calculated_signal_ids[i]] = desc->reference_signal_ids[i];
+				}
+			}
+		}
+
 		for (size_t i = 0; i < scgms::signal_Virtual.size(); i++) {
 			std::wstring desc_str = dsSignal_Prefix_Virtual + std::wstring(L" ") + std::to_wstring(i);
 
@@ -232,6 +242,15 @@ namespace scgms {
 			memcpy(&desc, &(result->second), sizeof(decltype(desc)));
 			return true;
 		} else 
+			return false;
+	}
+
+	bool CSignal_Description::Get_Reference_Signal_Id(const GUID& signal_id, GUID& reference_id) const {
+		const auto result = mSignal_Reference_Signal_Ids.find(signal_id);
+		if (result != mSignal_Reference_Signal_Ids.end()) {
+			reference_id = result->second;
+			return true;
+		} else
 			return false;
 	}
 

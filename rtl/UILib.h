@@ -63,11 +63,13 @@ namespace scgms {
 			//this class and disposes once unneeded to prevent memory leaks
 	protected:
 		std::map<GUID, TSignal_Descriptor> mSignal_Descriptors;
+		std::map<GUID, GUID> mSignal_Reference_Signal_Ids;
         std::vector<std::wstring> mVirtual_Signal_Names;
 	public:
 		CSignal_Description();
 		std::wstring Get_Name(const GUID &signal_id) const;
         bool Get_Descriptor(const GUID& signal_id, TSignal_Descriptor &desc) const;
+		bool Get_Reference_Signal_Id(const GUID& signal_id, GUID& reference_id) const;
 
         void for_each(std::function<void(scgms::TSignal_Descriptor)> callback) const;
 	};
