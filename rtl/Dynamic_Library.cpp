@@ -64,7 +64,7 @@ CDynamic_Library::~CDynamic_Library() noexcept {
 }
 
 bool CDynamic_Library::Load(const filesystem::path &file_path) noexcept {
-	mLib_Path = file_path;
+	mLib_Path = file_path.wstring(); // also needed to often buggy assignment operator (verified by valgrind)
 
 	const std::wstring converted_path{ mLib_Path.wstring() }; //we need to make a deep copy
 	const auto cstr = converted_path.c_str();

@@ -39,6 +39,7 @@
 #pragma once
 
 #include "../rtl/guid.h"
+#include "winapi_mapping.h"
 
 #include <string>
 #include <locale>

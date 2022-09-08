@@ -79,6 +79,8 @@ void CSVG_Renderer::Render_Default_Params(drawing::Element& shape)
 		mSvg_Target << " id=\"" << shape.Get_Id() << "\"";
 	if (!shape.Get_Class().empty())
 		mSvg_Target << " class=\"" << shape.Get_Class() << "\"";
+	if (!shape.Get_Transform().empty())
+		mSvg_Target << " transform=\"" << shape.Get_Transform() << "\"";
 
 	if (shape.Get_Stroke_Width() > 0)
 	{

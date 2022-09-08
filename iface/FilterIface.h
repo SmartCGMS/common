@@ -188,6 +188,7 @@ namespace scgms {
 
 	//The following GUIDs advertise known filters 		
 	constexpr GUID IID_Drawing_Filter = { 0x850a122c, 0x8943, 0xa211,{ 0xc5, 0x14, 0x25, 0xba, 0xa9, 0x14, 0x35, 0x74 } };
+	constexpr GUID IID_Drawing_Filter_v2 = { 0xa96b151a, 0xb120, 0x44ec, { 0x9b, 0x10, 0xca, 0x6a, 0x4d, 0x1d, 0x76, 0x8e } }; // {A96B151A-B120-44EC-9B10-CA6A4D1D768E}
 	constexpr GUID IID_Log_Filter = { 0xc0e942b9, 0x3928, 0x4b81,{ 0x9b, 0x43, 0xa3, 0x47, 0x66, 0x82, 0x0, 0xBA } };
 
 	//The following interfaces can be access via refcnt::IUnknown::QueryInterface 
@@ -382,6 +383,34 @@ namespace scgms {
 		wchar_t* name;
 	};
 
+	// drawing options - passed as an input parameter to Draw method of IDrawing_Filter_Inspection_v2
+	struct TDraw_Options {
+
+		/* an array of segment IDs to draw; nullptr = all segments */
+		uint64_t* segments = nullptr;
+
+		/* a size of segments array; if segments == nullptr, this has no effect */
+		size_t segment_count = 0;
+
+		/* an array of signal IDs to draw; nullptr = all signals */
+		GUID* in_signals = nullptr;
+
+		/* an array of reference signal IDs; reference signal is optional and may be null - needed for e.g.; for error grids, then its size must match with signal size
+		 *                     when using reference signal to draw e.g.; an error grid, the filter is assumed take discrete levels
+		 *                     of the reference signal, while plotting them against continous levels of the signal
+		 */
+		GUID* reference_signals = nullptr;
+
+		/* size of signals and reference_signals array; if in_signals == nullptr, this has no effect */
+		size_t signal_count = 0;
+
+		/* width of the resulting drawing; 0 = use default value for given drawing type (defined by implementation) */
+		int width = 0;
+
+		/* height of the resulting drawing; 0 = use default value for given drawing type (defined by implementation) */
+		int height = 0;
+	};
+
 	//knonw drawing capability
 	constexpr GUID dcGraph =		{ 0xb7ca6ed4, 0xfb05, 0x4b16, { 0x91, 0x4c, 0x3f, 0xdd, 0xed, 0x23, 0x22, 0xa0 } }; // {B7CA6ED4-FB05-4B16-914C-3FDDED2322A0}
 	constexpr GUID dcDaily_Graph =  { 0x1564bc55, 0xcb1b, 0x4f4a, { 0x82, 0x4b, 0xef, 0x41, 0x52, 0x34, 0xc2, 0x10 } } ;// {1564BC55-CB1B-4F4A-824B-EF415234C210}
@@ -393,7 +422,8 @@ namespace scgms {
 	constexpr GUID dcProfile_Glucose = { 0x77be67e9, 0xfb9f, 0x4b1b, { 0xbf, 0x91, 0x2b, 0x94, 0xc3, 0x20, 0xfc, 0xd } }; // {77BE67E9-FB9F-4B1B-BF91-2B94C320FC0D}
 	constexpr GUID dcProfile_Insulin = { 0x2f58f928, 0xfe42, 0x4dd1, { 0xa3, 0x75, 0x2e, 0x4d, 0x84, 0xea, 0x10, 0xa8 } }; // {2F58F928-FE42-4DD1-A375-2E4D84EA10A8}
 	constexpr GUID dcProfile_Carbs = { 0xb72f566f, 0x9953, 0x4d0a, { 0xaf, 0xd8, 0x10, 0xd5, 0x1e, 0xef, 0x9, 0xe6 } };	// {B72F566F-9953-4D0A-AFD8-10D51EEF09E6}
-	
+	constexpr GUID dcCVGA =			{ 0xd374f883, 0xefec, 0x4d09, { 0x82, 0x7c, 0xe4, 0x7c, 0xdb, 0x41, 0xcd, 0xec } };	// {D374F883-EFEC-4D09-827C-E47CDB41CDEC}
+
 	constexpr GUID IID_Drawing_Filter_Inspection_v2 = { 0x80c23438, 0x8eb8, 0x4e45, { 0xac, 0x35, 0x6f, 0x4e, 0xa8, 0xdc, 0xfc, 0xad } }; //{80C23438-8EB8-4E45-AC35-6F4EA8DCFCAD}
 	class IDrawing_Filter_Inspection_v2 : public virtual ILogical_Clock {
 	public:
@@ -401,7 +431,7 @@ namespace scgms {
 		 * Retrieves an array of supported plots
 		 * descs - a vector container of plot descriptors
 		 */
-		virtual HRESULT IfaceCalling Get_Capabilities(refcnt::IVector_Container<const TPlot_Descriptor>* descs) const = 0;
+		virtual HRESULT IfaceCalling Get_Capabilities(refcnt::IVector_Container<TPlot_Descriptor>* descs) const = 0;
 
 		/**
 		 * Retrieves an array of supported segments
@@ -420,15 +450,9 @@ namespace scgms {
 		 * Retrieves generated SVG for a given type of the plot
 		 * plot_id - ID of a plot to be drawn; this must be one of IDs advertised in Get_Capabilities
 		 * svg - a container to render result into; the target must exist and point to a valid empty container
-		 * segments - an array of segment IDs to draw; nullptr = all segments
-		 * segment_count - a size of segments array; if segments == nullptr, this has no effect
-		 * in_signals - an array of signal IDs to draw; nullptr = all signals
-		 * reference_signals - an array of reference signal IDs; reference signal is optional and may be null - needed for e.g.; for error grids, then its size must match with signal size
-		 *                     when using reference signal to draw e.g.; an error grid, the filter is assumed take discrete levels
-		 *                     of the reference signal, while plotting them against continous levels of the signal
-		 * signal_count - size of signals and reference_signals array; if in_signals == nullptr, this has no effect
+		 * options - a structure of options used for rendering the result
 		 */
-		virtual HRESULT IfaceCalling Draw(const GUID *plot_id, refcnt::str_container *svg, const uint64_t *segments, const size_t segment_count, const GUID *in_signals, const GUID *reference_signals, const size_t signal_count) = 0;
+		virtual HRESULT IfaceCalling Draw(const GUID *plot_id, refcnt::str_container *svg, const TDraw_Options* options) = 0;
 	};
 
 	class IPlot_Drawer : public virtual refcnt::IReferenced {

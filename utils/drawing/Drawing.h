@@ -50,6 +50,8 @@ struct RGBColor
 	uint8_t g;
 	uint8_t b;
 
+	uint8_t a = 255;
+
 	static constexpr uint8_t Hex_Lookup(char c) {
 		if (c >= '0' && c <= '9')
 			return c - '0';
@@ -61,13 +63,35 @@ struct RGBColor
 	}
 
 	static RGBColor From_HTML_Color(const std::string& col) {
-		if (col.length() != 7) // we expect "#RRGGBB" format
-			return { 0,0,0 };
+
+		if (col.length() == 9) // in case of "#AARRGGBB" format (used in our color descriptors)
+		{
+			return {
+				static_cast<uint8_t>(Hex_Lookup(col[3]) * 16 + Hex_Lookup(col[4])),
+				static_cast<uint8_t>(Hex_Lookup(col[5]) * 16 + Hex_Lookup(col[6])),
+				static_cast<uint8_t>(Hex_Lookup(col[7]) * 16 + Hex_Lookup(col[8])),
+				static_cast<uint8_t>(Hex_Lookup(col[1]) * 16 + Hex_Lookup(col[2]))
+				};
+		}
+
+		if (col.length() != 7) // otherwise we expect "#RRGGBB" format
+			return { 0,0,0,255 };
 
 		return {
 			static_cast<uint8_t>(Hex_Lookup(col[1]) * 16 + Hex_Lookup(col[2])),
 			static_cast<uint8_t>(Hex_Lookup(col[3]) * 16 + Hex_Lookup(col[4])),
-			static_cast<uint8_t>(Hex_Lookup(col[5]) * 16 + Hex_Lookup(col[6]))
+			static_cast<uint8_t>(Hex_Lookup(col[5]) * 16 + Hex_Lookup(col[6])),
+			255
+		};
+	}
+
+	static RGBColor From_UInt32(const uint32_t col, bool has_alpha = false)
+	{
+		return {
+			static_cast<uint8_t>(col >> 16),
+			static_cast<uint8_t>(col >> 8),
+			static_cast<uint8_t>(col),
+			has_alpha ? static_cast<uint8_t>(col >> 24) : static_cast<uint8_t>(255),
 		};
 	}
 };
@@ -98,6 +122,7 @@ namespace drawing
 			std::string mId{ };
 			std::string mClass{ };
 			std::vector<double> mStroke_Dash_Array{ };
+			std::string mTransform{ };
 
 		public:
 			Element() = default;
@@ -134,6 +159,7 @@ namespace drawing
 			const std::string& Get_Id() const { return mId; }
 			const std::string& Get_Class() const { return mClass; }
 			const std::vector<double>& Get_Stroke_Dash_Array() { return mStroke_Dash_Array; }
+			const std::string& Get_Transform() const { return mTransform; }
 
 			Element& Set_Stroke_Width(double width) { mStroke_Width = width; return *this; }
 			Element& Set_Stroke_Color(RGBColor color) { mStroke_Color = color; return *this; }
@@ -143,6 +169,7 @@ namespace drawing
 			Element& Set_Id(const std::string& id) { mId = id; return *this; }
 			Element& Set_Class(const std::string& clss) { mClass = clss; return *this; }
 			Element& Set_Stroke_Dash_Array(const std::vector<double>& dashArray) { mStroke_Dash_Array = dashArray; return *this; }
+			Element& Set_Transform(const std::string& transform) { mTransform = transform; return *this; }
 
 			// clone settings to another Shape
 			void CloneTo(Element& target) const {

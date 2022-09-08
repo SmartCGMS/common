@@ -72,8 +72,17 @@ namespace scgms {
         void for_each(std::function<void(scgms::TSignal_Descriptor)> callback) const;
 	};
 
-
-
 	size_t Segment_Count(const size_t parameters_count, const TModel_Descriptor& desc);	//non-zero parameters_count and zero result means corrupted data
 
+	// checks for flags presence (all-or-none)
+	template<typename TFlags>
+	inline bool Has_Flags_All(const TFlags& field, const TFlags& check_flags) {
+		return (field & check_flags) == check_flags;
+	}
+
+	// check for flags presence (any one of given flags)
+	template<typename TFlags>
+	inline bool Has_Flags_Any(const TFlags& field, const TFlags& check_flags) {
+		return (field & check_flags) != 0;
+	}
 }

@@ -44,7 +44,9 @@
 namespace scgms {
 
 	enum class NFilter_Flags : uint8_t {
-		None = 0
+		None = 0,
+		Encapsulated_Model = 1 << 0,		// the filter itself defines a model with the same GUID
+		Presentation_Only = 1 << 1,			// the filter is used only during a presentation phase, i.e. it does not get instantiated during parameters optimalization and similar processes
 	};
 
 	using TFilter_Flags = std::underlying_type<NFilter_Flags>::type;
@@ -205,9 +207,10 @@ namespace scgms {
 		const NSignal_Visualization visualization;
 		const NSignal_Mark mark;
 		const NSignal_Mark *stroke_pattern;	//NSignal_Mark::none terminated stroke pattern, nullptr means solid line
+		const double value_scale;
 	};
 
-	constexpr TSignal_Descriptor Null_Signal_Descriptor = { Invalid_GUID, nullptr, nullptr, NSignal_Unit::Unitless, 0, 0, NSignal_Visualization::smooth, NSignal_Mark::none, nullptr};
+	constexpr TSignal_Descriptor Null_Signal_Descriptor = { Invalid_GUID, nullptr, nullptr, NSignal_Unit::Unitless, 0, 0, NSignal_Visualization::smooth, NSignal_Mark::none, nullptr, 1.0 };
 
 	using TGet_Filter_Descriptors = HRESULT(IfaceCalling*)(TFilter_Descriptor **begin, TFilter_Descriptor **end);
 	using TGet_Metric_Descriptors = HRESULT(IfaceCalling*)(TMetric_Descriptor **begin, TMetric_Descriptor **end);
