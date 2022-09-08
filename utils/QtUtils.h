@@ -40,6 +40,8 @@
 
 #include "../rtl/guid.h"
 
+#ifndef DDO_NOT_USE_QT
+
 #include <QtCore/QString>
 #include <QtCore/QUuid>
 
@@ -57,5 +59,7 @@ GUID QUuid_To_GUID(const QUuid& uuid);
 
 int HideDbColByName(const QSqlTableModel &model, QTableView &view, const char* dbcolname);
 int SetupDbColUI(QSqlTableModel &model, QTableView &view, const char* dbcolname, const char* uicolname, const int width, const int moveto);
+
+#endif
 
 #endif

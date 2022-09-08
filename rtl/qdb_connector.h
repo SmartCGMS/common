@@ -38,6 +38,8 @@
 
 #pragma once
 
+#ifndef DDO_NOT_USE_QT
+
 #include "../iface/FilterIface.h"
 #include "../rtl/DbLib.h"
 #include "../rtl/referencedImpl.h"
@@ -83,3 +85,5 @@ public:
 #pragma warning( pop )
 
 HRESULT IfaceCalling Setup_Filter_DB_Access(scgms::IFilter *filter, const void* data);
+
+#endif
