@@ -68,16 +68,16 @@ namespace scgms {
 		HRESULT set_wstring(const wchar_t *str);	
 		filesystem::path as_filepath(HRESULT& rc);
 
-		int64_t as_int(HRESULT &rc);		
+		int64_t as_int(HRESULT &rc);
 
-		double as_double(HRESULT &rc);		
+		double as_double(HRESULT &rc);
 		std::vector<double> as_double_array(HRESULT &rc);
-		HRESULT set_double_array(const std::vector<double> &values);		
+		HRESULT set_double_array(const std::vector<double> &values);
 
 		bool as_bool(HRESULT &rc);
 		HRESULT set_bool(const bool value);
 
-		GUID as_guid(HRESULT &rc);		
+		GUID as_guid(HRESULT &rc);
 		HRESULT set_GUID(const GUID &guid);
 
 		std::vector<int64_t> as_int_array(HRESULT &rc);
@@ -90,7 +90,6 @@ namespace scgms {
 	bool get_filter_descriptor_by_id(const GUID &id, TFilter_Descriptor &desc);
 
 
-	//class SFilter_Configuration : public std::shared_ptr<scgms::IFilter_Configuration> {
 	namespace internal {
 
 		SFilter_Parameter Create_Filter_Parameter(const scgms::NParameter_Type type, const wchar_t *config_name);
@@ -136,8 +135,8 @@ namespace scgms {
 				return Read_Parameter<GUID>(name, &SFilter_Parameter::as_guid, default_value);
 			}
 			
-			bool Read_Bool(const wchar_t* name, bool default_value = false) const {				
-				return Read_Parameter<bool>(name, &SFilter_Parameter::as_bool, default_value);				
+			bool Read_Bool(const wchar_t* name, bool default_value = false) const {
+				return Read_Parameter<bool>(name, &SFilter_Parameter::as_bool, default_value);
 			}
 
 			double Read_Double(const wchar_t* name, const double default_value = std::numeric_limits<double>::quiet_NaN()) const {
@@ -154,7 +153,7 @@ namespace scgms {
 				bool success = false;
 
 				const auto parameter = Resolve_Parameter(name);
-				if (parameter) {										
+				if (parameter) {
 
 					scgms::IModel_Parameter_Vector *raw_parameters;
 					if (parameter->Get_Model_Parameters(&raw_parameters) == S_OK) {
@@ -171,9 +170,9 @@ namespace scgms {
 									success = true;
 								}
 							}
-						}
+						} 
 						raw_parameters->Release();
-					}					
+					}
 				}
 
 				return success;
@@ -181,7 +180,7 @@ namespace scgms {
 
 			bool Write_Parameters(const wchar_t* name, const std::vector<double> &lower_bound, const std::vector<double> &default_parameters, const std::vector<double>& upper_bound) {
 				bool success = (lower_bound.size() == default_parameters.size()) && (default_parameters.size() == upper_bound.size());
-				
+
 				if (success) {
 					auto parameter = Resolve_Parameter(name);
 					if (!parameter) {
@@ -194,7 +193,7 @@ namespace scgms {
 						}
 					}
 
-					
+
 
 					if (success) {
 						std::vector<double> aggregated;
@@ -206,11 +205,11 @@ namespace scgms {
 					}
 				}
 
-				return success;				
+				return success;
 			}
 
 			SFilter_Parameter Resolve_Parameter(const wchar_t* name) const {
-				SFilter_Parameter result;				
+				SFilter_Parameter result;
 
 				if (name) {
 					if (refcnt::SReferenced<IConfiguration>::operator bool()) {
