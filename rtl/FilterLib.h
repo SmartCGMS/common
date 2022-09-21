@@ -170,8 +170,8 @@ namespace scgms {
 									upper_bound.assign(begin + 2*paramcnt, begin + 3*paramcnt);
 									success = true;
 								}
-							}
-						}
+							}							
+						} 
 						raw_parameters->Release();
 					}					
 				}

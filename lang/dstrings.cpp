@@ -248,6 +248,7 @@ const wchar_t *dsDrawing_Filter_Filename_ECDF = L"ECDF file path";
 const wchar_t *dsLog_Filter = L"Log";
 const wchar_t *dsLog_Output_File = L"Save log to CSV file";
 const wchar_t* dsLog_Segments_Individually = L"Save each segment to a dedicated file";
+const wchar_t* dsReduced_Log = L"Saved reduced log";
 const wchar_t* dsLog_Input_File_Or_Dir = L"Log file or dir with log files";
 const wchar_t *dsEmit_Shutdown_Msg = L"Emit the shutdown message";
 const wchar_t *dsLog_Header = L"Logical Clock; Device Time; Event Code; Signal; Info; Segment Id; Event Code Id; Device Id; Signal Id";
@@ -1085,6 +1086,7 @@ const wchar_t *rsRecalculate_On_Calibration = L"Recalculate_On_Calibration";
 
 const wchar_t *rsLog_Output_File = L"Log_File";
 const wchar_t* rsLog_Segments_Individually = L"Log_Segments_Individually";
+const wchar_t* rsReduced_Log = L"Reduce_Log";
 const wchar_t *rsEmit_Shutdown_Msg = L"Emit_Shutdown";
 const wchar_t *rsInterpret_Filename_As_Segment_Id = L"Filename_as_segment_id";
 const wchar_t *rsEmit_All_Events_Before_Shutdown = L"Emit_All_Events_Before_Shutdown";

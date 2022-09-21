@@ -180,9 +180,11 @@ namespace refcnt {
 			}
 
 			virtual HRESULT IfaceCalling get(T **begin, T **end) const override final {
-				if (!TAligned_Vector<T>::empty()) {
-					*begin = const_cast<T*>(TAligned_Vector<T>::data());
-					*end = const_cast<T*>(TAligned_Vector<T>::data()) + TAligned_Vector<T>::size();
+				const size_t sz = TAligned_Vector<T>::size();
+				if (sz > 0) {
+					const auto dta = const_cast<T*>(TAligned_Vector<T>::data());
+					*begin = dta;
+					*end = dta + sz;
 					return S_OK;
 				} else {
 					*begin = *end = nullptr;

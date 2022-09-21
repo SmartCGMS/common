@@ -245,6 +245,7 @@ extern const wchar_t *dsInterop_Export_Filter;
 extern const wchar_t *dsLog_Filter;
 extern const wchar_t *dsLog_Output_File;
 extern const wchar_t* dsLog_Segments_Individually;
+extern const wchar_t* dsReduced_Log;
 extern const wchar_t* dsLog_Input_File_Or_Dir;
 extern const wchar_t *dsEmit_Shutdown_Msg;
 extern const wchar_t *dsLog_Header;
@@ -1053,6 +1054,7 @@ extern const wchar_t *rsRecalculate_On_Calibration;
 
 extern const wchar_t *rsLog_Output_File;
 extern const wchar_t* rsLog_Segments_Individually;
+extern const wchar_t* rsReduced_Log;
 extern const wchar_t *rsEmit_Shutdown_Msg;
 extern const wchar_t* rsInterpret_Filename_As_Segment_Id;
 extern const wchar_t* rsEmit_All_Events_Before_Shutdown;
