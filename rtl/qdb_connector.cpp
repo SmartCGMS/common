@@ -131,7 +131,7 @@ HRESULT IfaceCalling CDb_Query::Get_Next(db::TParameter* const values, const siz
 															break;
 
 					case db::NParameter_Type::ptWChar:		tmp_str = db_value.toString();
-															if (tmp_str.count() > 0) {
+															if (tmp_str.size() > 0) {
 																mResult_String_Row[i] = tmp_str.toStdWString();
 																values[i].str = const_cast<wchar_t*>(mResult_String_Row[i].c_str());
 															}

@@ -380,7 +380,7 @@ namespace scgms {
 
 	struct TPlot_Descriptor {
 		GUID id;		//one of the dc constants
-		wchar_t* name;
+		const wchar_t* name;
 	};
 
 	// drawing options - passed as an input parameter to Draw method of IDrawing_Filter_Inspection_v2
