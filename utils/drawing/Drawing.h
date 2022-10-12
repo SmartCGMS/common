@@ -111,8 +111,8 @@ namespace drawing
 	class Element
 	{
 		protected:
-			double mPosition_X;
-			double mPosition_Y;
+			double mPosition_X = 0.0;
+			double mPosition_Y = 0.0;
 
 			double mStroke_Width{ 0.0 };
 			RGBColor mStroke_Color{ 0, 0, 0 };
