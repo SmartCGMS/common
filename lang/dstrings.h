@@ -904,6 +904,7 @@ extern const wchar_t* dsPeriod;
 extern const wchar_t* dsInvalid_Section_Name;
 extern const wchar_t* dsCannot_Resolve_Filter_Descriptor;
 extern const wchar_t* dsMalformed_Filter_Parameter_Value;
+extern const wchar_t* dsVar_Not_Set_Filter_Parameter_Value;
 extern const wchar_t* dsFilter_Parameter_Not_Configured;
 
 extern const wchar_t* dsParameters_to_optimize_not_found;
