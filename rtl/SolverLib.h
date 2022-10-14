@@ -138,14 +138,7 @@ namespace scgms {
 	};
 
 
-	HRESULT Optimize_Parameters(scgms::SFilter_Chain_Configuration configuration, const size_t filter_index, const wchar_t *parameters_configuration_name,
-								scgms::TOn_Filter_Created on_filter_created, const void* on_filter_created_data,
-								const GUID &solver_id, const size_t population_size, const size_t max_generations, 
-								const double** hints, const size_t hint_count,
-								solver::TSolver_Progress &progress,
-                                refcnt::Swstr_list error_description);
-
-	HRESULT Optimize_Multiple_Parameters(scgms::SFilter_Chain_Configuration configuration, const size_t *filter_indices, const wchar_t **parameters_configuration_names, size_t filter_count,
+	HRESULT Optimize_Parameters(scgms::SFilter_Chain_Configuration configuration, const size_t *filter_indices, const wchar_t **parameters_configuration_names, size_t filter_count,
 								scgms::TOn_Filter_Created on_filter_created, const void* on_filter_created_data,
 								const GUID &solver_id, const size_t population_size, const size_t max_generations, 
 								const double** hints, const size_t hint_count,
