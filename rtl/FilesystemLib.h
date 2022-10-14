@@ -69,3 +69,5 @@ bool Is_Regular_File_Or_Symlink(const filesystem::path& path);
 std::wstring& Ensure_Uniform_Dir_Separator(std::wstring& path) noexcept;	//some std libs still fail to make_preferred
 
 bool Match_Wildcard(const std::wstring fname, const std::wstring wcard, const bool case_sensitive);
+
+std::wstring Make_Absolute_Path(filesystem::path src_path, filesystem::path parent_path); //returns wstring because src_path may be relative, or even include a wild-card
