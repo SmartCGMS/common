@@ -570,8 +570,12 @@ extern const wchar_t *dsInvalid_Network_Port;
 extern const wchar_t *dsInvalid_Model_GUID;
 extern const wchar_t *dsCould_Not_Allocate_Network_Pool_Slot;
 
+extern const wchar_t* dsInvalid_Metric_GUID;
+
 extern const wchar_t *dsError_Column_Average;
 extern const wchar_t *dsError_Column_StdDev;
+extern const wchar_t* dsError_Column_ExcKurtosis;
+extern const wchar_t* dsError_Column_Skewness;
 extern const wchar_t *dsError_Column_Count;
 extern const wchar_t *dsError_Column_Sum;
 extern const wchar_t *dsError_Column_Minimum;

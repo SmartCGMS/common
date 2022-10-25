@@ -576,8 +576,12 @@ const wchar_t *dsInvalid_Network_Port = L"Invalid network port specified";
 const wchar_t *dsInvalid_Model_GUID = L"Invalid network model ID specified";
 const wchar_t *dsCould_Not_Allocate_Network_Pool_Slot = L"Could not allocate network pool slot due to fatal error";
 
+const wchar_t* dsInvalid_Metric_GUID = L"Invalid metric ID specified: ";
+
 const wchar_t *dsError_Column_Average = L"Average";
 const wchar_t *dsError_Column_StdDev = L"Std.Dev (Bessel)";
+const wchar_t* dsError_Column_ExcKurtosis = L"Exc.Kurt. (Bessel)";
+const wchar_t* dsError_Column_Skewness = L"Skewness (Bessel)";
 const wchar_t *dsError_Column_Count = L"Count";
 const wchar_t *dsError_Column_Sum = L"Sum";
 const wchar_t *dsError_Column_Minimum = L"Minimum";
@@ -1301,8 +1305,8 @@ const wchar_t* rsConst_CR = L"const_carb_to_insulin_ratio";
 
 
 const wchar_t* rsOutput_CSV_File = L"Output_CSV_file";
-const wchar_t* rsSignal_Stats_Header = L"Segment id; marker;; avg; stddev;count;; min; 25th; median; 75; 95; 99; max";
-const wchar_t* rsDecoupling_Stats_Header = L"Segment id; marker;; avg; stddev;count;; min; 25th; median; 75; max;; matched_events; total_events; matched_levels; total_levels";
+const wchar_t* rsSignal_Stats_Header = L"Segment id; marker;; avg; stddev;exc.kurt;skew;count;; min; 25th; median; 75; 95; 99; max";
+const wchar_t* rsDecoupling_Stats_Header = L"Segment id; marker;; avg; stddev;exc.kurt;skew;count;; min; 25th; median; 75; max;; matched_events; total_events; matched_levels; total_levels";
 
 const wchar_t* rsDiabetes_Grid_Header = L"Segment id;; A; B; A+B; C; D; E";
 
