@@ -570,8 +570,12 @@ extern const wchar_t *dsInvalid_Network_Port;
 extern const wchar_t *dsInvalid_Model_GUID;
 extern const wchar_t *dsCould_Not_Allocate_Network_Pool_Slot;
 
+extern const wchar_t* dsInvalid_Metric_GUID;
+
 extern const wchar_t *dsError_Column_Average;
 extern const wchar_t *dsError_Column_StdDev;
+extern const wchar_t* dsError_Column_ExcKurtosis;
+extern const wchar_t* dsError_Column_Skewness;
 extern const wchar_t *dsError_Column_Count;
 extern const wchar_t *dsError_Column_Sum;
 extern const wchar_t *dsError_Column_Minimum;
@@ -904,6 +908,7 @@ extern const wchar_t* dsPeriod;
 extern const wchar_t* dsInvalid_Section_Name;
 extern const wchar_t* dsCannot_Resolve_Filter_Descriptor;
 extern const wchar_t* dsMalformed_Filter_Parameter_Value;
+extern const wchar_t* dsVar_Not_Set_Filter_Parameter_Value;
 extern const wchar_t* dsFilter_Parameter_Not_Configured;
 
 extern const wchar_t* dsParameters_to_optimize_not_found;

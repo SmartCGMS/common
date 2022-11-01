@@ -47,11 +47,9 @@ void Set_Error_To_No_Data(scgms::TSignal_Stats& signal_error) {
 	signal_error.sum = 0.0;
 	signal_error.avg = std::numeric_limits<double>::quiet_NaN();
 	signal_error.stddev = std::numeric_limits<double>::quiet_NaN();
-
-	/*const size_t ECDF_offset = static_cast<size_t>(scgms::NECDF::min_value);
-	for (size_t i = 0; i <= static_cast<size_t>(scgms::NECDF::max_value) - ECDF_offset; i++)
-		signal_error.ecdf[ECDF_offset + i] = std::numeric_limits<double>::quiet_NaN();
-		*/
+	
+	signal_error.exc_kurtosis= std::numeric_limits<double>::quiet_NaN();
+	signal_error.skewness = std::numeric_limits<double>::quiet_NaN();
 
 	for (scgms::NECDF i = scgms::NECDF::min_value; i <= scgms::NECDF::max_value; i++)
 		signal_error.ecdf[i] = std::numeric_limits<double>::quiet_NaN();
@@ -88,15 +86,27 @@ bool Calculate_Signal_Stats(std::vector<double>& series, scgms::TSignal_Stats& s
 	//3. calculate stddev
 	{		
 		double square_error = 0.0;
+		double central_moment_3 = 0.0;
+		double central_moment_4 = 0.0;
+
+
 		for (const auto& value : series) {
 			const double tmp = value - signal_error.avg;
-			square_error += tmp * tmp;
+			const double square = tmp * tmp;
+			square_error += square;
+
+			central_moment_3 += square * tmp;
+			central_moment_4 += square * square;
 		}
 
 		if (corrected_count > 1.5) corrected_count -= 1.5;					//Unbiased estimation of standard deviation
 			else if (corrected_count > 1.0) corrected_count -= 1.0;			//Bessel's correction
 
-		signal_error.stddev = sqrt(square_error / corrected_count);
+		const double variance = square_error / corrected_count;
+		signal_error.stddev = sqrt(variance);
+
+		signal_error.exc_kurtosis = central_moment_4 * corrected_count / (square_error * square_error) - 3.0; //(central_moment_4 / (variance * variance * corrected_count)) - 3.0; 
+		signal_error.skewness = central_moment_3 / (square_error * signal_error.stddev); //central_moment_3 / (corrected_count * variance * signal_error.stddev);
 	}
 	
 	return true;

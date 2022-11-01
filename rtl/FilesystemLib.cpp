@@ -215,3 +215,24 @@ bool Match_Wildcard(const std::wstring fname, const std::wstring wcard, const bo
 
 	return f < fname.size() ? false : true;	//return false if some chars in the fname were not eaten
 }
+
+
+std::wstring Make_Absolute_Path(filesystem::path src_path, filesystem::path parent_path) {
+	if (src_path.is_relative()) {
+		std::error_code ec;
+		filesystem::path relative_part = src_path;
+		src_path = filesystem::canonical(parent_path / relative_part, ec);
+		if (ec) {
+			src_path = filesystem::weakly_canonical(parent_path / relative_part, ec);
+			if (ec)
+				src_path = parent_path / relative_part;
+		}
+	}
+
+
+	src_path = src_path.make_preferred();	//we know that make_preferred fails sometimes
+	std::wstring converted_path = src_path.wstring();
+	converted_path = Ensure_Uniform_Dir_Separator(converted_path);
+
+	return converted_path;
+}

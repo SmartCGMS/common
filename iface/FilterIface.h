@@ -297,6 +297,7 @@ namespace scgms {
 
 	struct TSignal_Stats {
 		double avg, stddev, sum;	//standard deviation with Bessel's correction
+		double exc_kurtosis, skewness;
 		size_t count;				//number of elements on which we calculate the metrics
 		TECDF ecdf;
 	};

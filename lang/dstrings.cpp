@@ -576,8 +576,12 @@ const wchar_t *dsInvalid_Network_Port = L"Invalid network port specified";
 const wchar_t *dsInvalid_Model_GUID = L"Invalid network model ID specified";
 const wchar_t *dsCould_Not_Allocate_Network_Pool_Slot = L"Could not allocate network pool slot due to fatal error";
 
+const wchar_t* dsInvalid_Metric_GUID = L"Invalid metric ID specified: ";
+
 const wchar_t *dsError_Column_Average = L"Average";
 const wchar_t *dsError_Column_StdDev = L"Std.Dev (Bessel)";
+const wchar_t* dsError_Column_ExcKurtosis = L"Exc.Kurt. (Bessel)";
+const wchar_t* dsError_Column_Skewness = L"Skewness (Bessel)";
 const wchar_t *dsError_Column_Count = L"Count";
 const wchar_t *dsError_Column_Sum = L"Sum";
 const wchar_t *dsError_Column_Minimum = L"Minimum";
@@ -902,6 +906,7 @@ const wchar_t* dsPeriod = L"period";
 const wchar_t* dsInvalid_Section_Name = L"Configuration, invalid section name: ";
 const wchar_t* dsCannot_Resolve_Filter_Descriptor = L"Cannot resolve filter descriptor by id: ";
 const wchar_t* dsMalformed_Filter_Parameter_Value = L"Malformed filter(1)-parameter(2)'s value(3): (1)";
+const wchar_t* dsVar_Not_Set_Filter_Parameter_Value = L"Variable filter(1)-parameter(2)'s value(3) not set: (1)";
 const wchar_t* dsFilter_Parameter_Not_Configured = L"Filter(1)-parameter(2) is not configured, default value will be used.\nEither set it to $([[maybe_unused]]), or configure it, and save the configuration to remove whis warning.\n(1)";
 
 const wchar_t* dsParameters_to_optimize_not_found = L"Parameters to optimize were not found.";
@@ -1300,8 +1305,8 @@ const wchar_t* rsConst_CR = L"const_carb_to_insulin_ratio";
 
 
 const wchar_t* rsOutput_CSV_File = L"Output_CSV_file";
-const wchar_t* rsSignal_Stats_Header = L"Segment id; marker;; avg; stddev;count;; min; 25th; median; 75; 95; 99; max";
-const wchar_t* rsDecoupling_Stats_Header = L"Segment id; marker;; avg; stddev;count;; min; 25th; median; 75; max;; matched_events; total_events; matched_levels; total_levels";
+const wchar_t* rsSignal_Stats_Header = L"Segment id; marker;; avg; stddev;exc.kurt;skew;count;; min; 25th; median; 75; 95; 99; max";
+const wchar_t* rsDecoupling_Stats_Header = L"Segment id; marker;; avg; stddev;exc.kurt;skew;count;; min; 25th; median; 75; max;; matched_events; total_events; matched_levels; total_levels";
 
 const wchar_t* rsDiabetes_Grid_Header = L"Segment id;; A; B; A+B; C; D; E";
 

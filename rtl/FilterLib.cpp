@@ -89,7 +89,7 @@ namespace scgms {
 
 		refcnt::wstr_container* wstr;
 		rc = get()->Get_WChar_Container(&wstr, read_interpreted);
-		if (rc == S_OK) {
+		if ((rc == S_OK) || ((rc == E_NOT_SET) && !read_interpreted)){
 			//if the WChar_Container_To_WString should fail, e.g. on bad alloc, the wstr could leak
 			//if not guarded with RAII
 			refcnt::Swstr_container mem_guard = refcnt::make_shared_reference_ext<refcnt::Swstr_container, refcnt::wstr_container>(wstr, true);
