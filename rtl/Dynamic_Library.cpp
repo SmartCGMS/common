@@ -104,7 +104,7 @@ void* CDynamic_Library::Resolve(const char* symbolName) noexcept {
 	if (!mHandle)
 		return nullptr;
 
-	return GetProcAddress(mHandle, symbolName);
+	return reinterpret_cast<void*>(GetProcAddress(mHandle, symbolName));
 }
 
 bool CDynamic_Library::Is_Library(const filesystem::path& path) noexcept {
