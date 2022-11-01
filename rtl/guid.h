@@ -106,6 +106,32 @@
 	static_assert(sizeof(GUID::Data2) == 2, "GUID Data2 (unsigned short) is not 2 bytes long");
 	static_assert(sizeof(GUID::Data3) == 2, "GUID Data3 is not 2 bytes long");
 	static_assert(sizeof(GUID::Data4) == 8, "GUID Data4 is not 8 bytes long");
+
+	// for std::hash
+	#include <functional>
+
+	// explicitly specialize std::hash for GUID type; this is due to occassional need of having the GUID as a key in std::unordered_map or std::unordered_set
+	template<> struct std::hash<GUID> {
+
+		// combine hashes - this is taken from the boost library (Qt does essentially the same)
+		template<typename T>
+		inline void hash_combine(std::size_t& cur_hash, T value) const noexcept {
+			std::hash<T> hasher;
+			cur_hash ^= hasher(value) + 0x9e3779b9 + (cur_hash << 6) + (cur_hash >> 2);
+		}
+
+		std::size_t operator()(const GUID& g) const noexcept {
+			std::size_t ret = 0;
+
+			hash_combine(ret, g.Data1);
+			hash_combine(ret, g.Data2);
+			hash_combine(ret, g.Data3);
+			for (size_t i = 0; i < 8; i++)
+				hash_combine(ret, g.Data4[i]);
+
+			return ret;
+		}
+	};
 #endif
 
 // Generates a new GUID version 4 (completely random, suitable for network traffic)
