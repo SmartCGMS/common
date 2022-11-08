@@ -244,7 +244,9 @@ std::wstring dbl_2_wstr(const double val) {
 
     auto convert_normal = [](const double val)->std::wstring {
         std::wstringstream  stream;
-        auto unused = stream.imbue(std::locale(std::wcout.getloc(), new CDecimal_Separator<wchar_t>{ L'.' })); //locale takes ownership of dec_sep
+
+        auto dec_sep = new CDecimal_Separator<wchar_t>{ L'.' };
+        auto unused = stream.imbue(std::locale{ std::wcout.getloc(), std::move(dec_sep) }); //locale takes ownership of dec_sep
         stream << std::setprecision(std::numeric_limits<long double>::digits10 + 1) << val;
         return stream.str();
     };
