@@ -37,6 +37,7 @@
  */
 
 #include "Dynamic_Library.h"
+#include "FilesystemLib.h"
 #include "../utils/string_utils.h"
 
 #include <algorithm>
@@ -76,6 +77,16 @@ bool CDynamic_Library::Load(const filesystem::path &file_path) noexcept {
 	if (mHandle == NULL && mLib_Path.is_relative() && !converted_path.empty() && converted_path[0] != '.') {
 		// construct temporary path instance due to bug in assignment operator of filesystem lib (valgrind reports invalid reads and writes)
 		const filesystem::path npath = filesystem::path{ std::wstring{ L"." } } / mLib_Path;
+		mLib_Path = npath;
+		const std::wstring converted_path2{ mLib_Path.wstring() };
+		mHandle = LoadLibraryW(converted_path2.c_str());
+	}
+
+	// if the library is still not found, and is requested by a relative path without leading dot, explicitly try to search the current module
+	// directory - this is a special case, which affects embedded library loading mechanisms present in e.g. .NET MAUI, Android bundles etc.
+	if (mHandle == NULL && mLib_Path.is_relative() && !converted_path.empty() && converted_path[0] != '.') {
+		// construct temporary path instance due to bug in assignment operator of filesystem lib (valgrind reports invalid reads and writes)
+		const filesystem::path npath = Get_Dll_Dir() / mLib_Path;
 		mLib_Path = npath;
 		const std::wstring converted_path2{ mLib_Path.wstring() };
 		mHandle = LoadLibraryW(converted_path2.c_str());
