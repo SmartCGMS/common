@@ -107,11 +107,12 @@
 	static_assert(sizeof(GUID::Data3) == 2, "GUID Data3 is not 2 bytes long");
 	static_assert(sizeof(GUID::Data4) == 8, "GUID Data4 is not 8 bytes long");
 
-	// for std::hash
-	#include <functional>
+	#include <typeindex> // for std::hash; this is a "cheaper" standard header, than the functional, that guarantees the proper definition of std::hash
 
 	// explicitly specialize std::hash for GUID type; this is due to occassional need of having the GUID as a key in std::unordered_map or std::unordered_set
-	template<> struct std::hash<GUID> {
+	// note, that this is not an extension of namespace std (would be undefined behavior), but just a template specialization, which is allowed by the standard (https://en.cppreference.com/w/cpp/language/extending_std)
+	template<>
+	struct std::hash<GUID> {
 
 		// combine hashes - this is taken from the boost library (Qt does essentially the same)
 		template<typename T>
