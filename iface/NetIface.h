@@ -39,6 +39,7 @@
 #pragma once
 
 #include <cstdint>
+#include <functional>
 #include "../rtl/guid.h"
 
 namespace scgms
