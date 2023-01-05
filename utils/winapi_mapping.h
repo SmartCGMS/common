@@ -129,6 +129,8 @@
 
 	EXTERN_C int wcstombs_s(size_t* converted, char* dst, size_t dstSizeBytes, const wchar_t* src, size_t maxSizeBytes);
 	EXTERN_C int wcsncpy_s(wchar_t *dest, const wchar_t *src, size_t n);
+	
+	EXTERN_C int getenv_s(size_t *len, char *value, size_t valuesz, const char *name);
 
 	#define SD_BOTH SHUT_RDWR
 

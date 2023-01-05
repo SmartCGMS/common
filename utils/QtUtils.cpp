@@ -38,6 +38,8 @@
 
 #include "QtUtils.h"
 
+#ifndef DDO_NOT_USE_QT
+
 #include <sstream>
 
 /*! Convert a QString to an std::wstring */
@@ -94,5 +96,7 @@ int SetupDbColUI(QSqlTableModel &model, QTableView &view, const char* dbcolname,
 	}
 	return idx;
 };
+
+#endif
 
 #endif

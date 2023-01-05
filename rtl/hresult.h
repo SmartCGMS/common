@@ -75,6 +75,7 @@
 	#define E_HANDLE								((HRESULT)0x80070006L)
 	#define E_OUTOFMEMORY							((HRESULT)0x8007000EL)
 	#define E_NOT_SET								((HRESULT)0x80070490L)
+	#define E_UAC_DISABLED							((HRESULT)0x80270252L)
 
 #endif
 

@@ -38,6 +38,9 @@
 
 #pragma once
 
+#include <cstdint>
+#include <functional>
+
 #include "../rtl/guid.h"
 
 #include <cstdint>

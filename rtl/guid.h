@@ -107,6 +107,34 @@
 	static_assert(sizeof(GUID::Data3) == 2, "GUID Data3 is not 2 bytes long");
 	static_assert(sizeof(GUID::Data4) == 8, "GUID Data4 is not 8 bytes long");
 
+	#include <typeindex> // for std::hash; this is a "cheaper" standard header, than the functional, that guarantees the proper definition of std::hash
+
+	// explicitly specialize std::hash for GUID type; this is due to occassional need of having the GUID as a key in std::unordered_map or std::unordered_set
+	// note, that this is not an extension of namespace std (would be undefined behavior), but just a template specialization, which is allowed by the standard (https://en.cppreference.com/w/cpp/language/extending_std)
+	template<>
+	struct std::hash<GUID> {
+
+		// combine hashes - this is taken from the boost library (Qt does essentially the same)
+		template<typename T>
+		inline void hash_combine(std::size_t& cur_hash, T value) const noexcept {
+			std::hash<T> hasher;
+			cur_hash ^= hasher(value) + 0x9e3779b9 + (cur_hash << 6) + (cur_hash >> 2);
+		}
+
+		std::size_t operator()(const GUID& g) const noexcept {
+			std::size_t ret = 0;
+
+			hash_combine(ret, g.Data1);
+			hash_combine(ret, g.Data2);
+			hash_combine(ret, g.Data3);
+			for (size_t i = 0; i < 8; i++)
+				hash_combine(ret, g.Data4[i]);
+
+			return ret;
+		}
+	};
+
+
 	// Generates a new GUID version 4 (completely random, suitable for network traffic)
 	// C++ code only for simplicity as C++ has more powerful tools for randnom numbers out of the box
 	GUID Generate_GUIDv4();	

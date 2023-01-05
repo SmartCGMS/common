@@ -67,6 +67,7 @@ wchar_t* Describe_Error(const HRESULT error) {
 		case E_HANDLE: return L"Invalid object"; break;
 		case E_OUTOFMEMORY: return L"Out of memory"; break;
 		case /*E_NOT_SET*/((HRESULT)0x80070490L): return L"Not set/found"; break;	//otherwise fails to compile on Win
+		case E_UAC_DISABLED: return L"Access control disabled"; break;
 
 		default:	return L"Error description is not available"; break;
 	}

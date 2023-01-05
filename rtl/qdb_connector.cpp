@@ -38,6 +38,8 @@
 
 #include "qdb_connector.h"
 
+#ifndef DDO_NOT_USE_QT
+
 #include "../rtl/manufactory.h"
 #include "../utils/DebugHelper.h"
 #include "../utils/QtUtils.h"
@@ -231,3 +233,5 @@ HRESULT IfaceCalling Setup_Filter_DB_Access(scgms::IFilter *filter, const void* 
 
 	return rc;
 }
+
+#endif

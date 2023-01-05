@@ -43,7 +43,7 @@
 
 #include <memory>
 
-#ifdef __cpp_lib_execution
+#if defined(__cpp_lib_execution) || __has_include(<execution>)
 #include <execution>
 #else
 namespace std

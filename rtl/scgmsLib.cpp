@@ -58,7 +58,7 @@ namespace scgms {
 			void* resolve_factory_symbol(const char* symbol_name) noexcept {
 
 				if (!gFactory_Library.Is_Loaded()) {
-					const std::wstring lib_path{ factory_dynamic_lib_name };					
+					const std::wstring lib_path{ factory_dynamic_lib_name };
 					if (!gFactory_Library.Load(lib_path)) {
 						return nullptr;
 					}
