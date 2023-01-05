@@ -106,7 +106,8 @@
 	static_assert(sizeof(GUID::Data2) == 2, "GUID Data2 (unsigned short) is not 2 bytes long");
 	static_assert(sizeof(GUID::Data3) == 2, "GUID Data3 is not 2 bytes long");
 	static_assert(sizeof(GUID::Data4) == 8, "GUID Data4 is not 8 bytes long");
-#endif
 
-// Generates a new GUID version 4 (completely random, suitable for network traffic)
-GUID Generate_GUIDv4();
+	// Generates a new GUID version 4 (completely random, suitable for network traffic)
+	// C++ code only for simplicity as C++ has more powerful tools for randnom numbers out of the box
+	GUID Generate_GUIDv4();	
+#endif
