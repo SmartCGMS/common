@@ -278,7 +278,7 @@ double str_2_dbl(const wchar_t* wstr) {
 
 
      if (iter != symbols.end()) {
-         if (signbit(val))
+         if (std::signbit(val))
              result += TNumeric_Chars<C>::minus_sign;
          result += iter->second;
      }
