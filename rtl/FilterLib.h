@@ -273,6 +273,8 @@ namespace scgms {
 		template <typename IChain_Configuration>
 		class CInternal_Filter_Chain_Configuration : public virtual refcnt::SReferenced<IChain_Configuration> {
 		public:
+			virtual ~CInternal_Filter_Chain_Configuration() = default;
+
 			SFilter_Configuration_Link Add_Link(const GUID &id) {
 				scgms::SFilter_Configuration_Link link = Create_Configuration_Link(id);				
 				if (link) {
@@ -317,7 +319,7 @@ namespace scgms {
 	class SPersistent_Filter_Chain_Configuration : public virtual internal::CInternal_Filter_Chain_Configuration<scgms::IPersistent_Filter_Chain_Configuration> {
 	public:
 		SPersistent_Filter_Chain_Configuration();
-		virtual ~SPersistent_Filter_Chain_Configuration() {};
+		virtual ~SPersistent_Filter_Chain_Configuration() = default;
 		operator SFilter_Chain_Configuration();
 	};
 

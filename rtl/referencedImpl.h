@@ -91,7 +91,7 @@ namespace refcnt {
 			std::shared_ptr<I>::reset(obj, [](I* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });
 		}		
 
-		virtual ~SReferenced() {}
+		virtual ~SReferenced() = default;
 
 		SReferenced& operator=(I*) = delete;
 		template< class Y, class Deleter >
@@ -113,18 +113,21 @@ namespace refcnt {
 
 		#pragma warning( push )
 		#pragma warning( disable : 4250 ) // C4250 - 'class1' : inherits 'class2::member' via dominance
-
+	
 		template <typename T>
-		class TAligned_Vector : public std::vector<T, AlignmentAllocator<T>>, public CAligned<> {
-		};
-
-		template <typename T>
-		class CVector_Container : public virtual IVector_Container<T>, public virtual CReferenced, public TAligned_Vector<T> {
+		class CVector_Container : public virtual IVector_Container<T>, public virtual CReferenced {
+		protected:
+			std::vector<T, AlignmentAllocator<T>> mData;	//be aware that STL templates do not have virtual dtor => any inheritance is a non-standard behavior
+															//Hence, STL objet can became garbage sooner than assume and e.g., clang is just like this case and we do inherit from std::vector
+															//STL was not designed for inheritance (also we do here) https://www.stroustrup.com/oopsla.pdf
+															//See The C++ Programming Language, in section 16.3.4, where he adds the following warning : 
+															//"...derivation from a concrete class should be done with care and only rarely because of the lack of virtual functions and run-time type information..
+															//=> we would have to add member struct with any method to uniqe_ptr, which is an overhead both to performance and code complexity.
 		private:
 			template <typename D = typename std::remove_pointer<T>::type>
 			typename std::enable_if<!std::is_base_of<refcnt::IReferenced, D>::value && !std::is_base_of<refcnt::IUnique_Reference, D>::value, void>::type
 			Add_Content(T *begin, T *end) {
-				std::copy(begin, end, std::back_inserter(*this));
+				std::copy(begin, end, std::back_inserter(mData));
 			};
 
 			template <typename D = typename std::remove_pointer<T>::type>
@@ -132,7 +135,7 @@ namespace refcnt {
 			Add_Content(T *begin, T *end) {
 				for (T* iter = begin; iter != end; iter++) {
 					T real_ptr = *iter;
-					TAligned_Vector<T>::push_back(real_ptr);
+					mData.push_back(real_ptr);
 					real_ptr->AddRef();
 				}
 			}
@@ -142,7 +145,7 @@ namespace refcnt {
 			Add_Content(T *begin, T *end) {
 				for (T* iter = begin; iter != end; iter++) {
 					T real_ptr = *iter;
-					TAligned_Vector<T>::push_back(std::move(real_ptr));
+					mData.push_back(std::move(real_ptr));
 					*iter = nullptr;	//now, we own the unique reference and therefore we clean the caller's data not to ever use the reference again
 				}
 			}
@@ -159,7 +162,7 @@ namespace refcnt {
 			}
 
 			void Release_Content() {
-				for (T &item : *this)
+				for (T &item : mData)
 					Release_Item(item);	//as we own both kind of references, we release them
 			}
 			
@@ -169,7 +172,7 @@ namespace refcnt {
 
 			virtual HRESULT IfaceCalling set(T *begin, T *end) override final {
 				Release_Content();
-				TAligned_Vector<T>::clear();
+				mData.clear();
 				return add(begin, end);
 			}
 
@@ -180,9 +183,9 @@ namespace refcnt {
 			}
 
 			virtual HRESULT IfaceCalling get(T **begin, T **end) const override final {
-				const size_t sz = TAligned_Vector<T>::size();
+				const size_t sz = mData.size();
 				if (sz > 0) {
-					const auto dta = const_cast<T*>(TAligned_Vector<T>::data());
+					const auto dta = const_cast<T*>(mData.data());
 					*begin = dta;
 					*end = dta + sz;
 					return S_OK;
@@ -193,46 +196,47 @@ namespace refcnt {
 			}
 		
 			virtual HRESULT IfaceCalling pop(T* value) override final {
-				if (TAligned_Vector<T>::empty()) return S_FALSE;
+				if (mData.empty()) return S_FALSE;
 
-				*value = TAligned_Vector<T>::back();
-				TAligned_Vector<T>::pop_back();
+				*value = mData.back();
+				mData.pop_back();
 
 				//there is no reference add_refing/releasing needed, because we are moving from the vector out
 				return S_OK;
 			}
 
 			virtual HRESULT IfaceCalling remove(const size_t index) override {
-				if (TAligned_Vector<T>::empty()) return S_FALSE;
+				if (mData.empty()) return S_FALSE;
 								
-				Release_Item(TAligned_Vector<T>::operator [](index) );
-				TAligned_Vector<T>::erase(TAligned_Vector<T>::begin() + index);
+				Release_Item(mData.operator [](index) );
+				mData.erase(mData.begin() + index);
 				
 				return S_OK;
 			}
 
 			virtual HRESULT IfaceCalling move(const size_t from_index, const size_t to_index) override {
-				if ((from_index >= TAligned_Vector<T>::size()) ||
-					(to_index >= TAligned_Vector<T>::size()) ||
+				const size_t sz = mData.size();
+				if ((from_index >= sz) ||
+					(to_index >= sz) ||
 					(from_index == to_index)) return E_INVALIDARG;
 
 				if (from_index < to_index)	// move down = rotate left by 1 element on given range
-					std::rotate(TAligned_Vector<T>::begin() + from_index, TAligned_Vector<T>::begin() + from_index + 1, TAligned_Vector<T>::begin() + to_index + 1);
+					std::rotate(mData.begin() + from_index, mData.begin() + from_index + 1, mData.begin() + to_index + 1);
 				else						// move up = rotate right by 1 element on given range = rotate left by whole range minus 1
-					std::rotate(TAligned_Vector<T>::begin() + to_index, TAligned_Vector<T>::begin() + from_index, TAligned_Vector<T>::begin() + from_index + 1);
+					std::rotate(mData.begin() + to_index, mData.begin() + from_index, mData.begin() + from_index + 1);
 				
 
 				return S_OK;
 			}
 
 			virtual HRESULT IfaceCalling empty() const override final {
-				return TAligned_Vector<T>::empty() ? S_OK : S_FALSE;
+				return mData.empty() ? S_OK : S_FALSE;
 			}
 		};
 
 
 		template <typename T>
-		class CVector_View : public virtual IVector_Container<T>, public virtual CNotReferenced, public TAligned_Vector<T> {
+		class CVector_View : public virtual IVector_Container<T>, public virtual CNotReferenced  {
 		protected:
 			const T *mBegin, *mEnd;
 		public:

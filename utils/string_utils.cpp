@@ -110,8 +110,11 @@ template <typename C>
 struct TNumeric_Chars {
     static constexpr C dot = char_type_selector<C>('.', L'.');
     static constexpr C coma = char_type_selector<C>(',', L',');
+    static constexpr C minus_sign = char_type_selector<C>('-', L'-');
     static const std::map<const std::basic_string<C>, double> known_symbols;
+    static const std::map<const int, std::basic_string<C>> known_symbols_reverse;
 };
+
 
 template <>
 const std::map<const std::basic_string<char>, double> TNumeric_Chars<char>::known_symbols = {
@@ -149,6 +152,22 @@ const std::map<const std::basic_string<wchar_t>, double> TNumeric_Chars<wchar_t>
            {L"-min", -std::numeric_limits<double>::min()},
            {L"max", std::numeric_limits<double>::max()},
            {L"-max", -std::numeric_limits<double>::max()}
+};
+
+template <>
+const std::map<const int, std::basic_string<char>> TNumeric_Chars<char>::known_symbols_reverse = {
+           {FP_INFINITE, "inf"},
+           {FP_NAN, "nan"},
+           {FP_SUBNORMAL, "subnormal"},
+           {FP_ZERO, "0"}
+};
+
+template <>
+const std::map<const int, std::basic_string<wchar_t>> TNumeric_Chars<wchar_t>::known_symbols_reverse = {
+           {FP_INFINITE, L"\x221e"},
+           {FP_NAN, L"nan"},
+           {FP_SUBNORMAL, L"subnormal"},
+           {FP_ZERO, L"0"}
 };
 
 double rtl_str_dbl(const char* str, char** end_ptr) { return strtod(str, end_ptr); }
@@ -240,27 +259,44 @@ double str_2_dbl(const wchar_t* wstr) {
      return result;
  }
 
+ template <typename C>
+ std::basic_string<C> rtl_dbl_2_str(const double val) {
+
+     auto convert_normal = [](const double val)->std::basic_string<C> {
+         std::basic_stringstream<C, std::char_traits<C>, std::allocator<C>> stream;
+
+         auto dec_sep = new CDecimal_Separator<C>{ TNumeric_Chars<C>::dot};
+         auto unused = stream.imbue(std::locale{ std::wcout.getloc(), std::move(dec_sep) }); //locale takes ownership of dec_sep
+         stream << std::setprecision(std::numeric_limits<long double>::digits10 + 1) << val;
+         return stream.str();
+     };
+
+     const auto symbols = TNumeric_Chars<C>::known_symbols_reverse;
+     const int cls = std::fpclassify(val);
+     std::basic_string<C> result;
+     auto iter = symbols.find(cls);
+
+
+     if (iter != symbols.end()) {
+         if (signbit(val))
+             result += TNumeric_Chars<C>::minus_sign;
+         result += iter->second;
+     }
+     else {
+         result = convert_normal(val);
+     }
+
+     return result;
+ }
+
 std::wstring dbl_2_wstr(const double val) {
-
-    auto convert_normal = [](const double val)->std::wstring {
-        std::wstringstream  stream;
-        auto unused = stream.imbue(std::locale(std::wcout.getloc(), new CDecimal_Separator<wchar_t>{ L'.' })); //locale takes ownership of dec_sep
-        stream << std::setprecision(std::numeric_limits<long double>::digits10 + 1) << val;
-        return stream.str();
-    };
-
-
-    switch (std::fpclassify(val)) {
-        case FP_INFINITE:  return std::signbit(val) ? L"-\x221e" : L"\x221e";
-        case FP_NAN:       return L"NaN";
-        case FP_NORMAL:    return convert_normal(val);                        
-        case FP_SUBNORMAL: return L"subnormal";
-        case FP_ZERO:      return L"0";
-        default:           return L"unknown";
-        
-    }
-    
+    return rtl_dbl_2_str<wchar_t>(val);
 }
+
+std::string dbl_2_str(const double val) {
+    return rtl_dbl_2_str<char>(val);
+}
+
 
 template <typename T>
 int get_base(T* str) {
