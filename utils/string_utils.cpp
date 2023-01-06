@@ -51,6 +51,7 @@
 #include <cwctype>
 #include <type_traits>
 #include <cmath>
+#include <cctype>
 
 #undef min
 #undef max
@@ -111,10 +112,26 @@ struct TNumeric_Chars {
     static constexpr C dot = char_type_selector<C>('.', L'.');
     static constexpr C coma = char_type_selector<C>(',', L',');
     static constexpr C minus_sign = char_type_selector<C>('-', L'-');
+
+    static constexpr C small_x = char_type_selector<C>('x', L'x');
+    static constexpr C capital_x = char_type_selector<C>('X', L'X');
+
+    static const std::array<const C, 16> small_hexa_digits;
+    static const std::array<const C, 16> capital_hexa_digits;
+
     static const std::map<const std::basic_string<C>, double> known_symbols;
     static const std::map<const int, std::basic_string<C>> known_symbols_reverse;
 };
 
+template <>
+const std::array<const char, 16> TNumeric_Chars<char>::capital_hexa_digits = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
+template <>
+const std::array<const char, 16> TNumeric_Chars<char>::small_hexa_digits = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
+
+template <>
+const std::array<const wchar_t, 16> TNumeric_Chars<wchar_t>::capital_hexa_digits = { L'0', L'1', L'2', L'3', L'4', L'5', L'6', L'7', L'8', L'9', L'A', L'B', L'C', L'D', L'E', L'F' };
+template <>
+const std::array<const wchar_t, 16> TNumeric_Chars<wchar_t>::small_hexa_digits = { L'0', L'1', L'2', L'3', L'4', L'5', L'6', L'7', L'8', L'9', L'a', L'b', L'c', L'd', L'e', L'f' };
 
 template <>
 const std::map<const std::basic_string<char>, double> TNumeric_Chars<char>::known_symbols = {
@@ -170,15 +187,93 @@ const std::map<const int, std::basic_string<wchar_t>> TNumeric_Chars<wchar_t>::k
            {FP_ZERO, L"0"}
 };
 
-double rtl_str_dbl(const char* str, char** end_ptr) { return strtod(str, end_ptr); }
-double rtl_str_dbl(const wchar_t* str, wchar_t** end_ptr) { return wcstod(str, end_ptr); }
+template <typename C>
+bool Is_Hexa_Double(const C* str) {
+    bool result = false;
+    if (*str == TNumeric_Chars<C>::small_hexa_digits[0]) {
+        if ((*(str + 1) == TNumeric_Chars<C>::small_x) || (*(str + 1) == TNumeric_Chars<C>::capital_x))
+            result = true;
+    }
 
+    return result;
+}
+
+
+bool rtl0_isspace(const char str) { return std::isspace(static_cast<unsigned char>(str)) != 0; }
+bool rtl0_isspace(const wchar_t str) { return std::iswspace(static_cast<wint_t>(str)) != 0; }
+
+double rtl0_str_dbl(const char* str, char** end_ptr) { return strtod(str, end_ptr); }
+double rtl0_str_dbl(const wchar_t* str, wchar_t** end_ptr) { return wcstod(str, end_ptr); }
+
+uint64_t rtl0_str_uint64(const char* str, char** end_ptr, int base) { return strtoul(str, end_ptr, base); }
+uint64_t rtl0_str_uint64(const wchar_t* str, wchar_t** end_ptr, int base) { return wcstoul(str, end_ptr, base); }
+
+
+template <typename C>
+double rtl_str_dbl(const C* str, C** end_ptr) {
+    const bool is_hexa = Is_Hexa_Double(str);
+    double result = std::numeric_limits<double>::quiet_NaN();
+    if (is_hexa) {        
+        //after the preliominary check, we expect 16 hexa, uninterrupted digits there
+
+        const C *start_digit = str + 2;
+        const C* expected_end_digit = start_digit + 16;
+
+        bool ok = true;
+        C* test_digit = const_cast<C*>(start_digit);
+        while (test_digit < expected_end_digit) {
+            if ((*test_digit == 0) || rtl0_isspace(*test_digit)) {                
+                ok = false;
+                break;
+            }
+
+            test_digit++;
+        }
+
+        if (ok) {
+
+            auto convert_single_digit = [&ok](const C digit)->size_t {
+                if ((digit >= TNumeric_Chars<C>::capital_hexa_digits[0]) && (digit <= TNumeric_Chars<C>::capital_hexa_digits[9]))
+                    return static_cast<size_t>(digit) - static_cast<size_t>(TNumeric_Chars<C>::capital_hexa_digits[0]);
+
+                if ((digit >= TNumeric_Chars<C>::capital_hexa_digits[0xA]) && (digit <= TNumeric_Chars<C>::capital_hexa_digits[0xF]))
+                    return static_cast<size_t>(digit) - static_cast<size_t>(TNumeric_Chars<C>::capital_hexa_digits[0xA]) + 10;
+
+                if ((digit >= TNumeric_Chars<C>::small_hexa_digits[0xA]) && (digit <= TNumeric_Chars<C>::small_hexa_digits[0xF]))
+                    return static_cast<size_t>(digit) - static_cast<size_t>(TNumeric_Chars<C>::small_hexa_digits[0xA]) + 10;
+
+                ok = false;
+                return 0;
+            };
+            
+            //result = 0.0; -- should be there for sanity, but we overwrite it all
+            //let us load the double simply as a memory dump of 8 bytes
+            uint8_t* converted = reinterpret_cast<uint8_t*>(&result);
+            C* converting_digit = const_cast<C*>(start_digit);
+            for (size_t i = 0; i < 8; i++) {
+                const size_t num = convert_single_digit(*converting_digit) * 16 + convert_single_digit(*(converting_digit + 1));
+                converted[i] = static_cast<uint8_t>(num);
+                converting_digit += 2;
+            }
+            
+            if (ok)
+                *end_ptr = const_cast<C*>(expected_end_digit);
+            else
+                *end_ptr = const_cast<C*>(str);
+            
+        }
+    }
+    else
+        result = rtl0_str_dbl(str, end_ptr);
+
+    return result;
+}
 template <typename C>
 double convert_str_2_double(const C* wstr, bool& ok) {         
 
-    C* end_char;   
+    C* end_char = nullptr;   
     double value = rtl_str_dbl(wstr, &end_char);
-    ok = *end_char == 0;
+    ok = (end_char != nullptr) && (*end_char == 0);
 
     //detecting local does not seems reliable in all cases we encountered
     auto try_convert = [&](const C old_point, const C new_point) {
@@ -189,12 +284,14 @@ double convert_str_2_double(const C* wstr, bool& ok) {
         str_2_dbl_string<C> converted{ wstr };
         std::replace(converted.begin(), converted.end(), old_point, new_point);
         value = rtl_str_dbl(converted.c_str(), &end_char);
-        ok = *end_char == 0;
+        ok = (end_char != nullptr) && (*end_char == 0);
         return value;
     };
 
-    if (*end_char == TNumeric_Chars<C>::dot) value = try_convert(TNumeric_Chars<C>::dot, TNumeric_Chars<C>::coma);
-    else if (*end_char == TNumeric_Chars<C>::coma) value = try_convert(TNumeric_Chars<C>::coma, TNumeric_Chars<C>::dot);
+    if (end_char != nullptr) {
+        if (*end_char == TNumeric_Chars<C>::dot) value = try_convert(TNumeric_Chars<C>::dot, TNumeric_Chars<C>::coma);
+        else if (*end_char == TNumeric_Chars<C>::coma) value = try_convert(TNumeric_Chars<C>::coma, TNumeric_Chars<C>::dot);
+    }
 
 
     if (!ok) {
@@ -260,41 +357,55 @@ double str_2_dbl(const wchar_t* wstr) {
  }
 
  template <typename C>
- std::basic_string<C> rtl_dbl_2_str(const double val) {
+ std::basic_string<C> rtl_dbl_2_str(const double val, const bool save_hexa) {
 
-     auto convert_normal = [](const double val)->std::basic_string<C> {
-         std::basic_stringstream<C, std::char_traits<C>, std::allocator<C>> stream;
-
-         auto dec_sep = new CDecimal_Separator<C>{ TNumeric_Chars<C>::dot};
-         auto unused = stream.imbue(std::locale{ std::wcout.getloc(), std::move(dec_sep) }); //locale takes ownership of dec_sep
-         stream << std::setprecision(std::numeric_limits<long double>::digits10 + 1) << val;
-         return stream.str();
-     };
-
-     const auto symbols = TNumeric_Chars<C>::known_symbols_reverse;
-     const int cls = std::fpclassify(val);
      std::basic_string<C> result;
-     auto iter = symbols.find(cls);
+
+     if (!save_hexa) {
+
+         auto convert_normal = [](const double val)->std::basic_string<C> {
+             std::basic_stringstream<C, std::char_traits<C>, std::allocator<C>> stream;
+
+             auto dec_sep = new CDecimal_Separator<C>{ TNumeric_Chars<C>::dot };
+             auto unused = stream.imbue(std::locale{ std::wcout.getloc(), std::move(dec_sep) }); //locale takes ownership of dec_sep
+             stream << std::setprecision(std::numeric_limits<long double>::digits10 + 1) << val;
+             return stream.str();
+         };
+
+         const auto symbols = TNumeric_Chars<C>::known_symbols_reverse;
+         const int cls = std::fpclassify(val);
+
+         auto iter = symbols.find(cls);
 
 
-     if (iter != symbols.end()) {
-         if (std::signbit(val))
-             result += TNumeric_Chars<C>::minus_sign;
-         result += iter->second;
-     }
-     else {
-         result = convert_normal(val);
+         if (iter != symbols.end()) {
+             if (std::signbit(val))
+                 result += TNumeric_Chars<C>::minus_sign;
+             result += iter->second;
+         }
+         else {
+             result = convert_normal(val);
+         }
+     } else {
+         //let us store the double simply as a memory dump of 8 bytes
+         const uint8_t* converted = reinterpret_cast<const uint8_t*>(&val);
+         result  = TNumeric_Chars<C>::small_hexa_digits[0];
+         result += TNumeric_Chars<C>::small_x;
+         for (size_t i = 0; i < 8; i++) {
+             result += TNumeric_Chars<C>::capital_hexa_digits[converted[i] / 16];
+             result += TNumeric_Chars<C>::capital_hexa_digits[converted[i] % 16];
+         }
      }
 
      return result;
  }
 
-std::wstring dbl_2_wstr(const double val) {
-    return rtl_dbl_2_str<wchar_t>(val);
+std::wstring dbl_2_wstr(const double val, const bool save_hexa) {
+    return rtl_dbl_2_str<wchar_t>(val, save_hexa);
 }
 
-std::string dbl_2_str(const double val) {
-    return rtl_dbl_2_str<char>(val);
+std::string dbl_2_str(const double val, const bool save_hexa) {
+    return rtl_dbl_2_str<char>(val, save_hexa);
 }
 
 

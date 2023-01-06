@@ -100,16 +100,16 @@ double str_2_dbl(const wchar_t* wstr, bool& ok);
 
 std::vector<double> str_2_dbls(const wchar_t* wstr, bool& ok);
 
-std::wstring dbl_2_wstr(const double val);
-std::string dbl_2_str(const double val);
+std::wstring dbl_2_wstr(const double val, const bool save_hexa = false);
+std::string dbl_2_str(const double val, const bool save_hexa = false);
 
 template <typename C>
-std::wstring dbl_2_str(const C& container) {
+std::wstring dbl_2_str(const C& container, const bool save_hexa = false) {
     std::wstring result;
     for (auto iter = container.begin(); iter != container.end(); iter++) {
         if (!result.empty())
             result += L' ';
-        result += dbl_2_wstr(*iter);
+        result += dbl_2_wstr(*iter, save_hexa);
     }
 
     return result;
