@@ -199,7 +199,8 @@ namespace scgms {
 									0,
 									NSignal_Visualization::smooth,
 									NSignal_Mark::none,
-								    nullptr
+									nullptr,
+									1.0
 			};
 						
 			std::transform(&desc, (&desc) + 1, std::inserter(mSignal_Descriptors, mSignal_Descriptors.end()), [](const TSignal_Descriptor& desc) {return std::make_pair(desc.id, desc); });
@@ -218,7 +219,8 @@ namespace scgms {
 				0,
 				NSignal_Visualization::mark,
 				NSignal_Mark::none,
-				nullptr
+				nullptr,
+				1.0
 			};
 
 			std::transform(&desc, (&desc) + 1, std::inserter(mSignal_Descriptors, mSignal_Descriptors.end()), [](const TSignal_Descriptor& desc) {return std::make_pair(desc.id, desc); });
