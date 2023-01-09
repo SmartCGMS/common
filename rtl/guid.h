@@ -133,7 +133,9 @@
 			return ret;
 		}
 	};
-#endif
 
-// Generates a new GUID version 4 (completely random, suitable for network traffic)
-GUID Generate_GUIDv4();
+
+	// Generates a new GUID version 4 (completely random, suitable for network traffic)
+	// C++ code only for simplicity as C++ has more powerful tools for randnom numbers out of the box
+	GUID Generate_GUIDv4();	
+#endif
