@@ -115,8 +115,13 @@ filesystem::path Get_Dll_Dir() {
 
 bool Is_Directory(const filesystem::path& path) {
 	std::error_code ec;
-	const bool result = filesystem::is_directory(path, ec);
-	return result && (!ec);
+
+	const auto path_status = filesystem::status(path, ec);
+	bool result = !ec;
+	if (result)
+		result = filesystem::is_directory(path_status);
+
+	return result;
 }
 
 bool Is_Regular_File_Or_Symlink(const filesystem::path& path) {
