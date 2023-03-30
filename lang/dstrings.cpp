@@ -196,6 +196,7 @@ const wchar_t *dsRecalculate_On_Segment_End = L"Recalculate on segment end";
 const wchar_t *dsRecalculate_On_Calibration = L"Recalculate on calibration";
 
 const wchar_t *dsFile_Reader = L"File Reader";
+const wchar_t *dsAdditional_Rules = L"Additional rules";
 const wchar_t *dsInput_Values_File = L"Input file";
 const wchar_t *dsMaximum_IG_Interval = L"Maximum IG interval";
 const wchar_t *dsMinimum_Required_IGs = L"Minimum IG levels";
@@ -1043,6 +1044,8 @@ const wchar_t* rsCarbDA = L"carbda";
 const wchar_t *rsNet_Host = L"Host";
 const wchar_t *rsNet_Port = L"Port";
 const wchar_t *rsNet_RecvSide = L"Is_Recv";
+
+const wchar_t *rsAdditional_Rules = L"Additional_Rules";
 
 const wchar_t *rsInput_Values_File = L"Input_File";
 const wchar_t *rsMaximum_IG_Interval = L"Maximum_IG_Interval";

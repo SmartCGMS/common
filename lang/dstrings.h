@@ -195,6 +195,7 @@ extern const wchar_t *dsRecalculate_On_Segment_End;
 extern const wchar_t *dsRecalculate_On_Calibration;
 
 extern const wchar_t *dsFile_Reader;
+extern const wchar_t *dsAdditional_Rules;
 extern const wchar_t *dsInput_Values_File;
 extern const wchar_t *dsMaximum_IG_Interval;
 extern const wchar_t *dsMinimum_Required_IGs;
@@ -1008,6 +1009,7 @@ extern const wchar_t *rsNet_Host;
 extern const wchar_t *rsNet_Port;
 extern const wchar_t *rsNet_RecvSide;
 
+extern const wchar_t *rsAdditional_Rules;
 extern const wchar_t *rsInput_Values_File;
 extern const wchar_t *rsMaximum_IG_Interval;
 
