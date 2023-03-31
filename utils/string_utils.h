@@ -133,6 +133,9 @@ bool str_2_bool(const std::wstring& str, bool& ok);
 
 
 std::wstring& trim(std::wstring& str);
+std::string& trim(std::string& str);
+std::string trim(const std::string& str);
+std::string trim(const char* str);
 
 std::string quote(const std::string& str);
 

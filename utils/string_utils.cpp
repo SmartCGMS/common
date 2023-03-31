@@ -573,21 +573,61 @@ std::wstring Get_Padded_Number(uint32_t num, size_t places) {
 }
 
 
-const wchar_t* trim_chars = L"\t\n\v\f\r ";
+template<typename T>
+static constexpr const T* trim_char_type_selector(const char* arg0, const wchar_t* arg1)
+{
+    if constexpr (std::is_same_v<T, wchar_t>)
+        return arg1;
+    else
+        return arg0; // fallback to static cast of last parameter in pack
+}
 
-std::wstring& ltrim(std::wstring& str) {
-    str.erase(0, str.find_first_not_of(trim_chars));
+const char* trim_ansi = " \t\n\v\f\r";          //note the leading space!
+const wchar_t* trim_wide = L" \t\n\v\f\r";
+
+template <typename T>
+const T* trim_chars = trim_char_type_selector<T>(trim_ansi, trim_wide);
+
+
+template <typename T>
+T& ltrim(T& str) {
+    using X = typename std::remove_reference<T>::type;
+    using Y = typename X::value_type;
+    str.erase(0, str.find_first_not_of(trim_chars<Y>));
     return str;
 }
 
-std::wstring& rtrim(std::wstring& str) {
-    str.erase(str.find_last_not_of(trim_chars) + 1);
+template <typename T>
+T& rtrim(T& str) {
+    using X = typename std::remove_reference<T>::type;
+    using Y = typename X::value_type;
+    str.erase(str.find_last_not_of(trim_chars<Y>) + 1);
     return str;
+}
+
+template <typename T>
+T trim_core(T& str) {
+    return ltrim<T>(rtrim<T>(str));
 }
 
 std::wstring& trim(std::wstring& str) {
-    return ltrim(rtrim(str));
+    return trim_core<std::wstring&>(str);
 }
+
+std::string& trim(std::string& str) {
+    return trim_core<std::string&>(str);
+}
+
+std::string trim(const std::string &str) {
+    std::string tmp{ str };
+    return trim_core(tmp);
+}
+
+std::string trim(const char* str) {
+    std::string tmp{ str };
+    return trim_core(tmp);
+}
+
 
 std::string quote(const std::string& str) {
     return '"' + str + '"';
