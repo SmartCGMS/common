@@ -171,6 +171,8 @@ namespace scgms {
 		m_per_s,	//speed
 		m_per_s2,	//acceleration
 		g,			//grams - - instead of SI kg due to historical reasons
+		Hz,			//Hertz
+		Calories,
 
 		Other		//a unit not described here, but its description is given in the signal descriptor
 	};

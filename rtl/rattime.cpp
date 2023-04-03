@@ -89,7 +89,7 @@ void convert_dbl(const double rt, std::wstring& str) {
 }
 
 template <typename C, typename S = std::basic_string<C>>
-S core_Rat_Time_To_Local_Time_Str(const double rt, const C *fmt, const double second_fraction_threshold) {
+S core_Rat_Time_To_Local_Time_Str(const double rt, const C *fmt, const double second_fraction_granularity) {
 	if (rt == 0.0) return S{};
 
 	time_t ltim = Rat_Time_To_Unix_Time(rt);
@@ -100,15 +100,19 @@ S core_Rat_Time_To_Local_Time_Str(const double rt, const C *fmt, const double se
 	std::basic_stringstream<C> os;
 	os << std::put_time(&ptm, fmt);
 
-	if (second_fraction_threshold > 0.0) {
-		const double number_of_secs = std::trunc(rt / scgms::One_Second);
-		const double fraction = rt - number_of_secs * scgms::One_Second;
-		if (fraction >= second_fraction_threshold) {
-			S str;
-			convert_dbl(fraction, str);
-			str.erase(0, 1);
-			os << str;
-		}
+	if (second_fraction_granularity > 0.0) {
+		const double rt_by_sec = rt / scgms::One_Second;
+		//const double number_of_secs = ;
+		const double sec_fraction = rt_by_sec - std::trunc(rt_by_sec);
+
+		const double granules = std::trunc(sec_fraction / second_fraction_granularity);
+		const double rounded_fraction = granules * second_fraction_granularity;
+
+		S str;
+		convert_dbl(rounded_fraction, str);
+		str.erase(0, 1);
+		os << str;
+
 	}
 
 
@@ -116,12 +120,12 @@ S core_Rat_Time_To_Local_Time_Str(const double rt, const C *fmt, const double se
 	return result;
 }
 
-std::string Rat_Time_To_Local_Time_Str(const double rt, const char* fmt, const double second_fraction_threshold) {
-	return core_Rat_Time_To_Local_Time_Str(rt, fmt, second_fraction_threshold);
+std::string Rat_Time_To_Local_Time_Str(const double rt, const char* fmt, const double second_fraction_granularity) {
+	return core_Rat_Time_To_Local_Time_Str(rt, fmt, second_fraction_granularity);
 }
 
-std::wstring Rat_Time_To_Local_Time_WStr(const double rt, const wchar_t* fmt, const double second_fraction_threshold) {
-	return core_Rat_Time_To_Local_Time_Str(rt, fmt, second_fraction_threshold);
+std::wstring Rat_Time_To_Local_Time_WStr(const double rt, const wchar_t* fmt, const double second_fraction_granularity) {
+	return core_Rat_Time_To_Local_Time_Str(rt, fmt, second_fraction_granularity);
 }
 
 template <typename S, typename NRS = typename std::remove_reference<S>, typename C = typename NRS::value_type >
@@ -145,21 +149,31 @@ double core_Local_Time_Str_To_Rat_Time(const S& str, const C* fmt) noexcept {
 										//the trailing, extra space removes the eof, thus making the conversion fail for the missing seconds
 	ss >> std::get_time(&ptm, fmt);
 
-	ptm.tm_isdst = -1;					//because Rat_Time_To_Local_Time_WStr is the inverse function to this one, and it ses localtime_s which makes automatic correction
-										//hence, we need to let the system to decide
-	time_t ltim = mktime(&ptm);
+
 
 	double result = std::numeric_limits<double>::quiet_NaN();
-	if (ltim != -1) {
-		result = Unix_Time_To_Rat_Time(ltim);
-		if (has_fraction) {
-			bool ok = false;
-			double fraction = str_2_dbl(fraction_part.c_str(), ok);
-			if (ok)
-				result += scgms::One_Second*fraction;
-			else
-				result = std::numeric_limits<double>::quiet_NaN();
-		}
+	const bool invalid_ptm = (ptm.tm_mday < 0) || (ptm.tm_mon < 0) || (ptm.tm_year < 0) || (ptm.tm_hour < 0) || (ptm.tm_min < 0) || (ptm.tm_sec < 0);
+	if (!invalid_ptm) {	//check whether get_time succeeded
+
+		ptm.tm_isdst = -1;					//because Rat_Time_To_Local_Time_WStr is the inverse function to this one, and it ses localtime_s which makes automatic correction
+		//hence, we need to let the system to decide
+		time_t ltim = mktime(&ptm);
+
+
+		bool fraction_ok = false;
+
+		double fraction = 0.0;
+		if (has_fraction) 	
+			fraction = str_2_dbl(fraction_part.c_str(), fraction_ok);		
+
+		
+		if (ltim != -1) 
+			result = Unix_Time_To_Rat_Time(ltim);	
+		else
+			result = 0.0;	//mktime returns -1 on zero ptm, which is, however, possible if measure something sub-second like e.g.; heartbeat ibi
+
+		if (has_fraction && fraction_ok)
+			result += scgms::One_Second * fraction;
 	}
 
 	return result;
