@@ -169,8 +169,13 @@ double core_Local_Time_Str_To_Rat_Time(const S& str, const C* fmt) noexcept {
 		
 		if (ltim != -1) 
 			result = Unix_Time_To_Rat_Time(ltim);	
-		else
-			result = 0.0;	//mktime returns -1 on zero ptm, which is, however, possible if measure something sub-second like e.g.; heartbeat ibi
+		else {
+			//mktime returns -1 on zero ptm, which is, however, possible if measure something sub-second like e.g.; heartbeat ibi
+			//=>proceeed with just the time of the day
+			result = static_cast<double>(ptm.tm_hour) * scgms::One_Hour +
+					 static_cast<double>(ptm.tm_min) * scgms::One_Minute +
+					 static_cast<double>(ptm.tm_sec) * scgms::One_Second;
+		}
 
 		if (has_fraction && fraction_ok)
 			result += scgms::One_Second * fraction;
