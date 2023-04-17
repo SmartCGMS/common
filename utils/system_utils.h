@@ -39,9 +39,17 @@
 
 #pragma once
 
+#include <string>
 
 class CPriority_Guard {
 public:
 	CPriority_Guard();	
 	~CPriority_Guard();
 };
+
+
+struct TCPU_Strings {
+	std::string name, simd_extensions, special_instructions;
+};
+
+TCPU_Strings Get_CPU_Strings();
