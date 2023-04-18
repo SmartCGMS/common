@@ -50,7 +50,6 @@ namespace scgms {
 
 	namespace imported {
 		scgms::TGet_Filter_Descriptors get_filter_descriptors = scgms::factory::resolve_symbol<scgms::TGet_Filter_Descriptors>("get_filter_descriptors");
-		scgms::TAdd_Filters add_filters = scgms::factory::resolve_symbol<scgms::TAdd_Filters>("add_filters");
 		scgms::TCreate_Persistent_Filter_Chain_Configuration create_persistent_filter_chain_configuration = scgms::factory::resolve_symbol<scgms::TCreate_Persistent_Filter_Chain_Configuration>("create_persistent_filter_chain_configuration");
 		scgms::TExecute_Filter_Configuration execute_filter_configuration = scgms::factory::resolve_symbol<scgms::TExecute_Filter_Configuration>("execute_filter_configuration");
 		scgms::TCreate_Filter_Parameter create_filter_parameter = scgms::factory::resolve_symbol<scgms::TCreate_Filter_Parameter>("create_filter_parameter");
@@ -274,10 +273,6 @@ namespace scgms {
 		scgms::IDevice_Event *raw_event = event.get();
 		event.release();
 		return get()->Execute(raw_event);
-	}
-
-	bool add_filters(const std::vector<scgms::TFilter_Descriptor> &descriptors, scgms::TCreate_Filter create_filter) {
-		return imported::add_filters(descriptors.data(), descriptors.data() + descriptors.size(), create_filter) == S_OK;
 	}
 
 	std::vector<TFilter_Descriptor> get_filter_descriptors() {

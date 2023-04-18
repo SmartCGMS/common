@@ -171,6 +171,8 @@ namespace scgms {
 		m_per_s,	//speed
 		m_per_s2,	//acceleration
 		g,			//grams - - instead of SI kg due to historical reasons
+		Hz,			//Hertz
+		Calories,
 
 		Other		//a unit not described here, but its description is given in the signal descriptor
 	};
@@ -217,7 +219,5 @@ namespace scgms {
 	using TGet_Model_Descriptors = HRESULT(IfaceCalling*)(TModel_Descriptor **begin, TModel_Descriptor **end);
 	using TGet_Solver_Descriptors = HRESULT(IfaceCalling*)(TSolver_Descriptor **begin, TSolver_Descriptor **end);
 	using TGet_Approx_Descriptors = HRESULT(IfaceCalling*)(TApprox_Descriptor **begin, TApprox_Descriptor **end);
-	using TGet_Signal_Descriptors = HRESULT(IfaceCalling*)(TSignal_Descriptor **begin, TSignal_Descriptor **end);
-
-	using TAdd_Filters = HRESULT(IfaceCalling *)(const scgms::TFilter_Descriptor *begin, const scgms::TFilter_Descriptor *end, const scgms::TCreate_Filter create_filter);
+	using TGet_Signal_Descriptors = HRESULT(IfaceCalling*)(TSignal_Descriptor **begin, TSignal_Descriptor **end);	
 }

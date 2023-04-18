@@ -86,7 +86,6 @@ namespace scgms {
 
 			const char* rsSolve_Generic = "solve_generic";
 
-			const char* rsAdd_Filters = "add_filters";
 			const char* rsExecute_Filter_Configuration = "execute_filter_configuration";
 			const char* rsOptimize_Parameters = "optimize_parameters";
 			const char* rsOptimize_Multiple_Parameters = "optimize_multiple_parameters";
@@ -106,7 +105,6 @@ namespace scgms {
 
 			HRESULT IfaceCalling solve_generic_not_impl(void *solver_id, void *setup, void *progress) { return E_NOTIMPL; }
 
-			HRESULT IfaceCalling add_filters_not_impl(void *begin, void *end, void* create_filter) { return E_NOTIMPL; }
 
 			HRESULT IfaceCalling execute_filter_configuration_not_impl(void *configuration, void* on_filter_created, void* data, void *custom_output, void *executor, void *error_description) { return E_NOTIMPL; }
 			HRESULT IfaceCalling optimize_parameters_not_impl(void *cfg, size_t idx, void *parameters_configuration_name, void* on_filter_created, void* data, void *solver_id, size_t population_size, size_t max_generations, void *progress, void *error_description) { return E_NOTIMPL; }
@@ -142,7 +140,6 @@ namespace scgms {
 
 			HRESULT IfaceCalling solve_generic_lazy(void *solver_id, void *setup, void *progress) { return factory_lazy_load(rsSolve_Generic, solver_id, setup, progress); }
 
-			HRESULT IfaceCalling add_filters_lazy(void *begin, void *end, void* create_filter) { return factory_lazy_load(rsAdd_Filters, begin, end, create_filter); }
 
 			HRESULT IfaceCalling execute_filter_configuration_lazy(void *configuration, void* on_filter_created, void* data, void *custom_output, void *executor, void *error_description) { return factory_lazy_load(rsExecute_Filter_Configuration, configuration, on_filter_created, data, custom_output, executor, error_description); }
 			HRESULT IfaceCalling optimize_parameters_lazy(void *cfg, size_t idx, void *parameters_cfg_name, void* on_filter_created, void* data, void *solver_id, size_t population_size, size_t max_generations, void *progress, void *error_description) { return factory_lazy_load(rsOptimize_Parameters, cfg, idx, parameters_cfg_name, on_filter_created, data, solver_id, population_size, max_generations, progress, error_description); }
@@ -168,7 +165,6 @@ namespace scgms {
 				if (strcmp(symbol_name, rsCreate_Approximator) == 0) return reinterpret_cast<void(*)>(internal::create_approximator_lazy);
 
 				if (strcmp(symbol_name, rsSolve_Generic) == 0) return reinterpret_cast<void(*)>(internal::solve_generic_lazy);
-				if (strcmp(symbol_name, rsAdd_Filters) == 0) return reinterpret_cast<void(*)>(internal::add_filters_lazy);
 				if (strcmp(symbol_name, rsExecute_Filter_Configuration) == 0) return reinterpret_cast<void(*)>(internal::execute_filter_configuration_lazy);
 				if (strcmp(symbol_name, rsOptimize_Parameters) == 0) return reinterpret_cast<void(*)>(internal::optimize_parameters_lazy);
 				if (strcmp(symbol_name, rsOptimize_Multiple_Parameters) == 0) return reinterpret_cast<void(*)>(internal::optimize_multiple_parameters_lazy);
@@ -192,7 +188,6 @@ namespace scgms {
 				if (strcmp(symbol_name, rsCreate_Approximator) == 0) return reinterpret_cast<void(*)>(internal::create_approximator_not_impl);
 
 				if (strcmp(symbol_name, rsSolve_Generic) == 0) return reinterpret_cast<void(*)>(internal::solve_generic_not_impl);
-				if (strcmp(symbol_name, rsAdd_Filters) == 0) return reinterpret_cast<void(*)>(internal::add_filters_not_impl);
 				if (strcmp(symbol_name, rsExecute_Filter_Configuration) == 0) return reinterpret_cast<void(*)>(internal::execute_filter_configuration_not_impl);
 				if (strcmp(symbol_name, rsOptimize_Parameters) == 0) return reinterpret_cast<void(*)>(internal::optimize_parameters_not_impl);
 				if (strcmp(symbol_name, rsOptimize_Multiple_Parameters) == 0) return reinterpret_cast<void(*)>(internal::optimize_multiple_parameters_not_impl);

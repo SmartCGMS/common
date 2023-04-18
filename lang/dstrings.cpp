@@ -196,6 +196,7 @@ const wchar_t *dsRecalculate_On_Segment_End = L"Recalculate on segment end";
 const wchar_t *dsRecalculate_On_Calibration = L"Recalculate on calibration";
 
 const wchar_t *dsFile_Reader = L"File Reader";
+const wchar_t *dsAdditional_Rules = L"Additional rules";
 const wchar_t *dsInput_Values_File = L"Input file";
 const wchar_t *dsMaximum_IG_Interval = L"Maximum IG interval";
 const wchar_t *dsMinimum_Required_IGs = L"Minimum IG levels";
@@ -249,6 +250,7 @@ const wchar_t *dsLog_Filter = L"Log";
 const wchar_t *dsLog_Output_File = L"Save log to CSV file";
 const wchar_t* dsLog_Segments_Individually = L"Save each segment to a dedicated file";
 const wchar_t* dsReduced_Log = L"Saved reduced log";
+const wchar_t* dsSecond_Threshold = L"Second threshold";
 const wchar_t* dsLog_Input_File_Or_Dir = L"Log file or dir with log files";
 const wchar_t *dsEmit_Shutdown_Msg = L"Emit the shutdown message";
 const wchar_t *dsLog_Header = L"Logical Clock; Device Time; Event Code; Signal; Info; Segment Id; Event Code Id; Device Id; Signal Id";
@@ -1044,6 +1046,8 @@ const wchar_t *rsNet_Host = L"Host";
 const wchar_t *rsNet_Port = L"Port";
 const wchar_t *rsNet_RecvSide = L"Is_Recv";
 
+const wchar_t *rsAdditional_Rules = L"Additional_Rules";
+
 const wchar_t *rsInput_Values_File = L"Input_File";
 const wchar_t *rsMaximum_IG_Interval = L"Maximum_IG_Interval";
 
@@ -1091,8 +1095,9 @@ const wchar_t *rsRecalculate_On_Segment_End = L"Recalculate_At_Segment_End";
 const wchar_t *rsRecalculate_On_Calibration = L"Recalculate_On_Calibration";
 
 const wchar_t *rsLog_Output_File = L"Log_File";
-const wchar_t* rsLog_Segments_Individually = L"Log_Segments_Individually";
-const wchar_t* rsReduced_Log = L"Reduce_Log";
+const wchar_t *rsLog_Segments_Individually = L"Log_Segments_Individually";
+const wchar_t *rsReduced_Log = L"Reduce_Log";
+const wchar_t *rsSecond_Threshold = L"Second_Threshold";
 const wchar_t *rsEmit_Shutdown_Msg = L"Emit_Shutdown";
 const wchar_t *rsInterpret_Filename_As_Segment_Id = L"Filename_as_segment_id";
 const wchar_t *rsEmit_All_Events_Before_Shutdown = L"Emit_All_Events_Before_Shutdown";

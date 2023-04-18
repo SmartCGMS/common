@@ -133,6 +133,9 @@ bool str_2_bool(const std::wstring& str, bool& ok);
 
 
 std::wstring& trim(std::wstring& str);
+std::string& trim(std::string& str);
+std::string trim(const std::string& str);
+std::string trim(const char* str);
 
 std::string quote(const std::string& str);
 
@@ -140,3 +143,10 @@ std::string quote(const std::string& str);
 std::wstring Lower_String(const std::wstring& wstr);
 std::string Lower_String(const std::string& wstr);
 
+
+
+template <typename T>
+bool ends_with(T const& complete_string, T const& ending_string) {
+    if (ending_string.size() > complete_string.size()) return false;
+    return std::equal(ending_string.rbegin(), ending_string.rend(), complete_string.rbegin());
+}

@@ -71,49 +71,125 @@ double Unix_Time_To_Rat_Time(const time_t qdt)
 
 time_t Rat_Time_To_Unix_Time(const double rt)
 {
-	double diff = rt * MSecsPerDay;
-	int64_t msecs = (static_cast<int64_t>(ceil(diff))) - diffFrom1970To1900;	
-
-	return static_cast<time_t>(msecs / 1000);
+	const double diff = rt * MSecsPerDay;
+	const double ceiled_msecs = std::ceil(diff);
+	const int64_t casted_msecs = static_cast<int64_t>(ceiled_msecs);
+	const int64_t msecs = casted_msecs - diffFrom1970To1900;
+	const int64_t secs = msecs / static_cast<int64_t>(1000);
+	const time_t result = static_cast<time_t>(secs);
+	return result;
 }
 
-std::string Rat_Time_To_Local_Time_Str(const double rt, const char *fmt) {
+
+void convert_dbl(const double rt, std::string& str) {
+	str = dbl_2_str(rt);
+}
+void convert_dbl(const double rt, std::wstring& str) {
+	str = dbl_2_wstr(rt);
+}
+
+template <typename C, typename S = std::basic_string<C>>
+S core_Rat_Time_To_Local_Time_Str(const double rt, const C *fmt, const double second_fraction_granularity) {
+	if (rt == 0.0) return S{};
+
 	time_t ltim = Rat_Time_To_Unix_Time(rt);
-	struct tm ptm {}; //zero initalize all possibly non-set elements like daylight saving
-	localtime_s(&ptm, &ltim);
-
-	std::ostringstream os;
-	os << std::put_time(&ptm, fmt);
-	
-	return os.str();
-}
-
-std::wstring Rat_Time_To_Local_Time_WStr(const double rt, const wchar_t *fmt) {
-	if (rt == 0.0) return std::wstring{};
-
-	time_t ltim = Rat_Time_To_Unix_Time(rt);
 
 	struct tm ptm {}; //zero initalize all possibly non-set elements like daylight saving
-	localtime_s(&ptm, &ltim);
+	localtime_s(&ptm, &ltim);	
 
-	std::wostringstream os;
+	std::basic_stringstream<C> os;
 	os << std::put_time(&ptm, fmt);
 
-	return os.str();
+	if (second_fraction_granularity > 0.0) {
+		const double rt_by_sec = rt / scgms::One_Second;
+		//const double number_of_secs = ;
+		const double sec_fraction = rt_by_sec - std::trunc(rt_by_sec);
+
+		const double granules = std::trunc(sec_fraction / second_fraction_granularity);
+		const double rounded_fraction = granules * second_fraction_granularity;
+
+		S str;
+		convert_dbl(rounded_fraction, str);
+		str.erase(0, 1);
+		os << str;
+
+	}
+
+
+	S result = os.str();
+	return result;
 }
 
-double Local_Time_WStr_To_Rat_Time(const std::wstring& str, const wchar_t* fmt) noexcept {
+std::string Rat_Time_To_Local_Time_Str(const double rt, const char* fmt, const double second_fraction_granularity) {
+	return core_Rat_Time_To_Local_Time_Str(rt, fmt, second_fraction_granularity);
+}
+
+std::wstring Rat_Time_To_Local_Time_WStr(const double rt, const wchar_t* fmt, const double second_fraction_granularity) {
+	return core_Rat_Time_To_Local_Time_Str(rt, fmt, second_fraction_granularity);
+}
+
+template <typename S, typename NRS = typename std::remove_reference<S>, typename C = typename NRS::value_type >
+double core_Local_Time_Str_To_Rat_Time(const S& str, const C* fmt) noexcept {
+
+	//note that we support a non-standard extension, which considers any trailing .zzz as a second fraction
+
+	const C extra_space = static_cast<C>(0x20);
+	const C extra_dot = static_cast<C>('.');
+
+	const auto fraction_separator_pos = str.find_first_of(extra_dot);
+	const bool has_fraction = fraction_separator_pos != S::npos;
+	auto normal_part = has_fraction ? str.substr(0, fraction_separator_pos) : str;
+	auto fraction_part = has_fraction ? static_cast<C>('0') + str.substr(fraction_separator_pos, str.size() - fraction_separator_pos - 1) : S{};
 
 	struct tm ptm {}; //zero initalize all possibly non-set elements like daylight saving
 	memset(&ptm, 0, sizeof(ptm)); // mktime may use fields, that may not be filled by std::get_time; to make valgrind happy, let us initialize the whole memory
-	std::wistringstream ss(str);
+	std::basic_stringstream<C>  ss(normal_part + extra_space);
+										// we append extra space to avoid 1b) and enforce 1c) for https://en.cppreference.com/w/cpp/locale/time_get/get
+										//practically, if mask would e.g.; contain seconds, but the source would not, then the conversion would still succeed despite missing seconds
+										//the trailing, extra space removes the eof, thus making the conversion fail for the missing seconds
 	ss >> std::get_time(&ptm, fmt);
 
-	ptm.tm_isdst = -1;					//because Rat_Time_To_Local_Time_WStr is the inverse function to this one, and it ses localtime_s which makes automatic correction
-										//hence, we need to let the system to decide
-	time_t ltim = mktime(&ptm);
 
-	return ltim != -1 ? Unix_Time_To_Rat_Time(ltim) : std::numeric_limits<double>::quiet_NaN();
+
+	double result = std::numeric_limits<double>::quiet_NaN();
+	const bool invalid_ptm = (ptm.tm_mday < 0) || (ptm.tm_mon < 0) || (ptm.tm_year < 0) || (ptm.tm_hour < 0) || (ptm.tm_min < 0) || (ptm.tm_sec < 0);
+	if (!invalid_ptm) {	//check whether get_time succeeded
+
+		ptm.tm_isdst = -1;					//because Rat_Time_To_Local_Time_WStr is the inverse function to this one, and it ses localtime_s which makes automatic correction
+		//hence, we need to let the system to decide
+		time_t ltim = mktime(&ptm);
+
+
+		bool fraction_ok = false;
+
+		double fraction = 0.0;
+		if (has_fraction) 	
+			fraction = str_2_dbl(fraction_part.c_str(), fraction_ok);		
+
+		
+		if (ltim != -1) 
+			result = Unix_Time_To_Rat_Time(ltim);	
+		else {
+			//mktime returns -1 on zero ptm, which is, however, possible if measure something sub-second like e.g.; heartbeat ibi
+			//=>proceeed with just the time of the day
+			result = static_cast<double>(ptm.tm_hour) * scgms::One_Hour +
+					 static_cast<double>(ptm.tm_min) * scgms::One_Minute +
+					 static_cast<double>(ptm.tm_sec) * scgms::One_Second;
+		}
+
+		if (has_fraction && fraction_ok)
+			result += scgms::One_Second * fraction;
+	}
+
+	return result;
+}
+
+double Local_Time_WStr_To_Rat_Time(const std::wstring& str, const wchar_t* fmt) noexcept {
+	return core_Local_Time_Str_To_Rat_Time(str, fmt);
+}
+
+double Local_Time_Str_To_Rat_Time(const std::string& str, const char* fmt) noexcept {
+	return core_Local_Time_Str_To_Rat_Time(str, fmt);
 }
 
 std::wstring Rat_Time_To_Default_WStr(double rattime) {

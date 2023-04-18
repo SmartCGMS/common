@@ -195,6 +195,7 @@ extern const wchar_t *dsRecalculate_On_Segment_End;
 extern const wchar_t *dsRecalculate_On_Calibration;
 
 extern const wchar_t *dsFile_Reader;
+extern const wchar_t *dsAdditional_Rules;
 extern const wchar_t *dsInput_Values_File;
 extern const wchar_t *dsMaximum_IG_Interval;
 extern const wchar_t *dsMinimum_Required_IGs;
@@ -246,6 +247,7 @@ extern const wchar_t *dsLog_Filter;
 extern const wchar_t *dsLog_Output_File;
 extern const wchar_t* dsLog_Segments_Individually;
 extern const wchar_t* dsReduced_Log;
+extern const wchar_t* dsSecond_Threshold;
 extern const wchar_t* dsLog_Input_File_Or_Dir;
 extern const wchar_t *dsEmit_Shutdown_Msg;
 extern const wchar_t *dsLog_Header;
@@ -1008,6 +1010,7 @@ extern const wchar_t *rsNet_Host;
 extern const wchar_t *rsNet_Port;
 extern const wchar_t *rsNet_RecvSide;
 
+extern const wchar_t *rsAdditional_Rules;
 extern const wchar_t *rsInput_Values_File;
 extern const wchar_t *rsMaximum_IG_Interval;
 
@@ -1061,6 +1064,7 @@ extern const wchar_t *rsRecalculate_On_Calibration;
 extern const wchar_t *rsLog_Output_File;
 extern const wchar_t* rsLog_Segments_Individually;
 extern const wchar_t* rsReduced_Log;
+extern const wchar_t* rsSecond_Threshold;
 extern const wchar_t *rsEmit_Shutdown_Msg;
 extern const wchar_t* rsInterpret_Filename_As_Segment_Id;
 extern const wchar_t* rsEmit_All_Events_Before_Shutdown;
