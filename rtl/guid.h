@@ -40,6 +40,10 @@
 
 #include <assert.h>
 
+#ifndef SCGMS_GUID_DEFINED
+
+#define SCGMS_GUID_DEFINED
+
 #ifdef _WIN32
 	#include <guiddef.h>
 #else
@@ -138,4 +142,6 @@
 	// Generates a new GUID version 4 (completely random, suitable for network traffic)
 	// C++ code only for simplicity as C++ has more powerful tools for randnom numbers out of the box
 	GUID Generate_GUIDv4();	
+#endif
+
 #endif

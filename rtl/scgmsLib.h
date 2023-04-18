@@ -49,7 +49,7 @@ namespace scgms {
 
             constexpr bool import_test_fails = false;
 
-            void* resolve_factory_symbol(const char* symbol_name) noexcept;
+            void* resolve_scgms_symbol(const char* symbol_name) noexcept;
             void* resolve_not_impl_symbol(const char* symbol_name) noexcept;
         }
 
@@ -58,7 +58,7 @@ namespace scgms {
             if (internal::import_test_fails)
                 return reinterpret_cast<T>(internal::resolve_not_impl_symbol(symbol_name));
 
-            void* resolution = internal::resolve_factory_symbol(symbol_name);
+            void* resolution = internal::resolve_scgms_symbol(symbol_name);
             if (!resolution) resolution = internal::resolve_not_impl_symbol(symbol_name);	//still returning not_impl if cannot load the symbol
 
             return reinterpret_cast<T>(resolution);
@@ -66,5 +66,6 @@ namespace scgms {
     }
 
 
-	bool is_scgms_loaded();
+    bool is_scgms_loaded();
+    bool force_scgms_unload();
 }

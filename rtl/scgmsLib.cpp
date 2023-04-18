@@ -46,25 +46,25 @@ namespace scgms {
 		namespace internal {
 
 		#ifdef _WIN32
-			const wchar_t* factory_dynamic_lib_name = L"scgms.dll";
+			const wchar_t* scgms_dynamic_lib_name = L"scgms.dll";
 		#elif __APPLE__
-			const wchar_t* factory_dynamic_lib_name = L"libscgms.dylib";
+			const wchar_t* scgms_dynamic_lib_name = L"libscgms.dylib";
 		#else
-			const wchar_t* factory_dynamic_lib_name = L"libscgms.so";
+			const wchar_t* scgms_dynamic_lib_name = L"libscgms.so";
 		#endif
 
-			CDynamic_Library gFactory_Library;
+			CDynamic_Library gScgms_Library;
 
-			void* resolve_factory_symbol(const char* symbol_name) noexcept {
+			void* resolve_scgms_symbol(const char* symbol_name) noexcept {
 
-				if (!gFactory_Library.Is_Loaded()) {
-					const std::wstring lib_path{ factory_dynamic_lib_name };
-					if (!gFactory_Library.Load(lib_path)) {
+				if (!gScgms_Library.Is_Loaded()) {
+					const std::wstring lib_path{ scgms_dynamic_lib_name };
+					if (!gScgms_Library.Load(lib_path)) {
 						return nullptr;
 					}
 				}
 
-				return gFactory_Library.Resolve(symbol_name);
+				return gScgms_Library.Resolve(symbol_name);
 			}
 
 			const char* rsGet_Filter_Descriptors = "get_filter_descriptors";
@@ -115,7 +115,7 @@ namespace scgms {
 			template<typename... Args>
 			HRESULT factory_lazy_load(const char* symbol_name, Args... args)
 			{
-				void* resolved = resolve_factory_symbol(symbol_name);
+				void* resolved = resolve_scgms_symbol(symbol_name);
 				if (!resolved)
 					return E_NOTIMPL;
 
@@ -206,6 +206,15 @@ namespace scgms {
 	}
 
 	bool is_scgms_loaded() {
-		return factory::internal::resolve_factory_symbol(factory::internal::rsCreate_Filter) != nullptr;
+		return factory::internal::resolve_scgms_symbol(factory::internal::rsCreate_Filter) != nullptr;
+	}
+
+	bool force_scgms_unload() {
+		if (!factory::internal::gScgms_Library.Is_Loaded()) {
+			return false;
+		}
+
+		factory::internal::gScgms_Library.Unload();
+		return true;
 	}
 }
