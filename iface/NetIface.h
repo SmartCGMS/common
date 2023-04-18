@@ -42,6 +42,7 @@
 #include <functional>
 
 #include "../rtl/guid.h"
+#include "referencedIface.h"
 
 #include <cstdint>
 #include <limits>
@@ -274,5 +275,168 @@ namespace scgms
 	};
 
 #pragma pack(pop)
+
+	/*
+	 * Namespace designated to hold classes and structures relevant to distributed generic subsystem of SmartCGMS
+	 */
+	namespace forum {
+
+		enum class NTransfer_File_Type : uint8_t {
+			Filters_Library,
+			Misc_File,
+		};
+
+		/*
+		 * Class representing a running solver instance on a node within the network; this usually implies a dependence on
+		 * the INet_Worker class instance, as it uses its services to interact with other solver instances
+		 */
+		class INet_Solver : public virtual refcnt::IReferenced {
+			public:
+				/*
+				 * broadcast a candidate solution to all other nodes; the caller manages the parameters container lifetime
+				 * returns S_OK if the broadcast was done successfully
+				 */
+				virtual HRESULT Broadcast_Candidate(refcnt::double_container* parameters, uint32_t generation, GUID* source_id) = 0;
+
+				/*
+				 * determines if there is a foreign candidate waiting in the queue
+				 * returns S_OK if there is at least one candidate waiting
+				 * returns S_FALSE if the queue is empty
+				 */
+				virtual HRESULT Has_Foreign_Candidate() = 0;
+
+				/*
+				 * pops a foreign candidate from the queue, fills the caller supplied parameters, generation and source_id pointers
+				 * the caller manages lifetime of all supplied referenced entities
+				 * returns S_OK if the request was successfull
+				 * returns E_FAIL when there is no candidate waiting in the queue
+				 */
+				virtual HRESULT Pop_Foreign_Candidate(refcnt::double_container* parameters, uint32_t* generation, GUID* source_id) = 0;
+
+				/*
+				 * finalizes the communication; this call blocks until the whole forum is finalized (every INet_Solver calls Finalize)
+				 * results S_OK if the finalization was successfull
+				 */
+				virtual HRESULT Finalize() = 0;
+
+				/*
+				 * broadcast a best solution to all other nodes; the caller manages the parameters container lifetime
+				 * returns S_OK if the broadcast was done successfully
+				 */
+				virtual HRESULT Broadcast_Best(refcnt::double_container* parameters, uint32_t generation, GUID* source_id) = 0;
+
+				/*
+				 * determines if there is a foreign best solution waiting in the queue
+				 * returns S_OK if there is at least one best solution waiting
+				 * returns S_FALSE if the queue is empty
+				 */
+				virtual HRESULT Has_Foreign_Best() = 0;
+
+				/*
+				 * pops a foreign candidate from the queue, fills the caller supplied parameters and source_id pointers
+				 * the caller manages lifetime of all supplied referenced entities
+				 * returns S_OK if the request was successfull
+				 * returns E_FAIL when there is no best solution waiting in the queue
+				 */
+				virtual HRESULT Pop_Foreign_Best(refcnt::double_container* parameters, GUID* source_id) = 0;
+		};
+
+		using TActivate_File_Fnc = HRESULT(*)(void* /*data*/, refcnt::wstr_container* /*file_name*/, refcnt::wstr_container* /*version_identifier*/);
+
+		using TUpdate_File_Fnc = HRESULT(*)(void* /*data*/, refcnt::wstr_container* /*file_name*/, refcnt::wstr_container* /*version_identifier*/, refcnt::IVector_Container<uint8_t>* /*file_contents*/);
+
+		using TOptimize_Request_Fnc = HRESULT(*)(void* /*data*/, refcnt::wstr_container* /*config_name*/, uint32_t /*filter_idx*/, refcnt::wstr_container* /*parameters_name*/, refcnt::double_container* /*result*/, INet_Solver* /*solver_comm*/);
+
+		/*
+		 * Class representing a worker in a network; this class maintains all the control and service purposes
+		 * This is usually visible only to the front-end; the class implementing INet_Worker should use an underlying
+		 * technology, such as MPI (acting as a non-root node), to exchange info between nodes
+		 */
+		class INet_Worker : public virtual refcnt::IReferenced {
+			public:
+				/*
+				 * starts the network worker code - this opens a given implementation-specific communication channel and begins listening for requests
+				 * returns S_OK if the worker is ready
+				 */
+				virtual HRESULT Start() = 0;
+
+				/*
+				 * finalizes the network code, closes the communication channel and exits; it either does so gracefully (force == FALSE) or forced
+				 * returns S_OK if the network was gracefully finalized
+				 * returns S_FALSE if force == TRUE and forced shut-down was required
+				 */
+				virtual HRESULT Stop(BOOL force) = 0;
+
+				/*
+				 * registers an activate file listener function; this function gets called when activate file request is obtained through the network interface
+				 * returns S_OK if the function was registered successfully and no other function was registered prior
+				 * returns S_FALSE if the registration has overwritten a previously registered function
+				 */
+				virtual HRESULT Register_Activate_File_Listener(TActivate_File_Fnc handler, void* handler_data) = 0;
+
+				/*
+				 * registers an update file listener function; this function gets called when update file request bulk is obtained through the network interface (whole file is received)
+				 * returns S_OK if the function was registered successfully and no other function was registered prior
+				 * returns S_FALSE if the registration has overwritten a previously registered function
+				 */
+				virtual HRESULT Register_Update_File_Listener(TUpdate_File_Fnc handler, void* handler_data) = 0;
+
+				/*
+				 * registers an optimize listener function; this function gets called when Optimize request is obtained through the network interface
+				 * returns S_OK if the function was registered successfully and no other function was registered prior
+				 * returns S_FALSE if the registration has overwritten a previously registered function
+				 */
+				virtual HRESULT Register_Optimize_Listener(TOptimize_Request_Fnc handler, void* handler_data) = 0;
+		};
+
+		/*
+		 * Class representing a coordinator of network cluster consisting of one or more workers; this class maintains
+		 * all the control and service purposes
+		 * This is usually visible only to the front-end; the class implementing INet_Coordinator should use an underlying
+		 * technology, such as MPI (acting as a root node), to exchange info between nodes
+		 */
+		class INet_Coordinator : public virtual refcnt::IReferenced {
+			public:
+				/*
+				 * connect to all available workers in a pool up to a worker_count - this allocates all such workers to work with this instance; actual number of workers are returned in worker_count
+				 * if *worker_count == 0, all available workers are used; *worker_count is filled with the actual number of workers allocated
+				 * returns S_OK if all requested workers (or at least 1 if *worker_count == 0) were allocated, S_FALSE if at least 1 and < *worker_count was allocated, E_FAIL when no workers are available
+				 */
+				virtual HRESULT Connect_Workers(size_t* worker_count) = 0;
+
+				/*
+				 * collects worker info - fills in the worker count and environment specs
+				 * envSpecs is an array of size worker_count
+				 * returns S_OK if all workers responded with required data
+				 */
+				virtual HRESULT Collect_Worker_Info(size_t* worker_count, refcnt::IVector_Container<refcnt::wstr_container*>** envSpecs) = 0;
+
+				/*
+				 * distributes a file of a given file class/type to workers; the caller must supply full path to the file and a version identifier (e.g., a hash)
+				 * the callee queries all workers of their current version and updates the given file if neccessary; the worker activates given file during this request
+				 * env_specifier specifies the environment, if applies (e.g., Windows, Linux, ...)
+				 * returns S_OK if the operation succeeded and at least one worker was updated
+				 * returns S_FALSE when no worker was updated due to already having the requested version
+				 * returns an error code when failure occurred
+				 */
+				virtual HRESULT Update_File_In_Workers(NTransfer_File_Type file_type, refcnt::wstr_container* file_path, refcnt::wstr_container* env_specifier, refcnt::wstr_container* file_version_identifier, refcnt::IVector_Container<uint8_t>* file_contents) = 0;
+
+				/*
+				 * runs an optimize job on all connected workers, so that they optimize given config name (distributed prior this call using Update_File_In_Workers call), its filter with index of filter_idx
+				 * and its parameters identified by parameters_name. As a result, it sets the worker_count to an actual number of workers that responded with valid response. This also serves as a size of the
+				 * following parameters array; the parameters container array contains the optimized parameters from each worker
+				 * 
+				 * NOTE: this does not pose any requirement for inter-solver communication, as it does not pass through the coordinator interface. The implementation of data passing between solvers is
+				 * an implementation detail of INet_Coordinator, as it merely forwards the messages to other workers and their linked INet_Solver instances
+				 * 
+				 * returns S_OK if all remote solvers returned a valid parameters array
+				 * returns S_FALSE if at least one solver returned a valid parameters array, but at least one failed to do so
+				 * returns E_ABORT when no solvers were able to return a valid parameters array (but they were successfully prompted) - this indicates an error in configuration
+				 * returns E_FAIL when there is a network error
+				 */
+				virtual HRESULT Optimize(refcnt::wstr_container* config_name, GUID* solver_id, uint32_t filter_idx, refcnt::wstr_container* parameters_name, uint32_t* worker_count, refcnt::double_container* parameters) = 0;
+		};
+
+	}
 
 }
