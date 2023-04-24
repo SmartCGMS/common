@@ -127,7 +127,7 @@ TCPU_Strings  Get_CPU_Strings() {
 		append_extension(result.simd_extensions, "AVX512BW", cpui[EBX_idx] & (1 << 30));
 		append_extension(result.simd_extensions, "AVX512VL", cpui[EBX_idx] & (1 << 31));
 
-		append_extension(result.simd_extensions, "AVX512_VBMI", cpui[ECX_idx] && (1 << 1));
+		append_extension(result.simd_extensions, "AVX512_VBMI", cpui[ECX_idx] & (1 << 1));
 	}
 
 	return result;
