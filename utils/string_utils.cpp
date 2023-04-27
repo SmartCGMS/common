@@ -314,6 +314,10 @@ double str_2_dbl(const char* str) {
     return str_2_dbl(str, tmp);
 }
 
+double str_2_dbl(const std::string& str) {
+    return str_2_dbl(str.c_str());
+}
+
 double str_2_dbl(const char* str, bool& ok) {
     return convert_str_2_double<char>(str, ok);
 }
@@ -477,8 +481,18 @@ uint64_t str_2_uint(const wchar_t* wstr, bool& ok) {
     return str_2_xint<uint64_t, wchar_t>(wstr, ok, std::wcstoull);
 }
 
-uint64_t str_2_uint(const char* wstr, bool& ok) {
-    return str_2_xint<uint64_t, char>(wstr, ok, std::strtol);
+uint64_t str_2_uint(const char* str, bool& ok) {
+    return str_2_xint<uint64_t, char>(str, ok, std::strtol);
+}
+
+uint64_t str_2_uint(const char* str) {
+    bool tmp = false;
+    return (str, tmp);
+}
+
+uint64_t str_2_uint(const std::string& str) {
+    bool tmp = false;
+    return str_2_uint(str.c_str(), tmp);
 }
 
 
