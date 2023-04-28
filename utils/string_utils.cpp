@@ -271,6 +271,11 @@ double rtl_str_dbl(const C* str, C** end_ptr) {
 template <typename C>
 double convert_str_2_double(const C* wstr, bool& ok) {         
 
+    if ((wstr == nullptr) || (*wstr ==0)) {
+        ok = false;
+        return std::numeric_limits<double>::quiet_NaN();    //std lib seems to happily return zero on empty string
+    }
+
     C* end_char = nullptr;   
     double value = rtl_str_dbl(wstr, &end_char);
     ok = (end_char != nullptr) && (*end_char == 0);
