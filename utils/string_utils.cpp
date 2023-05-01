@@ -492,7 +492,7 @@ uint64_t str_2_uint(const char* str, bool& ok) {
 
 uint64_t str_2_uint(const char* str) {
     bool tmp = false;
-    return (str, tmp);
+    return str_2_uint(str, tmp);
 }
 
 uint64_t str_2_uint(const std::string& str) {
