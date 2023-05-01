@@ -38,7 +38,7 @@
 
 #include "hresult.h"
 
-wchar_t* Describe_Error(const HRESULT error) {
+const wchar_t* Describe_Error(const HRESULT error) {
 	//although we could use the system error description, at least on Win32,
 	//we provide the meanings as we use them
 

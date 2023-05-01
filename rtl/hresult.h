@@ -82,7 +82,7 @@
 #ifdef __cplusplus
 	extern "C"
 #endif
-wchar_t* Describe_Error(const HRESULT error);
+const wchar_t* Describe_Error(const HRESULT error);
 
 
 #ifdef __cplusplus
