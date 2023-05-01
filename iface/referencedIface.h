@@ -38,7 +38,7 @@
 
 #pragma once
 
-#ifdef _WIN32
+#if defined(_WIN32) && !defined(_WIN64)
 	#define IfaceCalling __stdcall
 #else
 	#define IfaceCalling
