@@ -67,16 +67,14 @@ CPriority_Guard::~CPriority_Guard() {
 
 
 TCPU_Strings  Get_CPU_Strings() {
-	
 
-	auto append_extension = [](std::string& target, const std::string& desc, const auto set) {
+	[[maybe_unused]] auto append_extension = [](std::string& target, const std::string& desc, const auto set) {
 		if (set != 0) {
 			if (!target.empty())
 				target += " ";
 			target += desc;
 		}
 	};
-
 
 #ifdef _M_X64
 	std::array<int, 4> cpui;
@@ -133,12 +131,12 @@ TCPU_Strings  Get_CPU_Strings() {
 	return result;
 
 #elif defined(_M_IX86)
-	return { "A legacy 32-bit x86 processor", "unknown-simd extensions"};
+	return { "A legacy 32-bit x86 processor", "unknown-simd extensions", "unknown" };
 #elif defined(_M_ARM)
-	return {"A legacy 32-bit Arm processor", "unknown-simd extensions"};
+	return { "A legacy 32-bit Arm processor", "unknown-simd extensions", "unknown" };
 #elif defined(_M_ARM64)
-	return {"A 64-bit Arm processor", "unknown-simd extensions"};
+	return { "A 64-bit Arm processor", "unknown-simd extensions", "unknown" };
 #else
-	return {"Unknown processor", "unknown-simd extensions"};
+	return { "Unknown processor", "unknown-simd extensions", "unknown" };
 #endif
 }
