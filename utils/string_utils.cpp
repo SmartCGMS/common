@@ -271,6 +271,11 @@ double rtl_str_dbl(const C* str, C** end_ptr) {
 template <typename C>
 double convert_str_2_double(const C* wstr, bool& ok) {         
 
+    if ((wstr == nullptr) || (*wstr ==0)) {
+        ok = false;
+        return std::numeric_limits<double>::quiet_NaN();    //std lib seems to happily return zero on empty string
+    }
+
     C* end_char = nullptr;   
     double value = rtl_str_dbl(wstr, &end_char);
     ok = (end_char != nullptr) && (*end_char == 0);
@@ -312,6 +317,10 @@ double convert_str_2_double(const C* wstr, bool& ok) {
 double str_2_dbl(const char* str) {
     bool tmp;
     return str_2_dbl(str, tmp);
+}
+
+double str_2_dbl(const std::string& str) {
+    return str_2_dbl(str.c_str());
 }
 
 double str_2_dbl(const char* str, bool& ok) {
@@ -477,8 +486,18 @@ uint64_t str_2_uint(const wchar_t* wstr, bool& ok) {
     return str_2_xint<uint64_t, wchar_t>(wstr, ok, std::wcstoull);
 }
 
-uint64_t str_2_uint(const char* wstr, bool& ok) {
-    return str_2_xint<uint64_t, char>(wstr, ok, std::strtol);
+uint64_t str_2_uint(const char* str, bool& ok) {
+    return str_2_xint<uint64_t, char>(str, ok, std::strtol);
+}
+
+uint64_t str_2_uint(const char* str) {
+    bool tmp = false;
+    return str_2_uint(str, tmp);
+}
+
+uint64_t str_2_uint(const std::string& str) {
+    bool tmp = false;
+    return str_2_uint(str.c_str(), tmp);
 }
 
 

@@ -94,6 +94,7 @@ bool Is_Empty(const std::wstring& wstr, const Args&... args) {
 
 
 double str_2_dbl(const char* str);
+double str_2_dbl(const std::string &str);
 double str_2_dbl(const char* str, bool& ok);
 double str_2_dbl(const wchar_t* wstr);
 double str_2_dbl(const wchar_t* wstr, bool& ok);
@@ -123,7 +124,9 @@ int64_t str_2_int(const wchar_t* wstr);
 int64_t str_2_int(const wchar_t* wstr, bool& ok);
 int64_t str_2_int(const std::wstring& str, bool& converted_ok);
 uint64_t str_2_uint(const wchar_t* wstr, bool& ok);
-uint64_t str_2_uint(const char* wstr, bool& ok);
+uint64_t str_2_uint(const char* str, bool& ok);
+uint64_t str_2_uint(const char* str);
+uint64_t str_2_uint(const std::string &str);
 
 GUID WString_To_GUID(const std::wstring& str, bool& ok);
 std::wstring GUID_To_WString(const GUID& guid);
