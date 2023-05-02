@@ -45,9 +45,9 @@
 #include <functional>
 
 namespace scgms {
-	std::vector<TModel_Descriptor> get_model_descriptors();
-	std::vector<TMetric_Descriptor> get_metric_descriptors();
-	std::vector<TSolver_Descriptor> get_solver_descriptors();
+	std::vector<TModel_Descriptor> get_model_descriptor_list();
+	std::vector<TMetric_Descriptor> get_metric_descriptor_list();
+	std::vector<TSolver_Descriptor> get_solver_descriptor_list();
 
 	bool get_model_descriptor_by_id(const GUID &id, TModel_Descriptor &desc);
 	bool get_model_descriptor_by_signal_id(const GUID &signal_id, TModel_Descriptor &desc);    

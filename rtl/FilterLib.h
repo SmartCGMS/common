@@ -84,7 +84,7 @@ namespace scgms {
 		HRESULT set_int_array(const std::vector<int64_t> &values);
 	};
 
-	std::vector<TFilter_Descriptor> get_filter_descriptors();
+	std::vector<TFilter_Descriptor> get_filter_descriptor_list();
 	bool get_filter_descriptor_by_id(const GUID &id, TFilter_Descriptor &desc);
 
 

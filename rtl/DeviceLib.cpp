@@ -43,8 +43,9 @@
 #include "scgmsLib.h"
 
 namespace imported {
-	scgms::TCreate_Signal create_signal = scgms::factory::resolve_symbol<scgms::TCreate_Signal>("create_signal");
-	scgms::TCreate_Device_Event create_device_event = scgms::factory::resolve_symbol<scgms::TCreate_Device_Event>("create_device_event");
+	//all these vars have _external suffix not to confuse linker when building the libraries
+	scgms::TCreate_Signal create_signal_external = scgms::factory::resolve_symbol<scgms::TCreate_Signal>("create_signal");
+	scgms::TCreate_Device_Event create_device_event_external = scgms::factory::resolve_symbol<scgms::TCreate_Device_Event>("create_device_event");
 }
 
 
@@ -85,7 +86,7 @@ scgms::SSignal::SSignal(scgms::STime_Segment segment, const GUID &signal_id) :
 
 scgms::SSignal::SSignal(scgms::STime_Segment segment, const GUID& signal_id, const GUID& approx_id) {
 	scgms::ISignal* signal;
-	if (imported::create_signal(&signal_id, segment.get(), approx_id == Invalid_GUID ? nullptr : &approx_id, &signal) == S_OK) {
+	if (imported::create_signal_external(&signal_id, segment.get(), approx_id == Invalid_GUID ? nullptr : &approx_id, &signal) == S_OK) {
 		reset(signal, [](scgms::ISignal* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });
 	}
 }
@@ -137,7 +138,7 @@ scgms::TDevice_Event* Get_Raw_Event(scgms::IDevice_Event *event) {
 
 scgms::IDevice_Event* Create_Event(const scgms::NDevice_Event_Code code) {
 	scgms::IDevice_Event *result;
-	if (imported::create_device_event(code, &result) != S_OK) result = nullptr;
+	if (imported::create_device_event_external(code, &result) != S_OK) result = nullptr;
 	assert(result != nullptr);
 	return result;
 }
@@ -281,7 +282,7 @@ HRESULT IfaceCalling scgms::CTime_Segment::Get_Signal(const GUID *signal_id, scg
 	}
 
 	// prefer calculated signal, fall back to measured signal
-	if (imported::create_signal(signal_id, this, nullptr, signal) != S_OK) {
+	if (imported::create_signal_external(signal_id, this, nullptr, signal) != S_OK) {
 		return E_NOTIMPL;
 	}
 	mSignals[*signal_id] = refcnt::make_shared_reference_ext<scgms::SSignal, scgms::ISignal>(*signal, true);  // true due to creating "clone" of pointer with custom reference counter
