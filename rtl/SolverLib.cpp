@@ -42,10 +42,11 @@
 #include "scgmsLib.h"
 
 namespace imported {
-	scgms::TCreate_Metric create_metric = scgms::factory::resolve_symbol<scgms::TCreate_Metric>("create_metric");
-	scgms::TOptimize_Parameters optimize_parameters = scgms::factory::resolve_symbol<scgms::TOptimize_Parameters>("optimize_parameters");
-	scgms::TOptimize_Multiple_Parameters optimize_multiple_parameters = scgms::factory::resolve_symbol<scgms::TOptimize_Multiple_Parameters>("optimize_multiple_parameters");
-	solver::TGeneric_Solver generic_solver = scgms::factory::resolve_symbol<solver::TGeneric_Solver>("solve_generic");	
+	//all these vars have _external suffix not to confuse linker when building the libraries
+	scgms::TCreate_Metric create_metric_external = scgms::factory::resolve_symbol<scgms::TCreate_Metric>("create_metric");
+	scgms::TOptimize_Parameters optimize_parameters_external = scgms::factory::resolve_symbol<scgms::TOptimize_Parameters>("optimize_parameters");
+	scgms::TOptimize_Multiple_Parameters optimize_multiple_parameters_external = scgms::factory::resolve_symbol<scgms::TOptimize_Multiple_Parameters>("optimize_multiple_parameters");
+	solver::TGeneric_Solver generic_solver_external = scgms::factory::resolve_symbol<solver::TGeneric_Solver>("solve_generic");	
 }
 
 solver::TSolver_Setup solver::Check_Default_Parameters(const solver::TSolver_Setup &setup, const size_t default_max_generations, const size_t default_population_size) {
@@ -69,7 +70,7 @@ solver::TSolver_Setup solver::Check_Default_Parameters(const solver::TSolver_Set
 
 
 HRESULT solver::Solve_Generic(const GUID &solver_id, const solver::TSolver_Setup &setup, solver::TSolver_Progress &progress) noexcept {
-	return imported::generic_solver(&solver_id, &setup, &progress);
+	return imported::generic_solver_external(&solver_id, &setup, &progress);
 }
 
 scgms::SMetric::SMetric() : std::shared_ptr<scgms::IMetric>() {
@@ -84,7 +85,7 @@ scgms::SMetric::SMetric(const scgms::TMetric_Parameters &params) : std::shared_p
 void scgms::SMetric::Init(const scgms::TMetric_Parameters &params)
 {
 	scgms::IMetric* metric;
-	if (imported::create_metric(&params, &metric) == S_OK) {
+	if (imported::create_metric_external(&params, &metric) == S_OK) {
 		reset(metric, [](scgms::IMetric* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });
 	}
 }
@@ -98,7 +99,7 @@ scgms::SMetric scgms::SMetric::Clone()
 	if (self && self->Get_Parameters(&params) == S_OK)
 	{
 		scgms::IMetric *obj = nullptr;
-		if (imported::create_metric(&params, &obj) == S_OK)
+		if (imported::create_metric_external(&params, &obj) == S_OK)
 			result = refcnt::make_shared_reference_ext<scgms::SMetric, scgms::IMetric>(obj, false);
 	}
 
@@ -118,7 +119,7 @@ HRESULT scgms::Optimize_Parameters(scgms::SFilter_Chain_Configuration configurat
 	solver::TSolver_Progress &progress,
 	refcnt::Swstr_list error_description) {
 
-	return imported::optimize_multiple_parameters(configuration.get(), filter_indices, parameters_configuration_names, filter_count,
+	return imported::optimize_multiple_parameters_external(configuration.get(), filter_indices, parameters_configuration_names, filter_count,
 		on_filter_created, on_filter_created_data, &solver_id, population_size, max_generations, 
 		hints, hint_count,
 		&progress, error_description.get());

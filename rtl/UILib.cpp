@@ -49,42 +49,43 @@
 
 namespace scgms {
 	namespace imported {
-		scgms::TGet_Metric_Descriptors get_metric_descriptors = scgms::factory::resolve_symbol<scgms::TGet_Metric_Descriptors>("get_metric_descriptors");
-		scgms::TGet_Model_Descriptors get_model_descriptors = scgms::factory::resolve_symbol<scgms::TGet_Model_Descriptors>("get_model_descriptors");
-		scgms::TGet_Solver_Descriptors get_solver_descriptors = scgms::factory::resolve_symbol<scgms::TGet_Solver_Descriptors>("get_solver_descriptors");
-		scgms::TGet_Signal_Descriptors get_signal_descriptors = scgms::factory::resolve_symbol<scgms::TGet_Signal_Descriptors>("get_signal_descriptors");
+		//all these vars have _external suffix not to confuse linker when building the libraries
+		scgms::TGet_Metric_Descriptors get_metric_descriptors_external = scgms::factory::resolve_symbol<scgms::TGet_Metric_Descriptors>("get_metric_descriptors");
+		scgms::TGet_Model_Descriptors get_model_descriptors_external = scgms::factory::resolve_symbol<scgms::TGet_Model_Descriptors>("get_model_descriptors");
+		scgms::TGet_Solver_Descriptors get_solver_descriptors_external = scgms::factory::resolve_symbol<scgms::TGet_Solver_Descriptors>("get_solver_descriptors");
+		scgms::TGet_Signal_Descriptors get_signal_descriptors_external = scgms::factory::resolve_symbol<scgms::TGet_Signal_Descriptors>("get_signal_descriptors");
 	}
 
-	std::vector<TModel_Descriptor> get_model_descriptors()
+	std::vector<TModel_Descriptor> get_model_descriptor_list()
 	{
 		std::vector<TModel_Descriptor> result;
 		TModel_Descriptor *desc_begin, *desc_end;
 
-		if (imported::get_model_descriptors(&desc_begin, &desc_end) == S_OK) {
+		if (imported::get_model_descriptors_external(&desc_begin, &desc_end) == S_OK) {
 			std::copy(desc_begin, desc_end, std::back_inserter(result));
 		}
 
 		return result;
 	}
 
-	std::vector<TMetric_Descriptor> get_metric_descriptors()
+	std::vector<TMetric_Descriptor> get_metric_descriptor_list()
 	{
 		std::vector<TMetric_Descriptor> result;
 		TMetric_Descriptor *desc_begin, *desc_end;
 
-		if (imported::get_metric_descriptors(&desc_begin, &desc_end) == S_OK) {
+		if (imported::get_metric_descriptors_external(&desc_begin, &desc_end) == S_OK) {
 			std::copy(desc_begin, desc_end, std::back_inserter(result));
 		}
 
 		return result;
 	}
 
-	std::vector<TSolver_Descriptor> get_solver_descriptors()
+	std::vector<TSolver_Descriptor> get_solver_descriptor_list()
 	{
 		std::vector<TSolver_Descriptor> result;
 		TSolver_Descriptor *desc_begin, *desc_end;
 
-		if (imported::get_solver_descriptors(&desc_begin, &desc_end) == S_OK) {
+		if (imported::get_solver_descriptors_external(&desc_begin, &desc_end) == S_OK) {
 			std::copy(desc_begin, desc_end, std::back_inserter(result));
 		}
 
@@ -111,14 +112,14 @@ namespace scgms {
 	}
 
 	bool get_model_descriptor_by_id(const GUID& id, TModel_Descriptor& desc) {
-		return get_descriptor_by_id<TGet_Model_Descriptors, TModel_Descriptor>(id, desc, imported::get_model_descriptors);
+		return get_descriptor_by_id<TGet_Model_Descriptors, TModel_Descriptor>(id, desc, imported::get_model_descriptors_external);
 	}
 
 
 	bool get_model_descriptor_by_signal_id(const GUID &signal_id, TModel_Descriptor &desc) {
 		TModel_Descriptor *desc_begin, *desc_end;
 
-		bool result = imported::get_model_descriptors(&desc_begin, &desc_end) == S_OK;
+		bool result = imported::get_model_descriptors_external(&desc_begin, &desc_end) == S_OK;
 		if (result) {
 			result = false;	//we have to find the filter yet
 			for (auto iter = desc_begin; iter != desc_end; iter++)
@@ -140,15 +141,15 @@ namespace scgms {
 
 
 	bool get_signal_descriptor_by_id(const GUID& signal_id, TSignal_Descriptor& desc) {
-		return get_descriptor_by_id<TGet_Signal_Descriptors, TSignal_Descriptor>(signal_id, desc, imported::get_signal_descriptors);
+		return get_descriptor_by_id<TGet_Signal_Descriptors, TSignal_Descriptor>(signal_id, desc, imported::get_signal_descriptors_external);
 	}
 
 	bool get_metric_descriptor_by_id(const GUID& signal_id, TMetric_Descriptor& desc) {
-		return get_descriptor_by_id<TGet_Metric_Descriptors, TMetric_Descriptor>(signal_id, desc, imported::get_metric_descriptors);
+		return get_descriptor_by_id<TGet_Metric_Descriptors, TMetric_Descriptor>(signal_id, desc, imported::get_metric_descriptors_external);
 	}
 
 	bool get_solver_descriptor_by_id(const GUID& signal_id, TSolver_Descriptor& desc) {
-		return get_descriptor_by_id<TGet_Solver_Descriptors, TSolver_Descriptor>(signal_id, desc, imported::get_solver_descriptors);
+		return get_descriptor_by_id<TGet_Solver_Descriptors, TSolver_Descriptor>(signal_id, desc, imported::get_solver_descriptors_external);
 	}
 
 	const std::array<const wchar_t*, static_cast<size_t>(scgms::NDevice_Event_Code::count)> event_code_text = { {
@@ -174,13 +175,13 @@ namespace scgms {
 		mSignal_Descriptors.clear();
 
 		TSignal_Descriptor *desc_begin, *desc_end;
-		if (imported::get_signal_descriptors(&desc_begin, &desc_end) == S_OK) {
+		if (imported::get_signal_descriptors_external(&desc_begin, &desc_end) == S_OK) {
 			std::transform(desc_begin, desc_end, std::inserter(mSignal_Descriptors, mSignal_Descriptors.end()), [](const TSignal_Descriptor& desc) {return std::make_pair(desc.id, desc); });
 		}
 
 		// parse reference signal IDs - this is needed for the default settings in GUI
 		TModel_Descriptor *model_begin, *model_end;
-		if (imported::get_model_descriptors(&model_begin, &model_end) == S_OK) {
+		if (imported::get_model_descriptors_external(&model_begin, &model_end) == S_OK) {
 			for (auto* desc = model_begin; desc != model_end; desc++) {
 				for (size_t i = 0; i < desc->number_of_calculated_signals; i++) {
 					mSignal_Reference_Signal_Ids[desc->calculated_signal_ids[i]] = desc->reference_signal_ids[i];

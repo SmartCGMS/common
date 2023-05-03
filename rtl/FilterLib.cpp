@@ -49,12 +49,13 @@ namespace scgms {
 
 
 	namespace imported {
-		scgms::TGet_Filter_Descriptors get_filter_descriptors = scgms::factory::resolve_symbol<scgms::TGet_Filter_Descriptors>("get_filter_descriptors");
-		scgms::TCreate_Persistent_Filter_Chain_Configuration create_persistent_filter_chain_configuration = scgms::factory::resolve_symbol<scgms::TCreate_Persistent_Filter_Chain_Configuration>("create_persistent_filter_chain_configuration");
-		scgms::TExecute_Filter_Configuration execute_filter_configuration = scgms::factory::resolve_symbol<scgms::TExecute_Filter_Configuration>("execute_filter_configuration");
-		scgms::TCreate_Filter_Parameter create_filter_parameter = scgms::factory::resolve_symbol<scgms::TCreate_Filter_Parameter>("create_filter_parameter");
-		scgms::TCreate_Filter_Configuration_Link create_filter_configuration_link = scgms::factory::resolve_symbol<scgms::TCreate_Filter_Configuration_Link>("create_filter_configuration_link");
-		scgms::TCreate_Discrete_Model create_discrete_model = scgms::factory::resolve_symbol<scgms::TCreate_Discrete_Model>("create_discrete_model");
+		//all these vars have _external suffix not to confuse linker when building the libraries
+		scgms::TGet_Filter_Descriptors get_filter_descriptors_external = scgms::factory::resolve_symbol<scgms::TGet_Filter_Descriptors>("get_filter_descriptors");
+		scgms::TCreate_Persistent_Filter_Chain_Configuration create_persistent_filter_chain_configuration_external = scgms::factory::resolve_symbol<scgms::TCreate_Persistent_Filter_Chain_Configuration>("create_persistent_filter_chain_configuration");
+		scgms::TExecute_Filter_Configuration execute_filter_configuration_external = scgms::factory::resolve_symbol<scgms::TExecute_Filter_Configuration>("execute_filter_configuration");
+		scgms::TCreate_Filter_Parameter create_filter_parameter_external = scgms::factory::resolve_symbol<scgms::TCreate_Filter_Parameter>("create_filter_parameter");
+		scgms::TCreate_Filter_Configuration_Link create_filter_configuration_link_external = scgms::factory::resolve_symbol<scgms::TCreate_Filter_Configuration_Link>("create_filter_configuration_link");
+		scgms::TCreate_Discrete_Model create_discrete_model_external = scgms::factory::resolve_symbol<scgms::TCreate_Discrete_Model>("create_discrete_model");
 	}
 
 	SFilter::SFilter() : refcnt::SReferenced<IFilter>() {}
@@ -216,7 +217,7 @@ namespace scgms {
 	SFilter_Parameter SFilter_Configuration_Link::Add_Parameter(const scgms::NParameter_Type type, const wchar_t *conf_name) {
 		SFilter_Parameter result;
 		scgms::IFilter_Parameter *parameter;
-		if (imported::create_filter_parameter(type, conf_name, &parameter) == S_OK) {
+		if (imported::create_filter_parameter_external(type, conf_name, &parameter) == S_OK) {
 			if (get()->add(&parameter, &parameter + 1) == S_OK)
 				result = refcnt::make_shared_reference_ext<SFilter_Parameter, IFilter_Parameter>(parameter, false);
 		}
@@ -227,7 +228,7 @@ namespace scgms {
 	scgms::SFilter_Parameter scgms::internal::Create_Filter_Parameter(const scgms::NParameter_Type type, const wchar_t *config_name) {
 		scgms::SFilter_Parameter result;
 		scgms::IFilter_Parameter *new_parameter;
-		if (imported::create_filter_parameter(type, config_name, &new_parameter) == S_OK)
+		if (imported::create_filter_parameter_external(type, config_name, &new_parameter) == S_OK)
 			result = refcnt::make_shared_reference_ext<scgms::SFilter_Parameter, scgms::IFilter_Parameter>(new_parameter, false);
 		return result;
 	}
@@ -235,7 +236,7 @@ namespace scgms {
 	scgms::SFilter_Configuration_Link internal::Create_Configuration_Link(const GUID &id) {
 		scgms::SFilter_Configuration_Link result;
 		scgms::IFilter_Configuration_Link *link;
-		if (imported::create_filter_configuration_link(&id, &link) == S_OK) {
+		if (imported::create_filter_configuration_link_external(&id, &link) == S_OK) {
 			result = refcnt::make_shared_reference_ext<scgms::SFilter_Configuration_Link, scgms::IFilter_Configuration_Link>(link, false);
 		}
 
@@ -244,7 +245,7 @@ namespace scgms {
 
 	SPersistent_Filter_Chain_Configuration::SPersistent_Filter_Chain_Configuration() {
 		IPersistent_Filter_Chain_Configuration *configuration;
-		if (imported::create_persistent_filter_chain_configuration(&configuration) == S_OK)
+		if (imported::create_persistent_filter_chain_configuration_external(&configuration) == S_OK)
 			reset(configuration, [](IPersistent_Filter_Chain_Configuration* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });
 	}
 
@@ -264,7 +265,7 @@ namespace scgms {
 
 	SFilter_Executor::SFilter_Executor(refcnt::SReferenced<scgms::IFilter_Chain_Configuration> configuration, scgms::TOn_Filter_Created on_filter_created, const void* on_filter_created_data, refcnt::Swstr_list error_description, scgms::IFilter *output) {
 		scgms::IFilter_Executor *executor;
-		if (Succeeded(imported::execute_filter_configuration(configuration.get(), on_filter_created, on_filter_created_data, output, &executor, error_description.get())))
+		if (Succeeded(imported::execute_filter_configuration_external(configuration.get(), on_filter_created, on_filter_created_data, output, &executor, error_description.get())))
 			reset(executor, [](scgms::IFilter_Executor* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });
 	}
 
@@ -275,11 +276,11 @@ namespace scgms {
 		return get()->Execute(raw_event);
 	}
 
-	std::vector<TFilter_Descriptor> get_filter_descriptors() {
+	std::vector<TFilter_Descriptor> get_filter_descriptor_list() {
 		std::vector<TFilter_Descriptor> result;
 		TFilter_Descriptor *desc_begin, *desc_end;
 
-		if (imported::get_filter_descriptors(&desc_begin, &desc_end) == S_OK) {
+		if (imported::get_filter_descriptors_external(&desc_begin, &desc_end) == S_OK) {
 			std::copy(desc_begin, desc_end, std::back_inserter(result));
 		}
 
@@ -289,7 +290,7 @@ namespace scgms {
 	bool get_filter_descriptor_by_id(const GUID &id, TFilter_Descriptor &desc) {
 		TFilter_Descriptor *desc_begin, *desc_end;
 
-		bool result = imported::get_filter_descriptors(&desc_begin, &desc_end) == S_OK;
+		bool result = imported::get_filter_descriptors_external(&desc_begin, &desc_end) == S_OK;
 		if (result) {
 			result = false;	//we have to find the filter yet
 			for (auto iter = desc_begin; iter != desc_end; iter++)
@@ -368,7 +369,7 @@ namespace scgms {
 		scgms::SModel_Parameter_Vector parameters_shared = refcnt::Create_Container_shared<double, scgms::SModel_Parameter_Vector>(const_cast<double*>(parameters.data()), const_cast<double*>(parameters.data()+parameters.size()));			
 
 		scgms::IDiscrete_Model *model;
-		if (imported::create_discrete_model(&id, parameters_shared.get(), output.get(), &model) == S_OK)
+		if (imported::create_discrete_model_external(&id, parameters_shared.get(), output.get(), &model) == S_OK)
 			reset(model, [](scgms::IDiscrete_Model* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });
 	}
 	
