@@ -51,6 +51,8 @@
 	#include <Windows.h>
 	#include <locale.h>
 
+	#define DLL_EXPORT
+
 	EXTERN_C char __ImageBase;
 
 	typedef int socklen_t;
@@ -71,10 +73,14 @@
 #ifdef __cplusplus
 	#include <ctime>
 	#include <clocale>
+
+	#define DLL_EXPORT  extern "C"
 #else
 	#include <time.h>
 	#include <wchar.h>
 	#include <locale.h>
+
+	#define DLL_EXPORT
 #endif
 
 	#define MainCalling
