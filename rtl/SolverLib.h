@@ -43,7 +43,7 @@
 
 #include <memory>
 
-#if (defined(__cpp_lib_execution) || __has_include(<execution>)) && (!defined(ANDROID) || defined(_LIBCPP_HAS_PARALLEL_ALGORITHMS)) // Android in NDK r25b still does not support parallel STL
+#if (defined(__cpp_lib_execution) || __has_include(<execution>)) && ((!defined(ANDROID) && !defined(__APPLE__)) || defined(_LIBCPP_HAS_PARALLEL_ALGORITHMS)) // Android in NDK r25b still does not support parallel STL
 #include <execution>
 #else
 namespace std
