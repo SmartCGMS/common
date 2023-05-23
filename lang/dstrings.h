@@ -251,6 +251,7 @@ extern const wchar_t *dsEmit_Shutdown_Msg;
 extern const wchar_t *dsLog_Header;
 extern const wchar_t *dsLog_Filter_Replay;
 extern const wchar_t* dsInterpret_Filename_As_Segment_Id;
+extern const wchar_t* dsReset_Segment_Id;
 extern const wchar_t* dsEmit_All_Events_Before_Shutdown;
 extern const wchar_t* dsProcessing_File;
 extern const wchar_t* dsFile_Has_Not_Expected_Header;
@@ -1065,6 +1066,7 @@ extern const wchar_t* rsReduced_Log;
 extern const wchar_t* rsSecond_Threshold;
 extern const wchar_t *rsEmit_Shutdown_Msg;
 extern const wchar_t* rsInterpret_Filename_As_Segment_Id;
+extern const wchar_t* rsReset_Segment_Id;
 extern const wchar_t* rsEmit_All_Events_Before_Shutdown;
 
 extern const wchar_t *rsDrawing_Filter_Period;

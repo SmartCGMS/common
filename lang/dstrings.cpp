@@ -254,6 +254,7 @@ const wchar_t *dsEmit_Shutdown_Msg = L"Emit the shutdown message";
 const wchar_t *dsLog_Header = L"Logical Clock; Device Time; Event Code; Signal; Info; Segment Id; Event Code Id; Device Id; Signal Id";
 const wchar_t *dsLog_Filter_Replay = L"CSV File Log Replay";
 const wchar_t* dsInterpret_Filename_As_Segment_Id = L"Interpret filename as segment id";
+const wchar_t* dsReset_Segment_Id = L"Reset segment id";
 const wchar_t* dsEmit_All_Events_Before_Shutdown = L"Emit all events before shutdown";
 const wchar_t* dsProcessing_File = L"Processing file: ";
 const wchar_t* dsFile_Has_Not_Expected_Header = L"Expected header not found, will assume standard one. Filename: ";
@@ -1098,6 +1099,7 @@ const wchar_t *rsReduced_Log = L"Reduce_Log";
 const wchar_t *rsSecond_Threshold = L"Second_Threshold";
 const wchar_t *rsEmit_Shutdown_Msg = L"Emit_Shutdown";
 const wchar_t *rsInterpret_Filename_As_Segment_Id = L"Filename_as_segment_id";
+const wchar_t* rsReset_Segment_Id = L"Reset_segment_id";
 const wchar_t *rsEmit_All_Events_Before_Shutdown = L"Emit_All_Events_Before_Shutdown";
 
 const wchar_t *rsDrawing_Filter_Period = L"Redraw_Period";
