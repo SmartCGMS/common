@@ -212,7 +212,7 @@ double rtl_str_dbl(const C* str, C** end_ptr) {
     const bool is_hexa = Is_Hexa_Double(str);
     double result = std::numeric_limits<double>::quiet_NaN();
     if (is_hexa) {        
-        //after the preliominary check, we expect 16 hexa, uninterrupted digits there
+        //after the preliminary check, we expect 16 hexa, uninterrupted digits there
 
         const C *start_digit = str + 2;
         const C* expected_end_digit = start_digit + 16;
@@ -317,6 +317,11 @@ double str_2_dbl(const char* str) {
     return str_2_dbl(str, tmp);
 }
 
+double str_2_dbl(const std::string& str, bool ok) {
+    return str_2_dbl(str.c_str(), ok);
+}
+
+
 double str_2_dbl(const std::string& str) {
     return str_2_dbl(str.c_str());
 }
@@ -335,6 +340,10 @@ double str_2_dbl(const wchar_t* wstr) {
  double str_2_dbl(const wchar_t* wstr, bool& ok) {
      return convert_str_2_double<wchar_t>(wstr, ok);	
 }
+
+ double str_2_dbl(const std::wstring& wstr, bool ok) {
+     return convert_str_2_double<wchar_t>(wstr.c_str(), ok);
+ }
 
  std::vector<double> str_2_dbls(const wchar_t* wstr, bool& ok) {     
      std::wstring str_copy{ wstr };	//wcstok modifies the input string

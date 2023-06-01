@@ -129,6 +129,11 @@ std::wstring Rat_Time_To_Local_Time_WStr(const double rt, const wchar_t* fmt, co
 template <typename S, typename NRS = typename std::remove_reference<S>, typename C = typename NRS::value_type >
 double core_Local_Time_Str_To_Rat_Time(const S& str, const C* fmt) noexcept {
 
+	bool could_be_raw_double = false;
+	const double possible_raw_double = str_2_dbl(str, could_be_raw_double);
+	if (could_be_raw_double)
+		return possible_raw_double;
+
 	//note that we support a non-standard extension, which considers any trailing .zzz as a second fraction
 
 	const C extra_space = static_cast<C>(0x20);

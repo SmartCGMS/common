@@ -93,9 +93,12 @@ bool Is_Empty(const std::wstring& wstr, const Args&... args) {
 
 double str_2_dbl(const char* str);
 double str_2_dbl(const std::string &str);
+double str_2_dbl(const std::string& str, bool ok);
 double str_2_dbl(const char* str, bool& ok);
+
 double str_2_dbl(const wchar_t* wstr);
 double str_2_dbl(const wchar_t* wstr, bool& ok);
+double str_2_dbl(const std::wstring& wstr, bool ok);
 
 std::vector<double> str_2_dbls(const wchar_t* wstr, bool& ok);
 
