@@ -187,15 +187,21 @@ const std::map<const int, std::basic_string<wchar_t>> TNumeric_Chars<wchar_t>::k
 
 template <typename C>
 bool Is_Hexa_Double(const C* str) {
-    bool result = false;
-    if (*str == TNumeric_Chars<C>::small_hexa_digits[0]) {
-        if ((*(str + 1) == TNumeric_Chars<C>::small_x) || (*(str + 1) == TNumeric_Chars<C>::capital_x))
-            result = true;
+    bool result = str != nullptr;    
+    if (result) {
+        if (*str == TNumeric_Chars<C>::small_hexa_digits[0]) {
+            if ((*(str + 1) == TNumeric_Chars<C>::small_x) || (*(str + 1) == TNumeric_Chars<C>::capital_x))
+                result = true;
+        }
     }
 
     return result;
 }
 
+bool Has_Hexa_Prefix(const char* str) { return Is_Hexa_Double(str); }
+bool Has_Hexa_Prefix(const std::string& str) { return Is_Hexa_Double(str.c_str()); }
+bool Has_Hexa_Prefix(const wchar_t* wstr) { return Is_Hexa_Double(wstr); }
+bool Has_Hexa_Prefix(const std::wstring& wstr) { return Is_Hexa_Double(wstr.c_str()); }
 
 bool rtl0_isspace(const char str) { return std::isspace(static_cast<unsigned char>(str)) != 0; }
 bool rtl0_isspace(const wchar_t str) { return std::iswspace(static_cast<wint_t>(str)) != 0; }

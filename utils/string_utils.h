@@ -90,6 +90,10 @@ bool Is_Empty(const std::wstring& wstr, const Args&... args) {
 }
 
 
+bool Has_Hexa_Prefix(const char* str);
+bool Has_Hexa_Prefix(const std::string &str);
+bool Has_Hexa_Prefix(const wchar_t* wstr);
+bool Has_Hexa_Prefix(const std::wstring& wstr);
 
 double str_2_dbl(const char* str);
 double str_2_dbl(const std::string &str);

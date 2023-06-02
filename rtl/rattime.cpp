@@ -129,8 +129,9 @@ std::wstring Rat_Time_To_Local_Time_WStr(const double rt, const wchar_t* fmt, co
 template <typename S, typename NRS = typename std::remove_reference<S>, typename C = typename NRS::value_type >
 double core_Local_Time_Str_To_Rat_Time(const S& str, const C* fmt) noexcept {
 
-	bool could_be_raw_double = false;
-	const double possible_raw_double = str_2_dbl(str, could_be_raw_double);
+	bool could_be_raw_double = Has_Hexa_Prefix(str);	//we need to check for 0x prefix as the mask could indicate e.g.; hours only
+	const double possible_raw_double = could_be_raw_double ? str_2_dbl(str, could_be_raw_double) : std::numeric_limits<double>::quiet_NaN();
+	could_be_raw_double &= !std::isnan(possible_raw_double);
 	if (could_be_raw_double)
 		return possible_raw_double;
 
@@ -174,7 +175,7 @@ double core_Local_Time_Str_To_Rat_Time(const S& str, const C* fmt) noexcept {
 			result = Unix_Time_To_Rat_Time(ltim);	
 		else {
 			//mktime returns -1 on zero ptm, which is, however, possible if measure something sub-second like e.g.; heartbeat ibi
-			//=>proceeed with just the time of the day
+			//=>proceed with just the time of the day
 			result = static_cast<double>(ptm.tm_hour) * scgms::One_Hour +
 					 static_cast<double>(ptm.tm_min) * scgms::One_Minute +
 					 static_cast<double>(ptm.tm_sec) * scgms::One_Second;
