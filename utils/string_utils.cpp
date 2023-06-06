@@ -187,8 +187,8 @@ const std::map<const int, std::basic_string<wchar_t>> TNumeric_Chars<wchar_t>::k
 
 template <typename C>
 bool Is_Hexa_Double(const C* str) {
-    bool result = str != nullptr;    
-    if (result) {
+    bool result = false;  
+    if (str != nullptr) {        
         if (*str == TNumeric_Chars<C>::small_hexa_digits[0]) {
             if ((*(str + 1) == TNumeric_Chars<C>::small_x) || (*(str + 1) == TNumeric_Chars<C>::capital_x))
                 result = true;
