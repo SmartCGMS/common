@@ -323,7 +323,7 @@ double str_2_dbl(const char* str) {
     return str_2_dbl(str, tmp);
 }
 
-double str_2_dbl(const std::string& str, bool ok) {
+double str_2_dbl(const std::string& str, bool &ok) {
     return str_2_dbl(str.c_str(), ok);
 }
 
@@ -347,7 +347,7 @@ double str_2_dbl(const wchar_t* wstr) {
      return convert_str_2_double<wchar_t>(wstr, ok);	
 }
 
- double str_2_dbl(const std::wstring& wstr, bool ok) {
+ double str_2_dbl(const std::wstring& wstr, bool &ok) {
      return convert_str_2_double<wchar_t>(wstr.c_str(), ok);
  }
 
