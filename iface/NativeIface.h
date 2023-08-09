@@ -99,7 +99,9 @@ using TNative_Execute_Wrapper = HRESULT(IfaceCalling*)(
 
 
 #if defined(_WIN32) && defined(SCGMS_SCRIPT)
+#ifndef DLL_EXPORT
 	#define DLL_EXPORT	__declspec(dllexport)
+#endif
 
 	#include <Windows.h>
 
@@ -111,7 +113,9 @@ using TNative_Execute_Wrapper = HRESULT(IfaceCalling*)(
 		return TRUE;
 	}
 #else
+#ifndef DLL_EXPORT
 	#define DLL_EXPORT
+#endif
 
 	#ifndef APIENTRY
 		#define APIENTRY
