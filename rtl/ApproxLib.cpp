@@ -39,15 +39,15 @@
 #include "scgmsLib.h"
 
 namespace imported {
-	scgms::TCreate_Approximator create_approximator = scgms::factory::resolve_symbol<scgms::TCreate_Approximator>("create_approximator");
-	scgms::TGet_Approx_Descriptors get_approx_descriptors = scgms::factory::resolve_symbol<scgms::TGet_Approx_Descriptors>("get_approx_descriptors");
+	scgms::TCreate_Approximator create_approximator_external = scgms::factory::resolve_symbol<scgms::TCreate_Approximator>("create_approximator");
+	scgms::TGet_Approx_Descriptors get_approx_descriptors_external = scgms::factory::resolve_symbol<scgms::TGet_Approx_Descriptors>("get_approx_descriptors");
 }
 
-std::vector<scgms::TApprox_Descriptor> scgms::get_approx_descriptors() {
+std::vector<scgms::TApprox_Descriptor> scgms::get_approx_descriptor_list() {
 	std::vector<scgms::TApprox_Descriptor> result;
 	scgms::TApprox_Descriptor *desc_begin, *desc_end;
 
-	if (imported::get_approx_descriptors(&desc_begin, &desc_end) == S_OK) 
+	if (imported::get_approx_descriptors_external(&desc_begin, &desc_end) == S_OK)
 		std::copy(desc_begin, desc_end, std::back_inserter(result));
 
 	return result;
@@ -59,7 +59,7 @@ scgms::SApproximator Create_Approximator_Raw_ID(const GUID* id, scgms::ISignal* 
 	scgms::SApproximator result;
 	scgms::IApproximator* approximator;
 
-	if (imported::create_approximator(id, signal, &approximator) == S_OK)
+	if (imported::create_approximator_external(id, signal, &approximator) == S_OK)
 		result = refcnt::make_shared_reference_ext<scgms::SApproximator, scgms::IApproximator>(approximator, false);
 
 	return result;

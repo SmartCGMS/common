@@ -44,7 +44,7 @@
 #include <vector>
 
 namespace scgms {
-	std::vector<TApprox_Descriptor> get_approx_descriptors();
+	std::vector<TApprox_Descriptor> get_approx_descriptor_list();
 
 	using SApproximator = refcnt::SReferenced<IApproximator>;
 			
