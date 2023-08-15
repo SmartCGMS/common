@@ -231,8 +231,6 @@ const wchar_t *dsUnmasking_Filter = L"Signal value unmasking";
 const wchar_t *dsCalculated_Signal_Filter = L"Calculated signal";
 const wchar_t *dsDecoupling_Filter = L"Signal decoupling";
 
-const wchar_t* dsHealthKit_Dump_Reader_Filter = L"HealthKit dump reader filter";
-
 const wchar_t *dsDrawing_Filter_Period = L"Redraw period [ms]";
 const wchar_t *dsDiagnosis_Is_Type2 = L"Diabetes type 2? (1 = off)";
 const wchar_t *dsDrawing_Filter_Canvas_Width = L"Canvas width";

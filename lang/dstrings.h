@@ -226,8 +226,6 @@ extern const wchar_t* dsUnmasking_Filter;
 extern const wchar_t* dsCalculated_Signal_Filter;
 extern const wchar_t* dsDecoupling_Filter;
 
-extern const wchar_t* dsHealthKit_Dump_Reader_Filter;
-
 extern const wchar_t *dsDrawing_Filter_Period;
 extern const wchar_t *dsDiagnosis_Is_Type2;
 extern const wchar_t *dsDrawing_Filter_Canvas_Width;
