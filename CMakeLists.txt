@@ -38,26 +38,34 @@ CMAKE_MINIMUM_REQUIRED(VERSION 3.0)
 
 SET(PROJ "scgms-common")
 
+PROJECT(${PROJ})
+
+INCLUDE("${CMAKE_CURRENT_SOURCE_DIR}/cmake/Functions.cmake")
+
+DISCOVER_DEPENDENCIES()
+
 MESSAGE(STATUS "Configuring common SDK static library: ${PROJ}")
 
-CONFIGURE_COMMON(${PROJ})
+FILE(GLOB iface scgms/iface/*.cpp scgms/iface/*.c scgms/iface/*.hpp scgms/iface/*.h)
+FILE(GLOB lang scgms/lang/*.cpp scgms/lang/*.c scgms/lang/*.hpp scgms/lang/*.h)
+FILE(GLOB rtl scgms/rtl/*.cpp scgms/rtl/*.c scgms/rtl/*.hpp scgms/rtl/*.h)
+FILE(GLOB_RECURSE utils scgms/utils/*.cpp scgms/utils/*.c scgms/utils/*.hpp scgms/utils/*.h)
 
-FILE(GLOB iface iface/*.cpp iface/*.c iface/*.hpp iface/*.h)
-FILE(GLOB lang lang/*.cpp lang/*.c lang/*.hpp lang/*.h)
-FILE(GLOB rtl rtl/*.cpp rtl/*.c rtl/*.hpp rtl/*.h)
-FILE(GLOB_RECURSE utils utils/*.cpp utils/*.c utils/*.hpp utils/*.h)
+SOURCE_GROUP(iface FILES ${iface})
+SOURCE_GROUP(lang FILES ${lang})
+SOURCE_GROUP(rtl FILES ${rtl})
+SOURCE_GROUP(utils FILES ${utils})
 
 IF(Qt5_DISABLE)
 	LIST(FILTER rtl EXCLUDE REGEX ".*qdb_connector.*")
 	LIST(FILTER utils EXCLUDE REGEX ".*QtUtils.*")
+ELSE()
+	DISCOVER_QT_LIBRARY(Core Sql)
 ENDIF()
 
 ADD_LIBRARY(${PROJ} STATIC ${iface} ${lang} ${rtl} ${utils})
+APPLY_SCGMS_LIBRARY_BUILD_SETTINGS(${PROJ})
 
-
-
-
-
-
-
-
+IF(NOT Qt5_DISABLE)
+	TARGET_LINK_LIBRARIES(${PROJ} Qt5::Core Qt5::Sql)
+ENDIF()

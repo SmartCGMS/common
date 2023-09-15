@@ -37,9 +37,9 @@
 #pragma once
 
 #include <stdint.h>
-#include "../../common/rtl/guid.h"
-#include "../../common/rtl/hresult.h"
-#include "../../common/utils/winapi_mapping.h"
+#include <scgms/rtl/guid.h>
+#include <scgms/rtl/hresult.h>
+#include <scgms/utils/winapi_mapping.h>
 
 #ifdef _WIN32
 	#define SimpleCalling __cdecl
