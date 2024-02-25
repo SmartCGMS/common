@@ -40,11 +40,13 @@
 #include "scgmsLib.h"
 
 namespace imported {
-	//all these vars have _external suffix not to confuse linker when building the libraries
-	scgms::TCreate_Metric create_metric_external = scgms::factory::resolve_symbol<scgms::TCreate_Metric>("create_metric");
-	scgms::TOptimize_Parameters optimize_parameters_external = scgms::factory::resolve_symbol<scgms::TOptimize_Parameters>("optimize_parameters");
-	scgms::TOptimize_Multiple_Parameters optimize_multiple_parameters_external = scgms::factory::resolve_symbol<scgms::TOptimize_Multiple_Parameters>("optimize_multiple_parameters");
-	solver::TGeneric_Solver generic_solver_external = scgms::factory::resolve_symbol<solver::TGeneric_Solver>("solve_generic");	
+	namespace {
+		//all these vars have _external suffix not to confuse linker when building the libraries
+		scgms::TCreate_Metric create_metric_external = scgms::factory::resolve_symbol<scgms::TCreate_Metric>("create_metric");
+		scgms::TOptimize_Parameters optimize_parameters_external = scgms::factory::resolve_symbol<scgms::TOptimize_Parameters>("optimize_parameters");
+		scgms::TOptimize_Multiple_Parameters optimize_multiple_parameters_external = scgms::factory::resolve_symbol<scgms::TOptimize_Multiple_Parameters>("optimize_multiple_parameters");
+		solver::TGeneric_Solver generic_solver_external = scgms::factory::resolve_symbol<solver::TGeneric_Solver>("solve_generic");
+	}
 }
 
 solver::TSolver_Setup solver::Check_Default_Parameters(const solver::TSolver_Setup &setup, const size_t default_max_generations, const size_t default_population_size) {

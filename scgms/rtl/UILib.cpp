@@ -47,11 +47,13 @@
 
 namespace scgms {
 	namespace imported {
-		//all these vars have _external suffix not to confuse linker when building the libraries
-		scgms::TGet_Metric_Descriptors get_metric_descriptors_external = scgms::factory::resolve_symbol<scgms::TGet_Metric_Descriptors>("get_metric_descriptors");
-		scgms::TGet_Model_Descriptors get_model_descriptors_external = scgms::factory::resolve_symbol<scgms::TGet_Model_Descriptors>("get_model_descriptors");
-		scgms::TGet_Solver_Descriptors get_solver_descriptors_external = scgms::factory::resolve_symbol<scgms::TGet_Solver_Descriptors>("get_solver_descriptors");
-		scgms::TGet_Signal_Descriptors get_signal_descriptors_external = scgms::factory::resolve_symbol<scgms::TGet_Signal_Descriptors>("get_signal_descriptors");
+		namespace {
+			//all these vars have _external suffix not to confuse linker when building the libraries
+			scgms::TGet_Metric_Descriptors get_metric_descriptors_external = scgms::factory::resolve_symbol<scgms::TGet_Metric_Descriptors>("get_metric_descriptors");
+			scgms::TGet_Model_Descriptors get_model_descriptors_external = scgms::factory::resolve_symbol<scgms::TGet_Model_Descriptors>("get_model_descriptors");
+			scgms::TGet_Solver_Descriptors get_solver_descriptors_external = scgms::factory::resolve_symbol<scgms::TGet_Solver_Descriptors>("get_solver_descriptors");
+			scgms::TGet_Signal_Descriptors get_signal_descriptors_external = scgms::factory::resolve_symbol<scgms::TGet_Signal_Descriptors>("get_signal_descriptors");
+		}
 	}
 
 	std::vector<TModel_Descriptor> get_model_descriptor_list()
@@ -201,7 +203,7 @@ namespace scgms {
 									nullptr,
 									1.0
 			};
-						
+
 			std::transform(&desc, (&desc) + 1, std::inserter(mSignal_Descriptors, mSignal_Descriptors.end()), [](const TSignal_Descriptor& desc) {return std::make_pair(desc.id, desc); });
 			mVirtual_Signal_Names.push_back(std::move(desc_str));	//move to retain valid pointer
 		}

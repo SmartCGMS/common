@@ -40,17 +40,21 @@
 #include <numeric>
 #include <algorithm>
 
-void Set_Error_To_No_Data(scgms::TSignal_Stats& signal_error) {
-	signal_error.count = 0;
-	signal_error.sum = 0.0;
-	signal_error.avg = std::numeric_limits<double>::quiet_NaN();
-	signal_error.stddev = std::numeric_limits<double>::quiet_NaN();
-	
-	signal_error.exc_kurtosis= std::numeric_limits<double>::quiet_NaN();
-	signal_error.skewness = std::numeric_limits<double>::quiet_NaN();
+namespace {
 
-	for (scgms::NECDF i = scgms::NECDF::min_value; i <= scgms::NECDF::max_value; i++)
-		signal_error.ecdf[i] = std::numeric_limits<double>::quiet_NaN();
+	void Set_Error_To_No_Data(scgms::TSignal_Stats& signal_error) {
+		signal_error.count = 0;
+		signal_error.sum = 0.0;
+		signal_error.avg = std::numeric_limits<double>::quiet_NaN();
+		signal_error.stddev = std::numeric_limits<double>::quiet_NaN();
+
+		signal_error.exc_kurtosis = std::numeric_limits<double>::quiet_NaN();
+		signal_error.skewness = std::numeric_limits<double>::quiet_NaN();
+
+		for (scgms::NECDF i = scgms::NECDF::min_value; i <= scgms::NECDF::max_value; i++)
+			signal_error.ecdf[i] = std::numeric_limits<double>::quiet_NaN();
+	}
+
 }
 
 bool Calculate_Signal_Stats(std::vector<double>& series, scgms::TSignal_Stats& signal_error) {

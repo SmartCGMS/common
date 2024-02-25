@@ -41,6 +41,7 @@
 #include <algorithm>
 #include <cwchar>
 
+namespace {
 #ifdef _WIN32
 	const wchar_t* rsShared_Object_Extension = L".dll";
 #elif __APPLE__
@@ -48,6 +49,7 @@
 #else
 	const wchar_t* rsShared_Object_Extension = L".so";
 #endif
+}
 
 CDynamic_Library::CDynamic_Library() noexcept : mHandle(nullptr) {
 }

@@ -41,9 +41,11 @@
 #include "scgmsLib.h"
 
 namespace imported {
-	//all these vars have _external suffix not to confuse linker when building the libraries
-	scgms::TCreate_Signal create_signal_external = scgms::factory::resolve_symbol<scgms::TCreate_Signal>("create_signal");
-	scgms::TCreate_Device_Event create_device_event_external = scgms::factory::resolve_symbol<scgms::TCreate_Device_Event>("create_device_event");
+	namespace {
+		//all these vars have _external suffix not to confuse linker when building the libraries
+		scgms::TCreate_Signal create_signal_external = scgms::factory::resolve_symbol<scgms::TCreate_Signal>("create_signal");
+		scgms::TCreate_Device_Event create_device_event_external = scgms::factory::resolve_symbol<scgms::TCreate_Device_Event>("create_device_event");
+	}
 }
 
 

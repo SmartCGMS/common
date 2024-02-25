@@ -57,10 +57,10 @@
 // PATH_MAX is fixed on several platforms (e.g. Android) to a fairly big number (4096). We don't need so long paths on a regular system,
 // so we define it to be lower. However, Android-NDK verifies the length of an input buffer to be >= PATH_MAX, so we have to be consistent
 #ifdef PATH_MAX
-	const size_t Max_File_Path = PATH_MAX;
+	constexpr size_t Max_File_Path = PATH_MAX;
 #else
 	//On Windows, there's MAX_PATH==260, which is too little => hence we do not check for its presence
-	const size_t Max_File_Path = 1024;
+	constexpr size_t Max_File_Path = 1024;
 #endif
 
 
@@ -126,7 +126,7 @@ bool Is_Regular_File_Or_Symlink(const filesystem::path& path) {
 	std::error_code ec;
 
 	bool is_reg = filesystem::is_regular_file(path, ec);
-	is_reg &= !ec;	
+	is_reg &= !ec;
 	if (is_reg) return true;
 
 	bool is_sym = filesystem::is_symlink(path, ec);
@@ -161,7 +161,7 @@ std::wstring& Ensure_Uniform_Dir_Separator(std::wstring& path) noexcept {
 
 		for (auto& e : path) {
 			switch (e) {
-				case L'\\': 				
+				case L'\\':
 				case L'/': e = sep;
 					break;
 			default:
@@ -189,12 +189,11 @@ bool Match_Wildcard(const std::wstring fname, const std::wstring wcard, const bo
 			//skip everything in the filename until extension or dir separator
 			while (f < fname.size()) {
 				if ((fname[f] == L'.') || (fname[f] == filesystem::path::preferred_separator)) 
-					break;				
+					break;
 
 				f++;
 			}
 			break;
-
 
 		default:
 			if (f >= fname.size())
@@ -210,15 +209,11 @@ bool Match_Wildcard(const std::wstring fname, const std::wstring wcard, const bo
 			//wild card and name still matches, continue
 			f++;
 			break;
-
 		}
-
-
 	}
 
 	return f < fname.size() ? false : true;	//return false if some chars in the fname were not eaten
 }
-
 
 std::wstring Make_Absolute_Path(filesystem::path src_path, filesystem::path parent_path) {
 	if (src_path.is_relative()) {
@@ -231,7 +226,6 @@ std::wstring Make_Absolute_Path(filesystem::path src_path, filesystem::path pare
 				src_path = parent_path / relative_part;
 		}
 	}
-
 
 	src_path = src_path.make_preferred();	//we know that make_preferred fails sometimes
 	std::wstring converted_path = src_path.wstring();

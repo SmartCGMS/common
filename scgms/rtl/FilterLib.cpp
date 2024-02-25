@@ -47,13 +47,15 @@ namespace scgms {
 
 
 	namespace imported {
-		//all these vars have _external suffix not to confuse linker when building the libraries
-		scgms::TGet_Filter_Descriptors get_filter_descriptors_external = scgms::factory::resolve_symbol<scgms::TGet_Filter_Descriptors>("get_filter_descriptors");
-		scgms::TCreate_Persistent_Filter_Chain_Configuration create_persistent_filter_chain_configuration_external = scgms::factory::resolve_symbol<scgms::TCreate_Persistent_Filter_Chain_Configuration>("create_persistent_filter_chain_configuration");
-		scgms::TExecute_Filter_Configuration execute_filter_configuration_external = scgms::factory::resolve_symbol<scgms::TExecute_Filter_Configuration>("execute_filter_configuration");
-		scgms::TCreate_Filter_Parameter create_filter_parameter_external = scgms::factory::resolve_symbol<scgms::TCreate_Filter_Parameter>("create_filter_parameter");
-		scgms::TCreate_Filter_Configuration_Link create_filter_configuration_link_external = scgms::factory::resolve_symbol<scgms::TCreate_Filter_Configuration_Link>("create_filter_configuration_link");
-		scgms::TCreate_Discrete_Model create_discrete_model_external = scgms::factory::resolve_symbol<scgms::TCreate_Discrete_Model>("create_discrete_model");
+		namespace {
+			//all these vars have _external suffix not to confuse linker when building the libraries
+			scgms::TGet_Filter_Descriptors get_filter_descriptors_external = scgms::factory::resolve_symbol<scgms::TGet_Filter_Descriptors>("get_filter_descriptors");
+			scgms::TCreate_Persistent_Filter_Chain_Configuration create_persistent_filter_chain_configuration_external = scgms::factory::resolve_symbol<scgms::TCreate_Persistent_Filter_Chain_Configuration>("create_persistent_filter_chain_configuration");
+			scgms::TExecute_Filter_Configuration execute_filter_configuration_external = scgms::factory::resolve_symbol<scgms::TExecute_Filter_Configuration>("execute_filter_configuration");
+			scgms::TCreate_Filter_Parameter create_filter_parameter_external = scgms::factory::resolve_symbol<scgms::TCreate_Filter_Parameter>("create_filter_parameter");
+			scgms::TCreate_Filter_Configuration_Link create_filter_configuration_link_external = scgms::factory::resolve_symbol<scgms::TCreate_Filter_Configuration_Link>("create_filter_configuration_link");
+			scgms::TCreate_Discrete_Model create_discrete_model_external = scgms::factory::resolve_symbol<scgms::TCreate_Discrete_Model>("create_discrete_model");
+		}
 	}
 
 	SFilter::SFilter() : refcnt::SReferenced<IFilter>() {}
@@ -61,7 +63,7 @@ namespace scgms {
 	SFilter::SFilter(IFilter* filter) : refcnt::SReferenced<IFilter>(filter) {}
 
 	HRESULT SFilter::Send(scgms::UDevice_Event& event) {
-		if (!event) return E_INVALIDARG;		
+		if (!event) return E_INVALIDARG;
 
 		scgms::IDevice_Event* raw_event = event.get();
 		event.release();
@@ -74,13 +76,11 @@ namespace scgms {
 		return result;
 	}
 
-
 	const wchar_t* SFilter_Parameter::configuration_name() {
 		wchar_t* result = nullptr;
-		get()->Get_Config_Name(&result);	
+		get()->Get_Config_Name(&result);
 		return result;
 	}
-
 
 	std::wstring SFilter_Parameter::as_wstring(HRESULT &rc, bool read_interpreted) {
 		std::wstring result;
@@ -113,7 +113,7 @@ namespace scgms {
 		std::wstring result;
 
 		refcnt::wstr_container* wstr;
-		rc = get()->Get_File_Path(&wstr);			
+		rc = get()->Get_File_Path(&wstr);
 		if (rc == S_OK) {
 			result = refcnt::WChar_Container_To_WString(wstr);
 			wstr->Release();
@@ -206,10 +206,10 @@ namespace scgms {
 		GUID filter_id;
 		if (operator bool())
 			if (get()->Get_Filter_Id(&filter_id) == S_OK)
-				scgms::get_filter_descriptor_by_id(filter_id, filter_desc);			
+				scgms::get_filter_descriptor_by_id(filter_id, filter_desc);
 
 		return filter_desc;
-	}	
+	}
 
 
 	SFilter_Parameter SFilter_Configuration_Link::Add_Parameter(const scgms::NParameter_Type type, const wchar_t *conf_name) {
@@ -239,7 +239,7 @@ namespace scgms {
 		}
 
 		return result;
-	}	
+	}
 
 	SPersistent_Filter_Chain_Configuration::SPersistent_Filter_Chain_Configuration() {
 		IPersistent_Filter_Chain_Configuration *configuration;
@@ -326,7 +326,7 @@ namespace scgms {
 			return E_OUTOFMEMORY;
 	}
 
-	HRESULT CBase_Filter::Emit_Info(const scgms::NDevice_Event_Code code, const std::wstring& msg, const uint64_t segment_id) noexcept {				
+	HRESULT CBase_Filter::Emit_Info(const scgms::NDevice_Event_Code code, const std::wstring& msg, const uint64_t segment_id) noexcept {
 		return Emit_Info(code, msg.c_str(), segment_id);
 	}
 
@@ -342,7 +342,7 @@ namespace scgms {
 			return E_OUTOFMEMORY;
 	}
 
-	HRESULT IfaceCalling CBase_Filter::Configure(IFilter_Configuration* configuration, refcnt::wstr_list* error_description) noexcept {		
+	HRESULT IfaceCalling CBase_Filter::Configure(IFilter_Configuration* configuration, refcnt::wstr_list* error_description) noexcept {
 		refcnt::Swstr_list shared_error_description = refcnt::make_shared_reference_ext<refcnt::Swstr_list, refcnt::wstr_list>(error_description, true);
 		if (mOutput) {
 			SFilter_Configuration shared_configuration = refcnt::make_shared_reference_ext<SFilter_Configuration, IFilter_Configuration>(configuration, true);

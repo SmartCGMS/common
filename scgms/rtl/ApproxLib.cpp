@@ -39,8 +39,10 @@
 #include "scgmsLib.h"
 
 namespace imported {
-	scgms::TCreate_Approximator create_approximator_external = scgms::factory::resolve_symbol<scgms::TCreate_Approximator>("create_approximator");
-	scgms::TGet_Approx_Descriptors get_approx_descriptors_external = scgms::factory::resolve_symbol<scgms::TGet_Approx_Descriptors>("get_approx_descriptors");
+	namespace {
+		scgms::TCreate_Approximator create_approximator_external = scgms::factory::resolve_symbol<scgms::TCreate_Approximator>("create_approximator");
+		scgms::TGet_Approx_Descriptors get_approx_descriptors_external = scgms::factory::resolve_symbol<scgms::TGet_Approx_Descriptors>("get_approx_descriptors");
+	}
 }
 
 std::vector<scgms::TApprox_Descriptor> scgms::get_approx_descriptor_list() {

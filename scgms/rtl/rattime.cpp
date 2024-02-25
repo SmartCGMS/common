@@ -153,8 +153,6 @@ double core_Local_Time_Str_To_Rat_Time(const S& str, const C* fmt) noexcept {
 										//the trailing, extra space removes the eof, thus making the conversion fail for the missing seconds
 	ss >> std::get_time(&ptm, fmt);
 
-
-
 	double result = std::numeric_limits<double>::quiet_NaN();
 	const bool invalid_ptm = (ptm.tm_mday < 0) || (ptm.tm_mon < 0) || (ptm.tm_year < 0) || (ptm.tm_hour < 0) || (ptm.tm_min < 0) || (ptm.tm_sec < 0);
 	if (!invalid_ptm) {	//check whether get_time succeeded
@@ -167,12 +165,11 @@ double core_Local_Time_Str_To_Rat_Time(const S& str, const C* fmt) noexcept {
 		bool fraction_ok = false;
 
 		double fraction = 0.0;
-		if (has_fraction) 	
-			fraction = str_2_dbl(fraction_part.c_str(), fraction_ok);		
+		if (has_fraction)
+			fraction = str_2_dbl(fraction_part.c_str(), fraction_ok);
 
-		
 		if (ltim != -1) 
-			result = Unix_Time_To_Rat_Time(ltim);	
+			result = Unix_Time_To_Rat_Time(ltim);
 		else {
 			//mktime returns -1 on zero ptm, which is, however, possible if measure something sub-second like e.g.; heartbeat ibi
 			//=>proceed with just the time of the day
@@ -206,7 +203,6 @@ std::wstring Rat_Time_To_Default_WStr(double rattime) {
 		rattime = std::modf(rattime, &intpart);
 		return intpart;
 	};
-
 
 	auto add_fraction = [&](const double intpart, const double factor) {
 		if (factor == 1.0) {	//days
@@ -321,7 +317,7 @@ double Convert_Str_To_Rat_Time(const C* input, bool& converted_ok) {
 		while (pos >= plus_minus_pos) {
 			const C ch = input[pos];
 			if (ch == sep) break;
-			if (!is_digit(ch) && (ch != decimal)) return false;	
+			if (!is_digit(ch) && (ch != decimal)) return false;
 
 			pos--;
 		}
@@ -329,7 +325,7 @@ double Convert_Str_To_Rat_Time(const C* input, bool& converted_ok) {
 		pos++;
 		std::basic_string<C, std::char_traits<C>, std::allocator<C>> substring(&input[pos], static_cast<size_t>(last_pos) - static_cast<size_t>(pos));	//must be a string to add the terminating zero
 		bool ok;
-		result = str_2_dbl(substring.c_str(), ok);			
+		result = str_2_dbl(substring.c_str(), ok);
 
 		if ((!ok) || (result >= result_max)) return false;
 
@@ -350,7 +346,7 @@ double Convert_Str_To_Rat_Time(const C* input, bool& converted_ok) {
 
 			if (last_pos > plus_minus_pos)
 				if (!fetch_number(TTime_Chars<C>::minus, 0, days, std::numeric_limits<double>::max()))
-					return std::numeric_limits<double>::quiet_NaN();				
+					return std::numeric_limits<double>::quiet_NaN();
 		}
 	}
 
