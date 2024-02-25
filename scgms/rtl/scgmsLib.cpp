@@ -43,15 +43,17 @@ namespace scgms {
 
 		namespace internal {
 
-		#ifdef _WIN32
-			const wchar_t* scgms_dynamic_lib_name = L"scgms.dll";
-		#elif __APPLE__
-			const wchar_t* scgms_dynamic_lib_name = L"libscgms.dylib";
-		#else
-			const wchar_t* scgms_dynamic_lib_name = L"libscgms.so";
-		#endif
+			namespace {
+			#ifdef _WIN32
+				const wchar_t* scgms_dynamic_lib_name = L"scgms.dll";
+			#elif __APPLE__
+				const wchar_t* scgms_dynamic_lib_name = L"libscgms.dylib";
+			#else
+				const wchar_t* scgms_dynamic_lib_name = L"libscgms.so";
+			#endif
 
-			CDynamic_Library gScgms_Library;
+				CDynamic_Library gScgms_Library;
+			}
 
 			void* resolve_scgms_symbol(const char* symbol_name) noexcept {
 
@@ -65,28 +67,31 @@ namespace scgms {
 				return gScgms_Library.Resolve(symbol_name);
 			}
 
-			const char* rsGet_Filter_Descriptors = "get_filter_descriptors";
-			const char* rsGet_Metric_Descriptors = "get_metric_descriptors";
-			const char* rsGet_Model_Descriptors = "get_model_descriptors";
-			const char* rsGet_Solver_Descriptors = "get_solver_descriptors";
-			const char* rsGet_Approx_Descriptors = "get_approx_descriptors";
-			const char* rsGet_Signal_Descriptors = "get_signal_descriptors";
+			namespace {
 
-			const char* rsCreate_Filter = "create_filter";
-			const char* rsCreate_Metric = "create_metric";
-			const char* rsCreate_Signal = "create_signal";
-			const char* rsCreate_Device_Event = "create_device_event";
-			const char* rsCreate_Persistent_Filter_Chain_Configuration = "create_persistent_filter_chain_configuration";
-			const char* rsCreate_Filter_Parameter = "create_filter_parameter";
-			const char* rsCreate_Filter_Configuration_Link = "create_filter_configuration_link";
-			const char* rsCreate_Discrete_Model = "create_discrete_model";
-			const char* rsCreate_Approximator = "create_approximator";
+				const char* rsGet_Filter_Descriptors = "get_filter_descriptors";
+				const char* rsGet_Metric_Descriptors = "get_metric_descriptors";
+				const char* rsGet_Model_Descriptors = "get_model_descriptors";
+				const char* rsGet_Solver_Descriptors = "get_solver_descriptors";
+				const char* rsGet_Approx_Descriptors = "get_approx_descriptors";
+				const char* rsGet_Signal_Descriptors = "get_signal_descriptors";
 
-			const char* rsSolve_Generic = "solve_generic";
+				const char* rsCreate_Filter = "create_filter";
+				const char* rsCreate_Metric = "create_metric";
+				const char* rsCreate_Signal = "create_signal";
+				const char* rsCreate_Device_Event = "create_device_event";
+				const char* rsCreate_Persistent_Filter_Chain_Configuration = "create_persistent_filter_chain_configuration";
+				const char* rsCreate_Filter_Parameter = "create_filter_parameter";
+				const char* rsCreate_Filter_Configuration_Link = "create_filter_configuration_link";
+				const char* rsCreate_Discrete_Model = "create_discrete_model";
+				const char* rsCreate_Approximator = "create_approximator";
 
-			const char* rsExecute_Filter_Configuration = "execute_filter_configuration";
-			const char* rsOptimize_Parameters = "optimize_parameters";
-			const char* rsOptimize_Multiple_Parameters = "optimize_multiple_parameters";
+				const char* rsSolve_Generic = "solve_generic";
+
+				const char* rsExecute_Filter_Configuration = "execute_filter_configuration";
+				const char* rsOptimize_Parameters = "optimize_parameters";
+				const char* rsOptimize_Multiple_Parameters = "optimize_multiple_parameters";
+			}
 
 			// stub for: get_*_descriptors exported functions
 			HRESULT IfaceCalling get_desc_not_impl(void *begin, void *end) { return E_NOTIMPL; }

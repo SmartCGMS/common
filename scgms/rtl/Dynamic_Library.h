@@ -73,7 +73,7 @@ class CDynamic_Library final {
 
 		// is module (properly) loaded?
 		bool Is_Loaded() const noexcept;
-        filesystem::path Lib_Path() const noexcept;
+		filesystem::path Lib_Path() const noexcept;
 
 		// checks extension of supplied path to verify, if it's a library (platform-dependent check)
 		static bool Is_Library(const filesystem::path& path) noexcept;
