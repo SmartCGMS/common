@@ -63,7 +63,7 @@ namespace scgms {
         }
     }
 
-
+    void set_base_path(const std::wstring& base);
     bool is_scgms_loaded();
     bool force_scgms_unload();
 }

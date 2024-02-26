@@ -44,6 +44,8 @@ namespace scgms {
 		namespace internal {
 
 			namespace {
+				std::wstring base_search_path = L"";
+
 			#ifdef _WIN32
 				const wchar_t* scgms_dynamic_lib_name = L"scgms.dll";
 			#elif __APPLE__
@@ -58,7 +60,8 @@ namespace scgms {
 			void* resolve_scgms_symbol(const char* symbol_name) noexcept {
 
 				if (!gScgms_Library.Is_Loaded()) {
-					const std::wstring lib_path{ scgms_dynamic_lib_name };
+					const filesystem::path base{ base_search_path };
+					const std::wstring lib_path{ (base / scgms_dynamic_lib_name).wstring() };
 					if (!gScgms_Library.Load(lib_path)) {
 						return nullptr;
 					}
@@ -201,6 +204,10 @@ namespace scgms {
 
 		}
 
+	}
+
+	void set_base_path(const std::wstring& base) {
+		factory::internal::base_search_path = base;
 	}
 
 	bool is_scgms_loaded() {
