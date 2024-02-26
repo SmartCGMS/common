@@ -42,28 +42,37 @@
 
 namespace scgms {
 
-    namespace factory {
-        namespace internal {
+	namespace factory {
+		namespace internal {
+			void* resolve_scgms_symbol(const char* symbol_name) noexcept;
+			void* resolve_not_impl_symbol(const char* symbol_name) noexcept;
+		}
 
-            constexpr bool import_test_fails = false;
+		// resolves a symbol with a given name from the scgms library; casts the result to the requested type
+		template <typename T>
+		T resolve_symbol(const char* symbol_name) noexcept {
 
-            void* resolve_scgms_symbol(const char* symbol_name) noexcept;
-            void* resolve_not_impl_symbol(const char* symbol_name) noexcept;
-        }
+			// attempt to resolve symbol directly
+			void* resolution = internal::resolve_scgms_symbol(symbol_name);
 
-        template <typename T>
-        T resolve_symbol(const char* symbol_name) noexcept {
-            if (internal::import_test_fails)
-                return reinterpret_cast<T>(internal::resolve_not_impl_symbol(symbol_name));
+			// attempt to resolve symbol using alternatives;
+			// e.g., lazy loading (if some dependencies are not met at the time of the initial request
+			if (!resolution) {
+				resolution = internal::resolve_not_impl_symbol(symbol_name);
+			}
 
-            void* resolution = internal::resolve_scgms_symbol(symbol_name);
-            if (!resolution) resolution = internal::resolve_not_impl_symbol(symbol_name);	//still returning not_impl if cannot load the symbol
+			return reinterpret_cast<T>(resolution);
+		}
+	}
 
-            return reinterpret_cast<T>(resolution);
-        }
-    }
+	// sets base path for scgms library resolution; this comes in handy when the workdir must be different and putting scgms
+	// directly to the folder together with executable is not convenient
+	void set_base_path(const std::wstring& base);
 
-    void set_base_path(const std::wstring& base);
-    bool is_scgms_loaded();
-    bool force_scgms_unload();
+	// is the scgms library properly loaded? This attempts to load the library and resolve a sample symbol, if the library is
+	// not loaded yet
+	bool is_scgms_loaded();
+
+	// forces scgms library to unload and reset
+	bool force_scgms_unload();
 }

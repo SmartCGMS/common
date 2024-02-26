@@ -96,25 +96,8 @@ namespace scgms {
 				const char* rsOptimize_Multiple_Parameters = "optimize_multiple_parameters";
 			}
 
-			// stub for: get_*_descriptors exported functions
-			HRESULT IfaceCalling get_desc_not_impl(void *begin, void *end) { return E_NOTIMPL; }
-			// specialized stubs
-			HRESULT IfaceCalling create_filter_not_impl(void* id, void* input, void* output, void* filter) { return E_NOTIMPL; }
-			HRESULT IfaceCalling create_metric_not_impl(void *parameters, void *metric) { return E_NOTIMPL; };
-			HRESULT IfaceCalling create_signal_not_impl(void *signal_id, void *segment, void *signal) { return E_NOTIMPL; }
-			HRESULT IfaceCalling create_device_event_not_impl(scgms::NDevice_Event_Code code, void *event) { return E_NOTIMPL; }
-			HRESULT IfaceCalling create_persistent_filter_chain_configuration_not_impl(void *config) { return E_NOTIMPL; };
-			HRESULT IfaceCalling create_filter_parameter_not_impl(scgms::NParameter_Type type, void *config_name, void *parameter) { return E_NOTIMPL; };
-			HRESULT IfaceCalling create_filter_configuration_link_not_impl(void *id, void *link) { return E_NOTIMPL; };
-			HRESULT IfaceCalling create_discrete_model_not_impl(void *model_id, void *parameters, void *output, void *model) { return E_NOTIMPL; };
-			HRESULT IfaceCalling create_approximator_not_impl(void* approx_id, void *signal, void* configuration, void* approx) { return E_NOTIMPL; }
-
-			HRESULT IfaceCalling solve_generic_not_impl(void *solver_id, void *setup, void *progress) { return E_NOTIMPL; }
-
-
-			HRESULT IfaceCalling execute_filter_configuration_not_impl(void *configuration, void* on_filter_created, void* data, void *custom_output, void *executor, void *error_description) { return E_NOTIMPL; }
-			HRESULT IfaceCalling optimize_parameters_not_impl(void *cfg, size_t idx, void *parameters_configuration_name, void* on_filter_created, void* data, void *solver_id, size_t population_size, size_t max_generations, void *progress, void *error_description) { return E_NOTIMPL; }
-			HRESULT IfaceCalling optimize_multiple_parameters_not_impl(void *cfg, size_t *idx, void *parameters_configuration_name, size_t count, void* on_filter_created, void* data, void *solver_id, size_t population_size, size_t max_generations, void *progress, void *error_description) { return E_NOTIMPL; }
+			// stub for generic not_implemented function
+			HRESULT IfaceCalling dummy_not_impl(void *a, void* b, void* c, void* d, void* e) { return E_NOTIMPL; }
 
 			template<typename... Args>
 			HRESULT factory_lazy_load(const char* symbol_name, Args... args)
@@ -146,13 +129,11 @@ namespace scgms {
 
 			HRESULT IfaceCalling solve_generic_lazy(void *solver_id, void *setup, void *progress) { return factory_lazy_load(rsSolve_Generic, solver_id, setup, progress); }
 
-
 			HRESULT IfaceCalling execute_filter_configuration_lazy(void *configuration, void* on_filter_created, void* data, void *custom_output, void *executor, void *error_description) { return factory_lazy_load(rsExecute_Filter_Configuration, configuration, on_filter_created, data, custom_output, executor, error_description); }
 			HRESULT IfaceCalling optimize_parameters_lazy(void *cfg, size_t idx, void *parameters_cfg_name, void* on_filter_created, void* data, void *solver_id, size_t population_size, size_t max_generations, void *progress, void *error_description) { return factory_lazy_load(rsOptimize_Parameters, cfg, idx, parameters_cfg_name, on_filter_created, data, solver_id, population_size, max_generations, progress, error_description); }
 			HRESULT IfaceCalling optimize_multiple_parameters_lazy(void *cfg, size_t *idx, void *parameters_cfg_name, size_t count, void* on_filter_created, void* data, void *solver_id, size_t population_size, size_t max_generations, void *progress, void *error_description) { return factory_lazy_load(rsOptimize_Multiple_Parameters, cfg, idx, parameters_cfg_name, count, on_filter_created, data, solver_id, population_size, max_generations, progress, error_description); }
 
 			void* resolve_not_impl_symbol(const char* symbol_name) noexcept {
-	#if defined(__ARM_ARCH_7A__) || defined(__aarch64__)
 				if (strcmp(symbol_name, rsGet_Filter_Descriptors) == 0) return reinterpret_cast<void(*)>(internal::get_filter_desc_lazy);
 				if (strcmp(symbol_name, rsGet_Model_Descriptors) == 0) return reinterpret_cast<void(*)>(internal::get_model_desc_lazy);
 				if (strcmp(symbol_name, rsGet_Metric_Descriptors) == 0) return reinterpret_cast<void(*)>(internal::get_metric_desc_lazy);
@@ -175,31 +156,7 @@ namespace scgms {
 				if (strcmp(symbol_name, rsOptimize_Parameters) == 0) return reinterpret_cast<void(*)>(internal::optimize_parameters_lazy);
 				if (strcmp(symbol_name, rsOptimize_Multiple_Parameters) == 0) return reinterpret_cast<void(*)>(internal::optimize_multiple_parameters_lazy);
 
-	#else
-				if (strcmp(symbol_name, rsGet_Filter_Descriptors) == 0) return reinterpret_cast<void(*)>(internal::get_desc_not_impl);
-				if (strcmp(symbol_name, rsGet_Model_Descriptors) == 0) return reinterpret_cast<void(*)>(internal::get_desc_not_impl);
-				if (strcmp(symbol_name, rsGet_Metric_Descriptors) == 0) return reinterpret_cast<void(*)>(internal::get_desc_not_impl);
-				if (strcmp(symbol_name, rsGet_Solver_Descriptors) == 0) return reinterpret_cast<void(*)>(internal::get_desc_not_impl);
-				if (strcmp(symbol_name, rsGet_Approx_Descriptors) == 0) return reinterpret_cast<void(*)>(internal::get_desc_not_impl);
-				if (strcmp(symbol_name, rsGet_Signal_Descriptors) == 0) return reinterpret_cast<void(*)>(internal::get_desc_not_impl);
-
-				if (strcmp(symbol_name, rsCreate_Filter) == 0) return reinterpret_cast<void(*)>(internal::create_filter_not_impl);
-				if (strcmp(symbol_name, rsCreate_Metric) == 0) return reinterpret_cast<void(*)>(internal::create_metric_not_impl);
-				if (strcmp(symbol_name, rsCreate_Signal) == 0) return reinterpret_cast<void(*)>(internal::create_signal_not_impl);
-				if (strcmp(symbol_name, rsCreate_Device_Event) == 0) return reinterpret_cast<void(*)>(internal::create_device_event_not_impl);
-				if (strcmp(symbol_name, rsCreate_Persistent_Filter_Chain_Configuration) == 0) return reinterpret_cast<void(*)>(internal::create_persistent_filter_chain_configuration_not_impl);
-				if (strcmp(symbol_name, rsCreate_Filter_Parameter) == 0) return reinterpret_cast<void(*)>(internal::create_filter_parameter_not_impl);
-				if (strcmp(symbol_name, rsCreate_Filter_Configuration_Link) == 0) return reinterpret_cast<void(*)>(internal::create_filter_configuration_link_not_impl);
-				if (strcmp(symbol_name, rsCreate_Discrete_Model) == 0) return reinterpret_cast<void(*)>(internal::create_discrete_model_not_impl);
-				if (strcmp(symbol_name, rsCreate_Approximator) == 0) return reinterpret_cast<void(*)>(internal::create_approximator_not_impl);
-
-				if (strcmp(symbol_name, rsSolve_Generic) == 0) return reinterpret_cast<void(*)>(internal::solve_generic_not_impl);
-				if (strcmp(symbol_name, rsExecute_Filter_Configuration) == 0) return reinterpret_cast<void(*)>(internal::execute_filter_configuration_not_impl);
-				if (strcmp(symbol_name, rsOptimize_Parameters) == 0) return reinterpret_cast<void(*)>(internal::optimize_parameters_not_impl);
-				if (strcmp(symbol_name, rsOptimize_Multiple_Parameters) == 0) return reinterpret_cast<void(*)>(internal::optimize_multiple_parameters_not_impl);
-	#endif
-
-				return reinterpret_cast<void(*)>(internal::get_desc_not_impl);
+				return reinterpret_cast<void(*)>(internal::dummy_not_impl);
 			}
 
 		}
