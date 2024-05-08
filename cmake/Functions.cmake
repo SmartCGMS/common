@@ -93,7 +93,7 @@ FUNCTION(DISCOVER_DEPENDENCIES)
 		PUSH_REQUIRED_LIBRARY("stdc++fs")
 	ENDIF()
 
-	IF("${CMAKE_SYSTEM_PROCESSOR}" MATCHES ".*armv7.*")
+	IF("${CMAKE_SYSTEM_PROCESSOR}" MATCHES ".*armv7.*" OR "${CMAKE_SYSTEM_PROCESSOR}" MATCHES ".*armv6.*")
 		MESSAGE("Warning: linking against libatomic, the host processor does not support atomic instructions")
 		PUSH_REQUIRED_LIBRARY("atomic")
 	ENDIF()
