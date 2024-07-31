@@ -68,19 +68,27 @@ filesystem::path Get_Application_Dir() {
 
 #ifdef _WIN32
 	wchar_t ModuleFileName[Max_File_Path];
-	GetModuleFileNameW(NULL, ModuleFileName, Max_File_Path);
+	auto res = GetModuleFileNameW(NULL, ModuleFileName, Max_File_Path);
+	if (res <= 0) {
+		return std::filesystem::path{ "" };
+	}
 #elif __APPLE__
 	char RelModuleFileName[Max_File_Path];
 	uint32_t size = static_cast<uint32_t>(Max_File_Path);
 	_NSGetExecutablePath(RelModuleFileName, &size);
 
 	char ModuleFileName[Max_File_Path];
-	realpath(RelModuleFileName, ModuleFileName);
+	auto res = realpath(RelModuleFileName, ModuleFileName);
+	if (!res) {
+		return std::filesystem::path{ "" };
+	}
 #else
 	char ModuleFileName[Max_File_Path];
 	memset(ModuleFileName, 0, Max_File_Path);
-	readlink("/proc/self/exe", ModuleFileName, Max_File_Path);
-	// TODO: error checking
+	auto res = readlink("/proc/self/exe", ModuleFileName, Max_File_Path);
+	if (res < 0) {
+		return std::filesystem::path{""};
+	}
 #endif
 
 	filesystem::path exe_path{ ModuleFileName };
