@@ -89,7 +89,13 @@ EXTERN_C void* _aligned_malloc(size_t n, size_t alignment)
 #if defined(__ARM_ARCH_7A__) || defined(__aarch64__)
 	mem = malloc(n);
 #else
-	posix_memalign(&mem, alignment, n);
+	auto res = posix_memalign(&mem, alignment, n);
+	if (res != 0) {
+		if (mem) {
+			_aligned_free(mem);
+		}
+		return nullptr;
+	}
 #endif
 
 	return mem;
