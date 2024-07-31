@@ -171,14 +171,14 @@ FUNCTION(APPLY_SCGMS_LIBRARY_BUILD_SETTINGS TARGET_NAME)
 		ENDIF()
 
 		# debug build = no optimization, add debug symbols
-		LIST(APPEND TARGET_COMPILE_FLAGS_DEBUG "-g")
+		LIST(APPEND TARGET_COMPILE_FLAGS_DEBUG -g)
 
 		# release build = maximum optimization, use all available mechanisms for given platform/architecture
 		IF (ANDROID)
 			# do not optimize with march=native when cross-compiling for Android
-			LIST(APPEND TARGET_COMPILE_FLAGS_RELEASE "-O3")
+			LIST(APPEND TARGET_COMPILE_FLAGS_RELEASE -O3)
 		ELSE()
-			LIST(APPEND TARGET_COMPILE_FLAGS_RELEASE "-O3 -march=native")
+			LIST(APPEND TARGET_COMPILE_FLAGS_RELEASE -O3 -march=native)
 		ENDIF()
 	ENDIF()
 	
@@ -218,7 +218,7 @@ MACRO(SCGMS_ADD_LIBRARY TARGET_NAME)
 	LIST(APPEND TARGETS_LIBRARIES ${TARGET_NAME} CACHE INTERNAL "" FORCE)
 ENDMACRO()
 
-SET(OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}" CACHE PATH "Where to store compiled binaries")
+SET(OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/compiled/" CACHE PATH "Where to store compiled binaries")
 
 # function to configure output parameters of common target according to project settings
 FUNCTION(CONFIGURE_BASE_LIB_OUTPUT PROJNAME)
@@ -291,6 +291,11 @@ FUNCTION(CONFIGURE_TARGET_OUTPUT PROJNAME OUTDIRNAME)
 			RUNTIME_OUTPUT_DIRECTORY_${OUTPUTCONFIG} "${OUTPUT_DIRECTORY}/${ORIG_OUT_CONFIG}/${OUTDIRNAME}"
 		)
 	ENDFOREACH(OUTPUTCONFIG CMAKE_CONFIGURATION_TYPES)
+ENDFUNCTION()
+
+# function to configure output parameters of common target according to project settings
+FUNCTION(CONFIGURE_ROOT_TARGET_OUTPUT PROJNAME)
+	CONFIGURE_TARGET_OUTPUT(${PROJNAME} "")
 ENDFUNCTION()
 
 # Set generic library variables, since Windows, Linux and Mac have different conventions for library naming
