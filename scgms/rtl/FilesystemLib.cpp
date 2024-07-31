@@ -70,7 +70,7 @@ filesystem::path Get_Application_Dir() {
 	wchar_t ModuleFileName[Max_File_Path];
 	auto res = GetModuleFileNameW(NULL, ModuleFileName, Max_File_Path);
 	if (res <= 0) {
-		return std::filesystem::path{ "" };
+		return filesystem::path{ "" };
 	}
 #elif __APPLE__
 	char RelModuleFileName[Max_File_Path];
@@ -80,14 +80,14 @@ filesystem::path Get_Application_Dir() {
 	char ModuleFileName[Max_File_Path];
 	auto res = realpath(RelModuleFileName, ModuleFileName);
 	if (!res) {
-		return std::filesystem::path{ "" };
+		return filesystem::path{ "" };
 	}
 #else
 	char ModuleFileName[Max_File_Path];
 	memset(ModuleFileName, 0, Max_File_Path);
 	auto res = readlink("/proc/self/exe", ModuleFileName, Max_File_Path);
 	if (res < 0) {
-		return std::filesystem::path{""};
+		return filesystem::path{""};
 	}
 #endif
 
