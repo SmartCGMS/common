@@ -94,7 +94,7 @@ EXTERN_C void* _aligned_malloc(size_t n, size_t alignment)
 		if (mem) {
 			_aligned_free(mem);
 		}
-		return nullptr;
+		return NULL;
 	}
 #endif
 
