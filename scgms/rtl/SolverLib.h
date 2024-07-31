@@ -41,29 +41,29 @@
 
 #include <memory>
 
-#if (defined(__cpp_lib_execution) || __has_include(<execution>)) && (!defined(ANDROID) || defined(_LIBCPP_HAS_PARALLEL_ALGORITHMS)) // Android in NDK r25b still does not support parallel STL
+#if (defined(__cpp_lib_execution) || __has_include(<execution>)) && ((!defined(ANDROID) && !defined(__APPLE__)) || defined(_LIBCPP_HAS_PARALLEL_ALGORITHMS)) // Android in NDK r25b still does not support parallel STL
 #include <execution>
 #else
 namespace std
 {
 	// minimal substitute for missing execution header (for pre C++20 compilers)
 
-	enum class execution {
-		seq,
-		unseq,
-		par,
-		par_unseq
-	};
+	namespace execution {
+		static constexpr int seq = 0;
+		static constexpr int unseq = 1;
+		static constexpr int par = 2;
+		static constexpr int par_unseq = 3;
+	}
 
-	template<typename Fnc, typename It>
-	void for_each(const execution ex, const It& begin, const It& end, Fnc fnc)
+	template<typename ExPo, typename Fnc, typename It>
+	void for_each(ExPo&& ex, const It& begin, const It& end, Fnc fnc)
 	{
 		for (It itr = begin; itr != end; itr++)
 			fnc(*itr);
 	}
 
-	template<typename Fnc, typename It>
-	auto min_element(const execution ex, const It& begin, const It& end, Fnc fnc)
+	template<typename ExPo, typename Fnc, typename It>
+	auto min_element(ExPo&&, const It& begin, const It& end, Fnc fnc)
 	{
 		return std::min_element(begin, end, fnc);
 	}
