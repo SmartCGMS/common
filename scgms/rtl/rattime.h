@@ -40,35 +40,41 @@
 #include <cstdint>
 #include <ctime>
 
-/*
-	i.e. a diff in msecs between January 0, 1900 and 1970-01-01T00:00:00.000
-	In Delphi/FPC: EncodeDate(1970, 1, 1)*MSecsPerDay aka UnixDateDelta*MSecsPerday
-*/
+/* i.e. a diff in msecs between January 0, 1900 and 1970-01-01T00:00:00.000
+ * In Delphi/FPC: EncodeDate(1970, 1, 1)*MSecsPerDay aka UnixDateDelta*MSecsPerday */
 constexpr int64_t diffFrom1970To1900 = 2209161600000;
-// seconds per day
+/* seconds per day */
 constexpr double MSecsPerDay = 24.0*60.0*60.0*1000.0;
-// reciproc value of seconds per day for faster calculations
+/* reciproc value of seconds per day for faster calculations */
 constexpr double InvMSecsPerDay = 1.0 / MSecsPerDay;
 
-// gets current time offset from UTC
+/* gets current time offset from UTC */
 int Get_UTC_Offset();
 
-// converts given unix timestamp to rat time
+/* converts given unix timestamp to rat time */
 double Unix_Time_To_Rat_Time(const time_t qdt);
-// converts given rat time to unix timestamp
+/* converts given rat time to unix timestamp */
 time_t Rat_Time_To_Unix_Time(const double rt);
 
-// fmt is the string formatting used by C++ standard library
-// second_fraction_threshold says a precision of a second fraction, which should be outputed => 0.0 precision to 1 second
+/* fmt is the string formatting used by C++ standard library
+ * second_fraction_threshold says a precision of a second fraction, which should be outputed => 0.0 precision to 1 second */
 std::string Rat_Time_To_Local_Time_Str(const double rt, const char *fmt, const double second_fraction_threshold = 0.0);
+
+/* fmt is the string formatting used by C++ standard library
+ * second_fraction_threshold says a precision of a second fraction, which should be outputed => 0.0 precision to 1 second */
 std::wstring Rat_Time_To_Local_Time_WStr(const double rt, const wchar_t *fmt, const double second_fraction_threshold = 0.0);
 
-// converts string representation of local time (str) to rat time; fmt is the string formatting used by C++ standard library
+/* converts string representation of local time(str) to rat time; fmt is the string formatting used by C++ standard library */
 double Local_Time_WStr_To_Rat_Time(const std::wstring& str, const wchar_t* fmt) noexcept;
+/* converts string representation of local time(str) to rat time; fmt is the string formatting used by C++ standard library */
 double Local_Time_Str_To_Rat_Time(const std::string& str, const char* fmt) noexcept;
 
+/* converts the time represented as rat time into a default-formatted datetime string <days> <hours>:<minutes>:<seconds>.<seconds fraction> */
 std::wstring Rat_Time_To_Default_WStr(double rattime);
 
+/* converts string representation of local time to rat time, uses a default formatter settings */
 double Default_Str_To_Rat_Time(const wchar_t* input, bool& converted_ok);
+/* converts string representation of local time to rat time, uses a default formatter settings */
 double Default_Str_To_Rat_Time(const std::wstring &input, bool& converted_ok);
+/* converts string representation of local time to rat time, uses a default formatter settings */
 double Default_Str_To_Rat_Time(const char* input, bool& converted_ok);

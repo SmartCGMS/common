@@ -42,8 +42,8 @@
 #include <string>
 #include <sstream>
 
-class CSVG_Renderer : public drawing::IRenderer
-{
+/* renderer implementation for SVG file format */
+class CSVG_Renderer : public drawing::IRenderer {
 	private:
 		std::string &mSvg_String_Target;
 		std::ostringstream mSvg_Target;

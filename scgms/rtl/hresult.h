@@ -78,13 +78,13 @@
 #endif
 
 #ifdef __cplusplus
-	extern "C"
+extern "C"
 #endif
 const wchar_t* Describe_Error(const HRESULT error);
 
 
 #ifdef __cplusplus
-	extern "C"
+extern "C"
 #endif
-	bool Succeeded(const HRESULT rc);
-	//the default Succeeded macro tests rc>0, which fails to indicate e.g.; file not found as a success
+bool Succeeded(const HRESULT rc);
+/* the default Succeeded macro tests rc>0, which fails to indicate e.g.; file not found as a success */

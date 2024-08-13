@@ -43,173 +43,203 @@
 
 namespace db {
 
-	
+	/* a class implementing operations on the IDb_Query interface, wrapped as a shared_ptr */
 	class SDb_Query : public ::std::shared_ptr<IDb_Query>{
-	protected:
-		std::vector<TParameter> mRow_Storage;
-		// stores original, required type and the pointer
-		std::vector<TParameter> mRow_Bindings;
+		protected:
+			std::vector<TParameter> mRow_Storage;
+			// stores original, required type and the pointer
+			std::vector<TParameter> mRow_Bindings;
 
-		bool mReady_To_Clear_Result_Bindings = true;
-		template <typename... Args>
-		void Clear_Result_Bindings(Args...) {
-			if (mReady_To_Clear_Result_Bindings) {
-				mRow_Bindings.clear();
-				mReady_To_Clear_Result_Bindings = false;
+			bool mReady_To_Clear_Result_Bindings = true;
+
+			template <typename... Args>
+			void Clear_Result_Bindings(Args...) {
+				if (mReady_To_Clear_Result_Bindings) {
+					mRow_Bindings.clear();
+					mReady_To_Clear_Result_Bindings = false;
+				}
 			}
-		}
-	public:
-		template <typename TParam1, typename ...Args>
-		bool Bind_Parameters(TParam1 param1, Args... args) {
-			return Bind_Parameters(param1) && Bind_Parameters(args...);
-		}
+		public:
+			template <typename TParam1, typename ...Args>
+			bool Bind_Parameters(TParam1 param1, Args... args) {
+				return Bind_Parameters(param1) && Bind_Parameters(args...);
+			}
 
-		template <typename TParam1>
-		bool Bind_Parameters(TParam1 param1) {
-			if (!operator bool()) return false;
+			template <typename TParam1>
+			bool Bind_Parameters(TParam1 param1) {
+				if (!operator bool()) return false;
 
-			TParameter desc{};
-			if (!Bind_Parameter(param1, desc))
-				return false;
+				TParameter desc{};
+				if (!Bind_Parameter(param1, desc))
+					return false;
 
-			return get()->Bind_Parameters(&desc, 1) == S_OK;
-		}
+				return get()->Bind_Parameters(&desc, 1) == S_OK;
+			}
 
-		template <typename TParam1, typename std::enable_if_t<std::is_integral_v<TParam1> && !std::is_same_v<std::remove_const_t<TParam1>, bool>, TParam1>* = nullptr>
-		bool Bind_Parameter(TParam1 param1, TParameter &desc) {
-			desc.type = db::NParameter_Type::ptInt64;
-			desc.integer = static_cast<decltype(desc.integer)>(param1);
-			return true;
-		}
+			template <typename TParam1, typename std::enable_if_t<std::is_integral_v<TParam1> && !std::is_same_v<std::remove_const_t<TParam1>, bool>, TParam1>* = nullptr>
+			bool Bind_Parameter(TParam1 param1, TParameter &desc) {
+				desc.type = db::NParameter_Type::ptInt64;
+				desc.integer = static_cast<decltype(desc.integer)>(param1);
+				return true;
+			}
 
-		template <typename TParam1, typename std::enable_if_t<std::is_same_v<std::remove_const_t<TParam1>, double>, TParam1>* = nullptr>
-		bool Bind_Parameter(TParam1 param1, TParameter &desc) {
-			desc.type = db::NParameter_Type::ptDouble;
-			desc.dbl = static_cast<decltype(desc.dbl)>(param1);
-			return true;
-		}
-
-		template <typename TParam1, typename std::enable_if_t<std::is_same_v<std::remove_const_t<TParam1>, bool>, TParam1>* = nullptr>
-		bool Bind_Parameter(TParam1 param1, TParameter &desc) {
-			desc.type = db::NParameter_Type::ptBool;
-			desc.boolean = static_cast<decltype(desc.boolean)>(param1 ? TRUE : FALSE);
-			return true;
-		}
-
-		template <typename TParam1, typename std::enable_if_t<std::is_same_v<std::remove_const_t<TParam1>, wchar_t*> || std::is_same_v<std::remove_const_t<TParam1>, const wchar_t*>, TParam1>* = nullptr>
-		bool Bind_Parameter(TParam1 param1, TParameter &desc) {
-			desc.type = db::NParameter_Type::ptWChar;
-			desc.str = reinterpret_cast<decltype(desc.str)>(const_cast<decltype(desc.str)>(param1));
-			return true;
-		}
-
-		template <typename TParam1, typename std::enable_if_t<std::is_same_v<std::remove_const_t<TParam1>, GUID>, TParam1>* = nullptr>
-		bool Bind_Parameter(TParam1 param1, TParameter& desc) {
-			desc.type = db::NParameter_Type::ptGuid;
-			desc.id = static_cast<decltype(desc.id)>(param1);
-			return true;
-		}
-
-		template <typename TParam1, typename std::enable_if_t<std::is_same_v<std::remove_const_t<TParam1>, TBinary_Object>, TParam1>* = nullptr>
-		bool Bind_Parameter(TParam1 param1, TParameter& desc) {
-			desc.type = db::NParameter_Type::ptBinaryObect;
-			desc.binary_object = static_cast<decltype(desc.binary_object)>(param1);
-			return true;
-		}
-
-		template <typename TParam1 = std::nullptr_t, typename std::enable_if_t<std::is_null_pointer_v<TParam1>, TParam1>* = nullptr>
-		bool Bind_Parameter(TParam1 param1, TParameter &desc) {
-			desc.type = db::NParameter_Type::ptNull;
-			return true;
-		}
-
-
-
-		template <typename TParam1, typename ...Args>
-		bool Bind_Result(TParam1 &param1, Args&... args) {				//binds particular variables for a repeated call of Get_Next
-			return Bind_Result(param1) && Bind_Result(args...);
-		}
-
-		template <typename TParam1>
-		bool Bind_Result(TParam1 &param1) {
-			if (!operator bool()) return false;
-
-			TParameter desc;
-			if (std::is_same<TParam1, int64_t>::value)  desc.type = db::NParameter_Type::ptInt64;
-			else if (std::is_same<TParam1, double>::value) desc.type = db::NParameter_Type::ptDouble;
-			else if (std::is_same<TParam1, bool>::value) desc.type = db::NParameter_Type::ptBool;
-			else if (std::is_same<TParam1, wchar_t*>::value) desc.type = db::NParameter_Type::ptWChar;
-			else if (std::is_same<TParam1, GUID>::value) desc.type = db::NParameter_Type::ptGuid;
-			else if (std::is_same<TParam1, TBinary_Object>::value) desc.type = db::NParameter_Type::ptBinaryObect;
-			else return false;
-			
-			desc.str = reinterpret_cast<wchar_t*>(&param1);	//intentionally missusing wchar_t* as void* (pointer as a pointer;)
-			mRow_Bindings.push_back(desc);
-
-			return true;
-		}
-
-		bool Bind_Result(std::vector<double> &param) {
-			if (!operator bool()) return false;
-			for (size_t i = 0; i < param.size(); i++) {
-				db::TParameter desc;
+			template <typename TParam1, typename std::enable_if_t<std::is_same_v<std::remove_const_t<TParam1>, double>, TParam1>* = nullptr>
+			bool Bind_Parameter(TParam1 param1, TParameter &desc) {
 				desc.type = db::NParameter_Type::ptDouble;
-				desc.str = reinterpret_cast<wchar_t*>(&param[i]);	//intentionally missusing wchar_t* as void* (pointer as a pointer;)
-				mRow_Bindings.push_back(desc);
+				desc.dbl = static_cast<decltype(desc.dbl)>(param1);
+				return true;
 			}
 
-			return true;
-		}
+			template <typename TParam1, typename std::enable_if_t<std::is_same_v<std::remove_const_t<TParam1>, bool>, TParam1>* = nullptr>
+			bool Bind_Parameter(TParam1 param1, TParameter &desc) {
+				desc.type = db::NParameter_Type::ptBool;
+				desc.boolean = static_cast<decltype(desc.boolean)>(param1 ? TRUE : FALSE);
+				return true;
+			}
 
-		template <typename TParam1, typename ...Args>
-		bool Get_Next(TParam1 &param1, Args&... args) {		//designed for one-time call of Get_Next, which reads one row into particular variables
-			if (!operator bool()) return false;
+			template <typename TParam1, typename std::enable_if_t<std::is_same_v<std::remove_const_t<TParam1>, wchar_t*> || std::is_same_v<std::remove_const_t<TParam1>, const wchar_t*>, TParam1>* = nullptr>
+			bool Bind_Parameter(TParam1 param1, TParameter &desc) {
+				desc.type = db::NParameter_Type::ptWChar;
+				desc.str = reinterpret_cast<decltype(desc.str)>(const_cast<decltype(desc.str)>(param1));
+				return true;
+			}
 
-			Clear_Result_Bindings(param1, args...);
-			if (!Bind_Result(param1, args...)) return false;
-			mReady_To_Clear_Result_Bindings = true;
+			template <typename TParam1, typename std::enable_if_t<std::is_same_v<std::remove_const_t<TParam1>, GUID>, TParam1>* = nullptr>
+			bool Bind_Parameter(TParam1 param1, TParameter& desc) {
+				desc.type = db::NParameter_Type::ptGuid;
+				desc.id = static_cast<decltype(desc.id)>(param1);
+				return true;
+			}
 
-			return Get_Next();
-		}
+			template <typename TParam1, typename std::enable_if_t<std::is_same_v<std::remove_const_t<TParam1>, TBinary_Object>, TParam1>* = nullptr>
+			bool Bind_Parameter(TParam1 param1, TParameter& desc) {
+				desc.type = db::NParameter_Type::ptBinaryObect;
+				desc.binary_object = static_cast<decltype(desc.binary_object)>(param1);
+				return true;
+			}
 
-		template <typename TParam1>
-		bool Get_Next(TParam1 &param1) {
-			if (!operator bool()) return false;
-			Clear_Result_Bindings(param1);
+			template <typename TParam1 = std::nullptr_t, typename std::enable_if_t<std::is_null_pointer_v<TParam1>, TParam1>* = nullptr>
+			bool Bind_Parameter(TParam1 param1, TParameter &desc) {
+				desc.type = db::NParameter_Type::ptNull;
+				return true;
+			}
 
-			if (!Bind_Result(param1)) return false;
-			mReady_To_Clear_Result_Bindings = true;
+			/* binds particular variables for a repeated call of Get_Next */
+			template <typename TParam1, typename ...Args>
+			bool Bind_Result(TParam1 &param1, Args&... args) {
+				return Bind_Result(param1) && Bind_Result(args...);
+			}
 
-			return Get_Next();
-		}
+			template <typename TParam1>
+			bool Bind_Result(TParam1 &param1) {
+				if (!operator bool()) {
+					return false;
+				}
 
-		bool Get_Next();
+				TParameter desc;
+				if (std::is_same<TParam1, int64_t>::value) {
+					desc.type = db::NParameter_Type::ptInt64;
+				}
+				else if (std::is_same<TParam1, double>::value) {
+					desc.type = db::NParameter_Type::ptDouble;
+				}
+				else if (std::is_same<TParam1, bool>::value) {
+					desc.type = db::NParameter_Type::ptBool;
+				}
+				else if (std::is_same<TParam1, wchar_t*>::value) {
+					desc.type = db::NParameter_Type::ptWChar;
+				}
+				else if (std::is_same<TParam1, GUID>::value) {
+					desc.type = db::NParameter_Type::ptGuid;
+				}
+				else if (std::is_same<TParam1, TBinary_Object>::value) {
+					desc.type = db::NParameter_Type::ptBinaryObect;
+				}
+				else {
+					return false;
+				}
+			
+				desc.str = reinterpret_cast<wchar_t*>(&param1);	//intentionally missusing wchar_t* as void* (pointer as a pointer;)
+				mRow_Bindings.push_back(desc);
 
-		bool Execute() {		//just a shortcut with a name that indicates the intention to execute query that returns no result set
-			mRow_Bindings.clear();
-			return Get_Next();
-		}
+				return true;
+			}
+
+			bool Bind_Result(std::vector<double> &param) {
+				if (!operator bool()) {
+					return false;
+				}
+
+				for (size_t i = 0; i < param.size(); i++) {
+					db::TParameter desc;
+					desc.type = db::NParameter_Type::ptDouble;
+					desc.str = reinterpret_cast<wchar_t*>(&param[i]);	//intentionally missusing wchar_t* as void* (pointer as a pointer;)
+					mRow_Bindings.push_back(desc);
+				}
+
+				return true;
+			}
+
+			template <typename TParam1, typename ...Args>
+			bool Get_Next(TParam1 &param1, Args&... args) {		//designed for one-time call of Get_Next, which reads one row into particular variables
+				if (!operator bool()) {
+					return false;
+				}
+
+				Clear_Result_Bindings(param1, args...);
+				if (!Bind_Result(param1, args...)) {
+					return false;
+				}
+				mReady_To_Clear_Result_Bindings = true;
+
+				return Get_Next();
+			}
+
+			template <typename TParam1>
+			bool Get_Next(TParam1 &param1) {
+				if (!operator bool()) {
+					return false;
+				}
+				Clear_Result_Bindings(param1);
+
+				if (!Bind_Result(param1)) {
+					return false;
+				}
+				mReady_To_Clear_Result_Bindings = true;
+
+				return Get_Next();
+			}
+
+			bool Get_Next();
+
+			/* helper method with a name, that indicates the intention to execute query that returns no result set (or we are not interested in it) */
+			bool Execute() {
+				mRow_Bindings.clear();
+				return Get_Next();
+			}
 	};
 
-	class SDb_Connection : public std::shared_ptr<IDb_Connection> {
-	public:
-		SDb_Query Query(const std::wstring &statement);
+	/* a class implementing operations on the IDb_Connection interface, wrapped as a shared_ptr */
+	class SDb_Connection : public ::std::shared_ptr<IDb_Connection> {
+		public:
+			SDb_Query Query(const std::wstring &statement);
 
-		template <typename... Args>
-		SDb_Query Query(const std::wstring &statement, Args... args)  {
-			SDb_Query result = Query(statement);
-			if (!result.Bind_Parameters(args...)) result.reset();
-			return result;
-		}
-
+			template <typename... Args>
+			SDb_Query Query(const std::wstring &statement, Args... args)  {
+				SDb_Query result = Query(statement);
+				if (!result.Bind_Parameters(args...)) result.reset();
+				return result;
+			}
 	};
 
-	class SDb_Connector : public std::shared_ptr<IDb_Connector> {
-	public:
-		SDb_Connection Connect(const std::wstring &host, const std::wstring &provider, uint16_t port, const std::wstring &name, const std::wstring &user_name, const std::wstring &password);
+	/* a class implementing operations on the IDb_Connector interface, wrapped as a shared_ptr */
+	class SDb_Connector : public ::std::shared_ptr<IDb_Connector> {
+		public:
+			SDb_Connection Connect(const std::wstring &host, const std::wstring &provider, uint16_t port, const std::wstring &name, const std::wstring &user_name, const std::wstring &password);
 	};
 
 	using SDb_Sink = std::shared_ptr<IDb_Sink>;
 
+	/* is the provider marking a database engine that uses a file-based database (e.g., SQLite)? */
 	bool is_file_db(const std::wstring& provider);
 }

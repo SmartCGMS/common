@@ -39,16 +39,18 @@
 #include "DeviceIface.h"
 #include "../rtl/hresult.h"
 
+/* This file gets compiled twice - once in the host program (SmartCGMS itself) and once in the guest program (the native script)
+ * Native scripting build environment defines the SCGMS_SCRIPT macro to distinguish the compilation runs */
 
 namespace native {
+	/* maximum number of input signals */
 	constexpr size_t max_signal_count = 10;
-	constexpr size_t max_parameter_count = 10; //number of configurable parameters
+	/* number of configurable parameters */
+	constexpr size_t max_parameter_count = 10;
 
 	using TSend_Event = HRESULT(IfaceCalling*)(const GUID* sig_id, const double device_time, const double level, const char* msg, const void* context);
 	using TCustom_Data_Size = size_t(IfaceCalling*)();
 }
-
-
 
 #ifdef SCGMS_SCRIPT
 	struct TCustom_Data;
@@ -69,33 +71,38 @@ namespace native {
 	using TCustom_Data_Ptr = Complete_Custom_Data<custom_data_sizeof<TCustom_Data> != 0, TCustom_Data>::TCustom_Data_Ptr;
 	#define DNEC const
 #else
+	using TCustom_Data_Ptr = void*;
 	#define DNEC 
 #endif
 
+/* native environment container - maintained by host, used by guest (therefore it's const only on guest side) */
 struct TNative_Environment {
-	DNEC native::TSend_Event send;						//function to inject new events
-#ifdef SCGMS_SCRIPT
-	TCustom_Data_Ptr custom_data;						//custom data pointer to implement a stateful processing
-#else
-	DNEC void* custom_data;								//custom data pointer to implement a stateful processing
-#endif
-
+	/* function pointer to inject new events */
+	DNEC native::TSend_Event send;
+	/* custom data pointer to implement a stateful processing */
+	TCustom_Data_Ptr custom_data;
+	/* index of the signal currently being processed */
 	DNEC size_t current_signal_index;
-	DNEC size_t level_count;							//number of levels to sanitize memory space - should be generated
-	DNEC GUID signal_id[native::max_signal_count];		//signal ids as configured
-	DNEC double device_time[native::max_signal_count];  //recent device times
-	DNEC double level[native::max_signal_count];		//recent levels
-	DNEC double slope[native::max_signal_count]; 		//recent slopes from the recent level to the preceding level, a linear line slope!
-
-	DNEC double parameters[native::max_parameter_count];//configurable parameters
+	/* number of levels to sanitize memory space - should be generated */
+	DNEC size_t level_count;
+	/* signal ids as configured */
+	DNEC GUID signal_id[native::max_signal_count];
+	/* recent device times */
+	DNEC double device_time[native::max_signal_count];
+	/* recent levels */
+	DNEC double level[native::max_signal_count];
+	/* recent slopes from the recent level to the preceding level, a linear line slope! */
+	DNEC double slope[native::max_signal_count];
+	/* configurable parameters */
+	DNEC double parameters[native::max_parameter_count];
 };
 
 
-
+/* type alias for execution wrapper */
 using TNative_Execute_Wrapper = HRESULT(IfaceCalling*)(
-		GUID* sig_id, double *device_time, double *level,
-		TNative_Environment*environment, const void* context
-	);
+	GUID* sig_id, double *device_time, double *level,
+	TNative_Environment*environment, const void* context
+);
 
 
 #if defined(_WIN32) && defined(SCGMS_SCRIPT)

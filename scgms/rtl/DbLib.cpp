@@ -43,13 +43,15 @@ namespace db {
 
 	bool SDb_Query::Get_Next() {
 
-		if (!operator bool())
+		if (!operator bool()) {
 			return false;
+		}
 
 		//as the row storage data type could have been altered due to null values, we must reinitialize it
 		mRow_Storage.resize(mRow_Bindings.size());
-		for (size_t i = 0; i < mRow_Bindings.size(); i++)
+		for (size_t i = 0; i < mRow_Bindings.size(); i++) {
 			mRow_Storage[i].type = mRow_Bindings[i].type;
+		}
 
 		HRESULT query_rc = get()->Get_Next(mRow_Storage.data(), mRow_Storage.size());
 		if (query_rc == S_OK) {
@@ -84,8 +86,9 @@ namespace db {
 				}
 			}
 		}
-		else 
-			return mRow_Bindings.empty() ?  query_rc == S_FALSE : false;	//SQL statement, e.g., insert does not need to return anything, yet it succeeds with S_FALSE code
+		else {
+			return mRow_Bindings.empty() ? query_rc == S_FALSE : false;	//SQL statement, e.g., insert does not need to return anything, yet it succeeds with S_FALSE code
+		}
 
 		return true;
 	}
@@ -103,8 +106,9 @@ namespace db {
 	SDb_Connection SDb_Connector::Connect(const std::wstring &host, const std::wstring &provider, uint16_t port, const std::wstring &name, const std::wstring &user_name, const std::wstring &password) {
 		IDb_Connection *connection;
 		SDb_Connection result;
-		if ((operator bool()) && (get()->Connect(host.c_str(), provider.c_str(), port, name.c_str(), user_name.c_str(), password.c_str(), &connection) == S_OK))
+		if ((operator bool()) && (get()->Connect(host.c_str(), provider.c_str(), port, name.c_str(), user_name.c_str(), password.c_str(), &connection) == S_OK)) {
 			result = refcnt::make_shared_reference_ext<SDb_Connection, IDb_Connection>(connection, false);
+		}
 
 		return result;
 	}
@@ -114,5 +118,4 @@ namespace db {
 
 		return file_dbs.find(provider) != file_dbs.end();
 	}
-
 }

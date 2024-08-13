@@ -44,15 +44,16 @@
 	extern "C" char __ImageBase;
 #endif
 
+/* helper class that catches memory allocated with global const variable */
 class CMemory_Leak_Tracker {
-	//just a class-helper that correctly catches memory allocated with global const variable
-protected:
-#if defined(_MSC_VER) && defined(_DEBUG)
-	_CrtMemState mStart = { 0 }, mStop = { 0 }, mDiff = { 0 };
-#endif
-public:
-	CMemory_Leak_Tracker();
-	~CMemory_Leak_Tracker();
+	protected:
+	#if defined(_MSC_VER) && defined(_DEBUG)
+		_CrtMemState mStart = { 0 }, mStop = { 0 }, mDiff = { 0 };
+	#endif
+
+	public:
+		CMemory_Leak_Tracker();
+		~CMemory_Leak_Tracker();
 };
 
 const CMemory_Leak_Tracker Memory_Leak_Tracker;
@@ -77,36 +78,36 @@ CMemory_Leak_Tracker::~CMemory_Leak_Tracker() {
 #ifndef _KERNEL_MODE
 		try {
 #endif
-				_CrtMemCheckpoint(&mStop); //take the stop snapshot
+			_CrtMemCheckpoint(&mStop); //take the stop snapshot
 
-				//wchar_t *fileName = (wchar_t*) malloc(1024*sizeof(wchar_t));
-				//wchar_t *buf = (wchar_t*) malloc(2048*sizeof(wchar_t));
-				//can't be on the heap, otherwise they will be reported as leaks
-				static wchar_t fileName[1024];
-				static wchar_t buf[2048];
-				GetModuleFileNameW(((HINSTANCE)&__ImageBase), fileName, 1024);
+			//wchar_t *fileName = (wchar_t*) malloc(1024*sizeof(wchar_t));
+			//wchar_t *buf = (wchar_t*) malloc(2048*sizeof(wchar_t));
+			//can't be on the heap, otherwise they will be reported as leaks
+			static wchar_t fileName[1024];
+			static wchar_t buf[2048];
+			GetModuleFileNameW(((HINSTANCE)&__ImageBase), fileName, 1024);
 
-				swprintf_s(buf, 2048, L"========== Dumping leaks for: %s ==========\n", fileName);
-				OutputDebugStringW(buf);
+			swprintf_s(buf, 2048, L"========== Dumping leaks for: %s ==========\n", fileName);
+			OutputDebugStringW(buf);
 
-				#ifdef prefer_vld
-					VLDReportLeaks();
-				#else				
-				if (_CrtMemDifference(&mDiff, &mStart, &mStop) == TRUE) {
-					OutputDebugStringW(L"-----------_CrtMemDumpStatistics ---------\n");
-					_CrtMemDumpStatistics(&mDiff);
-					OutputDebugStringW(L"-----------_CrtMemDumpAllObjectsSince ---------\n");
-					_CrtMemDumpAllObjectsSince(&mStart);
-					OutputDebugStringW(L"-----------_CrtDumpMemoryLeaks ---------\n");
-					_CrtDumpMemoryLeaks();
-				}
-				else {
-					OutputDebugStringW(L"No leaks detected:)\n");
-				}							
-				#endif
+			#ifdef prefer_vld
+			VLDReportLeaks();
+			#else
+			if (_CrtMemDifference(&mDiff, &mStart, &mStop) == TRUE) {
+				OutputDebugStringW(L"-----------_CrtMemDumpStatistics ---------\n");
+				_CrtMemDumpStatistics(&mDiff);
+				OutputDebugStringW(L"-----------_CrtMemDumpAllObjectsSince ---------\n");
+				_CrtMemDumpAllObjectsSince(&mStart);
+				OutputDebugStringW(L"-----------_CrtDumpMemoryLeaks ---------\n");
+				_CrtDumpMemoryLeaks();
+			}
+			else {
+				OutputDebugStringW(L"No leaks detected:)\n");
+			}
+			#endif
 
-				swprintf_s(buf, 2048, L"========== Leaks dumped for: %s ==========\n", fileName);
-				OutputDebugStringW(buf);
+			swprintf_s(buf, 2048, L"========== Leaks dumped for: %s ==========\n", fileName);
+			OutputDebugStringW(buf);
 #ifndef _KERNEL_MODE
 		}
 		catch (...) {
@@ -114,14 +115,13 @@ CMemory_Leak_Tracker::~CMemory_Leak_Tracker() {
 		}
 #endif
 
-
 		#endif
 	#endif
 }
 
 void dprintf(std::stringstream &stream) {
-        const auto msg = stream.str();
-        OutputDebugStringA(msg.c_str());
+	const auto msg = stream.str();
+	OutputDebugStringA(msg.c_str());
 }
 
 void dprintf(std::string &str) {

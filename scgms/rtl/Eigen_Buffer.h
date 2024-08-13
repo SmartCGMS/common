@@ -42,28 +42,34 @@
 using TVector1D = Eigen::Array<double, 1, Eigen::Dynamic, Eigen::RowMajor>;
 using TBlock1D = decltype(std::declval<TVector1D>().head(0));
 
+/* is any of the values provided NaN? */
 inline bool Is_Any_NaN(const TBlock1D &value) {
-	return (value == value).all();	
+	return (value == value).all();
 }
 
-
+/* reserves an eigen buffer of requested size */
 template <typename T>
 TBlock1D Reserve_Eigen_Buffer(T &vector, const size_t effective_size) {
-	if (vector.cols() < static_cast<int>(effective_size)) vector.resize(Eigen::NoChange, static_cast<int>(effective_size));
+	if (vector.cols() < static_cast<int>(effective_size)) {
+		vector.resize(Eigen::NoChange, static_cast<int>(effective_size));
+	}
 
 	return vector.head(static_cast<int>(effective_size));
 }
 
+/* maps double array to eigen buffer */
 template <typename T>
 Eigen::Map<T> Map_Double_To_Eigen(const double* vector, const size_t count) {
 	return Eigen::Map<T> { const_cast<double*>(vector), T::RowsAtCompileTime, static_cast<Eigen::Index>(count) };
 }
 
+/* maps double array to eigen buffer */
 template <typename T>
 Eigen::Map<T> Map_Double_To_Eigen(double* const vector, const size_t count) {
 	return Eigen::Map<T> { vector, T::RowsAtCompileTime, static_cast<Eigen::Index>(count) };
 }
 
+/* maps null-terminated double array to eigen buffer */
 template <typename T>
 Eigen::Map<T> Map_Double_To_Eigen(const double* vector) {
 	return Eigen::Map<T> { const_cast<double*>(vector), T::RowsAtCompileTime, T::ColsAtCompileTime };

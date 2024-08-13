@@ -71,43 +71,69 @@ namespace std
 #endif
 
 namespace solver {
+
+	/* class representing an iterator over integer values */
 	template <typename T>
 	class CInt_Iterator {
-	protected:
-		T mVal = 0;
-	public:
-		using iterator_category = std::forward_iterator_tag;
-		using value_type = T;
-		using difference_type = T;
-		using pointer = std::add_pointer_t<T>;
-		using reference = T&;
-	public:
-		CInt_Iterator(const T val) : mVal(val) {};
+		protected:
+			T mVal = 0;
+		public:
+			using iterator_category = std::forward_iterator_tag;
+			using value_type = T;
+			using difference_type = T;
+			using pointer = std::add_pointer_t<T>;
+			using reference = T&;
 
-		CInt_Iterator& operator++() { ++mVal; return *this; }
-		CInt_Iterator operator++(int) { CInt_Iterator tmp(*this); ++mVal; return tmp; }
+		public:
+			CInt_Iterator(const T val) : mVal(val) {}
 
-		bool operator==(CInt_Iterator const& other) const { return mVal == other.mVal; }
-		bool operator!=(CInt_Iterator const& other) const { return mVal != other.mVal; }
+			CInt_Iterator& operator++() {
+				++mVal;
+				return *this;
+			}
 
-		T operator*() const { return mVal; }
-		pointer operator->() const { return &mVal; }
-	public:
-		CInt_Iterator() = default;
-		CInt_Iterator(CInt_Iterator&&) = default;
-		CInt_Iterator(CInt_Iterator const&) = default;
-		CInt_Iterator& operator=(CInt_Iterator&&) = default;
-		CInt_Iterator& operator=(CInt_Iterator const&) = default;
+			CInt_Iterator operator++(int) {
+				CInt_Iterator tmp(*this);
+				++mVal;
+				return tmp;
+			}
 
+			bool operator==(CInt_Iterator const& other) const {
+				return mVal == other.mVal;
+			}
+
+			bool operator!=(CInt_Iterator const& other) const {
+				return mVal != other.mVal;
+			}
+
+			T operator*() const {
+				return mVal;
+			}
+
+			pointer operator->() const {
+				return &mVal;
+			}
+
+		public:
+			CInt_Iterator() = default;
+			CInt_Iterator(CInt_Iterator&&) = default;
+			CInt_Iterator(CInt_Iterator const&) = default;
+			CInt_Iterator& operator=(CInt_Iterator&&) = default;
+			CInt_Iterator& operator=(CInt_Iterator const&) = default;
 	};
 
-	solver::TSolver_Setup Check_Default_Parameters(const solver::TSolver_Setup &setup, const size_t default_max_generations, const size_t default_population_size);	
+	/* checks the solver default parameters, substitutes with defaults, if not set properly or set to a placeholder values */
+	solver::TSolver_Setup Check_Default_Parameters(const solver::TSolver_Setup &setup, const size_t default_max_generations, const size_t default_population_size);
+
+	/* solves the generic problem using given solver GUID */
 	HRESULT Solve_Generic(const GUID& solver_id, const solver::TSolver_Setup& setup, solver::TSolver_Progress& progress) noexcept;
 
+	/* calculates an Euclidean distance from solutions (second power, as square root is not required for comparison) */
 	template <typename T>
 	inline double Solution_Distance(const size_t objective_count, const T solution) {
-		if (objective_count == 1)
+		if (objective_count == 1) {
 			return solution[0];
+		}
 
 		double result = 0.0;
 		for (size_t i = 0; i < objective_count; i++) {
@@ -116,31 +142,36 @@ namespace solver {
 
 		return result;
 	}
-
 }
 
 namespace scgms {
+
+	/* shared pointer wrapper for metric */
 	class SMetric : public std::shared_ptr<IMetric> {
-	private:
-		void Init(const scgms::TMetric_Parameters &params);
-	public:
-		SMetric();
-		SMetric(const TMetric_Parameters &params);
-		SMetric Clone();
+		private:
+			/* initializes the metric object with given parameters */
+			void Init(const scgms::TMetric_Parameters &params);
+
+		public:
+			SMetric();
+			SMetric(const TMetric_Parameters &params);
+
+			/* clones the metric to a new instance */
+			SMetric Clone();
 	};
 
+	/* calculating filter inspection */
 	class SCalculate_Filter_Inspection : public std::shared_ptr<ICalculate_Filter_Inspection> {
-	public:
-		SCalculate_Filter_Inspection() noexcept {};
-		SCalculate_Filter_Inspection(const SFilter &calculate_filter);
+		public:
+			SCalculate_Filter_Inspection() noexcept {};
+			SCalculate_Filter_Inspection(const SFilter &calculate_filter);
 	};
 
-
+	/* optimize parameters based on given params */
 	HRESULT Optimize_Parameters(scgms::SFilter_Chain_Configuration configuration, const size_t *filter_indices, const wchar_t **parameters_configuration_names, size_t filter_count,
 								scgms::TOn_Filter_Created on_filter_created, const void* on_filter_created_data,
 								const GUID &solver_id, const size_t population_size, const size_t max_generations, 
 								const double** hints, const size_t hint_count,
 								solver::TSolver_Progress &progress,
 								refcnt::Swstr_list error_description);
-
 }

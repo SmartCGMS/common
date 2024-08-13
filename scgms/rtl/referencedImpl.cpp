@@ -45,7 +45,7 @@
 
 namespace refcnt {
 
-	HRESULT CReferenced::QueryInterface(const GUID*  riid, void ** ppvObj) {
+	HRESULT CReferenced::QueryInterface(const GUID* riid, void **ppvObj) {
 		return E_NOTIMPL;
 	}
 
@@ -55,11 +55,12 @@ namespace refcnt {
 
 	ULONG IfaceCalling CReferenced::Release() {
 		ULONG rc = mCounter.fetch_sub(1) - 1;	//fetch_sub returns the old value!
-		if (rc == 0) delete this;
+		if (rc == 0) {
+			delete this;
+		}
 
 		return rc;
 	}
-
 
 	ULONG IfaceCalling CNotReferenced::AddRef() {
 		return std::numeric_limits<ULONG>::max();
@@ -72,7 +73,6 @@ namespace refcnt {
 	std::string Char_Container_To_String(str_container *container) {
 		return Container_To_Vector<char, std::string>(container);
 	}
-
 
 	std::wstring WChar_Container_To_WString(refcnt::wstr_container *container) {
 		return Container_To_Vector<wchar_t, std::wstring>(container);
@@ -93,63 +93,74 @@ namespace refcnt {
 	bool WChar_Container_Equals_WString(wstr_container *container, const wchar_t* str, size_t offset, size_t maxCount) {
 		wchar_t *cont_begin, *cont_end;
 
-		if (container->get(&cont_begin, &cont_end) != S_OK || !str) return false;	//cannot compare
+		if (container->get(&cont_begin, &cont_end) != S_OK || !str) {
+			return false; // cannot compare
+		}
 
 		cont_begin += offset;
-		if (cont_begin >= cont_end)
+		if (cont_begin >= cont_end) {
 			return false;
+		}
 
 		const size_t cont_len = static_cast<size_t>(cont_end - cont_begin);
-		if (maxCount == (size_t)-1 && cont_len != wcslen(str)) return false;	//different size, thus not equal
+		if (maxCount == (size_t)-1 && cont_len != wcslen(str)) {
+			return false; // different size, thus not equal
+		}
 
 		return wmemcmp(cont_begin, str, std::min(cont_len, maxCount > 0 ? maxCount : wcslen(str))) == 0;
 	}
-
 
 	void Swstr_container::set(const wchar_t *str) {
 		if (operator bool()) {
 			wchar_t *str_ptr = const_cast<wchar_t*>(str);
 			const size_t str_len = str == nullptr ? 0 : wcslen(str);
 
-			if (str_len>0) get()->set(str_ptr, str_ptr + str_len);
-				else get()->set(nullptr, nullptr);
+			if (str_len > 0) {
+				get()->set(str_ptr, str_ptr + str_len);
+			}
+			else {
+				get()->set(nullptr, nullptr);
+			}
 		}
 	}
 
-
 	bool Swstr_container::operator==(const wchar_t *other) const {
-		if (!operator bool()) return false;
+		if (!operator bool()) {
+			return false;
+		}
 
 		return WChar_Container_Equals_WString(get(), other);
 	}
 
 	Swstr_list::Swstr_list() : SReferenced<refcnt::wstr_list>{ Create_Container<refcnt::wstr_container*>(nullptr, nullptr) } {
-		if (operator bool())
-			get()->Release();	//both ctor and Create_Container called AddRef => one AddRef is excessive
+		if (operator bool()) {
+			get()->Release(); // both ctor and Create_Container called AddRef => one AddRef is excessive
+		}
 	}
-
 
 	void Swstr_list::push(const wchar_t* wstr) {
 		if (operator bool()) {
 			auto container = WString_To_WChar_Container_shared(wstr);
 			auto container_raw = container.get();
-			if (container) get()->add(&container_raw, &container_raw + 1);
+			if (container) {
+				get()->add(&container_raw, &container_raw + 1);
+			}
 		}
-
 	}
 
 	void Swstr_list::push(const std::wstring& wstr) {
 		push(wstr.c_str());
 	}
 
-
 	void Swstr_list::for_each(std::function<void(const std::wstring& wstr)> callback) const {
 		refcnt::wstr_container** begin, ** end;
 		HRESULT rc = refcnt::SReferenced<refcnt::wstr_list>::get()->get(&begin, &end);
-		if (rc != S_OK) return;
+		if (rc != S_OK) {
+			return;
+		}
 
-
-		for (; begin != end; begin++)
+		for (; begin != end; begin++) {
 			callback(refcnt::WChar_Container_To_WString(*begin));
+		}
 	}
 }

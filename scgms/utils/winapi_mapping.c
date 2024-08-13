@@ -129,11 +129,13 @@ EXTERN_C int closesocket(SOCKET skt)
 EXTERN_C int getenv_s(size_t *len, char *value, size_t valuesz, const char *name)
 {
 	char* env = getenv(name);
-	if (!env)
+	if (!env) {
 		return 1;
+	}
 	
-	if (value)
+	if (value) {
 		value = env;
+	}
 	
 	*len = strlen(env);
 	return 0;

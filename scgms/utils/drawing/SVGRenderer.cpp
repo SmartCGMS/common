@@ -37,51 +37,52 @@
 #include "SVGRenderer.h"
 
 CSVG_Renderer::CSVG_Renderer(double canvasWidth, double canvasHeight, std::string& svgTarget)
-	: drawing::IRenderer(canvasWidth, canvasHeight), mSvg_String_Target(svgTarget)
-{
+	: drawing::IRenderer(canvasWidth, canvasHeight), mSvg_String_Target(svgTarget) {
 	//
 }
 
-std::string CSVG_Renderer::Color_To_String(const RGBColor& color)
-{
+std::string CSVG_Renderer::Color_To_String(const RGBColor& color) {
 	return "rgb(" + std::to_string(color.r) + "," + std::to_string(color.g) + "," + std::to_string(color.b) + ")";
 }
 
-std::string CSVG_Renderer::Anchor_To_String(const drawing::Text::TextAnchor anchor)
-{
-	switch (anchor)
-	{
-		case drawing::Text::TextAnchor::START: return "start";
-		case drawing::Text::TextAnchor::MIDDLE: return "middle";
-		case drawing::Text::TextAnchor::END: return "end";
+std::string CSVG_Renderer::Anchor_To_String(const drawing::Text::TextAnchor anchor) {
+	switch (anchor) {
+		case drawing::Text::TextAnchor::START:
+			return "start";
+		case drawing::Text::TextAnchor::MIDDLE:
+			return "middle";
+		case drawing::Text::TextAnchor::END:
+			return "end";
 	}
 
 	return "";
 }
 
-std::string CSVG_Renderer::Weight_To_String(const drawing::Text::FontWeight weight)
-{
-	switch (weight)
-	{
-		case drawing::Text::FontWeight::LIGHT: return "light";
-		case drawing::Text::FontWeight::NORMAL: return "normal";
-		case drawing::Text::FontWeight::BOLD: return "bold";
+std::string CSVG_Renderer::Weight_To_String(const drawing::Text::FontWeight weight) {
+	switch (weight) {
+		case drawing::Text::FontWeight::LIGHT:
+			return "light";
+		case drawing::Text::FontWeight::NORMAL:
+			return "normal";
+		case drawing::Text::FontWeight::BOLD:
+			return "bold";
 	}
 
 	return "normal";
 }
 
-void CSVG_Renderer::Render_Default_Params(drawing::Element& shape)
-{
-	if (!shape.Get_Id().empty())
+void CSVG_Renderer::Render_Default_Params(drawing::Element& shape) {
+	if (!shape.Get_Id().empty()) {
 		mSvg_Target << " id=\"" << shape.Get_Id() << "\"";
-	if (!shape.Get_Class().empty())
+	}
+	if (!shape.Get_Class().empty()) {
 		mSvg_Target << " class=\"" << shape.Get_Class() << "\"";
-	if (!shape.Get_Transform().empty())
+	}
+	if (!shape.Get_Transform().empty()) {
 		mSvg_Target << " transform=\"" << shape.Get_Transform() << "\"";
+	}
 
-	if (shape.Get_Stroke_Width() > 0)
-	{
+	if (shape.Get_Stroke_Width() > 0) {
 		mSvg_Target << " stroke-width=\"" << shape.Get_Stroke_Width() << "\"";
 		mSvg_Target << " stroke=\"" << Color_To_String(shape.Get_Stroke_Color()) << "\"";
 		mSvg_Target << " stroke-linejoin=\"round\""; // TODO: line join parameter
@@ -90,11 +91,11 @@ void CSVG_Renderer::Render_Default_Params(drawing::Element& shape)
 	}
 
 	const auto& dashArray = shape.Get_Stroke_Dash_Array();
-	if (!dashArray.empty())
-	{
+	if (!dashArray.empty()) {
 		mSvg_Target << " stroke-dasharray=\"";
-		for (size_t i = 0; i < dashArray.size(); i++)
+		for (size_t i = 0; i < dashArray.size(); i++) {
 			mSvg_Target << dashArray[i] << " ";
+		}
 		mSvg_Target << "\"";
 	}
 
@@ -102,10 +103,8 @@ void CSVG_Renderer::Render_Default_Params(drawing::Element& shape)
 	mSvg_Target << " fill-opacity=\"" << shape.Get_Fill_Opacity() << "\"";
 }
 
-void CSVG_Renderer::Begin_Render()
-{
-	if (mRenderer_Depth == 0)
-	{
+void CSVG_Renderer::Begin_Render() {
+	if (mRenderer_Depth == 0) {
 		mSvg_Target.clear();
 		mSvg_Target << "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\""
 					<< " viewBox=\"0 0 " << Get_Canvas_Width() << " " << Get_Canvas_Height() << "\""
@@ -119,12 +118,10 @@ void CSVG_Renderer::Begin_Render()
 	mRenderer_Depth++;
 }
 
-void CSVG_Renderer::Finalize_Render()
-{
+void CSVG_Renderer::Finalize_Render() {
 	mRenderer_Depth--;
 
-	if (mRenderer_Depth == 0)
-	{
+	if (mRenderer_Depth == 0) {
 		mSvg_Target << "</g>" << std::endl;
 		mSvg_Target << "</svg>" << std::endl;
 
@@ -133,54 +130,50 @@ void CSVG_Renderer::Finalize_Render()
 	}
 }
 
-void CSVG_Renderer::Render_Circle(drawing::Circle& shape)
-{
+void CSVG_Renderer::Render_Circle(drawing::Circle& shape) {
 	mSvg_Target << "<circle cx=\"" << shape.Get_Position_X() << "\" cy=\"" << shape.Get_Position_Y() << "\" r=\"" << shape.Get_Radius() << "\"";
 	Render_Default_Params(shape);
 	mSvg_Target << " />" << std::endl;
 }
 
-void CSVG_Renderer::Render_Line(drawing::Line& shape)
-{
+void CSVG_Renderer::Render_Line(drawing::Line& shape) {
 	mSvg_Target << "<line x1=\"" << shape.Get_Position_X() << "\" y1=\"" << shape.Get_Position_Y() << "\" x2=\"" << shape.Get_Target_X() << "\" y2=\"" << shape.Get_Target_Y() << "\"";
 	Render_Default_Params(shape);
 	mSvg_Target << " />" << std::endl;
 }
 
-void CSVG_Renderer::Render_PolyLine(drawing::PolyLine& shape)
-{
+void CSVG_Renderer::Render_PolyLine(drawing::PolyLine& shape) {
 	mSvg_Target << "<polyline points=\"";
 
 	mSvg_Target << shape.Get_Position_X() << "," << shape.Get_Position_Y();
-	for (auto& pt : shape.Get_Points())
+	for (auto& pt : shape.Get_Points()) {
 		mSvg_Target << " " << pt.x << "," << pt.y;
+	}
 	mSvg_Target << "\"" << std::endl;
 
 	Render_Default_Params(shape);
 	mSvg_Target << " />" << std::endl;
 }
 
-void CSVG_Renderer::Render_Rectangle(drawing::Rectangle& shape)
-{
+void CSVG_Renderer::Render_Rectangle(drawing::Rectangle& shape) {
 	mSvg_Target << "<rect x=\"" << shape.Get_Position_X() << "\" y=\"" << shape.Get_Position_Y() << "\" width=\"" << shape.Get_Width() << "\" height=\"" << shape.Get_Height() << "\"";
 	Render_Default_Params(shape);
 	mSvg_Target << "/>" << std::endl;
 }
 
-void CSVG_Renderer::Render_Polygon(drawing::Polygon& shape)
-{
+void CSVG_Renderer::Render_Polygon(drawing::Polygon& shape) {
 	mSvg_Target << "<polygon points=\"";
 	mSvg_Target << shape.Get_Position_X() << "," << shape.Get_Position_Y();
-	for (auto& pt : shape.Get_Points())
+	for (auto& pt : shape.Get_Points()) {
 		mSvg_Target << " " << pt.x << "," << pt.y;
+	}
 	mSvg_Target << "\"" << std::endl;
 
 	Render_Default_Params(shape);
 	mSvg_Target << " />" << std::endl;
 }
 
-void CSVG_Renderer::Render_Text(drawing::Text& shape)
-{
+void CSVG_Renderer::Render_Text(drawing::Text& shape) {
 	mSvg_Target << "<text x=\"" << shape.Get_Position_X() << "\" y=\"" << shape.Get_Position_Y() << "\""
 				<< " text-anchor=\"" << Anchor_To_String(shape.Get_Anchor()) << "\"";
 
@@ -191,11 +184,11 @@ void CSVG_Renderer::Render_Text(drawing::Text& shape)
 	mSvg_Target << "</text>" << std::endl;
 }
 
-void CSVG_Renderer::Render_Group(drawing::Group& shape)
-{
+void CSVG_Renderer::Render_Group(drawing::Group& shape) {
 	mSvg_Target << "<g";
-	if (shape.Get_Add_Stroke())
+	if (shape.Get_Add_Stroke()) {
 		Render_Default_Params(shape);
+	}
 	mSvg_Target << ">" << std::endl;
 
 	shape.RenderContents(*this);

@@ -38,12 +38,11 @@
 
 #include "hresult.h"
 
+/* creates an instance of reference-counted (IReferenced) object */
 template <class T, class I, typename... Args>
 HRESULT Manufacture_Object(I** manufactured, Args... args) {
-
-	//As SCGMS is supposed to run on embedded devices and real-time systems, there's no exception handling
-	//and we provide the new operator has tor return nullptr instead of throwing.
-
+	// As SCGMS is supposed to run on embedded devices and real-time systems, there's no exception handling
+	// and we provide the new operator has tor return nullptr instead of throwing.
 
 	HRESULT rc = E_UNEXPECTED;
 
@@ -54,8 +53,9 @@ HRESULT Manufacture_Object(I** manufactured, Args... args) {
 
 		rc = S_OK;
 	}
-	else
+	else {
 		rc = E_OUTOFMEMORY;
+	}
 	
 	return rc;
 }

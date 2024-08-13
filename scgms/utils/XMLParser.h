@@ -59,19 +59,21 @@ template<> constexpr wchar_t ChooseCW<wchar_t>(const char c, const wchar_t w) { 
 
 #define CW(C, STR) ChooseCW<C>(STR, L##STR)
 
+/* structure for a single XML element */
 template<typename T, typename S = std::basic_string<T, std::char_traits<T>, std::allocator<T>>>
-struct CXML_Element
-{
+struct CXML_Element {
 	S name;
 	std::map<S, S> parameters;
 	std::map<S, std::vector<CXML_Element<T>>> children;
 
 	S const& Get_Parameter(const S& key) const {
 		const auto& itr = parameters.find(key);
-		if (itr == parameters.end())
+		if (itr == parameters.end()) {
 			throw std::runtime_error("Requested parameter not found");
+		}
 		return itr->second;
 	}
+
 	S const& Get_Parameter(const S& key, const S& defaultValue) {
 		try {
 			return Get_Parameter(key);
@@ -81,6 +83,7 @@ struct CXML_Element
 	}
 };
 
+/* XML document parser class */
 template<typename T, typename S = std::basic_string<T, std::char_traits<T>, std::allocator<T>>,
 	typename IFS = std::basic_ifstream<T, std::char_traits<T>>, typename ISS = std::basic_istringstream<T, std::char_traits<T>, std::allocator<T>>>
 class CXML_Parser
@@ -188,18 +191,22 @@ class CXML_Parser
 	public:
 		CXML_Parser(const filesystem::path& fileName) noexcept : mValid(false) {
 			mFile.open(fileName);
-			if (mFile.is_open()) Parse_Root_Element();
+			if (mFile.is_open()) {
+				Parse_Root_Element();
+			}
 		}
 
-		virtual ~CXML_Parser() {
-		}
+		virtual ~CXML_Parser() = default;
 
+		/* is the loaded document a valid XML? */
 		bool Is_Valid() const {
 			return mValid;
 		}
 
+		/* retrieves an element using path */
 		CXML_Element<T> const& Get_Element(const S& path) const {
-			ISS iss(path); S tag, param;
+			ISS iss(path);
+			S tag, param;
 
 			CXML_Element<T> const* el = &mRootElement;
 			while (std::getline(iss, tag, rsDot)) {
@@ -210,8 +217,9 @@ class CXML_Parser
 				}
 
 				auto itr = el->children.find(tag);
-				if (itr == el->children.end() || itr->second.empty())
+				if (itr == el->children.end() || itr->second.empty()) {
 					throw std::runtime_error("Requested element not found");
+				}
 
 				el = &itr->second[0];
 			}
@@ -219,8 +227,10 @@ class CXML_Parser
 			return *el;
 		}
 
+		/* retrieves a parameter using its path */
 		S const& Get_Parameter(const S& path) const {
-			ISS iss(path); S tag, param;
+			ISS iss(path);
+			S tag, param;
 
 			CXML_Element<T> const* el = &mRootElement;
 			while (std::getline(iss, tag, rsDot)) {
@@ -229,23 +239,28 @@ class CXML_Parser
 					param = tag.substr(scpos + 1);
 					tag = tag.substr(0, scpos);
 				}
+
 				if (!tag.empty()) {
 					auto itr = el->children.find(tag);
-					if (itr == el->children.end() || itr->second.empty())
+					if (itr == el->children.end() || itr->second.empty()) {
 						throw std::runtime_error("Requested element not found");
+					}
 
 					el = &itr->second[0];
 				}
+
 				if (!param.empty()) {
 					auto pitr = el->parameters.find(param);
-					if (pitr == el->parameters.end())
+					if (pitr == el->parameters.end()) {
 						throw std::runtime_error("Requested parameter not found");
+					}
 					return pitr->second;
 				}
 			}
 			throw std::runtime_error("Requested parameter not found");
 		}
 
+		/* retrieves a parameter using its path, falls back to default value if not found */
 		S const& Get_Parameter(const S& path, const S& defaultValue) const {
 			try {
 				return Get_Parameter(path);

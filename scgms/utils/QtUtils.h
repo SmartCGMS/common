@@ -43,10 +43,15 @@
 #include <QtCore/QString>
 #include <QtCore/QUuid>
 
+/* converts Qt QString into a std::wstring */
 std::wstring QStringToStdWString(const QString &str);
+
+/* converts std::wstring into a Qt QString */
 QString StdWStringToQString(const std::wstring &str);
 
+/* comverts GUID to Qt QUuid */
 QUuid GUID_To_QUuid(const GUID& guid);
+/* converts Qt QUuid to GUID */
 GUID QUuid_To_GUID(const QUuid& uuid);
 
 // we may want to define NOGUI macro for non-graphical environments which still needs some of Qt utils
@@ -55,7 +60,10 @@ GUID QUuid_To_GUID(const QUuid& uuid);
 #include <QtSql/QSqlTableModel>
 #include <QtWidgets/QTableView>
 
+/* hides a column in table model by its name */
 int HideDbColByName(const QSqlTableModel &model, QTableView &view, const char* dbcolname);
+
+/* sets up a column in given table model */
 int SetupDbColUI(QSqlTableModel &model, QTableView &view, const char* dbcolname, const char* uicolname, const int width, const int moveto);
 
 #endif

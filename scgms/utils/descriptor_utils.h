@@ -38,17 +38,21 @@
 
 #include "../rtl/hresult.h"
 
+/* helper function to transform given container to a begin+end pair required by get_*_descriptors contract */
 template <typename T, typename A = std::allocator<T>, typename V = std::vector<T, A>>
 HRESULT do_get_descriptors(const V &descriptors, T **begin, T **end) {
 	if (!descriptors.empty()) {
 		*begin = const_cast<T*>(descriptors.data());
 		*end = *begin + descriptors.size();
 	}
-	else
+	else {
 		begin = end = nullptr;
+	}
+
 	return begin != nullptr ? S_OK : S_FALSE;
 }
 
+/* helper function to create descriptor of a non-specialized solver */
 constexpr scgms::TSolver_Descriptor Describe_Non_Specialized_Solver(const GUID id, const wchar_t* desc) {
 	return scgms::TSolver_Descriptor{
 		id,
@@ -59,23 +63,28 @@ constexpr scgms::TSolver_Descriptor Describe_Non_Specialized_Solver(const GUID i
 	};
 }
 
-
+/* helper function to fill the container with first distinct value and the rest of it with a follower value */
 template <typename R, typename T>
 R Set_Value_First_Followers(const T first, const T follower, const size_t param_count) {
 	using Q = typename std::remove_const<R>::type;
 	Q result;
 	result[0] = first;
-	for (size_t i = 1; i < param_count; i++)
+	for (size_t i = 1; i < param_count; i++) {
 		result[i] = follower;
+	}
+
 	return result;
 }
 
+/* specialization of Set_Value_First_Followers to a double precision value; fills the container with first distinct value and the rest of it with a follower value */
 template <typename R>
 R Set_Double_First_Followers(const double first, const double follower, const size_t param_count) {
 	R result = { first };
 	result.vector = Set_Value_First_Followers<decltype(result.vector), double>(first, follower, param_count);
 	return result;
 }
+
+/* fills the vector with first distinct string and the rest of it with prefixed follower value */
 template <typename R>
 R Name_Parameters_First_Followers(const wchar_t* first, const wchar_t* follower_prefix, bool ui, const size_t param_count, std::vector<std::wstring>& name_placeholder) {
 	using Q = typename std::remove_const<R>::type;

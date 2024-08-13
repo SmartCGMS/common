@@ -96,9 +96,12 @@ namespace scgms {
 				const char* rsOptimize_Multiple_Parameters = "optimize_multiple_parameters";
 			}
 
-			// stub for generic not_implemented function
-			HRESULT IfaceCalling dummy_not_impl(void *a, void* b, void* c, void* d, void* e) { return E_NOTIMPL; }
+			/* stub for generic not_implemented function */
+			HRESULT IfaceCalling dummy_not_impl(void *a, void* b, void* c, void* d, void* e) {
+				return E_NOTIMPL;
+			}
 
+			/* lazy loader function */
 			template<typename... Args>
 			HRESULT factory_lazy_load(const char* symbol_name, Args... args)
 			{
@@ -109,58 +112,146 @@ namespace scgms {
 				return reinterpret_cast<HRESULT(*)(Args...)>(resolved)(args...);
 			}
 
-			// lazy loading routines
-			HRESULT IfaceCalling get_filter_desc_lazy(void *begin, void *end) { return factory_lazy_load(rsGet_Filter_Descriptors, begin, end); }
-			HRESULT IfaceCalling get_metric_desc_lazy(void *begin, void *end) { return factory_lazy_load(rsGet_Metric_Descriptors, begin, end); }
-			HRESULT IfaceCalling get_model_desc_lazy(void *begin, void *end) { return factory_lazy_load(rsGet_Model_Descriptors, begin, end); }
-			HRESULT IfaceCalling get_solver_desc_lazy(void *begin, void *end) { return factory_lazy_load(rsGet_Solver_Descriptors, begin, end); }
-			HRESULT IfaceCalling get_approx_desc_lazy(void *begin, void *end) { return factory_lazy_load(rsGet_Approx_Descriptors, begin, end); }
-			HRESULT IfaceCalling get_signal_desc_lazy(void *begin, void *end) { return factory_lazy_load(rsGet_Signal_Descriptors, begin, end); }
+			/* lazy loading routines */
 
-			HRESULT IfaceCalling create_filter_lazy(void* id, void* input, void* output, void* filter) { return factory_lazy_load(rsCreate_Filter, id, input, output, filter); }
-			HRESULT IfaceCalling create_metric_lazy(void *parameters, void *metric) { return factory_lazy_load(rsCreate_Metric, parameters, metric); };
-			HRESULT IfaceCalling create_signal_lazy(void *signal_id, void *segment, void *signal) { return factory_lazy_load(rsCreate_Signal, signal_id, segment, signal); }
-			HRESULT IfaceCalling create_device_event_lazy(scgms::NDevice_Event_Code code, void *event) { return factory_lazy_load(rsCreate_Device_Event, code, event); }
-			HRESULT IfaceCalling create_persistent_filter_chain_configuration_lazy(void *config) { return factory_lazy_load(rsCreate_Persistent_Filter_Chain_Configuration, config); };
-			HRESULT IfaceCalling create_filter_parameter_lazy(scgms::NParameter_Type type, void *config_name, void *parameter) { return factory_lazy_load(rsCreate_Filter_Parameter, type, config_name, parameter); };
-			HRESULT IfaceCalling create_filter_configuration_link_lazy(void *id, void *link) { return factory_lazy_load(rsCreate_Filter_Configuration_Link, id, link); };
-			HRESULT IfaceCalling create_discrete_model_lazy(void *model_id, void *parameters, void *output, void *model) { return factory_lazy_load(rsCreate_Discrete_Model, model_id, parameters, output, model); };
-			HRESULT IfaceCalling create_approximator_lazy(void* approx_id, void *signal, void* configuration, void* approx) { return factory_lazy_load(rsCreate_Approximator, approx_id, signal, configuration, approx); }
+			HRESULT IfaceCalling get_filter_desc_lazy(void *begin, void *end) {
+				return factory_lazy_load(rsGet_Filter_Descriptors, begin, end);
+			}
 
-			HRESULT IfaceCalling solve_generic_lazy(void *solver_id, void *setup, void *progress) { return factory_lazy_load(rsSolve_Generic, solver_id, setup, progress); }
+			HRESULT IfaceCalling get_metric_desc_lazy(void *begin, void *end) {
+				return factory_lazy_load(rsGet_Metric_Descriptors, begin, end);
+			}
 
-			HRESULT IfaceCalling execute_filter_configuration_lazy(void *configuration, void* on_filter_created, void* data, void *custom_output, void *executor, void *error_description) { return factory_lazy_load(rsExecute_Filter_Configuration, configuration, on_filter_created, data, custom_output, executor, error_description); }
-			HRESULT IfaceCalling optimize_parameters_lazy(void *cfg, size_t idx, void *parameters_cfg_name, void* on_filter_created, void* data, void *solver_id, size_t population_size, size_t max_generations, void *progress, void *error_description) { return factory_lazy_load(rsOptimize_Parameters, cfg, idx, parameters_cfg_name, on_filter_created, data, solver_id, population_size, max_generations, progress, error_description); }
-			HRESULT IfaceCalling optimize_multiple_parameters_lazy(void *cfg, size_t *idx, void *parameters_cfg_name, size_t count, void* on_filter_created, void* data, void *solver_id, size_t population_size, size_t max_generations, void *progress, void *error_description) { return factory_lazy_load(rsOptimize_Multiple_Parameters, cfg, idx, parameters_cfg_name, count, on_filter_created, data, solver_id, population_size, max_generations, progress, error_description); }
+			HRESULT IfaceCalling get_model_desc_lazy(void *begin, void *end) {
+				return factory_lazy_load(rsGet_Model_Descriptors, begin, end);
+			}
+
+			HRESULT IfaceCalling get_solver_desc_lazy(void *begin, void *end) {
+				return factory_lazy_load(rsGet_Solver_Descriptors, begin, end);
+			}
+
+			HRESULT IfaceCalling get_approx_desc_lazy(void *begin, void *end) {
+				return factory_lazy_load(rsGet_Approx_Descriptors, begin, end);
+			}
+
+			HRESULT IfaceCalling get_signal_desc_lazy(void *begin, void *end) {
+				return factory_lazy_load(rsGet_Signal_Descriptors, begin, end);
+			}
+
+			HRESULT IfaceCalling create_filter_lazy(void* id, void* input, void* output, void* filter) {
+				return factory_lazy_load(rsCreate_Filter, id, input, output, filter);
+			}
+
+			HRESULT IfaceCalling create_metric_lazy(void *parameters, void *metric) {
+				return factory_lazy_load(rsCreate_Metric, parameters, metric);
+			}
+
+			HRESULT IfaceCalling create_signal_lazy(void *signal_id, void *segment, void *signal) {
+				return factory_lazy_load(rsCreate_Signal, signal_id, segment, signal);
+			}
+
+			HRESULT IfaceCalling create_device_event_lazy(scgms::NDevice_Event_Code code, void *event) {
+				return factory_lazy_load(rsCreate_Device_Event, code, event);
+			}
+
+			HRESULT IfaceCalling create_persistent_filter_chain_configuration_lazy(void *config) {
+				return factory_lazy_load(rsCreate_Persistent_Filter_Chain_Configuration, config);
+			}
+
+			HRESULT IfaceCalling create_filter_parameter_lazy(scgms::NParameter_Type type, void *config_name, void *parameter) {
+				return factory_lazy_load(rsCreate_Filter_Parameter, type, config_name, parameter);
+			}
+
+			HRESULT IfaceCalling create_filter_configuration_link_lazy(void *id, void *link) {
+				return factory_lazy_load(rsCreate_Filter_Configuration_Link, id, link);
+			}
+
+			HRESULT IfaceCalling create_discrete_model_lazy(void *model_id, void *parameters, void *output, void *model) {
+				return factory_lazy_load(rsCreate_Discrete_Model, model_id, parameters, output, model);
+			}
+
+			HRESULT IfaceCalling create_approximator_lazy(void* approx_id, void *signal, void* configuration, void* approx) {
+				return factory_lazy_load(rsCreate_Approximator, approx_id, signal, configuration, approx);
+			}
+
+			HRESULT IfaceCalling solve_generic_lazy(void *solver_id, void *setup, void *progress) {
+				return factory_lazy_load(rsSolve_Generic, solver_id, setup, progress);
+			}
+
+			HRESULT IfaceCalling execute_filter_configuration_lazy(void *configuration, void* on_filter_created, void* data, void *custom_output, void *executor, void *error_description) {
+				return factory_lazy_load(rsExecute_Filter_Configuration, configuration, on_filter_created, data, custom_output, executor, error_description);
+			}
+
+			HRESULT IfaceCalling optimize_parameters_lazy(void *cfg, size_t idx, void *parameters_cfg_name, void* on_filter_created, void* data, void *solver_id, size_t population_size, size_t max_generations, void *progress, void *error_description) {
+				return factory_lazy_load(rsOptimize_Parameters, cfg, idx, parameters_cfg_name, on_filter_created, data, solver_id, population_size, max_generations, progress, error_description);
+			}
+
+			HRESULT IfaceCalling optimize_multiple_parameters_lazy(void *cfg, size_t *idx, void *parameters_cfg_name, size_t count, void* on_filter_created, void* data, void *solver_id, size_t population_size, size_t max_generations, void *progress, void *error_description) {
+				return factory_lazy_load(rsOptimize_Multiple_Parameters, cfg, idx, parameters_cfg_name, count, on_filter_created, data, solver_id, population_size, max_generations, progress, error_description);
+			}
 
 			void* resolve_not_impl_symbol(const char* symbol_name) noexcept {
-				if (strcmp(symbol_name, rsGet_Filter_Descriptors) == 0) return reinterpret_cast<void(*)>(internal::get_filter_desc_lazy);
-				if (strcmp(symbol_name, rsGet_Model_Descriptors) == 0) return reinterpret_cast<void(*)>(internal::get_model_desc_lazy);
-				if (strcmp(symbol_name, rsGet_Metric_Descriptors) == 0) return reinterpret_cast<void(*)>(internal::get_metric_desc_lazy);
-				if (strcmp(symbol_name, rsGet_Solver_Descriptors) == 0) return reinterpret_cast<void(*)>(internal::get_solver_desc_lazy);
-				if (strcmp(symbol_name, rsGet_Approx_Descriptors) == 0) return reinterpret_cast<void(*)>(internal::get_approx_desc_lazy);
-				if (strcmp(symbol_name, rsGet_Signal_Descriptors) == 0) return reinterpret_cast<void(*)>(internal::get_signal_desc_lazy);
-
-				if (strcmp(symbol_name, rsCreate_Filter) == 0) return reinterpret_cast<void(*)>(internal::create_filter_lazy);
-				if (strcmp(symbol_name, rsCreate_Metric) == 0) return reinterpret_cast<void(*)>(internal::create_metric_lazy);
-				if (strcmp(symbol_name, rsCreate_Signal) == 0) return reinterpret_cast<void(*)>(internal::create_signal_lazy);
-				if (strcmp(symbol_name, rsCreate_Device_Event) == 0) return reinterpret_cast<void(*)>(internal::create_device_event_lazy);
-				if (strcmp(symbol_name, rsCreate_Persistent_Filter_Chain_Configuration) == 0) return reinterpret_cast<void(*)>(internal::create_persistent_filter_chain_configuration_lazy);
-				if (strcmp(symbol_name, rsCreate_Filter_Parameter) == 0) return reinterpret_cast<void(*)>(internal::create_filter_parameter_lazy);
-				if (strcmp(symbol_name, rsCreate_Filter_Configuration_Link) == 0) return reinterpret_cast<void(*)>(internal::create_filter_configuration_link_lazy);
-				if (strcmp(symbol_name, rsCreate_Discrete_Model) == 0) return reinterpret_cast<void(*)>(internal::create_discrete_model_lazy);
-				if (strcmp(symbol_name, rsCreate_Approximator) == 0) return reinterpret_cast<void(*)>(internal::create_approximator_lazy);
-
-				if (strcmp(symbol_name, rsSolve_Generic) == 0) return reinterpret_cast<void(*)>(internal::solve_generic_lazy);
-				if (strcmp(symbol_name, rsExecute_Filter_Configuration) == 0) return reinterpret_cast<void(*)>(internal::execute_filter_configuration_lazy);
-				if (strcmp(symbol_name, rsOptimize_Parameters) == 0) return reinterpret_cast<void(*)>(internal::optimize_parameters_lazy);
-				if (strcmp(symbol_name, rsOptimize_Multiple_Parameters) == 0) return reinterpret_cast<void(*)>(internal::optimize_multiple_parameters_lazy);
+				if (strcmp(symbol_name, rsGet_Filter_Descriptors) == 0) {
+					return reinterpret_cast<void(*)>(internal::get_filter_desc_lazy);
+				}
+				if (strcmp(symbol_name, rsGet_Model_Descriptors) == 0) {
+					return reinterpret_cast<void(*)>(internal::get_model_desc_lazy);
+				}
+				if (strcmp(symbol_name, rsGet_Metric_Descriptors) == 0) {
+					return reinterpret_cast<void(*)>(internal::get_metric_desc_lazy);
+				}
+				if (strcmp(symbol_name, rsGet_Solver_Descriptors) == 0) {
+					return reinterpret_cast<void(*)>(internal::get_solver_desc_lazy);
+				}
+				if (strcmp(symbol_name, rsGet_Approx_Descriptors) == 0) {
+					return reinterpret_cast<void(*)>(internal::get_approx_desc_lazy);
+				}
+				if (strcmp(symbol_name, rsGet_Signal_Descriptors) == 0) {
+					return reinterpret_cast<void(*)>(internal::get_signal_desc_lazy);
+				}
+				if (strcmp(symbol_name, rsCreate_Filter) == 0) {
+					return reinterpret_cast<void(*)>(internal::create_filter_lazy);
+				}
+				if (strcmp(symbol_name, rsCreate_Metric) == 0) {
+					return reinterpret_cast<void(*)>(internal::create_metric_lazy);
+				}
+				if (strcmp(symbol_name, rsCreate_Signal) == 0) {
+					return reinterpret_cast<void(*)>(internal::create_signal_lazy);
+				}
+				if (strcmp(symbol_name, rsCreate_Device_Event) == 0) {
+					return reinterpret_cast<void(*)>(internal::create_device_event_lazy);
+				}
+				if (strcmp(symbol_name, rsCreate_Persistent_Filter_Chain_Configuration) == 0) {
+					return reinterpret_cast<void(*)>(internal::create_persistent_filter_chain_configuration_lazy);
+				}
+				if (strcmp(symbol_name, rsCreate_Filter_Parameter) == 0) {
+					return reinterpret_cast<void(*)>(internal::create_filter_parameter_lazy);
+				}
+				if (strcmp(symbol_name, rsCreate_Filter_Configuration_Link) == 0) {
+					return reinterpret_cast<void(*)>(internal::create_filter_configuration_link_lazy);
+				}
+				if (strcmp(symbol_name, rsCreate_Discrete_Model) == 0) {
+					return reinterpret_cast<void(*)>(internal::create_discrete_model_lazy);
+				}
+				if (strcmp(symbol_name, rsCreate_Approximator) == 0) {
+					return reinterpret_cast<void(*)>(internal::create_approximator_lazy);
+				}
+				if (strcmp(symbol_name, rsSolve_Generic) == 0) {
+					return reinterpret_cast<void(*)>(internal::solve_generic_lazy);
+				}
+				if (strcmp(symbol_name, rsExecute_Filter_Configuration) == 0) {
+					return reinterpret_cast<void(*)>(internal::execute_filter_configuration_lazy);
+				}
+				if (strcmp(symbol_name, rsOptimize_Parameters) == 0) {
+					return reinterpret_cast<void(*)>(internal::optimize_parameters_lazy);
+				}
+				if (strcmp(symbol_name, rsOptimize_Multiple_Parameters) == 0) {
+					return reinterpret_cast<void(*)>(internal::optimize_multiple_parameters_lazy);
+				}
 
 				return reinterpret_cast<void(*)>(internal::dummy_not_impl);
 			}
-
 		}
-
 	}
 
 	void set_base_path(const std::wstring& base) {

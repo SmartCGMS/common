@@ -43,45 +43,48 @@
 
 #include "net_utils.h"
 
-bool Set_Socket_Blocking_State(SOCKET skt, bool state)
-{
+bool Set_Socket_Blocking_State(SOCKET skt, bool state) {
 #ifdef WIN32
 	u_long mode = state ? 1 : 0;
 	auto result = ioctlsocket(skt, FIONBIO, &mode);
-	if (result != NO_ERROR)
+	if (result != NO_ERROR) {
 		return false;
+	}
 #else
 	int arg;
 
-	if ((arg = fcntl(skt, F_GETFL, NULL)) < 0)
+	if ((arg = fcntl(skt, F_GETFL, NULL)) < 0) {
 		return false;
+	}
 
-	if (state)
+	if (state) {
 		arg |= O_NONBLOCK;
-	else
+	}
+	else {
 		arg &= (~O_NONBLOCK);
+	}
 
-	if (fcntl(skt, F_SETFL, arg) < 0)
+	if (fcntl(skt, F_SETFL, arg) < 0) {
 		return false;
+	}
 #endif
 
 	return true;
 }
 
-bool Init_Network()
-{
+bool Init_Network() {
 #ifdef _WIN32
 	// startup WSA on Windows
 	WORD version = MAKEWORD(2, 2);
 	WSADATA data;
-	if (WSAStartup(version, &data) != 0)
+	if (WSAStartup(version, &data) != 0) {
 		return false;
+	}
 #endif
 	return true;
 }
 
-bool Deinit_Network()
-{
+bool Deinit_Network() {
 #ifdef _WIN32
 	// https://docs.microsoft.com/en-us/windows/win32/api/winsock/nf-winsock-wsastartup
 	// "An application must call the WSACleanup function for every successful time the WSAStartup function is called.

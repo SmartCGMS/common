@@ -39,42 +39,41 @@
 #include "DeviceIface.h"
 #include "DbIface.h"
 
- //TODO: create rtl/opencllib.h with at least a function to rename OpenCL function to avoid name conflicts
+//TODO: create rtl/opencllib.h with at least a function to rename OpenCL function to avoid name conflicts
 
 namespace opencl {		//note that opencl does not clash with the official cl namespace
 
 	enum class NFunction_Id : uint16_t {
-		Metric_Calculate_Accumulated = 0,		//equivalent to calling scgms::IMetric->Reset, Accumulate and Calculate
-												//parameters[0].integer gives the number of elements in calculated and expected arrays respectively
-												//parameters[1].integer gives the number of required levels
-												//returns a function source with the following signature
-												//double Metric_Calculate_Accumulated(double *calculated, double *expected) {}
+		/* equivalent to calling scgms::IMetric->Reset, Accumulate and Calculate
+		 * parameters[0].integer gives the number of elements in calculated and expected arrays respectively
+		 * parameters[1].integer gives the number of required levels
+		 * returns a function source with the following signature
+		 * double Metric_Calculate_Accumulated(double *calculated, double *expected) {} */
+		Metric_Calculate_Accumulated = 0,
 
-		Get_Continuous_Levels,					//equivalent to ISignal::Get_Continuous_Levels
-												//parameters[0].integer gives the number of parameters
-												//parameters[1].integer gives the number of elements in the times and calculated arrays respectively
-												//parameters[2].integer gives the desired degree of derivative
-												//returns a function source with the following signature
-												//void Get_Continous_Levels(double *parameters, double *times, double *calculated) {}
+		/* equivalent to ISignal::Get_Continuous_Levels
+		 * parameters[0].integer gives the number of parameters
+		 * parameters[1].integer gives the number of elements in the times and calculated arrays respectively
+		 * parameters[2].integer gives the desired degree of derivative
+		 * returns a function source with the following signature
+		 * void Get_Continous_Levels(double *parameters, double *times, double *calculated) {} */
+		Get_Continuous_Levels,
 	}
-		
 
 	constexpr GUID IID_IFunction = { 0xde4d9967, 0x8b, 0x445d, { 0xb4, 0xe7, 0x3b, 0xb6, 0xf5, 0x80, 0x6e, 0x1 } };
 	class IFunction : public virtual refcnt::IReferenced {
-		/*
-			For a given kernel_id, it returns specific function source so that it can be compiled with OpenCL 2.0 or later.
-			The motivation is to compensate for the lack of OOP on GPU-like programming model.
-
-			Segment is provided to resolve e.g., dependencies on other signals such Diffusion model depends on BG and IG.
-			In addition, the OpenCL code can assume that it does not work on live data and hence segment can be used to cache
-			those values, which will not change - e.g., results of ITimeSegments::Get_Discrete_Bounds.
-
-			constant_memory may be already prefilled with some values, so the callee is supposed to add its constant
-			data as needed - for example, measured signal will copy its data there. However, constants should be embeded
-			into the function's source code to increase performance.
-		*/
-		HRESULT IfaceCalling Generate_Source(const NFunction_Id function_id, 
-									 	     scgms::ITime_Segment *segment, const db::TParameter *parameters, const size_t parameter_count, 
+		/* For a given kernel_id, it returns specific function source so that it can be compiled with OpenCL 2.0 or later.
+		 * The motivation is to compensate for the lack of OOP on GPU-like programming model.
+		 *
+		 * Segment is provided to resolve e.g., dependencies on other signals such Diffusion model depends on BG and IG.
+		 * In addition, the OpenCL code can assume that it does not work on live data and hence segment can be used to cache
+		 * those values, which will not change - e.g., results of ITimeSegments::Get_Discrete_Bounds.
+		 *
+		 * constant_memory may be already prefilled with some values, so the callee is supposed to add its constant
+		 * data as needed - for example, measured signal will copy its data there. However, constants should be embeded
+		 * into the function's source code to increase performance. */
+		virtual HRESULT IfaceCalling Generate_Source(const NFunction_Id function_id,
+									 	     scgms::ITime_Segment *segment, const db::TParameter *parameters, const size_t parameter_count,
 											 refcnt::str_container *function_source,
 											 refcnt::byte_container *constant_memory) = 0;
 	};

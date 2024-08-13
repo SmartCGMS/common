@@ -45,34 +45,34 @@ namespace imported {
 	}
 }
 
+namespace {
+	scgms::SApproximator Create_Approximator_Raw_ID(const GUID* id, scgms::ISignal* signal) {
+
+		scgms::SApproximator result;
+		scgms::IApproximator* approximator;
+
+		if (imported::create_approximator_external(id, signal, &approximator) == S_OK) {
+			result = refcnt::make_shared_reference_ext<scgms::SApproximator, scgms::IApproximator>(approximator, false);
+		}
+
+		return result;
+	}
+}
+
 std::vector<scgms::TApprox_Descriptor> scgms::get_approx_descriptor_list() {
 	std::vector<scgms::TApprox_Descriptor> result;
-	scgms::TApprox_Descriptor *desc_begin, *desc_end;
+	scgms::TApprox_Descriptor* desc_begin, *desc_end;
 
-	if (imported::get_approx_descriptors_external(&desc_begin, &desc_end) == S_OK)
+	if (imported::get_approx_descriptors_external(&desc_begin, &desc_end) == S_OK) {
 		std::copy(desc_begin, desc_end, std::back_inserter(result));
+	}
 
 	return result;
 }
-
-
-scgms::SApproximator Create_Approximator_Raw_ID(const GUID* id, scgms::ISignal* signal) {
-
-	scgms::SApproximator result;
-	scgms::IApproximator* approximator;
-
-	if (imported::create_approximator_external(id, signal, &approximator) == S_OK)
-		result = refcnt::make_shared_reference_ext<scgms::SApproximator, scgms::IApproximator>(approximator, false);
-
-	return result;
-}
-
-
 
 scgms::SApproximator scgms::Create_Approximator(const GUID &id, scgms::SSignal signal) {
 	return Create_Approximator_Raw_ID(&id, signal.get());
 }
-
 
 scgms::SApproximator scgms::Create_Approximator(const GUID &id, scgms::ISignal* signal) {
 	return Create_Approximator_Raw_ID(&id, signal);	

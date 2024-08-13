@@ -56,8 +56,8 @@ namespace scgms {
 		}
 	}
 
-	std::vector<TModel_Descriptor> get_model_descriptor_list()
-	{
+	std::vector<TModel_Descriptor> get_model_descriptor_list() {
+
 		std::vector<TModel_Descriptor> result;
 		TModel_Descriptor *desc_begin, *desc_end;
 
@@ -68,8 +68,8 @@ namespace scgms {
 		return result;
 	}
 
-	std::vector<TMetric_Descriptor> get_metric_descriptor_list()
-	{
+	std::vector<TMetric_Descriptor> get_metric_descriptor_list() {
+
 		std::vector<TMetric_Descriptor> result;
 		TMetric_Descriptor *desc_begin, *desc_end;
 
@@ -80,8 +80,8 @@ namespace scgms {
 		return result;
 	}
 
-	std::vector<TSolver_Descriptor> get_solver_descriptor_list()
-	{
+	std::vector<TSolver_Descriptor> get_solver_descriptor_list() {
+
 		std::vector<TSolver_Descriptor> result;
 		TSolver_Descriptor *desc_begin, *desc_end;
 
@@ -94,18 +94,19 @@ namespace scgms {
 
 	template <typename TGet_Descriptors, typename TDescriptor>
 	bool get_descriptor_by_id(const GUID& id, TDescriptor& desc, TGet_Descriptors get_descriptors) {
-		TDescriptor* desc_begin, * desc_end;
+		TDescriptor* desc_begin, *desc_end;
 
-		bool result = get_descriptors(&desc_begin, &desc_end) == S_OK;
+		bool result = (get_descriptors(&desc_begin, &desc_end) == S_OK);
 		if (result) {
 			result = false;	//we have to find the filter yet
-			for (auto iter = desc_begin; iter != desc_end; iter++)
+			for (auto iter = desc_begin; iter != desc_end; iter++) {
 				if (iter->id == id) {
 					//desc = *iter;							assign const won't work with const members and custom operator= will result into undefined behavior as it has const members (so it does not have to be const itself)
 					memcpy(&desc, iter, sizeof(decltype(desc)));	//=> memcpy https://stackoverflow.com/questions/9218454/struct-with-const-member
 					result = true;
 					break;
 				}
+			}
 		}
 
 		return result;
@@ -115,17 +116,14 @@ namespace scgms {
 		return get_descriptor_by_id<TGet_Model_Descriptors, TModel_Descriptor>(id, desc, imported::get_model_descriptors_external);
 	}
 
-
 	bool get_model_descriptor_by_signal_id(const GUID &signal_id, TModel_Descriptor &desc) {
 		TModel_Descriptor *desc_begin, *desc_end;
 
 		bool result = imported::get_model_descriptors_external(&desc_begin, &desc_end) == S_OK;
 		if (result) {
 			result = false;	//we have to find the filter yet
-			for (auto iter = desc_begin; iter != desc_end; iter++)
-			{
-				for (size_t i = 0; i < iter->number_of_calculated_signals; i++)
-				{
+			for (auto iter = desc_begin; iter != desc_end; iter++) {
+				for (size_t i = 0; i < iter->number_of_calculated_signals; i++) {
 					if (iter->calculated_signal_ids[i] == signal_id) {
 						//desc = *iter;							assign const won't work with const members and custom operator= will result into undefined behavior as it has const members (so it does not have to be const itself)
 						memcpy(&desc, iter, sizeof(decltype(desc)));	//=> memcpy https://stackoverflow.com/questions/9218454/struct-with-const-member
@@ -176,7 +174,9 @@ namespace scgms {
 
 		TSignal_Descriptor *desc_begin, *desc_end;
 		if (imported::get_signal_descriptors_external(&desc_begin, &desc_end) == S_OK) {
-			std::transform(desc_begin, desc_end, std::inserter(mSignal_Descriptors, mSignal_Descriptors.end()), [](const TSignal_Descriptor& desc) {return std::make_pair(desc.id, desc); });
+			std::transform(desc_begin, desc_end, std::inserter(mSignal_Descriptors, mSignal_Descriptors.end()), [](const TSignal_Descriptor& desc) {
+				return std::make_pair(desc.id, desc);
+			});
 		}
 
 		// parse reference signal IDs - this is needed for the default settings in GUI
@@ -204,13 +204,13 @@ namespace scgms {
 									1.0
 			};
 
-			std::transform(&desc, (&desc) + 1, std::inserter(mSignal_Descriptors, mSignal_Descriptors.end()), [](const TSignal_Descriptor& desc) {return std::make_pair(desc.id, desc); });
+			std::transform(&desc, (&desc) + 1, std::inserter(mSignal_Descriptors, mSignal_Descriptors.end()), [](const TSignal_Descriptor& desc) {
+				return std::make_pair(desc.id, desc);
+			});
 			mVirtual_Signal_Names.push_back(std::move(desc_str));	//move to retain valid pointer
 		}
 
-
-		auto describe_special_signal = [this](const GUID id, const wchar_t* desc_str)
-		{
+		auto describe_special_signal = [this](const GUID id, const wchar_t* desc_str) {
 			TSignal_Descriptor desc{
 				id,
 				desc_str,
@@ -224,19 +224,24 @@ namespace scgms {
 				1.0
 			};
 
-			std::transform(&desc, (&desc) + 1, std::inserter(mSignal_Descriptors, mSignal_Descriptors.end()), [](const TSignal_Descriptor& desc) {return std::make_pair(desc.id, desc); });
+			std::transform(&desc, (&desc) + 1, std::inserter(mSignal_Descriptors, mSignal_Descriptors.end()), [](const TSignal_Descriptor& desc) {
+				return std::make_pair(desc.id, desc);
+			});
 		};
 		
 		describe_special_signal(scgms::signal_All, dsSignal_GUI_Name_All);
 		describe_special_signal(scgms::signal_Null, dsSignal_Null);
 		describe_special_signal(Invalid_GUID, dsInvalid_ID);
-	
 	}
 
 	std::wstring CSignal_Description::Get_Name(const GUID &signal_id) const {
 		const auto result = mSignal_Descriptors.find(signal_id);
-		if (result != mSignal_Descriptors.end()) return result->second.signal_description;
-			else return GUID_To_WString(signal_id);
+		if (result != mSignal_Descriptors.end()) {
+			return result->second.signal_description;
+		}
+		else {
+			return GUID_To_WString(signal_id);
+		}
 	}
 
 	bool CSignal_Description::Get_Descriptor(const GUID& signal_id, TSignal_Descriptor& desc) const {
@@ -244,8 +249,10 @@ namespace scgms {
 		if (result != mSignal_Descriptors.end()) {
 			memcpy(&desc, &(result->second), sizeof(decltype(desc)));
 			return true;
-		} else 
+		}
+		else {
 			return false;
+		}
 	}
 
 	bool CSignal_Description::Get_Reference_Signal_Id(const GUID& signal_id, GUID& reference_id) const {
@@ -253,8 +260,10 @@ namespace scgms {
 		if (result != mSignal_Reference_Signal_Ids.end()) {
 			reference_id = result->second;
 			return true;
-		} else
+		}
+		else {
 			return false;
+		}
 	}
 
 	void CSignal_Description::for_each(std::function<void(scgms::TSignal_Descriptor)> callback) const {
@@ -263,22 +272,22 @@ namespace scgms {
 		}
 	}
 
-
-
 	size_t Segment_Count(const size_t parameters_count, const TModel_Descriptor& desc) {
-		if (parameters_count == 0)
+		if (parameters_count == 0) {
 			return 0;
+		}
 
-		if (desc.number_of_segment_specific_parameters == 0)
+		if (desc.number_of_segment_specific_parameters == 0) {
 			return parameters_count == desc.total_number_of_parameters ? 1 : 0;
+		}
 
 		const size_t segment_agnostic_parameters = desc.total_number_of_parameters - desc.number_of_segment_specific_parameters;
 		const size_t total_specific_count = parameters_count - segment_agnostic_parameters;
-		const size_t reminder = total_specific_count % desc.number_of_segment_specific_parameters;
-		if (reminder != 0)
-			return 0;		//check failed, the reminder must be positive
+		const size_t remainder = total_specific_count % desc.number_of_segment_specific_parameters;
+		if (remainder != 0) {
+			return 0; //check failed, the remainder must be positive
+		}
 
 		return total_specific_count / desc.number_of_segment_specific_parameters;
 	}
-
 }

@@ -38,18 +38,19 @@
 
 #include <random>
 
-GUID Generate_GUIDv4()
-{
-    GUID guid;
+GUID Generate_GUIDv4() {
 
-    static std::random_device rdev;
+	GUID guid;
 
-    guid.Data1 = static_cast<decltype(guid.Data1)>(rdev());
-    guid.Data2 = static_cast<decltype(guid.Data2)>(rdev());
-    guid.Data3 = static_cast<decltype(guid.Data3)>(rdev());
+	static std::random_device rdev;
 
-    for (size_t i = 0; i < 8; i++)
-        guid.Data4[i] = static_cast<std::remove_reference_t<decltype(guid.Data4[0])>>(rdev());
+	guid.Data1 = static_cast<decltype(guid.Data1)>(rdev());
+	guid.Data2 = static_cast<decltype(guid.Data2)>(rdev());
+	guid.Data3 = static_cast<decltype(guid.Data3)>(rdev());
 
-    return guid;
+	for (size_t i = 0; i < 8; i++) {
+		guid.Data4[i] = static_cast<std::remove_reference_t<decltype(guid.Data4[0])>>(rdev());
+	}
+
+	return guid;
 }

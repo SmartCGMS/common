@@ -48,8 +48,7 @@
 
 #undef max
 
-int Get_UTC_Offset()
-{
+int Get_UTC_Offset() {
 	time_t gmt, rawtime = time(nullptr);
 	struct tm ptm {}; //zero initalize all possibly non-set elements like daylight saving
 
@@ -61,14 +60,12 @@ int Get_UTC_Offset()
 	return static_cast<int>(difftime(rawtime, gmt));
 }
 
-double Unix_Time_To_Rat_Time(const time_t qdt)
-{
+double Unix_Time_To_Rat_Time(const time_t qdt) {
 	int64_t diff = static_cast<int64_t>(qdt)*1000 + diffFrom1970To1900;
 	return static_cast<double>(diff) * InvMSecsPerDay;
 }
 
-time_t Rat_Time_To_Unix_Time(const double rt)
-{
+time_t Rat_Time_To_Unix_Time(const double rt) {
 	const double diff = rt * MSecsPerDay;
 	const double ceiled_msecs = std::ceil(diff);
 	const int64_t casted_msecs = static_cast<int64_t>(ceiled_msecs);
@@ -78,17 +75,19 @@ time_t Rat_Time_To_Unix_Time(const double rt)
 	return result;
 }
 
-
 void convert_dbl(const double rt, std::string& str) {
 	str = dbl_2_str(rt);
 }
+
 void convert_dbl(const double rt, std::wstring& str) {
 	str = dbl_2_wstr(rt);
 }
 
 template <typename C, typename S = std::basic_string<C>>
 S core_Rat_Time_To_Local_Time_Str(const double rt, const C *fmt, const double second_fraction_granularity) {
-	if (rt == 0.0) return S{};
+	if (rt == 0.0) {
+		return S{};
+	}
 
 	time_t ltim = Rat_Time_To_Unix_Time(rt);
 
@@ -110,7 +109,6 @@ S core_Rat_Time_To_Local_Time_Str(const double rt, const C *fmt, const double se
 		convert_dbl(rounded_fraction, str);
 		str.erase(0, 1);
 		os << str;
-
 	}
 
 
@@ -132,8 +130,9 @@ double core_Local_Time_Str_To_Rat_Time(const S& str, const C* fmt) noexcept {
 	bool could_be_raw_double = Has_Hexa_Prefix(str);	//we need to check for 0x prefix as the mask could indicate e.g.; hours only
 	const double possible_raw_double = could_be_raw_double ? str_2_dbl(str, could_be_raw_double) : std::numeric_limits<double>::quiet_NaN();
 	could_be_raw_double &= !std::isnan(possible_raw_double);
-	if (could_be_raw_double)
+	if (could_be_raw_double) {
 		return possible_raw_double;
+	}
 
 	//note that we support a non-standard extension, which considers any trailing .zzz as a second fraction
 
@@ -161,15 +160,16 @@ double core_Local_Time_Str_To_Rat_Time(const S& str, const C* fmt) noexcept {
 		//hence, we need to let the system to decide
 		time_t ltim = mktime(&ptm);
 
-
 		bool fraction_ok = false;
 
 		double fraction = 0.0;
-		if (has_fraction)
+		if (has_fraction) {
 			fraction = str_2_dbl(fraction_part.c_str(), fraction_ok);
+		}
 
-		if (ltim != -1) 
+		if (ltim != -1) {
 			result = Unix_Time_To_Rat_Time(ltim);
+		}
 		else {
 			//mktime returns -1 on zero ptm, which is, however, possible if measure something sub-second like e.g.; heartbeat ibi
 			//=>proceed with just the time of the day
@@ -178,8 +178,9 @@ double core_Local_Time_Str_To_Rat_Time(const S& str, const C* fmt) noexcept {
 					 static_cast<double>(ptm.tm_sec) * scgms::One_Second;
 		}
 
-		if (has_fraction && fraction_ok)
+		if (has_fraction && fraction_ok) {
 			result += scgms::One_Second * fraction;
+		}
 	}
 
 	return result;
@@ -194,8 +195,9 @@ double Local_Time_Str_To_Rat_Time(const std::string& str, const char* fmt) noexc
 }
 
 std::wstring Rat_Time_To_Default_WStr(double rattime) {
-	if (std::isnan(rattime))
+	if (std::isnan(rattime)) {
 		return L"NaN";
+	}
 
 	auto calc_fraction = [&](const double factor) {
 		double intpart;
@@ -210,12 +212,12 @@ std::wstring Rat_Time_To_Default_WStr(double rattime) {
 		}
 		else {
 			std::wstring result = std::to_wstring(static_cast<int>(intpart));
-			while (result.size() < 2)
+			while (result.size() < 2) {
 				result = L'0' + result;
+			}
 			return result;
 		}
 	};
-
 
 	//handle the sign
 	std::wstring result{ rattime < 0.0 ? L"-" : L"" };
@@ -255,25 +257,49 @@ std::wstring Rat_Time_To_Default_WStr(double rattime) {
 	return result;
 }
 
-
 bool is_digit(const char ch) {
 	switch (ch) {
-		case '0': case '1': case '2': case '3': case '4':
-		case '5': case '6': case '7': case '8': case '9': return true;
-		default: return false;
+		case '0':
+		case '1':
+		case '2':
+		case '3':
+		case '4':
+		case '5':
+		case '6':
+		case '7':
+		case '8':
+		case '9':
+			return true;
+		default:
+			return false;
 	}
 }
 
 bool is_digit(const wchar_t ch) {
 	switch (ch) {
-		case L'0': case L'1': case L'2': case L'3': case L'4':
-		case L'5': case L'6': case L'7': case L'8': case L'9': return true;
-		default: return false;
+		case L'0':
+		case L'1':
+		case L'2':
+		case L'3':
+		case L'4':
+		case L'5':
+		case L'6':
+		case L'7':
+		case L'8':
+		case L'9':
+			return true;
+		default:
+			return false;
 	}
 }
 
-size_t str_len(const char* str) { return strlen(str); }
-size_t str_len(const wchar_t* str) { return wcslen(str); }
+size_t str_len(const char* str) {
+	return strlen(str);
+}
+
+size_t str_len(const wchar_t* str) {
+	return wcslen(str);
+}
 
 template <typename T>
 struct TTime_Chars {
@@ -300,24 +326,28 @@ double Convert_Str_To_Rat_Time(const C* input, bool& converted_ok) {
 	double plus_minus_sign = 1.0;
 	int plus_minus_pos = 0;	//must be signed int!
 	
-	if (!input || (*input == 0))  return std::numeric_limits<double>::quiet_NaN();	
-		
+	if (!input || (*input == 0)) {
+		return std::numeric_limits<double>::quiet_NaN();
+	}
+
 	if (input[0] == TTime_Chars<C>::minus) {
 		plus_minus_sign = -1.0;
 		plus_minus_pos = 1;
 	}
 
-
 	int pos, last_pos = static_cast<int>(str_len(input));
-	
 
 	auto fetch_number = [&](const C sep, const C decimal, double& result, const double result_max) {
 		pos = last_pos - 1;
 
 		while (pos >= plus_minus_pos) {
 			const C ch = input[pos];
-			if (ch == sep) break;
-			if (!is_digit(ch) && (ch != decimal)) return false;
+			if (ch == sep) {
+				break;
+			}
+			if (!is_digit(ch) && (ch != decimal)) {
+				return false;
+			}
 
 			pos--;
 		}
@@ -327,33 +357,40 @@ double Convert_Str_To_Rat_Time(const C* input, bool& converted_ok) {
 		bool ok;
 		result = str_2_dbl(substring.c_str(), ok);
 
-		if ((!ok) || (result >= result_max)) return false;
+		if ((!ok) || (result >= result_max)) {
+			return false;
+		}
 
 		last_pos = pos - 1;
 		return true;
 	};
 
-
 	//search for seconds, minutes, hours and days
 
-	if (!fetch_number(TTime_Chars<C>::colon, TTime_Chars<C>::dot, seconds, 60.0)) return false;
+	if (!fetch_number(TTime_Chars<C>::colon, TTime_Chars<C>::dot, seconds, 60.0)) {
+		return false;
+	}
 
 	if (last_pos > plus_minus_pos) {
-		if (!fetch_number(TTime_Chars<C>::colon, 0, minutes, 60.0)) return false;
+		if (!fetch_number(TTime_Chars<C>::colon, 0, minutes, 60.0)) {
+			return false;
+		}
 
 		if (last_pos > plus_minus_pos) {
-			if (!fetch_number(TTime_Chars<C>::space, 0, hours, 24.0)) return false;
+			if (!fetch_number(TTime_Chars<C>::space, 0, hours, 24.0)) {
+				return false;
+			}
 
-			if (last_pos > plus_minus_pos)
-				if (!fetch_number(TTime_Chars<C>::minus, 0, days, std::numeric_limits<double>::max()))
+			if (last_pos > plus_minus_pos) {
+				if (!fetch_number(TTime_Chars<C>::minus, 0, days, std::numeric_limits<double>::max())) {
 					return std::numeric_limits<double>::quiet_NaN();
+				}
+			}
 		}
 	}
 
 	converted_ok = true;
 	return plus_minus_sign * (days + scgms::One_Hour * hours + scgms::One_Minute * minutes + scgms::One_Second * seconds);
-
-	return true;
 }
 
 double Default_Str_To_Rat_Time(const std::wstring& input, bool& converted_ok) {

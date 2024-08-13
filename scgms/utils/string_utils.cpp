@@ -317,7 +317,7 @@ namespace {
 
 		if ((wstr == nullptr) || (*wstr == 0)) {
 			ok = false;
-			return std::numeric_limits<double>::quiet_NaN();    // std lib seems to happily return zero on empty string
+			return std::numeric_limits<double>::quiet_NaN(); // std lib seems to happily return zero on empty string
 		}
 
 		C* end_char = nullptr;
@@ -461,7 +461,7 @@ namespace {
 			}
 		}
 		else {
-			//let us store the double simply as a memory dump of 8 bytes
+			// let us store the double simply as a memory dump of 8 bytes
 			const uint8_t* converted = reinterpret_cast<const uint8_t*>(&val);
 			result = TNumeric_Chars<C>::small_hexa_digits[0];
 			result += TNumeric_Chars<C>::small_x;
@@ -507,7 +507,8 @@ namespace {
 						case up:
 							base = 16;
 							break;
-						default: break;
+						default:
+							break;
 					}
 					break;
 

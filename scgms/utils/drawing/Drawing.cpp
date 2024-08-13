@@ -40,40 +40,32 @@
 namespace drawing
 {
 	Drawing::Drawing()
-		: mRoot()
-	{
+		: mRoot() {
 		//
 	}
 
-	void Drawing::Render(IRenderer& target)
-	{
+	void Drawing::Render(IRenderer& target) {
 		target.Begin_Render();
-
 		mRoot.RenderTo(target);
-
 		target.Finalize_Render();
 	}
 
-	Group& Drawing::Root()
-	{
+	Group& Drawing::Root() {
 		return mRoot;
 	}
 
-	void Group::RenderContents(IRenderer& renderer)
-	{
-		for (auto& shapePtr : mObjects)
+	void Group::RenderContents(IRenderer& renderer) {
+		for (auto& shapePtr : mObjects) {
 			shapePtr->RenderTo(renderer);
+		}
 	}
 
-	void Group::Apply_Defaults(Element& target)
-	{
-		try
-		{
+	void Group::Apply_Defaults(Element& target) {
+		try {
 			drawing::Element& shapeTarget = dynamic_cast<drawing::Element&>(target);
 			mDefault_Shape.CloneTo(shapeTarget);
 		}
-		catch (...)
-		{
+		catch (...) {
 			// attempting to set default to an object, which is unexpected (not derived from vector shape)
 		}
 	}

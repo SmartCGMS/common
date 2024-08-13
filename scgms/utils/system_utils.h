@@ -38,15 +38,17 @@
 
 #include <string>
 
+/* RAII structure to set/unset runtime priority at the system level */
 class CPriority_Guard {
-public:
-	CPriority_Guard();	
-	~CPriority_Guard();
+	public:
+		CPriority_Guard();
+		~CPriority_Guard();
 };
 
-
+/* structure containing CPU-related information */
 struct TCPU_Strings {
 	std::string name, simd_extensions, special_instructions;
 };
 
+/* retrieves info about host CPU */
 TCPU_Strings Get_CPU_Strings();

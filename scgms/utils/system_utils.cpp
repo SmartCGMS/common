@@ -38,7 +38,7 @@
 
 
 #ifdef _WIN32
-	#include <Windows.h>	
+	#include <Windows.h>
 #endif
 
 #ifdef _M_X64
@@ -50,15 +50,17 @@
 
 CPriority_Guard::CPriority_Guard() {
 #ifdef _WIN32
-	if (SetPriorityClass(GetCurrentProcess(), BELOW_NORMAL_PRIORITY_CLASS))
+	if (SetPriorityClass(GetCurrentProcess(), BELOW_NORMAL_PRIORITY_CLASS)) {
 		std::wcout << L"Process priority lowered to BELOW_NORMAL." << std::endl;
+	}
 #endif
 }
 	
 CPriority_Guard::~CPriority_Guard() {
-#ifdef _WIN32		
-	if (SetPriorityClass(GetCurrentProcess(), NORMAL_PRIORITY_CLASS))
+#ifdef _WIN32
+	if (SetPriorityClass(GetCurrentProcess(), NORMAL_PRIORITY_CLASS)) {
 		std::wcout << L"Process priority restored to NORMAL." << std::endl;
+	}
 #endif
 }
 
@@ -67,8 +69,9 @@ TCPU_Strings  Get_CPU_Strings() {
 
 	[[maybe_unused]] auto append_extension = [](std::string& target, const std::string& desc, const auto set) {
 		if (set != 0) {
-			if (!target.empty())
+			if (!target.empty()) {
 				target += " ";
+			}
 			target += desc;
 		}
 	};
@@ -83,15 +86,17 @@ TCPU_Strings  Get_CPU_Strings() {
 
 	__cpuid(cpui.data(), 0x80000000);
 	nExIds = cpui[0];
-	for (i = 0x80000000; i <= nExIds; ++i)
-	{
+	for (i = 0x80000000; i <= nExIds; ++i) {
 		__cpuid(cpui.data(), i);
-		if (i == 0x80000002)
+		if (i == 0x80000002) {
 			memcpy(cpu_brand_string, cpui.data(), sizeof(int) * cpui.size());
-		else if (i == 0x80000003)
+		}
+		else if (i == 0x80000003) {
 			memcpy(cpu_brand_string + 16, cpui.data(), sizeof(int) * cpui.size());
-		else if (i == 0x80000004)
+		}
+		else if (i == 0x80000004) {
 			memcpy(cpu_brand_string + 32, cpui.data(), sizeof(int) * cpui.size());
+		}
 	}
 
 	TCPU_Strings result;

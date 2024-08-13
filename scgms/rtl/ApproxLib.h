@@ -44,11 +44,15 @@
 #include <vector>
 
 namespace scgms {
+	/* retrieves a list of approximator descriptors that are currently loaded */
 	std::vector<TApprox_Descriptor> get_approx_descriptor_list();
 
 	using SApproximator = refcnt::SReferenced<IApproximator>;
-			
+
+	/* creates approximator with given GUID */
 	SApproximator Create_Approximator(const GUID &id, SSignal signal);
+	/* creates approximator with given GUID */
 	SApproximator Create_Approximator(const GUID &id, ISignal* signal);
-	SApproximator Create_Approximator(ISignal* signal); //creates a default one
+	/* creates a default approximator */
+	SApproximator Create_Approximator(ISignal* signal);
 }

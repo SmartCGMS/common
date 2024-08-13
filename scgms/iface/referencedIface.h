@@ -47,77 +47,112 @@
 #include "../rtl/hresult.h"
 #include "../rtl/guid.h"
 
-/*
-  Note that we have to split this class into interface and its implementation,
-  as we can use several different compilers. This is to guarantee that the method
-  implementations will be consistent - i.e. that each object will have the methods
-  compiled with the same compiler.
-*/
+/* Note that we have to split this class into interface and its implementation,
+ * as we can use several different compilers. This is to guarantee that the method
+ * implementations will be consistent - i.e. that each object will have the methods
+ * compiled with the same compiler.
+ */
 namespace refcnt {
 
+	/* an object that is held by a single owner (equivalent to std::unique_ptr) */
 	class IUnique_Reference {
-	public:
-		virtual ULONG IfaceCalling Release() = 0;					//releases allocated memory using the right allocator, returns 0
+		public:
+			/* releases allocated memory/object returns 0 */
+			virtual ULONG IfaceCalling Release() = 0;
 	};
 
-	/* Actually, this is IUnknown of the WinAPI's COM
-	   HRESULT and ULONG are used to allow possible and easy interoperability
-	   accross different compilers and languages on Windows
-	*/
+	/* a reference-counted object with possibly multiple owners (equivalent to std::shared_ptr)
+	 *
+	 * Actually, this is IUnknown of the WinAPI's COM
+	 * HRESULT and ULONG are used to allow possible and easy interoperability
+	 * accross different compilers and languages on Windows */
 	class IReferenced {
-	public:
-		virtual HRESULT IfaceCalling QueryInterface(const GUID*  riid, void ** ppvObj) = 0;
-		virtual ULONG IfaceCalling AddRef() = 0;
-		virtual ULONG IfaceCalling Release() = 0;
+		public:
+			/* queries the object for support of the given interface identified by GUID parameter riid
+			 * if the interface is supported, the object casts itself to that interface and fills the ppvObj pointer
+			 * in that case, S_OK is retured; otherwise, E_NOTIMPL is returned */
+			virtual HRESULT IfaceCalling QueryInterface(const GUID* riid, void **ppvObj) = 0;
+
+			/* adds a reference to the reference counter; returns a number of references after this call */
+			virtual ULONG IfaceCalling AddRef() = 0;
+			/* releases a reference, releases the allocated memory/object if the reference count drops to zero; returns a number of references after this call */
+			virtual ULONG IfaceCalling Release() = 0;
 	};
 
+	/* factory function to create std::shared_ptr holding an object implementing IReferenced
+	 * S is a std::shared_ptr or its child class, I is the IReferenced type to be created
+	 * note that shared_ptr will overtake the assignment operations and maintain its own counter
+	 * when shared_ptr's counter reaches zero, the Release method is called automatically thanks to a custom deleter */
 	template <typename S, typename I>
-	//this one is designed for extending std::shared_ptr via inheritance
 	S make_shared_reference_ext(I *obj, bool add_reference) {
-		if ((add_reference) && (obj != nullptr)) obj->AddRef();
+		if ((add_reference) && (obj != nullptr)) {
+			obj->AddRef();
+		}
+
 		S result;
-		result.reset(obj, [](I* obj_to_release) {if (obj_to_release != nullptr) obj_to_release->Release(); });
-		//shared_ptr will overtake the assignment operations and maintain its own counter
-		//when shared_ptr's counter comes to zero, referenced's Release  takes action
+		result.reset(obj, [](I* obj_to_release) {
+			if (obj_to_release != nullptr) {
+				obj_to_release->Release();
+			}
+		});
+
 		return result;
 	}
 
+	/* constructs a std::shared_ptr from IReferenced; this is a helper function to call make_shared_reference_ext */
 	template <typename I>
-	std::shared_ptr<I>  make_shared_reference(I *obj, bool add_reference) {
+	std::shared_ptr<I> make_shared_reference(I *obj, bool add_reference) {
 		return make_shared_reference_ext<std::shared_ptr<I>, I>(obj, add_reference);
 	}
 
+	/* queries the interface of given object, fills the target shared_ptr with accordingly initialized interface object, if succeeds */
 	template <typename I, typename Q>
 	void Query_Interface(I *obj, const GUID &id, std::shared_ptr<Q> &target) {
 		Q* queried;
-		if (obj->QueryInterface(&id, reinterpret_cast<void**>(&queried)) == S_OK)
-			target.reset(queried, [](Q* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });
+		if (obj->QueryInterface(&id, reinterpret_cast<void**>(&queried)) == S_OK) {
+			target.reset(queried, [](Q* obj_to_release) {
+				if (obj_to_release != nullptr) {
+					obj_to_release->Release();
+				}
+			});
+		}
 	}
 
+	/* are all objects given as parameters non-nullptr? */
 	template <typename T>
 	bool Shared_Valid_All(const T& a) {
 		return a.get() != nullptr;
 	}
 
+	/* are all objects given as parameters non-nullptr? */
 	template <typename T, typename... Args>
 	bool Shared_Valid_All(const T& a, const Args&... args) {
 		bool result = a.get() != nullptr;
-		if (result) result &= Shared_Valid_All(args...);
+
+		if (result) {
+			result &= Shared_Valid_All(args...);
+		}
 		return result;
 	}
 
-
+	/* interop wrapper interface for continuous dynamic memory array */
 	template <typename T>
 	class IVector_Container : public virtual refcnt::IReferenced {
-	public:
-		virtual HRESULT IfaceCalling set(T *begin, T *end) = 0;			//sets new content to a given block for <begin, end)
-															//T may point to e.g., IReferenced, thus cannot be const
-		virtual HRESULT IfaceCalling add(T *begin, T *end) = 0;			//appends new content
-		virtual HRESULT IfaceCalling get(T **begin, T **end) const = 0;	//receives boundaries of existing content <*begin, *end)
-		virtual HRESULT IfaceCalling pop(T* value) = 0;					//removes and returns exactly one item from the existing content
-		virtual HRESULT IfaceCalling remove(const size_t index) = 0;		//removes exactly one item from the existing content, identified by its ordinal number/position from begin
-		virtual HRESULT IfaceCalling move(const size_t from_index, const size_t to_index) = 0;	//moves exactly one item from to
-		virtual HRESULT IfaceCalling empty() const = 0;					//tests whether there is at least one item
+		public:
+			/* sets new content to a given block for <begin, end); T may point to IReferenced, thus cannot be const */
+			virtual HRESULT IfaceCalling set(T *begin, T *end) = 0;
+			/* appends new content to the container */
+			virtual HRESULT IfaceCalling add(T *begin, T *end) = 0;
+			/* retrieves memory boundaries marked with <*begin, *end) */
+			virtual HRESULT IfaceCalling get(T **begin, T **end) const = 0;
+			/* removes and returns exactly one item from the container items, if there is any */
+			virtual HRESULT IfaceCalling pop(T* value) = 0;
+			/* removes exacly one item from the existing content, identified by its ordinal number/position from the beginning */
+			virtual HRESULT IfaceCalling remove(const size_t index) = 0;
+			/* moves exactly one item from source to destination index */
+			virtual HRESULT IfaceCalling move(const size_t from_index, const size_t to_index) = 0;
+			/* returns S_OK if the container is empty, S_FALSE if not */
+			virtual HRESULT IfaceCalling empty() const = 0;
 	};
 
 	using str_container = IVector_Container<char>;

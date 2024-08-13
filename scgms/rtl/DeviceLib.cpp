@@ -55,27 +55,37 @@ bool scgms::SModel_Parameter_Vector::set(const std::vector<double> &params) {
 		scgms::IModel_Parameter_Vector *new_vector = refcnt::Create_Container<double>(data_ptr, data_ptr + params.size());
 		reset(new_vector, [](scgms::IModel_Parameter_Vector* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });
 		return operator bool();
-	} else
+	}
+	else {
 		return get()->set(data_ptr, data_ptr + params.size()) == S_OK;
+	}
 }
 
 
 bool scgms::SModel_Parameter_Vector::set(const scgms::SModel_Parameter_Vector &params) {
-	if (!params) return false;
+	if (!params) {
+		return false;
+	}
 
 	double *begin, *end;
-	if (params->get(&begin, &end) != S_OK) return false;
+	if (params->get(&begin, &end) != S_OK) {
+		return false;
+	}
 
 	if (!operator bool()) {
 		scgms::IModel_Parameter_Vector *new_vector = refcnt::Create_Container<double>(begin, end);
 		reset(new_vector, [](scgms::IModel_Parameter_Vector* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });
 		return operator bool();
-	} else
+	}
+	else {
 		return get()->set(begin, end) == S_OK;
+	}
 }
 
 bool scgms::SModel_Parameter_Vector::empty() const {
-	if (!operator bool()) return true;
+	if (!operator bool()) {
+		return true;
+	}
 	return get()->empty() == S_OK;
 }
 
@@ -87,11 +97,16 @@ scgms::SSignal::SSignal(scgms::STime_Segment segment, const GUID &signal_id) :
 scgms::SSignal::SSignal(scgms::STime_Segment segment, const GUID& signal_id, const GUID& approx_id) {
 	scgms::ISignal* signal;
 	if (imported::create_signal_external(&signal_id, segment.get(), approx_id == Invalid_GUID ? nullptr : &approx_id, &signal) == S_OK) {
-		reset(signal, [](scgms::ISignal* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });
+		reset(signal, [](scgms::ISignal* obj_to_release) {
+			if (obj_to_release != nullptr) {
+				obj_to_release->Release();
+			}
+		});
 	}
 }
 
-scgms::WSignal::WSignal(ISignal *signal) : mSignal(signal) {};
+scgms::WSignal::WSignal(ISignal *signal) : mSignal(signal) {
+};
 
 HRESULT scgms::WSignal::Get_Discrete_Levels(double* const times, double* const levels, const size_t count, size_t *filled) const {
 	return mSignal ? mSignal->Get_Discrete_Levels(times, levels, count, filled) : E_FAIL;
@@ -110,9 +125,11 @@ scgms::SSignal scgms::WTime_Segment::Get_Signal(const GUID &signal_id) {
 	scgms::SSignal result;
 	ISignal *obj = nullptr;
 
-	if (mSegment)
-		if (mSegment->Get_Signal(&signal_id, &obj) == S_OK)
+	if (mSegment) {
+		if (mSegment->Get_Signal(&signal_id, &obj) == S_OK) {
 			result = refcnt::make_shared_reference_ext<scgms::SSignal, scgms::ISignal>(obj, false);
+		}
+	}
 
 	return result;
 }
@@ -122,23 +139,29 @@ scgms::SSignal scgms::STime_Segment::Get_Signal(const GUID &signal_id) {
 	ISignal *obj = nullptr;
 	scgms::ITime_Segment *segment = get();
 
-	if (segment)
-		if (segment->Get_Signal(&signal_id, &obj) == S_OK)
+	if (segment) {
+		if (segment->Get_Signal(&signal_id, &obj) == S_OK) {
 			result = refcnt::make_shared_reference_ext<scgms::SSignal, scgms::ISignal>(obj, false);
+		}
+	}
 
 	return result;
 }
 
 scgms::TDevice_Event* Get_Raw_Event(scgms::IDevice_Event *event) {
 	scgms::TDevice_Event* result;
-	if ((event == nullptr) || (event->Raw(&result) != S_OK)) result = nullptr;
+	if ((event == nullptr) || (event->Raw(&result) != S_OK)) {
+		result = nullptr;
+	}
 
 	return result;
 }
 
 scgms::IDevice_Event* Create_Event(const scgms::NDevice_Event_Code code) {
 	scgms::IDevice_Event *result;
-	if (imported::create_device_event_external(code, &result) != S_OK) result = nullptr;
+	if (imported::create_device_event_external(code, &result) != S_OK) {
+		result = nullptr;
+	}
 	assert(result != nullptr);
 	return result;
 }
@@ -153,11 +176,15 @@ scgms::UDevice_Event::UDevice_Event(scgms::UDevice_Event&& event) noexcept: mRaw
 scgms::UDevice_Event::UDevice_Event(IDevice_Event *event) : std::unique_ptr<IDevice_Event, UDevice_Event_Deleter>(event), mRaw(Get_Raw_Event(event)){
 	switch (major_type()) {
 		case scgms::UDevice_Event_internal::NDevice_Event_Major_Type::info:
-			if (mRaw->info) info = refcnt::make_shared_reference_ext<refcnt::Swstr_container, refcnt::wstr_container>(mRaw->info, true);
+			if (mRaw->info) {
+				info = refcnt::make_shared_reference_ext<refcnt::Swstr_container, refcnt::wstr_container>(mRaw->info, true);
+			}
 			break;
 
 		case scgms::UDevice_Event_internal::NDevice_Event_Major_Type::parameters:
-			if (mRaw->parameters) parameters = refcnt::make_shared_reference_ext<scgms::SModel_Parameter_Vector, scgms::IModel_Parameter_Vector>(mRaw->parameters, true);
+			if (mRaw->parameters) {
+				parameters = refcnt::make_shared_reference_ext<scgms::SModel_Parameter_Vector, scgms::IModel_Parameter_Vector>(mRaw->parameters, true);
+			}
 			break;
 
 		default:
@@ -166,32 +193,38 @@ scgms::UDevice_Event::UDevice_Event(IDevice_Event *event) : std::unique_ptr<IDev
 }
 
 scgms::UDevice_Event_internal::NDevice_Event_Major_Type scgms::UDevice_Event::major_type() const {
-	if (mRaw == nullptr) return scgms::UDevice_Event_internal::NDevice_Event_Major_Type::null;
+	if (mRaw == nullptr) {
+		return scgms::UDevice_Event_internal::NDevice_Event_Major_Type::null;
+	}
 	return UDevice_Event_internal::major_type(mRaw->event_code);
 }
 
 scgms::UDevice_Event_internal::NDevice_Event_Major_Type scgms::UDevice_Event_internal::major_type(const scgms::NDevice_Event_Code code) {
 	switch (code) {
 		case scgms::NDevice_Event_Code::Level:
-		case scgms::NDevice_Event_Code::Masked_Level:		return scgms::UDevice_Event_internal::NDevice_Event_Major_Type::level;
+		case scgms::NDevice_Event_Code::Masked_Level:
+			return scgms::UDevice_Event_internal::NDevice_Event_Major_Type::level;
 
 		case scgms::NDevice_Event_Code::Parameters:
-		case scgms::NDevice_Event_Code::Parameters_Hint:	return scgms::UDevice_Event_internal::NDevice_Event_Major_Type::parameters;
+		case scgms::NDevice_Event_Code::Parameters_Hint:
+			return scgms::UDevice_Event_internal::NDevice_Event_Major_Type::parameters;
 
 		case scgms::NDevice_Event_Code::Information:
 		case scgms::NDevice_Event_Code::Warning:
-		case scgms::NDevice_Event_Code::Error:				return scgms::UDevice_Event_internal::NDevice_Event_Major_Type::info;
+		case scgms::NDevice_Event_Code::Error:
+			return scgms::UDevice_Event_internal::NDevice_Event_Major_Type::info;
 
 		case scgms::NDevice_Event_Code::Time_Segment_Start:
 		case scgms::NDevice_Event_Code::Time_Segment_Stop:
-		case scgms::NDevice_Event_Code::Solve_Parameters:		
+		case scgms::NDevice_Event_Code::Solve_Parameters:
 		case scgms::NDevice_Event_Code::Shut_Down:
 		case scgms::NDevice_Event_Code::Warm_Reset:
 		case scgms::NDevice_Event_Code::Suspend_Parameter_Solving:
 		case scgms::NDevice_Event_Code::Resume_Parameter_Solving:
-															return scgms::UDevice_Event_internal::NDevice_Event_Major_Type::control;
+			return scgms::UDevice_Event_internal::NDevice_Event_Major_Type::control;
 
-		default:	break;
+		default:
+			break;
 	}
 
 	return scgms::UDevice_Event_internal::NDevice_Event_Major_Type::null;
@@ -206,7 +239,9 @@ void scgms::UDevice_Event::reset(IDevice_Event *event) {
 	}
 
 	if (event) {
-		if (event->Raw(&mRaw) == S_OK) event->Release();	//do not forget that we're moving the object!
+		if (event->Raw(&mRaw) == S_OK) {
+			event->Release();	//do not forget that we're moving the object!
+		}
 	}
 	
 }
@@ -216,8 +251,9 @@ scgms::UDevice_Event scgms::UDevice_Event::Clone() {
 	if (operator bool() && (get()->Clone(&clone) == S_OK)) {
 		return scgms::UDevice_Event{ clone };
 	}
-	else
+	else {
 		return scgms::UDevice_Event{};
+	}
 }
 
 const scgms::NDevice_Event_Code& scgms::UDevice_Event::event_code() const {
@@ -274,8 +310,7 @@ scgms::CTime_Segment::~CTime_Segment()
 HRESULT IfaceCalling scgms::CTime_Segment::Get_Signal(const GUID *signal_id, scgms::ISignal **signal)
 {
 	auto itr = mSignals.find(*signal_id);
-	if (itr != mSignals.end())
-	{
+	if (itr != mSignals.end()) {
 		*signal = (*itr).second.get();
 		(*signal)->AddRef();
 		return S_OK;
@@ -294,8 +329,9 @@ scgms::STime_Segment scgms::CTime_Segment::Clone()
 {
 	// manufacture new segment
 	scgms::CTime_Segment* cloned;
-	if (Manufacture_Object<scgms::CTime_Segment>(&cloned) != S_OK)
+	if (Manufacture_Object<scgms::CTime_Segment>(&cloned) != S_OK) {
 		return {};
+	}
 
 	size_t count;
 	scgms::ISignal* target;
@@ -303,18 +339,20 @@ scgms::STime_Segment scgms::CTime_Segment::Clone()
 	std::vector<double> tmpTimes, tmpLevels;
 
 	// clone each signal
-	for (auto const& signal : mSignals)
-	{
+	for (auto const& signal : mSignals) {
 		// create signal in cloned object
-		if (cloned->Get_Signal(&signal.first, &target) != S_OK)
+		if (cloned->Get_Signal(&signal.first, &target) != S_OK) {
 			continue;
+		}
 
 		// retrieve discrete bounds (this will fail for calculated signals, which we are not fancy copying)
-		if (signal.second->Get_Discrete_Bounds(nullptr, nullptr, &count) != S_OK)
+		if (signal.second->Get_Discrete_Bounds(nullptr, nullptr, &count) != S_OK) {
 			continue;
+		}
 
-		if (count == 0)
+		if (count == 0) {
 			continue;
+		}
 
 		// resize to fit
 		tmpTimes.resize(count);
@@ -323,8 +361,9 @@ scgms::STime_Segment scgms::CTime_Segment::Clone()
 		size_t filled = count;
 
 		// retrieve all values
-		if (signal.second->Get_Discrete_Levels(tmpTimes.data(), tmpLevels.data(), count, &filled) != S_OK)
+		if (signal.second->Get_Discrete_Levels(tmpTimes.data(), tmpLevels.data(), count, &filled) != S_OK) {
 			continue;
+		}
 
 		// update cloned signal
 		target->Update_Levels(tmpTimes.data(), tmpLevels.data(), filled);

@@ -60,8 +60,9 @@ CDynamic_Library::CDynamic_Library(CDynamic_Library&& other) noexcept : mHandle(
 }
 
 CDynamic_Library::~CDynamic_Library() noexcept {
-	if (mHandle)
+	if (mHandle) {
 		Unload();
+	}
 }
 
 bool CDynamic_Library::Load(const filesystem::path &file_path) noexcept {
@@ -112,8 +113,9 @@ void CDynamic_Library::Unload() noexcept {
 }
 
 void* CDynamic_Library::Resolve(const char* symbolName) noexcept {
-	if (!mHandle)
+	if (!mHandle) {
 		return nullptr;
+	}
 
 	return reinterpret_cast<void*>(GetProcAddress(mHandle, symbolName));
 }
@@ -121,7 +123,10 @@ void* CDynamic_Library::Resolve(const char* symbolName) noexcept {
 bool CDynamic_Library::Is_Library(const filesystem::path& path) noexcept {
 	const auto ext = path.extension();
 
-	if (ext.empty()) return false;
+	if (ext.empty()) {
+		return false;
+	}
+
 	return ext.wstring() == rsShared_Object_Extension;
 }
 

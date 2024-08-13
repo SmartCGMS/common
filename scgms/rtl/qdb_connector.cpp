@@ -45,12 +45,14 @@
 #include <QtCore/QVariant>
 #include <QtSql/QSqlError>
 
+#include <stdexcept>
+
 #undef max
 
-
-CDb_Connector db_connector{};
-
-
+namespace {
+	/* default connector instance, not public */
+	CDb_Connector db_connector{};
+}
 
 CDb_Query::CDb_Query(QSqlDatabase &db, const wchar_t *statement) : mQuery(QSqlQuery{ db }) {
 	if (!mQuery.prepare(QString::fromWCharArray(statement))) {
@@ -61,33 +63,32 @@ CDb_Query::CDb_Query(QSqlDatabase &db, const wchar_t *statement) : mQuery(QSqlQu
 	}
 }
 
-
 HRESULT IfaceCalling CDb_Query::Bind_Parameters(const db::TParameter *values, const size_t count) {
 
 	for (size_t i = 0; i < count; i++) {
-
 		switch (values[i].type) {
 			default:
-			case db::NParameter_Type::ptNull:		mQuery.addBindValue(QVariant{});
-													break;
-
-			case db::NParameter_Type::ptInt64:		mQuery.addBindValue(static_cast<qlonglong>(values[i].integer));
-													break;
-
-			case db::NParameter_Type::ptDouble:		mQuery.addBindValue(values[i].dbl);
-													break;
-
-			case db::NParameter_Type::ptWChar:		mQuery.addBindValue( QString::fromWCharArray(values[i].str));
-													break;
-
-			case db::NParameter_Type::ptBool:		mQuery.addBindValue(values[i].boolean != FALSE ? true : false);
-													break;
-
-			case db::NParameter_Type::ptGuid:		mQuery.addBindValue(GUID_To_QUuid(values[i].id));
-													break;
-
-			case db::NParameter_Type::ptBinaryObect:mQuery.addBindValue(QByteArray(reinterpret_cast<const char*>(values[i].binary_object.data), static_cast<int>(values[i].binary_object.size)));
-													break;
+			case db::NParameter_Type::ptNull:
+				mQuery.addBindValue(QVariant{});
+				break;
+			case db::NParameter_Type::ptInt64:
+				mQuery.addBindValue(static_cast<qlonglong>(values[i].integer));
+				break;
+			case db::NParameter_Type::ptDouble:
+				mQuery.addBindValue(values[i].dbl);
+				break;
+			case db::NParameter_Type::ptWChar:
+				mQuery.addBindValue( QString::fromWCharArray(values[i].str));
+				break;
+			case db::NParameter_Type::ptBool:
+				mQuery.addBindValue(values[i].boolean != FALSE ? true : false);
+				break;
+			case db::NParameter_Type::ptGuid:
+				mQuery.addBindValue(GUID_To_QUuid(values[i].id));
+				break;
+			case db::NParameter_Type::ptBinaryObect:
+				mQuery.addBindValue(QByteArray(reinterpret_cast<const char*>(values[i].binary_object.data), static_cast<int>(values[i].binary_object.size)));
+				break;
 		}
 	}
 
@@ -95,13 +96,16 @@ HRESULT IfaceCalling CDb_Query::Bind_Parameters(const db::TParameter *values, co
 }
 
 HRESULT IfaceCalling CDb_Query::Get_Next(db::TParameter* const values, const size_t count) {
-	if (!mExecuted) mExecuted = mQuery.exec();
 	if (!mExecuted) {
-                auto msg =mQuery.lastError().driverText().toStdString();
-                dprintf(msg.c_str());
+		mExecuted = mQuery.exec();
+	}
+
+	if (!mExecuted) {
+		auto msg =mQuery.lastError().driverText().toStdString();
+		dprintf(msg.c_str());
 		dprintf("\n");
-                msg = mQuery.lastError().databaseText().toStdString();
-                dprintf(msg.c_str());
+		msg = mQuery.lastError().databaseText().toStdString();
+		dprintf(msg.c_str());
 		dprintf("\n");
 		return E_FAIL;
 	}
@@ -111,8 +115,9 @@ HRESULT IfaceCalling CDb_Query::Get_Next(db::TParameter* const values, const siz
 
 		for (size_t i = 0; i < count; i++) {
 			QVariant db_value = mQuery.value(static_cast<int>(i));
-			//first, we had to attempt to read the value as some db drivers
-			//will provide valid IsNull() only after that
+
+			// first, we had to attempt to read the value as some db drivers
+			// will provide valid IsNull() only after that
 			if (!mQuery.isNull(static_cast<int>(i))) {
 
 				bool ok_test;
@@ -120,77 +125,84 @@ HRESULT IfaceCalling CDb_Query::Get_Next(db::TParameter* const values, const siz
 				QByteArray tmp_byte_arr;
 
 				switch (values[i].type) {
-					case db::NParameter_Type::ptInt64:		values[i].integer = static_cast<int64_t>(db_value.toLongLong(&ok_test));
-															if (!ok_test)
-																values[i].type = db::NParameter_Type::ptNull;
-															break;
-
-					case db::NParameter_Type::ptDouble:		values[i].dbl = db_value.toDouble(&ok_test);
-															if (!ok_test)
-																values[i].type = db::NParameter_Type::ptNull;
-															break;
-
-					case db::NParameter_Type::ptWChar:		tmp_str = db_value.toString();
-															if (tmp_str.size() > 0) {
-																mResult_String_Row[i] = tmp_str.toStdWString();
-																values[i].str = const_cast<wchar_t*>(mResult_String_Row[i].c_str());
-															}
-															else
-																values[i].type = db::NParameter_Type::ptNull;
-															break;
-
-					case db::NParameter_Type::ptBool:		values[i].boolean = db_value.toBool() ? TRUE : FALSE;
-															break;
-
-					case db::NParameter_Type::ptGuid:		values[i].id = QUuid_To_GUID(db_value.toUuid());
-															break;
-
-					case db::NParameter_Type::ptBinaryObect:	// this might be potentially dangerous as we are assigning temporary object
-																// but the result will be valid as long as the query is in memory
-																// TODO: solve this better (COM-compatible binary object representation)
-															tmp_byte_arr = db_value.toByteArray();
-															values[i].binary_object.data = reinterpret_cast<uint8_t*>(tmp_byte_arr.data());
-															values[i].binary_object.size = tmp_byte_arr.size();
-															break;
-
-					default: break;
+					case db::NParameter_Type::ptInt64:
+						values[i].integer = static_cast<int64_t>(db_value.toLongLong(&ok_test));
+						if (!ok_test) {
+							values[i].type = db::NParameter_Type::ptNull;
+						}
+						break;
+					case db::NParameter_Type::ptDouble:
+						values[i].dbl = db_value.toDouble(&ok_test);
+						if (!ok_test) {
+							values[i].type = db::NParameter_Type::ptNull;
+						}
+						break;
+					case db::NParameter_Type::ptWChar:
+						tmp_str = db_value.toString();
+						if (tmp_str.size() > 0) {
+							mResult_String_Row[i] = tmp_str.toStdWString();
+							values[i].str = const_cast<wchar_t*>(mResult_String_Row[i].c_str());
+						}
+						else {
+							values[i].type = db::NParameter_Type::ptNull;
+						}
+						break;
+					case db::NParameter_Type::ptBool:
+						values[i].boolean = db_value.toBool() ? TRUE : FALSE;
+						break;
+					case db::NParameter_Type::ptGuid:
+						values[i].id = QUuid_To_GUID(db_value.toUuid());
+						break;
+					case db::NParameter_Type::ptBinaryObect:
+						// this might be potentially dangerous as we are assigning temporary object
+						// but the result will be valid as long as the query is in memory
+						// TODO: solve this better (COM-compatible binary object representation)
+						tmp_byte_arr = db_value.toByteArray();
+						values[i].binary_object.data = reinterpret_cast<uint8_t*>(tmp_byte_arr.data());
+						values[i].binary_object.size = tmp_byte_arr.size();
+						break;
+					default:
+						break;
 				}
 			}
-			else
+			else {
 				values[i].type = db::NParameter_Type::ptNull;
+			}
 		}
 
 		return S_OK;
 	}
-	else
+	else {
 		return S_FALSE;
+	}
 }
-
 
 HRESULT IfaceCalling CDb_Query::Cancel() {
 	mQuery.finish();
 	return S_OK;
 }
 
-CDb_Connection::CDb_Connection(const wchar_t *host, const wchar_t *provider, uint16_t port, const wchar_t *name, const wchar_t *user_name, const wchar_t *password) : 
-	mConnection_Name("QDB_Connection_" + QUuid::createUuid().toString()) {
+CDb_Connection::CDb_Connection(const wchar_t *host, const wchar_t *provider, uint16_t port, const wchar_t *name, const wchar_t *user_name, const wchar_t *password)
+	: mConnection_Name("QDB_Connection_" + QUuid::createUuid().toString()) {
 	
 	mDb = QSqlDatabase::addDatabase(QString::fromWCharArray(provider), mConnection_Name);
 	
 	mDb.setHostName(QString::fromWCharArray(host));
-	if (port != 0) mDb.setPort(port);
+	if (port != 0) {
+		mDb.setPort(port);
+	}
 	mDb.setDatabaseName(QString::fromWCharArray(name));
 	mDb.setUserName(QString::fromWCharArray(user_name));
 	mDb.setPassword(QString::fromWCharArray(password));
 
 	if (!mDb.open()) {
-                auto msg = mDb.lastError().driverText().toStdString();
-                dprintf(msg.c_str());
+		auto msg = mDb.lastError().driverText().toStdString();
+		dprintf(msg.c_str());
 		dprintf("\n");
-                msg = mDb.lastError().databaseText().toStdString();
-                dprintf(msg.c_str());
+		msg = mDb.lastError().databaseText().toStdString();
+		dprintf(msg.c_str());
 		dprintf("\n");
-		throw "Cannot open database";
+		throw std::runtime_error{ "Cannot open database" };
 	}
 }
 
@@ -218,16 +230,14 @@ HRESULT IfaceCalling CDb_Connector::Connect(const wchar_t *host, const wchar_t *
 	}
 }
 
-
 HRESULT IfaceCalling Setup_Filter_DB_Access(scgms::IFilter *filter, const void* data) {
 	HRESULT rc = S_OK;
-#ifndef SMARTCGMS_NO_DB
-	{
-		db::SDb_Sink db_sink;
-		refcnt::Query_Interface<scgms::IFilter, db::IDb_Sink>(filter, db::Db_Sink_Filter, db_sink);
-		if (db_sink) rc = db_sink->Set_Connector(static_cast<db::IDb_Connector*>(&db_connector));
+
+	db::SDb_Sink db_sink;
+	refcnt::Query_Interface<scgms::IFilter, db::IDb_Sink>(filter, db::Db_Sink_Filter, db_sink);
+	if (db_sink) {
+		rc = db_sink->Set_Connector(static_cast<db::IDb_Connector*>(&db_connector));
 	}
-#endif
 
 	return rc;
 }

@@ -43,44 +43,58 @@
 #include <functional>
 
 namespace scgms {
+
+	/* retrieves a vector of loaded model descriptors */
 	std::vector<TModel_Descriptor> get_model_descriptor_list();
+	/* retrieves a vector of loaded metric descriptors */
 	std::vector<TMetric_Descriptor> get_metric_descriptor_list();
+	/* retrieves a vector of loaded solver descriptors */
 	std::vector<TSolver_Descriptor> get_solver_descriptor_list();
 
+	/* retrieves a model descriptor of a given GUID */
 	bool get_model_descriptor_by_id(const GUID &id, TModel_Descriptor &desc);
+	/* retrieves a model descriptor of a model producing a given signal GUID */
 	bool get_model_descriptor_by_signal_id(const GUID &signal_id, TModel_Descriptor &desc);    
-    bool get_signal_descriptor_by_id(const GUID& signal_id, TSignal_Descriptor& desc);
+	/* retrieves a signal descriptor of a given GUID */
+	bool get_signal_descriptor_by_id(const GUID& signal_id, TSignal_Descriptor& desc);
+	/* retrieves a metric descriptor of a given GUID */
 	bool get_metric_descriptor_by_id(const GUID& signal_id, TMetric_Descriptor& desc);
+	/* retrieves a solver descriptor of a given GUID */
 	bool get_solver_descriptor_by_id(const GUID& signal_id, TSolver_Descriptor& desc);
 
+	/* array of string representations of event codes */
 	extern const std::array<const wchar_t*, static_cast<size_t>(scgms::NDevice_Event_Code::count)> event_code_text;
 	
+	/* a container class of all loaded signals described by a descriptor */
 	class CSignal_Description {
-			//should we replace this conversion_factor class with a simple function, the map would have to use TBB allocator to avoid memory leaks
-			//and because we don't want TBB to be a required component to compile all filters, we rather ask the programmer to instantitate
-			//this class and disposes once unneeded to prevent memory leaks
-	protected:
-		std::map<GUID, TSignal_Descriptor> mSignal_Descriptors;
-		std::map<GUID, GUID> mSignal_Reference_Signal_Ids;
-        std::vector<std::wstring> mVirtual_Signal_Names;
-	public:
-		CSignal_Description();
-		std::wstring Get_Name(const GUID &signal_id) const;
-        bool Get_Descriptor(const GUID& signal_id, TSignal_Descriptor &desc) const;
-		bool Get_Reference_Signal_Id(const GUID& signal_id, GUID& reference_id) const;
+		protected:
+			std::map<GUID, TSignal_Descriptor> mSignal_Descriptors;
+			std::map<GUID, GUID> mSignal_Reference_Signal_Ids;
+			std::vector<std::wstring> mVirtual_Signal_Names;
 
-        void for_each(std::function<void(scgms::TSignal_Descriptor)> callback) const;
+		public:
+			CSignal_Description();
+			/* retrieve a signal name by its GUID */
+			std::wstring Get_Name(const GUID &signal_id) const;
+			/* retrueve a signal descriptor by its GUID */
+			bool Get_Descriptor(const GUID& signal_id, TSignal_Descriptor &desc) const;
+			/* retrieves a reference signal GUID by a source signal GUID */
+			bool Get_Reference_Signal_Id(const GUID& signal_id, GUID& reference_id) const;
+
+			/* traverses the signal descriptors and invokes a callback on each of them */
+			void for_each(std::function<void(scgms::TSignal_Descriptor)> callback) const;
 	};
 
-	size_t Segment_Count(const size_t parameters_count, const TModel_Descriptor& desc);	//non-zero parameters_count and zero result means corrupted data
+	/* extracts segment count from given parameter count */
+	size_t Segment_Count(const size_t parameters_count, const TModel_Descriptor& desc);
 
-	// checks for flags presence (all-or-none)
+	/* checks for flags presence (all-or-none) */
 	template<typename TFlags>
 	inline bool Has_Flags_All(const TFlags& field, const TFlags& check_flags) {
 		return (field & check_flags) == check_flags;
 	}
 
-	// check for flags presence (any one of given flags)
+	/* check for flags presence (any one of given flags) */
 	template<typename TFlags>
 	inline bool Has_Flags_Any(const TFlags& field, const TFlags& check_flags) {
 		return (field & check_flags) != 0;

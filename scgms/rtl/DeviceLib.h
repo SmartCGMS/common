@@ -46,55 +46,71 @@
 
 namespace scgms {
 
+	/* shared pointer for model parameter vector; helper class */
 	class SModel_Parameter_Vector : public std::shared_ptr<IModel_Parameter_Vector> {
-	public:
-		bool set(const std::vector<double> &params);
-		bool set(const SModel_Parameter_Vector &params);
-		bool empty() const;
+		public:
+			/* sets new set of parameters */
+			bool set(const std::vector<double> &params);
+			/* sets new set of parameters */
+			bool set(const SModel_Parameter_Vector &params);
+			/* is the model parameter vector empty? */
+			bool empty() const;
 	};
 
 	class STime_Segment;
 
+	/* shared pointer for signal; helper class */
 	class SSignal : public std::shared_ptr<ISignal> {
-	public:
-		SSignal() {};	//just an empty object
-		SSignal(STime_Segment segment, const GUID &signal_id);
-		SSignal(STime_Segment segment, const GUID& signal_id, const GUID& approx_id);
+		public:
+			SSignal() {};
+			SSignal(STime_Segment segment, const GUID &signal_id);
+			SSignal(STime_Segment segment, const GUID& signal_id, const GUID& approx_id);
 	};
 
+	/* weak pointer emulation for ISignal interface; convenient for indirect circular dependencies */
 	class WSignal {
-	protected:
-		ISignal * mSignal;
-	public:
-		WSignal(ISignal *signal);
+		protected:
+			ISignal *mSignal;
 
-		HRESULT Get_Discrete_Levels(double* const times, double* const levels, const size_t count, size_t *filled) const;
-		HRESULT Get_Discrete_Bounds(scgms::TBounds* const time_bounds, scgms::TBounds* const level_bounds, size_t *level_count) const;
+		public:
+			WSignal(ISignal *signal);
+
+			/* wrapper for Get_Discrete_Levels call on a wrapped object */
+			HRESULT Get_Discrete_Levels(double* const times, double* const levels, const size_t count, size_t *filled) const;
+			/* wrapper for Get_Discrete_Bounds call on a wrapped object */
+			HRESULT Get_Discrete_Bounds(scgms::TBounds* const time_bounds, scgms::TBounds* const level_bounds, size_t *level_count) const;
 	};
 
-	class WTime_Segment { //: public std::weak_ptr<ITime_Segment> { --cannot inherit because shared-weak relationship cannot live across COM interface
-						  //Perhaps, we should make STime_Segment export friendly function to WTimeSegment that will take WTime_Segment's
-						  //as callback of STime_Segment. STime_Segment will call the WTime_Segment's callback from STime_Segment's dctor.
-						  //That way, WTime_Segment will learn about STime_Segment's desctruction and return appropriate error codes from that moment on.
-	protected:
-		ITime_Segment * mSegment;
-	public:
-		WTime_Segment(ITime_Segment *segment);
-		SSignal Get_Signal(const GUID &signal_id);
+	/* weak pointer emulation for ITime_Segment interface; convenient for indirect circular dependencies */
+	class WTime_Segment {
+		protected:
+			ITime_Segment *mSegment;
+
+		public:
+			WTime_Segment(ITime_Segment *segment);
+
+			/* retrieves the stored signal, if it still exists; nullptr otherwise */
+			SSignal Get_Signal(const GUID &signal_id);
 	};
 
+	/* shared pointer for ITime_Segment; helper class */
 	class STime_Segment : public std::shared_ptr<ITime_Segment> {
-	public:
-		SSignal Get_Signal(const GUID &signal_id);
+		public:
+			/* retrieves a signal contained within the time segment */
+			SSignal Get_Signal(const GUID &signal_id);
 	};
 
-
-	//because unique_ptr::reset does not let us to specify deleter lambda, let's do it this way
+	/* deleter for std::unique_ptr object containing a device event */
 	struct UDevice_Event_Deleter {
-		void operator()(IDevice_Event *obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); };
+		void operator()(IDevice_Event *obj_to_release) { 
+			if (obj_to_release != nullptr) {
+				obj_to_release->Release();
+			}
+		};
 	};
 
 	namespace UDevice_Event_internal {
+		/* internal device event major type enumeration */
 		enum class NDevice_Event_Major_Type : uint8_t {
 			null = 0,
 			level,
@@ -103,65 +119,82 @@ namespace scgms {
 			control
 		};
 
+		/* retrieves the device event major type according to its interface type */
 		NDevice_Event_Major_Type major_type(const scgms::NDevice_Event_Code code);
 	}
 
+	/* device event helper class to maintain memory correctly during operation */
 	class UDevice_Event : public std::unique_ptr<IDevice_Event, UDevice_Event_Deleter> {
-	protected:
-		TDevice_Event * mRaw;		//mRaw must be initialized in the constructor exactly once
-									//therefore, the implementation defines two helper functions,
-									//which returns pointers only
-		scgms::UDevice_Event_internal::NDevice_Event_Major_Type major_type() const;
-	public:
-		explicit UDevice_Event(const NDevice_Event_Code code = NDevice_Event_Code::Nothing)  noexcept;
-		UDevice_Event(UDevice_Event&& event) noexcept;	
-		UDevice_Event(IDevice_Event *event);			
-		void reset(IDevice_Event *event);	
+		protected:
+			/* raw device event structure; this must be initialized in the constructor exactly once */
+			TDevice_Event * mRaw;
 
-		UDevice_Event Clone();
+		protected:
+			/* retrieves device event major type */
+			scgms::UDevice_Event_internal::NDevice_Event_Major_Type major_type() const;
 
-														//this must be const, because level, parameters and info shared the same data space!!!
-														//it is 100% fool proof, but programmer should still easily discover the error when overwriting e.g., info with level and then reading info
-		const NDevice_Event_Code& event_code() const;
-		const int64_t& logical_time() const;
+		public:
+			explicit UDevice_Event(const NDevice_Event_Code code = NDevice_Event_Code::Nothing)  noexcept;
+			UDevice_Event(UDevice_Event&& event) noexcept;
+			UDevice_Event(IDevice_Event *event);
+			void reset(IDevice_Event *event);
 
-		GUID& device_id() const;
-		GUID& signal_id() const;
-		double& device_time() const;
-		uint64_t& segment_id() const;
-		double& level() const;
+			/* clones the device event into a new instance */
+			UDevice_Event Clone();
 
+			/* this must be const, because level, parameters and info shared the same data space!
+			 * it is 100% fool proof, but programmer should still easily discover the error when overwriting e.g., info with level and then reading info */
 
-		SModel_Parameter_Vector parameters;
-		refcnt::Swstr_container info;
+			/* retrieves an event code */
+			const NDevice_Event_Code& event_code() const;
+			/* retrieves device event logical (Lamport) time */
+			const int64_t& logical_time() const;
 
-		bool is_level_event() const;
-		bool is_parameters_event() const;
-		bool is_info_event() const;
-		bool is_control_event() const;
+			/* retrieves device GUID */
+			GUID& device_id() const;
+			/* retrieves contained signal GUID */
+			GUID& signal_id() const;
+			/* retrieves event rattime */
+			double& device_time() const;
+			/* retrieves the segment ID */
+			uint64_t& segment_id() const;
+			/* retrieves the level contained, if it's a level event */
+			double& level() const;
+
+			/* stored parameters vector; for parameter events */
+			SModel_Parameter_Vector parameters;
+			/* stored string; for info events */
+			refcnt::Swstr_container info;
+
+			/* is the device event a level event (e.g., contains a level value)? */
+			bool is_level_event() const;
+			/* is the device event a parameters event (e.g., parameters field is valid)? */
+			bool is_parameters_event() const;
+			/* is the device event an info event (e.g., info string is valid)? */
+			bool is_info_event() const;
+			/* is the device event a control event? */
+			bool is_control_event() const;
 	};
-
 
 #pragma warning(push)
 #pragma warning( disable : 4250 ) // C4250 - 'class1' : inherits 'class2::member' via dominance
 
+	/* time segment implementation class */
 	class CTime_Segment final : public virtual ITime_Segment, public virtual refcnt::CReferenced
 	{
-	private:
-		// managed signals; created by calling Get_Signal
-		std::map<GUID, scgms::SSignal> mSignals;
+		private:
+			/* managed signals; created by calling Get_Signal */
+			std::map<GUID, scgms::SSignal> mSignals;
 
-	public:
-		// default constructor
-		CTime_Segment() = default;
-		// disable copying, allow just cloning
-		CTime_Segment(const CTime_Segment& b) = delete;
-		virtual ~CTime_Segment();
+		public:
+			CTime_Segment() = default;
+			CTime_Segment(const CTime_Segment& b) = delete;
+			virtual ~CTime_Segment();
 
-		virtual HRESULT IfaceCalling Get_Signal(const GUID *signal_id, scgms::ISignal **signal) override;
+			virtual HRESULT IfaceCalling Get_Signal(const GUID *signal_id, scgms::ISignal **signal) override;
 
-		// clones this segment into another; calls AddRef (passes ownership to caller)
-		STime_Segment Clone();
+			/* clones this segment into another; calls AddRef (passes ownership to caller) */
+			STime_Segment Clone();
 	};
 
 #pragma warning( pop ) 

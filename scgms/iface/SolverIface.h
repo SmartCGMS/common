@@ -41,45 +41,72 @@
 #undef min
 
 namespace solver {
+	/* maximum number of objectives the solver may use */
 	constexpr size_t Maximum_Objectives_Count = 10;
+
 	using TFitness = std::array<double, solver::Maximum_Objectives_Count>;
 
-	//solver sets these values to indicate its progress
+	/* a container to propagate solver progress to outer code */
 	struct TSolver_Progress {
-		size_t current_progress, max_progress;	//minimum progress is zero
+		/* current solver progress (always less or equal max_progress); minimum progress is 0 */
+		size_t current_progress;
+		/* maximum progress (e.g., maximum number of generations or solver steps) */
+		size_t max_progress;
+		/* container of best achieved metrics */
 		TFitness best_metric;
-		BOOL cancelled;	//just cast it to bool, if set to true, solver cancels the current operation
+		/* cancelled flag; if the outer code sets this to TRUE, the solver cancels the operation in its nearest convenience */
+		BOOL cancelled;
 	};
 
 	const TFitness Nan_Fitness = { std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN() };
 	const TFitness Max_Fitness = { std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), std::numeric_limits<double>::max() };
 	const TSolver_Progress Null_Solver_Progress = { 0, 0, Nan_Fitness, 0 };
 	
+	/* Fitness comparator to compare fitnesses during multi-criterial optimalization
+	 * better and worse are arrays of fitnesses of two respective parameter sets, objective_count is a size of these arrays
+	 * returns TRUE if better is truly better than worse, FALSE otherwise
+	 */
 	using TFitness_Comparator = BOOL(IfaceCalling*)(const double* better, const double* worse, const size_t objective_count);
+
+	/* Objective function pointer
+	 * data is an opaque handler for arbitrary data (e.g., for stateful evaluation)
+	 * count is the number of solutions - they are laid one after one in 1D/fixed-size array
+	 * solution points to the first candidate solution, increase the pointer by n*sizeof(double)*problem_size bytes to read n-th solution
+	 * fitness is an array where to store up to Maximum_Objective_Count, also laid in 1D/fixed-size array, thus increase the pointer by n*solver::Maximum_Objectives_Count*sizeof(double) bytes to write n-th fitness
+	 * returns TRUE (success) or FALSE (there was an error) */
 	using TObjective_Function = BOOL(IfaceCalling*)(const void *data, const size_t count, const double *solution, double * const fitness);
-		//data is an opaque handler
-		//count is the number of solutions - they are laid one after one in 1D/fixed-size array
-		//solution points to the first candidate solution, increase the pointer by n*sizeof(double)*problem_size bytes to read n-th solution
-		//fitness is an array where to store up to Maximum_Objective_Count, also laid in 1D/fixed-size array, thus increase the pointer by n*solver::Maximum_Objectives_Count*sizeof(double) bytes to write n-th fitness
-		//returns TRUE or FALSE
 
+	/* solver setup container */
 	struct TSolver_Setup {
+		/* size of the problem, e.g., number of parameters */
 		const size_t problem_size;
-		const size_t objectives_count;			//1 for single objective, else the number of objectives
-		const double *lower_bound, *upper_bound;
+		/* count of objectives to consider (always less or equal to Maximum_Objectives_Count */
+		const size_t objectives_count;
+		/* parameter lower bounds */
+		const double* lower_bound;
+		/* parameter upper bounds */
+		const double* upper_bound;
+		/* parameter hints - an array of previously solved or default parameters */
 		const double **hints;
+		/* size of hints array */
 		const size_t hint_count;
-		double * const solution;		//where to store the found solution
+		/* a pointer to a sufficiently large array of doubles, where the solver stores the solution */
+		double * const solution;
 
+		/* arbitrary data pointer (for e.g., stateful evaluation) */
 		const void *data;
-		const TObjective_Function objective;	//cannot be null
-		const TFitness_Comparator comparator;	//can be null and then, solver will use its default one - however, this is a suggestion only and the solver can use whatever it wants
+		/* pointer to objective function; cannot be nullptr */
+		const TObjective_Function objective;
+		/* fitness comparator for multi-criterial evaluation; can be nullptr, solver will then use its default comparator */
+		const TFitness_Comparator comparator;
 
-		const size_t max_generations;	//where relevant, maximum number of generations - zero for default value
-		const size_t population_size;	//where relevant, maximum number of population - zero for default value
-		const double tolerance;			//where relevant, objective function tolerance that indicates no further improvement
+		/* maximum number of generations for generation-based solvers (where relevant); zero for default value of given solver */
+		const size_t max_generations;
+		/* maximum number of population members for population-based solvers (where relevant); zero for default value of given solver */
+		const size_t population_size;
+		/* tolerance indicating no further improvement between steps (where relevant) */
+		const double tolerance;
 	};
-
 
 	const TSolver_Setup Default_Solver_Setup = { 0, 0, nullptr, nullptr, nullptr, 0, nullptr, nullptr, nullptr, nullptr, 0, 0, std::numeric_limits<double>::min() };
 	using TGeneric_Solver = HRESULT(IfaceCalling*)(const GUID *solver_id, const TSolver_Setup *setup, TSolver_Progress *progress);
@@ -87,59 +114,65 @@ namespace solver {
 
 namespace scgms {
 
+	/* parameters of metric to use during solve */
 	struct TMetric_Parameters {
+		/* metric GUID */
 		const GUID metric_id;
 			//any metric can ignore the parameters below as seen fit as e.g., AIC or Leal_2010 are not compatible with all the options
+
+		/* should the metric use relative error? can be ignored by the metric, if the metric does not support it */
 		const unsigned char use_relative_error;
+		/* should the metric use squared differences? can be ignored by the metric, if the metric does not support it */
 		const unsigned char use_squared_differences;
-		const unsigned char prefer_more_levels;		//i.e. result is once more divided by the number of levels evaluated
-		const double threshold;					//particular meaning depends on used metric and the caller is responsible for providing correct value
+		/* should the result be once more divided by the value count? can be ignored by the metric, if the metric does not support it */
+		const unsigned char prefer_more_levels;
+		/* metric threshold; this parameter depends on the used metric, the caller is responsible for providing the metric with a correct value */
+		const double threshold;
 	};
 
 	const TMetric_Parameters Null_Metric_Parameters = { Invalid_GUID, 0, 0, 0, 0.0 };
 
+	/* metric interface */
 	class IMetric: public virtual refcnt::IReferenced {
-	public:
-		/* let's the calculator to process a batch of known differences
-		   count is the number of elements of differences, which are encoded as vectors to exploit SIMD
-				this will become significant with ist prediction, where increased number of levels is expected compared to blood
-		   count is the total number of all levels that could have been calculated under optimal conditions
-				not calculated levels are quiet NaN and they are ignored
-		*/
-		virtual HRESULT IfaceCalling Accumulate(const double *times, const double *reference, const double *calculated, const size_t count) = 0;
+		public:
+			/* accumulates next batch of levels - the calculator processes a batch of differences
+			 * count is the number of elements of differences, which are encoded as vectors to exploit SIMD
+			 * not calculated levels are quiet NaN and they are ignored */
+			virtual HRESULT IfaceCalling Accumulate(const double *times, const double *reference, const double *calculated, const size_t count) = 0;
 
-		// undo all previously called Accumulate
-		virtual HRESULT IfaceCalling Reset() = 0;
+			/* undo all previously called Accumulate */
+			virtual HRESULT IfaceCalling Reset() = 0;
 
-		/* calculates the metric - the less number is better
-		   levels_accumulated will be the number of non-nan levels accumulated, can be nullptr
-		   returns S_FALSE if *levels_accumulated < levels_required
-		*/
-		virtual HRESULT IfaceCalling Calculate(double *metric, size_t *levels_accumulated, size_t levels_required) = 0;
+			/* calculates the metric - the less number is better; stores the result into the metric output parameter
+			 * levels_accumulated will be the number of non-nan levels accumulated, can be nullptr
+			 * returns S_FALSE if *levels_accumulated < levels_required */
+			virtual HRESULT IfaceCalling Calculate(double *metric, size_t *levels_accumulated, size_t levels_required) = 0;
 
-		// Retrieves metric parameter struct, so that we can clone the metric, e.g., over a network connection
-		virtual HRESULT IfaceCalling Get_Parameters(TMetric_Parameters *parameters) = 0;
+			/* Retrieves metric parameter struct, so that we can clone the metric, e.g., over a network connection */
+			virtual HRESULT IfaceCalling Get_Parameters(TMetric_Parameters *parameters) = 0;
 	};
 
+	/* solver status enumeration */
 	enum class TSolver_Status : uint8_t {
-		Disabled = 0,
-		Idle,
-		In_Progress,
-		Completed_Improved,
-		Completed_Not_Improved,
-		Failed
+		Disabled = 0,            // no solver status
+		Idle,                    // solver is idle at the moment
+		In_Progress,             // solver is performing optimalization
+		Completed_Improved,      // solver completed its operation, parameters were improved according to metrics
+		Completed_Not_Improved,  // solver completed its operation, parameters were not improved according to metrics
+		Failed                   // solver operation failed
 	};
 
-	
 	constexpr GUID IID_Calculate_Filter_Inspection = { 0xec44cd18, 0x8d08, 0x46d1, { 0xa6, 0xcb, 0xc2, 0x43, 0x8e, 0x4, 0x19, 0x88 } };
+
+	/* calculated signal filter inspection interface */
 	class ICalculate_Filter_Inspection : public virtual refcnt::IReferenced {
-	public:
-		// makes a deep copy of the entire progress
-		virtual HRESULT IfaceCalling Get_Solver_Progress(solver::TSolver_Progress* const progress) = 0;
-		// retrieves solver information
-		virtual HRESULT IfaceCalling Get_Solver_Information(GUID* const calculated_signal_id, scgms::TSolver_Status* const status) const = 0;
-		// explicitly cancels solver
-		virtual HRESULT IfaceCalling Cancel_Solver() = 0;
+		public:
+			/* retrieves solver progress, copies the progress to supplied progress container (makes a deep copy, the caller must provide a valid pointer) */
+			virtual HRESULT IfaceCalling Get_Solver_Progress(solver::TSolver_Progress* const progress) = 0;
+			/* retrieves the solver information to given output parameters */
+			virtual HRESULT IfaceCalling Get_Solver_Information(GUID* const calculated_signal_id, scgms::TSolver_Status* const status) const = 0;
+			/* cancels the solver explicitly */
+			virtual HRESULT IfaceCalling Cancel_Solver() = 0;
 	};
 
 	using TCreate_Metric = HRESULT(IfaceCalling*)(const TMetric_Parameters *parameters, IMetric **metric);

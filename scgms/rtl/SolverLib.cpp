@@ -52,17 +52,21 @@ namespace imported {
 solver::TSolver_Setup solver::Check_Default_Parameters(const solver::TSolver_Setup &setup, const size_t default_max_generations, const size_t default_population_size) {
 	//fill in the default values
 	solver::TSolver_Setup result{
-			setup.problem_size,
-			std::min(setup.objectives_count, solver::Maximum_Objectives_Count),
-			setup.lower_bound, setup.upper_bound,
-			setup.hints, setup.hint_count,
-			setup.solution,
+		setup.problem_size,
+		std::min(setup.objectives_count, solver::Maximum_Objectives_Count),
+		setup.lower_bound,
+		setup.upper_bound,
+		setup.hints,
+		setup.hint_count,
+		setup.solution,
 
-			setup.data, setup.objective, setup.comparator,
+		setup.data,
+		setup.objective,
+		setup.comparator,
 
-			setup.max_generations == 0 ? default_max_generations : setup.max_generations,
-			setup.population_size == 0 ? default_population_size : setup.population_size,
-			setup.tolerance
+		setup.max_generations == 0 ? default_max_generations : setup.max_generations,
+		setup.population_size == 0 ? default_population_size : setup.population_size,
+		setup.tolerance
 	};
 
 	return result;
@@ -82,35 +86,39 @@ scgms::SMetric::SMetric(const scgms::TMetric_Parameters &params) : std::shared_p
 	Init(params);
 }
 
-void scgms::SMetric::Init(const scgms::TMetric_Parameters &params)
-{
+void scgms::SMetric::Init(const scgms::TMetric_Parameters &params) {
+
 	scgms::IMetric* metric;
 	if (imported::create_metric_external(&params, &metric) == S_OK) {
-		reset(metric, [](scgms::IMetric* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });
+		reset(metric, [](scgms::IMetric* obj_to_release) {
+			if (obj_to_release != nullptr) {
+				obj_to_release->Release();
+			}
+		});
 	}
 }
 
-scgms::SMetric scgms::SMetric::Clone()
-{
+scgms::SMetric scgms::SMetric::Clone() {
+
 	scgms::SMetric result;
 	auto self = get();
 	scgms::TMetric_Parameters params = scgms::Null_Metric_Parameters;
 
-	if (self && self->Get_Parameters(&params) == S_OK)
-	{
+	if (self && self->Get_Parameters(&params) == S_OK) {
 		scgms::IMetric *obj = nullptr;
-		if (imported::create_metric_external(&params, &obj) == S_OK)
+		if (imported::create_metric_external(&params, &obj) == S_OK) {
 			result = refcnt::make_shared_reference_ext<scgms::SMetric, scgms::IMetric>(obj, false);
+		}
 	}
 
 	return result;
 }
 
 scgms::SCalculate_Filter_Inspection::SCalculate_Filter_Inspection(const scgms::SFilter &calculate_filter) {
-	if (calculate_filter)
+	if (calculate_filter) {
 		refcnt::Query_Interface<scgms::IFilter, scgms::ICalculate_Filter_Inspection>(calculate_filter.get(), IID_Calculate_Filter_Inspection, *this);
+	}
 }
-
 
 HRESULT scgms::Optimize_Parameters(scgms::SFilter_Chain_Configuration configuration, const size_t *filter_indices, const wchar_t **parameters_configuration_names, size_t filter_count,
 	scgms::TOn_Filter_Created on_filter_created, const void* on_filter_created_data,

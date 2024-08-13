@@ -40,25 +40,21 @@
 
 #include <sstream>
 
-/*! Convert a QString to an std::wstring */
 std::wstring QStringToStdWString(const QString &str) {
 #ifdef _MSC_VER
-    return std::wstring((const wchar_t *)str.utf16());
+	return std::wstring((const wchar_t *)str.utf16());
 #else
-    return str.toStdWString();
+	return str.toStdWString();
 #endif
 }
 
-/*! Convert an std::wstring to a QString */
 QString StdWStringToQString(const std::wstring &str) {
-
 #ifdef _MSC_VER
-    return QString::fromUtf16((const char16_t *)str.c_str());
+	return QString::fromUtf16((const char16_t *)str.c_str());
 #else
-    return QString::fromStdWString(str);
+	return QString::fromStdWString(str);
 #endif
 }
-
 
 QUuid GUID_To_QUuid(const GUID& guid) {
 	return QUuid(guid.Data1, guid.Data2, guid.Data3, guid.Data4[0], guid.Data4[1], guid.Data4[2],
@@ -72,7 +68,6 @@ GUID QUuid_To_GUID(const QUuid& uuid) {
 	};
 }
 
-
 #ifndef NOGUI
 
 #include <QtWidgets/QHeaderView>
@@ -81,7 +76,7 @@ int HideDbColByName(const QSqlTableModel &model, QTableView &view, const char* d
 	int idx = model.fieldIndex(dbcolname);
 	if (idx >= 0) view.hideColumn(idx);
 	return idx;
-};
+}
 
 int SetupDbColUI(QSqlTableModel &model, QTableView &view, const char* dbcolname, const char* uicolname, const int width, const int moveto){
 	int idx = model.fieldIndex(dbcolname);
@@ -93,7 +88,7 @@ int SetupDbColUI(QSqlTableModel &model, QTableView &view, const char* dbcolname,
 		hdr->moveSection(hdr->visualIndex(idx), moveto);
 	}
 	return idx;
-};
+}
 
 #endif
 

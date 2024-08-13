@@ -48,7 +48,7 @@ namespace scgms {
 			void* resolve_not_impl_symbol(const char* symbol_name) noexcept;
 		}
 
-		// resolves a symbol with a given name from the scgms library; casts the result to the requested type
+		/* resolves a symbol with a given name from the scgms library; casts the result to the requested type */
 		template <typename T>
 		T resolve_symbol(const char* symbol_name) noexcept {
 
@@ -65,14 +65,14 @@ namespace scgms {
 		}
 	}
 
-	// sets base path for scgms library resolution; this comes in handy when the workdir must be different and putting scgms
-	// directly to the folder together with executable is not convenient
+	/* sets base path for scgms library resolution; this comes in handy when the workdir must be different and putting scgms
+	 * directly to the folder together with executable is not convenient */
 	void set_base_path(const std::wstring& base);
 
-	// is the scgms library properly loaded? This attempts to load the library and resolve a sample symbol, if the library is
-	// not loaded yet
+	/* is the scgms library properly loaded? This attempts to load the library and resolve a sample symbol, if the library is
+	 * not loaded yet */
 	bool is_scgms_loaded();
 
-	// forces scgms library to unload and reset
+	/* forces scgms library to unload and reset */
 	bool force_scgms_unload();
 }

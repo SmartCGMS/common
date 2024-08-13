@@ -40,26 +40,23 @@
 
 #include "../iface/NetIface.h"
 
-// Sets the socket into blocking / non-blocking state
+/* Sets the socket into blocking / non-blocking state */
 bool Set_Socket_Blocking_State(SOCKET skt, bool state);
 
-// Initializes network subsystem of run-time environment
+/* Initializes network subsystem of run-time environment */
 bool Init_Network();
 
-// De-initializes network subsystem of run-time environment
+/* De - initializes network subsystem of run - time environment */
 bool Deinit_Network();
 
-
-// Helper method retrieving the fixed body part ref
+/* Helper method retrieving the fixed body part ref */
 template<typename T>
-inline T& Get_Fixed_Body(scgms::TNet_Packet_Header* base)
-{
+inline T& Get_Fixed_Body(scgms::TNet_Packet_Header* base) {
 	return *reinterpret_cast<T*>(base + 1);
 }
 
-// Helper method retrieving the dynamic body part ref
+/* Helper method retrieving the dynamic body part ref */
 template<typename T, typename U>
-inline U* Get_Dynamic_Body(scgms::TNet_Packet_Header* base)
-{
+inline U* Get_Dynamic_Body(scgms::TNet_Packet_Header* base) {
 	return reinterpret_cast<U*>(reinterpret_cast<T*>(base + 1) + 1);
 }

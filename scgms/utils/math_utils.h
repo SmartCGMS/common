@@ -42,27 +42,31 @@
 #include <vector>
 #include <type_traits>
 
+/* returns true, if any of the contained values is NaN */
 template <typename T>
 typename std::enable_if<std::is_floating_point<T>::value, bool>::type
 Is_Any_NaN(const T value) {
-    return std::isnan(value);
+	return std::isnan(value);
 }
 
-
+/* returns true, if any of the contained values is NaN */
 template <typename T>
 typename std::enable_if<!std::is_floating_point<T>::value, bool>::type
 Is_Any_NaN(const T& list) {
-    for (const auto& elem : list)
-        if (Is_Any_NaN(elem)) return true;
+	for (const auto& elem : list) {
+		if (Is_Any_NaN(elem)) {
+			return true;
+		}
+	}
 
-    return false;
+	return false;
 }
 
+/* return true, if any of the contained values is NaN */
 template <typename T, typename... Args>
 bool Is_Any_NaN(const T value, const Args&... args) {
-    return Is_Any_NaN(value) || Is_Any_NaN(args...);
+	return Is_Any_NaN(value) || Is_Any_NaN(args...);
 }
 
-
-//does not check whether series contains NaN, destroys series content
+/* calculates signal statistics - series is a vector of signal values; does not check whether series contains NaN; destroys series content */
 bool Calculate_Signal_Stats(std::vector<double>& series, scgms::TSignal_Stats& signal_error);

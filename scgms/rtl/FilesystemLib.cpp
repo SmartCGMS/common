@@ -106,8 +106,9 @@ filesystem::path Get_Dll_Dir() {
 	Dl_info info;
 	if (dladdr((void*)Get_Dll_Dir, &info) != 0) {
 		auto result = realpath(info.dli_fname, ModuleFileName);
-		if (!result)
+		if (!result) {
 			return Get_Application_Dir();
+		}
 	}
 	else
 		return Get_Application_Dir();
@@ -124,8 +125,9 @@ bool Is_Directory(const filesystem::path& path) {
 
 	const auto path_status = filesystem::status(path, ec);
 	bool result = !ec;
-	if (result)
+	if (result) {
 		result = filesystem::is_directory(path_status);
+	}
 
 	return result;
 }
@@ -135,7 +137,9 @@ bool Is_Regular_File_Or_Symlink(const filesystem::path& path) {
 
 	bool is_reg = filesystem::is_regular_file(path, ec);
 	is_reg &= !ec;
-	if (is_reg) return true;
+	if (is_reg) {
+		return true;
+	}
 
 	bool is_sym = filesystem::is_symlink(path, ec);
 	return is_sym && (!ec);
@@ -145,21 +149,21 @@ std::wstring& Ensure_Uniform_Dir_Separator(std::wstring& path) noexcept {
 	bool forward_slash = false;
 	bool back_slash = false;
 
-	//check if the string has uniform separator
+	// check if the string has uniform separator
 	for (const auto& e : path) {
 		switch (e) {
-			case L'\\' : back_slash = true;
-						  break;
-
-			case L'/': forward_slash = true;
-						break;
-
+			case L'\\':
+				back_slash = true;
+				break;
+			case L'/':
+				forward_slash = true;
+				break;
 			default:
 				break;
 		}
 	}
 
-	//if there's a mismatch, attempt to correct it
+	// if there's a mismatch, attempt to correct it
 	if (forward_slash && back_slash) {
 #ifdef _WIN32
 		const wchar_t sep = L'\\';
@@ -170,10 +174,11 @@ std::wstring& Ensure_Uniform_Dir_Separator(std::wstring& path) noexcept {
 		for (auto& e : path) {
 			switch (e) {
 				case L'\\':
-				case L'/': e = sep;
+				case L'/':
+					e = sep;
 					break;
-			default:
-				break;
+				default:
+					break;
 			}
 		}
 	}
@@ -186,37 +191,40 @@ bool Match_Wildcard(const std::wstring fname, const std::wstring wcard, const bo
 	size_t f = 0;
 	for (size_t w = 0; w < wcard.size(); w++) {
 		switch (wcard[w]) {
-		case L'?':
-			if (f >= fname.size()) return false;
-			//there is one char to eat, let's continue
-			f++;
-			break;
-
-
-		case L'*':
-			//skip everything in the filename until extension or dir separator
-			while (f < fname.size()) {
-				if ((fname[f] == L'.') || (fname[f] == filesystem::path::preferred_separator)) 
-					break;
-
+			case L'?':
+				if (f >= fname.size()) {
+					return false;
+				}
+				// there is one char to eat, let's continue
 				f++;
-			}
-			break;
+				break;
+			case L'*':
+				// skip everything in the filename until extension or dir separator
+				while (f < fname.size()) {
+					if ((fname[f] == L'.') || (fname[f] == filesystem::path::preferred_separator)) {
+						break;
+					}
 
-		default:
-			if (f >= fname.size())
-				return false;
-			if (case_sensitive) {
-				if (wcard[w] != fname[f])
+					f++;
+				}
+				break;
+			default:
+				if (f >= fname.size()) {
 					return false;
-			}
-			else {
-				if (std::towupper(wcard[w]) != std::towupper(fname[f]))
-					return false;
-			}
-			//wild card and name still matches, continue
-			f++;
-			break;
+				}
+				if (case_sensitive) {
+					if (wcard[w] != fname[f]) {
+						return false;
+					}
+				}
+				else {
+					if (std::towupper(wcard[w]) != std::towupper(fname[f])) {
+						return false;
+					}
+				}
+				//wild card and name still matches, continue
+				f++;
+				break;
 		}
 	}
 
@@ -230,8 +238,9 @@ std::wstring Make_Absolute_Path(filesystem::path src_path, filesystem::path pare
 		src_path = filesystem::canonical(parent_path / relative_part, ec);
 		if (ec) {
 			src_path = filesystem::weakly_canonical(parent_path / relative_part, ec);
-			if (ec)
+			if (ec) {
 				src_path = parent_path / relative_part;
+			}
 		}
 	}
 

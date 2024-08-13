@@ -49,23 +49,35 @@
 
 #pragma pack(push,1)
 
+/* simplified device event structure for languages which may not support objects */
 typedef struct _TSCGMS_Event_Data {
+	/* event code this event contains */
 	uint8_t event_code;
-	GUID device_id;				//supporting parallel measurements
-	GUID signal_id;				//blood, ist, isig, model id aka e.g, calculated blood, etc.
 
-	double device_time;				//signal with multiple values are aggregated by device_time with the same signal_id and device_id
+	/* GUID of an entity (filter, model, device, ...) that is a source of this event */
+	GUID device_id;
+	/* GUID of a signal contained within this entity; this may also be related to the information */
+	GUID signal_id;
+
+	/* device time encoded as rattime */
+	double device_time;
+	/* logical time of the device event (Lamport) */
 	int64_t logical_time;
 
-	uint64_t segment_id;			// segment identifier or Invalid_Segment_Id
+	/* segment identifier (for e.g., signal grouping); may be Invalid_Segment to indicate no segment */
+	uint64_t segment_id;
 
 	//the following members are not in a union to make it easier for certain languages
-	double level;					//level event
-
-	double *parameters;				//parameters event
+	/* signal level */
+	double level;
+	/* model parameters */
+	double *parameters;
+	/* parameters count; normally, we use a vector container, but since this simple interface is intended for
+	 * languages which may not support objects, we marshal the parameters as such */
 	size_t count;
 
-	wchar_t *str;					//info event
+	/* contained string - info, error, warning */
+	wchar_t *str;
 } TSCGMS_Event_Data;
 
 #pragma pack(pop)

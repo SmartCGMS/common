@@ -72,36 +72,43 @@ namespace db {
 	static constexpr int64_t Anonymous_Subject_Identifier = -2;
 	static constexpr int64_t New_Subject_Identifier = -1;
 
+	/* Database query wrapper interface */
 	class IDb_Query : public virtual refcnt::IReferenced {
-	public:
-		// binds count arguments, for which the following rules aplies
-		virtual HRESULT IfaceCalling Bind_Parameters(const TParameter *values, const size_t count) = 0;
+		public:
+			/* binds count arguments, for which the following rules aplies */
+			virtual HRESULT IfaceCalling Bind_Parameters(const TParameter *values, const size_t count) = 0;
 
-		/* reads a result row, particularly reads values at given indexes of given types and sets pointers/values 
-		   null values are indicated with the type member
-		   pointers are valid only until the next call of Get_Next/Cancel or dctor
-		   returns S_OK if a row of a result has been succesfully fetched (internally calls exec on before fetching the very first row)
-		*/
-		virtual HRESULT IfaceCalling Get_Next(TParameter* const values, const size_t count) = 0;
+			/* reads a result row, particularly reads values at given indexes of given types and sets pointers/values
+			   null values are indicated with the type member
+			   pointers are valid only until the next call of Get_Next/Cancel or dctor
+			   returns S_OK if a row of a result has been succesfully fetched (internally calls exec on before fetching the very first row)
+			*/
+			virtual HRESULT IfaceCalling Get_Next(TParameter* const values, const size_t count) = 0;
 
-		// cancels the current query so it can be restarted with the Get_Next sequence
-		virtual HRESULT IfaceCalling Cancel() = 0;
+			/* cancels the current query so it can be restarted with the Get_Next sequence */
+			virtual HRESULT IfaceCalling Cancel() = 0;
 	};
 
+	/* Database connection interface */
 	class IDb_Connection : public virtual refcnt::IReferenced {
-	public:
-		virtual HRESULT IfaceCalling Query(const wchar_t *statement, IDb_Query **query) = 0;
+		public:
+			/* Queries the database for given statement; returns an executed query object in the output parameter */
+			virtual HRESULT IfaceCalling Query(const wchar_t *statement, IDb_Query **query) = 0;
 	};
 
+	/* Database connector interface */
 	class IDb_Connector : public virtual refcnt::IReferenced {
-	public:
-		virtual HRESULT IfaceCalling Connect(const wchar_t *host, const wchar_t *provider, uint16_t port, const wchar_t *name, const wchar_t *user_name, const wchar_t *password, IDb_Connection **connection) = 0;
+		public:
+			/* Connect to the database at given location with given credentials; returns a connection instance in the output parameter */
+			virtual HRESULT IfaceCalling Connect(const wchar_t *host, const wchar_t *provider, uint16_t port, const wchar_t *name, const wchar_t *user_name, const wchar_t *password, IDb_Connection **connection) = 0;
 	};
 
 	constexpr GUID Db_Sink_Filter =  { 0x2bdd102e, 0xc401, 0x4ddc,{ 0x88, 0x16, 0xf, 0xb1, 0x51, 0x87, 0x9e, 0x48 } };
-	class IDb_Sink : public virtual refcnt::IReferenced {
-	public:
-		virtual HRESULT IfaceCalling Set_Connector(IDb_Connector *connector) = 0;
-	};
 
+	/* Database sink interface - inspection interface */
+	class IDb_Sink : public virtual refcnt::IReferenced {
+		public:
+			/* Sets the database connection for the entity to use */
+			virtual HRESULT IfaceCalling Set_Connector(IDb_Connector *connector) = 0;
+	};
 }

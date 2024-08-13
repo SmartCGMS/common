@@ -99,7 +99,6 @@
 		return Is_Invalid_GUID(id) || Is_Invalid_GUID(args...);
 	}
 
-
 	// on several systems (OS's and compilers), the lengths of standard types may vary (e.g. "unsigned long" on LLP64 vs. LP64);
 	// the C++ standard itself defines minimal length, but does not guarantee exact length on every platform;
 	// this is here to ensure correct lengths of all GUID fields
@@ -139,7 +138,7 @@
 
 	// Generates a new GUID version 4 (completely random, suitable for network traffic)
 	// C++ code only for simplicity as C++ has more powerful tools for randnom numbers out of the box
-	GUID Generate_GUIDv4();	
+	GUID Generate_GUIDv4();
 #endif
 
 #endif

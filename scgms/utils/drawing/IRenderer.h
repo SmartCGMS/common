@@ -38,10 +38,10 @@
 
 #include "Drawing.h"
 
-namespace drawing
-{
-	class IRenderer
-	{
+namespace drawing {
+
+	/* drawing renderer interface */
+	class IRenderer {
 		protected:
 			double mCanvas_Width;
 			double mCanvas_Height;
@@ -56,10 +56,21 @@ namespace drawing
 			IRenderer(IRenderer&&) = delete;
 			IRenderer& operator=(IRenderer&&) = delete;
 
-			double Get_Canvas_Width() const { return mCanvas_Width; }
-			double Get_Canvas_Height() const { return mCanvas_Height; }
-			void Set_Canvas_Width(double canvasWidth) { mCanvas_Width = canvasWidth; }
-			void Set_Canvas_Height(double canvasHeight) { mCanvas_Height = canvasHeight; }
+			double Get_Canvas_Width() const {
+				return mCanvas_Width;
+			}
+
+			double Get_Canvas_Height() const {
+				return mCanvas_Height;
+			}
+
+			void Set_Canvas_Width(double canvasWidth) {
+				mCanvas_Width = canvasWidth;
+			}
+
+			void Set_Canvas_Height(double canvasHeight) {
+				mCanvas_Height = canvasHeight;
+			}
 
 			void Set_Canvas_Size(double canvasWidth, double canvasHeight) {
 				mCanvas_Width = canvasWidth;

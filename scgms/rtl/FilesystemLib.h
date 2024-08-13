@@ -36,9 +36,9 @@
 
 #pragma once
 
-// feature check for C++17/TS support state - filesystem is supported on both MSVS2017 and GCC8, but
-// on MSVC it's still in experimental namespace, contrary to GCC8, where it's considered stable
-// we may also decide to disable C++17 FS support on some platforms (e.g.; some Android targets) with STDCPP_FS_DISABLED macro
+/* feature check for C++17/TS support state - filesystem is supported on both MSVS2017 and GCC8, but
+ * on MSVC it's still in experimental namespace, contrary to GCC8, where it's considered stable
+ * we may also decide to disable C++17 FS support on some platforms (e.g.; some Android targets) with STDCPP_FS_DISABLED macro */
 #if !defined(STDCPP_FS_DISABLED) && __has_include(<filesystem>)
 	#include <filesystem>
 	namespace filesystem = std::filesystem;
@@ -53,19 +53,23 @@
 
 #include "hresult.h"
 
-// resolves application directory (may be different from working directory)
+/* resolves application directory (may be different from working directory) */
 filesystem::path Get_Application_Dir();
 
+/* resolves current library directory (when called from some dynamic library) */
 filesystem::path Get_Dll_Dir();
 
-// does given path point to a directory?
+/* does given path point to a directory? */
 bool Is_Directory(const filesystem::path& path);
 
-// does given path point to a directory or is a symbolic link?
+/* does given path point to a file or is a symbolic link? */
 bool Is_Regular_File_Or_Symlink(const filesystem::path& path);
 
-std::wstring& Ensure_Uniform_Dir_Separator(std::wstring& path) noexcept;	//some std libs still fail to make_preferred
+/* converts path separators to a uniform separator preferred for given platform (some implementations may fail doing so) */
+std::wstring& Ensure_Uniform_Dir_Separator(std::wstring& path) noexcept;
 
+/* does the filename match the wildcard given? */
 bool Match_Wildcard(const std::wstring fname, const std::wstring wcard, const bool case_sensitive);
 
-std::wstring Make_Absolute_Path(filesystem::path src_path, filesystem::path parent_path); //returns wstring because src_path may be relative, or even include a wild-card
+/* returns an absolute path from given relative one and given parent path */
+std::wstring Make_Absolute_Path(filesystem::path src_path, filesystem::path parent_path);

@@ -41,19 +41,20 @@
 #include "DeviceIface.h"
 
 namespace scgms {
+
 	constexpr GUID apxLine = { 0xb89204aa, 0x5842, 0xa8f1, { 0x4c, 0xa1, 0x43, 0x12, 0x5f, 0x4e, 0xb2, 0xa7 } };		// {B89204AA-5842-A8F1-4CA1-43125F4EB2A7}
 	constexpr GUID apxAkima = { 0xc3e9669d, 0x594a, 0x4fd4,{ 0xb0, 0xf4, 0x44, 0xab, 0x9d, 0x4e, 0x7, 0x39 } };			// {C3E9669D-594A-4FD4-B0F4-44AB9D4E0739}
 	constexpr GUID apxAvgExpAppx = { 0x97b51526, 0x533b, 0x40ae, { 0xa9, 0xb4, 0x9f, 0xac, 0xfd, 0x82, 0x41, 0x49 } };	// {97B51526-533B-40AE-A9B4-9FACFD824149}
 		//primary DOI: 10.1109/ITAB.2010.5687663		following DOI: 10.1007/978-3-319-00846-2_304
 
-	class IApproximator : public virtual refcnt::IReferenced
-	{
+	/* Interface of an approximator
+	 * parameters of approximation curve(s) on given signal (signal is passed in constructor of each approximation) are calculated when
+	 * performing construction of approximator object;
+	 */
+	class IApproximator : public virtual refcnt::IReferenced {
 		public:
-			// parameters of approximation curve(s) on given signal (signal is passed in constructor of each approximation) are calculated when
-			// performing construction of approximator object;
-
-			// approximates signal levels (or derivations) on given times array of size "count"
-			// a call to Approximate method must precede (once per ISignal data set)
+			/* approximates signal levels (or derivations) on given times array of size "count"
+			 * a call to Approximate method must precede (once per ISignal data set) */
 			virtual HRESULT IfaceCalling GetLevels(const double* times, double* const levels, const size_t count, const size_t derivation_order) = 0;
 	};
 

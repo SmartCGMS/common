@@ -43,18 +43,17 @@
 #pragma warning( push )
 #pragma warning( disable : 4250 ) // C4250 - 'class1' : inherits 'class2::member' via dominance
 
-
+/* a base class for all calculated signals */
 class CCommon_Calculated_Signal : public virtual scgms::ISignal, public virtual refcnt::CReferenced {	
-public:	
-	CCommon_Calculated_Signal() {};
-	CCommon_Calculated_Signal(scgms::WTime_Segment segment);
-	virtual ~CCommon_Calculated_Signal() {};
+	public:
+		CCommon_Calculated_Signal() = default;
+		CCommon_Calculated_Signal(scgms::WTime_Segment segment);
+		virtual ~CCommon_Calculated_Signal() = default;
 
-	//scgms::ISignal iface
-	virtual HRESULT IfaceCalling Get_Discrete_Levels(double* const times, double* const levels, const size_t count, size_t *filled) const override;
-	virtual HRESULT IfaceCalling Get_Discrete_Bounds(scgms::TBounds* const time_bounds, scgms::TBounds* const level_bounds, size_t *level_count) const override;
-	virtual HRESULT IfaceCalling Update_Levels(const double *times, const double *levels, const size_t count) override;
-	
+		// scgms::ISignal iface
+		virtual HRESULT IfaceCalling Get_Discrete_Levels(double* const times, double* const levels, const size_t count, size_t *filled) const override;
+		virtual HRESULT IfaceCalling Get_Discrete_Bounds(scgms::TBounds* const time_bounds, scgms::TBounds* const level_bounds, size_t *level_count) const override;
+		virtual HRESULT IfaceCalling Update_Levels(const double *times, const double *levels, const size_t count) override;
 };
 
 #pragma warning( pop )

@@ -45,7 +45,6 @@
 
 namespace scgms {
 
-
 	namespace imported {
 		namespace {
 			//all these vars have _external suffix not to confuse linker when building the libraries
@@ -58,12 +57,16 @@ namespace scgms {
 		}
 	}
 
-	SFilter::SFilter() : refcnt::SReferenced<IFilter>() {}
+	SFilter::SFilter() : refcnt::SReferenced<IFilter>() {
+	}
 
-	SFilter::SFilter(IFilter* filter) : refcnt::SReferenced<IFilter>(filter) {}
+	SFilter::SFilter(IFilter* filter) : refcnt::SReferenced<IFilter>(filter) {
+	}
 
 	HRESULT SFilter::Send(scgms::UDevice_Event& event) {
-		if (!event) return E_INVALIDARG;
+		if (!event) {
+			return E_INVALIDARG;
+		}
 
 		scgms::IDevice_Event* raw_event = event.get();
 		event.release();
@@ -156,9 +159,10 @@ namespace scgms {
 		bool result = false;
 		BOOL uint8;
 		rc = get()->Get_Bool(&uint8);
-		if (rc == S_OK) 
+		if (rc == S_OK) {
 			result = uint8 != FALSE;
-		
+		}
+
 		return result;
 	}
 
@@ -166,8 +170,6 @@ namespace scgms {
 		return get()->Set_Bool(value ? TRUE : FALSE);
 	}
 
-
-	
 	std::vector<int64_t> SFilter_Parameter::as_int_array(HRESULT &rc) {
 		std::vector<int64_t> result;
 
@@ -184,8 +186,12 @@ namespace scgms {
 	HRESULT SFilter_Parameter::set_int_array(const std::vector<int64_t> &values) {
 		int64_t *casted_data = const_cast<int64_t*>(values.data());
 		refcnt::SVector_Container<int64_t> container = refcnt::Create_Container_shared<int64_t>(casted_data, casted_data + values.size());
-		if (container) return get()->Set_Time_Segment_Id_Container(container.get());
-			else return E_FAIL;
+		if (container) {
+			return get()->Set_Time_Segment_Id_Container(container.get());
+		}
+		else {
+			return E_FAIL;
+		}
 	}
 
 	
@@ -204,9 +210,11 @@ namespace scgms {
 		scgms::TFilter_Descriptor filter_desc = scgms::Null_Filter_Descriptor;
 
 		GUID filter_id;
-		if (operator bool())
-			if (get()->Get_Filter_Id(&filter_id) == S_OK)
+		if (operator bool()) {
+			if (get()->Get_Filter_Id(&filter_id) == S_OK) {
 				scgms::get_filter_descriptor_by_id(filter_id, filter_desc);
+			}
+		}
 
 		return filter_desc;
 	}
@@ -216,8 +224,9 @@ namespace scgms {
 		SFilter_Parameter result;
 		scgms::IFilter_Parameter *parameter;
 		if (imported::create_filter_parameter_external(type, conf_name, &parameter) == S_OK) {
-			if (get()->add(&parameter, &parameter + 1) == S_OK)
+			if (get()->add(&parameter, &parameter + 1) == S_OK) {
 				result = refcnt::make_shared_reference_ext<SFilter_Parameter, IFilter_Parameter>(parameter, false);
+			}
 		}
 
 		return result;
@@ -226,8 +235,9 @@ namespace scgms {
 	scgms::SFilter_Parameter scgms::internal::Create_Filter_Parameter(const scgms::NParameter_Type type, const wchar_t *config_name) {
 		scgms::SFilter_Parameter result;
 		scgms::IFilter_Parameter *new_parameter;
-		if (imported::create_filter_parameter_external(type, config_name, &new_parameter) == S_OK)
+		if (imported::create_filter_parameter_external(type, config_name, &new_parameter) == S_OK) {
 			result = refcnt::make_shared_reference_ext<scgms::SFilter_Parameter, scgms::IFilter_Parameter>(new_parameter, false);
+		}
 		return result;
 	}
 
@@ -243,8 +253,13 @@ namespace scgms {
 
 	SPersistent_Filter_Chain_Configuration::SPersistent_Filter_Chain_Configuration() {
 		IPersistent_Filter_Chain_Configuration *configuration;
-		if (imported::create_persistent_filter_chain_configuration_external(&configuration) == S_OK)
-			reset(configuration, [](IPersistent_Filter_Chain_Configuration* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });
+		if (imported::create_persistent_filter_chain_configuration_external(&configuration) == S_OK) {
+			reset(configuration, [](IPersistent_Filter_Chain_Configuration* obj_to_release) {
+				if (obj_to_release != nullptr) {
+					obj_to_release->Release();
+				}
+			});
+		}
 	}
 
 
@@ -263,8 +278,9 @@ namespace scgms {
 
 	SFilter_Executor::SFilter_Executor(refcnt::SReferenced<scgms::IFilter_Chain_Configuration> configuration, scgms::TOn_Filter_Created on_filter_created, const void* on_filter_created_data, refcnt::Swstr_list error_description, scgms::IFilter *output) {
 		scgms::IFilter_Executor *executor;
-		if (Succeeded(imported::execute_filter_configuration_external(configuration.get(), on_filter_created, on_filter_created_data, output, &executor, error_description.get())))
+		if (Succeeded(imported::execute_filter_configuration_external(configuration.get(), on_filter_created, on_filter_created_data, output, &executor, error_description.get()))) {
 			reset(executor, [](scgms::IFilter_Executor* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });
+		}
 	}
 
 
@@ -291,13 +307,14 @@ namespace scgms {
 		bool result = imported::get_filter_descriptors_external(&desc_begin, &desc_end) == S_OK;
 		if (result) {
 			result = false;	//we have to find the filter yet
-			for (auto iter = desc_begin; iter != desc_end; iter++)
+			for (auto iter = desc_begin; iter != desc_end; iter++) {
 				if (iter->id == id) {
 					//desc = *iter;							assign const won't work with const members and custom operator= will result into undefined behavior as it has const members (so it does not have to be const itself)
 					memcpy(&desc, iter, sizeof(decltype(desc)));	//=> memcpy https://stackoverflow.com/questions/9218454/struct-with-const-member
 					result = true;
 					break;
 				}
+			}
 		}
 
 		return result;
@@ -322,8 +339,9 @@ namespace scgms {
 			event.segment_id() = segment_id;
 			return mOutput.Send(event);
 		}
-		else
+		else {
 			return E_OUTOFMEMORY;
+		}
 	}
 
 	HRESULT CBase_Filter::Emit_Info(const scgms::NDevice_Event_Code code, const std::wstring& msg, const uint64_t segment_id) noexcept {
@@ -338,8 +356,9 @@ namespace scgms {
 			event.segment_id() = segment_id;
 			return mOutput.Send(event);
 		}
-		else
+		else {
 			return E_OUTOFMEMORY;
+		}
 	}
 
 	HRESULT IfaceCalling CBase_Filter::Configure(IFilter_Configuration* configuration, refcnt::wstr_list* error_description) noexcept {
@@ -355,7 +374,9 @@ namespace scgms {
 	}
 
 	HRESULT IfaceCalling CBase_Filter::Execute(scgms::IDevice_Event *event) noexcept {
-		if (!event) return E_INVALIDARG;
+		if (!event) {
+			return E_INVALIDARG;
+		}
 		return Do_Execute(scgms::UDevice_Event{event});
 	}
 
@@ -367,23 +388,31 @@ namespace scgms {
 		scgms::SModel_Parameter_Vector parameters_shared = refcnt::Create_Container_shared<double, scgms::SModel_Parameter_Vector>(const_cast<double*>(parameters.data()), const_cast<double*>(parameters.data()+parameters.size()));			
 
 		scgms::IDiscrete_Model *model;
-		if (imported::create_discrete_model_external(&id, parameters_shared.get(), output.get(), &model) == S_OK)
-			reset(model, [](scgms::IDiscrete_Model* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });
+		if (imported::create_discrete_model_external(&id, parameters_shared.get(), output.get(), &model) == S_OK) {
+			reset(model, [](scgms::IDiscrete_Model* obj_to_release) {
+				if (obj_to_release != nullptr) {
+					obj_to_release->Release();
+				}
+			});
+		}
 	}
 	
 	SDrawing_Filter_Inspection::SDrawing_Filter_Inspection(const SFilter &drawing_filter) {
-		if (drawing_filter)
+		if (drawing_filter) {
 			refcnt::Query_Interface<scgms::IFilter, scgms::IDrawing_Filter_Inspection>(drawing_filter.get(), IID_Drawing_Filter_Inspection, *this);
+		}
 	}
 
 	SDrawing_Filter_Inspection_v2::SDrawing_Filter_Inspection_v2(const SFilter& drawing_filter) {
-		if (drawing_filter)
+		if (drawing_filter) {
 			refcnt::Query_Interface<scgms::IFilter, scgms::IDrawing_Filter_Inspection_v2>(drawing_filter.get(), IID_Drawing_Filter_Inspection_v2, *this);
+		}
 	}
 
 	SLog_Filter_Inspection::SLog_Filter_Inspection(const SFilter &log_filter) {
-		if (log_filter)
+		if (log_filter) {
 			refcnt::Query_Interface<scgms::IFilter, scgms::ILog_Filter_Inspection>(log_filter.get(), IID_Log_Filter_Inspection, *this);
+		}
 	}
 
 	bool SLog_Filter_Inspection::pop(std::shared_ptr<refcnt::wstr_list> &list) {
@@ -401,13 +430,15 @@ namespace scgms {
 	}
 
 	SSignal_Error_Inspection::SSignal_Error_Inspection(const SFilter &signal_error_filter) {
-		if (signal_error_filter)
+		if (signal_error_filter) {
 			refcnt::Query_Interface<scgms::IFilter, scgms::ISignal_Error_Inspection>(signal_error_filter.get(), IID_Signal_Error_Inspection, *this);
+		}
 	}
 
 	SEvent_Export_Filter_Inspection::SEvent_Export_Filter_Inspection(const SFilter &event_export_filter) {
-		if (event_export_filter)
+		if (event_export_filter) {
 			refcnt::Query_Interface<scgms::IFilter, scgms::IEvent_Export_Filter_Inspection>(event_export_filter.get(), IID_Event_Export_Filter_Inspection, *this);
+		}
 	}
 
 

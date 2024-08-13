@@ -36,7 +36,7 @@
 
 #pragma once
 
-#define TrackLeaks	
+#define TrackLeaks
 	//Sometimes, e.g. SaveFileDialog with Qt causes hangup
 	//not that new(std::nothrow) will not compile with CrtDbg-like new_operator_replacement
 
@@ -48,7 +48,6 @@
 //	#define prefer_vld
 
 	#if defined(_MSC_VER) 
-//&& defined(_DEBUG)
 		#ifdef prefer_vld
 			// local-specific path to VLD; left here for compatibility/legacy reasons
 			#if __has_include("../../../Third Party/Visual Leak Detector/include/vld.h")

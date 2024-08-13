@@ -45,15 +45,19 @@
 #undef max
 
 namespace scgms {
-
-	// mg/dL -> mmol/L; source: http://www.soc-bdr.org/rds/authors/unit_tables_conversions_and_genetic_dictionaries/conversion_glucose_mg_dl_to_mmol_l/index_en.html
+	// factor for converting mg/dl to mmol/l (multiply by this value); source: http://www.soc-bdr.org/rds/authors/unit_tables_conversions_and_genetic_dictionaries/conversion_glucose_mg_dl_to_mmol_l/index_en.html
 	constexpr double mgdL_2_mmolL = 1.0 / 18.0182;
+	// factor for converting mmol/l to mg/dl (multiply by this value); source: http://www.soc-bdr.org/rds/authors/unit_tables_conversions_and_genetic_dictionaries/conversion_glucose_mg_dl_to_mmol_l/index_en.html
 	constexpr double mmolL_2_mgdL = 18.0182;
-	// pmol -> U; source: http://www.soc-bdr.org/content/rds/authors/unit_tables_conversions_and_genetic_dictionaries/e5196/index_en.html
+
+	// factor for converting pmol to U (multiply by this value); source: http://www.soc-bdr.org/content/rds/authors/unit_tables_conversions_and_genetic_dictionaries/e5196/index_en.html
 	constexpr double pmol_2_U = 1.0 / 6000.0;
 
+	/* One hour represented in rattime */
 	constexpr double One_Hour = 1.0 / (24.0);
+	/* One minute represented in rattime */
 	constexpr double One_Minute = 1.0 / (24.0 * 60.0);
+	/* One second represented in rattime */
 	constexpr double One_Second = 1.0 / (24.0 * 60.0 * 60.0);
 
 	inline namespace literals {
@@ -80,7 +84,9 @@ namespace scgms {
 
 	}
 
+	/* Approximator will not derivate */
 	const size_t apxNo_Derivation = 0;
+	/* Approximator will perform first order derivation */
 	const size_t apxFirst_Order_Derivation = 1;
 
 	/*
@@ -179,88 +185,104 @@ namespace scgms {
 
 
 	struct TDevice_Event {
+		/* event code this event contains */
 		NDevice_Event_Code event_code = NDevice_Event_Code::Nothing;
 
-		GUID device_id = Invalid_GUID;					//supporting parallel measurements
-		GUID signal_id = Invalid_GUID;					//blood, ist, isig, model id aka e.g, calculated blood, etc.
-														//discrete_model is also allowed as it may produce multiple signals
+		/* GUID of an entity (filter, model, device, ...) that is a source of this event */
+		GUID device_id = Invalid_GUID;
+		/* GUID of a signal contained within this entity; this may also be related to the information */
+		GUID signal_id = Invalid_GUID;
 
-		double device_time = std::numeric_limits<double>::quiet_NaN();	//signal with multiple values are aggregated by device_time with the same signal_id and device_id
+		/* device time encoded as rattime */
+		double device_time = std::numeric_limits<double>::quiet_NaN();
+		/* logical time of the device event (Lamport) */
 		int64_t logical_time = std::numeric_limits<int64_t>::max();
 
-		uint64_t segment_id = std::numeric_limits<uint64_t>::max();			// segment identifier or Invalid_Segment_Id
+		/* segment identifier (for e.g., signal grouping); may be Invalid_Segment to indicate no segment */
+		uint64_t segment_id = std::numeric_limits<uint64_t>::max();
 
 		union {
+			/* signal level */
 			double level = 0.0;
-			IModel_Parameter_Vector* parameters;		//this will have to be marshalled
-														//as different models have different number of parameters, statically sized field would case over-complicated code later on
-			refcnt::wstr_container* info;				//information, warning, error 
+			/* model parameters */
+			IModel_Parameter_Vector* parameters;
+			/* string container - info, error, warning */
+			refcnt::wstr_container* info;
 		};
 	};
 
-	//To make TDevice_Event handling more efficient, particulalry when passing through the pipe,
-	//IDevice_Event exposes TDevice_Event container iface so that the pipe can accept and pass throught only a pointer, not the entire structure.
-	//This way, we avoid the overhead of copying size_of(TDevice_Event) so many times.
+	/* Device event interface class
+	 * To make TDevice_Event handling more efficient, particulalry when passing through the pipe,
+	 * IDevice_Event exposes TDevice_Event container iface so that the pipe can accept and pass throught only a pointer, not the entire structure.
+	 * This way, we avoid the overhead of copying size_of(TDevice_Event) so many times. */
 	class IDevice_Event : public virtual refcnt::IUnique_Reference {
-	public:
-		// provides pointer to the contained TDevice_Event (free to modify as needed)
-		virtual HRESULT IfaceCalling Raw(TDevice_Event **raw) = 0;
-		virtual HRESULT IfaceCalling Clone(IDevice_Event** event) const = 0;
+		public:
+			/* provides pointer to the contained TDevice_Event (free to modify as needed) */
+			virtual HRESULT IfaceCalling Raw(TDevice_Event **raw) = 0;
+			/* clone the device event into the output parameter */
+			virtual HRESULT IfaceCalling Clone(IDevice_Event** event) const = 0;
 	};
 
+	/* special value for segment ID indicating no segment assigned */
 	static constexpr decltype(TDevice_Event::segment_id) Invalid_Segment_Id = std::numeric_limits<decltype(Invalid_Segment_Id)>::max();
+	/* special value for segment ID indicating the event is relevant to all segments */
 	static constexpr decltype(TDevice_Event::segment_id) All_Segments_Id = std::numeric_limits<decltype(All_Segments_Id)>::max() - 1;
 
+	/* signal bounds structure */
 	struct TBounds {
 		double Min, Max;
 	};
 
+	/* signal container interface */
 	class ISignal : public virtual refcnt::IReferenced {
-	public:
-		/* on S_OK, *filled elements were copied into times and double levels of the count size
-		   for measured signal, it returns the measured values
-		   for calculated signal, it returns E_NOIMPL
-		*/
-		virtual HRESULT IfaceCalling Get_Discrete_Levels(double* const times, double* const levels, const size_t count, size_t *filled) const = 0;
+		public:
+			/* retrieves discrete levels contained within the container, if any
+			 * on S_OK, *filled elements were copied into times and double levels of the count size
+			 * for measured signal, it returns the measured values
+			 * for calculated signal, it returns E_NOIMPL
+			 */
+			virtual HRESULT IfaceCalling Get_Discrete_Levels(double* const times, double* const levels, const size_t count, size_t *filled) const = 0;
 
-		/* gets bounds and level_count, any of these parameters can be nullptr
-		   for measured and calculated signals, dtto Get_Discrete_Levels
-		*/
-		virtual HRESULT IfaceCalling Get_Discrete_Bounds(TBounds* const time_bounds, TBounds* const level_bounds, size_t *level_count) const = 0;
+			/* retrieves bounds of discrete levels
+			 * any of these parameters can be nullptr to indicate no interest
+			 * for measured signal, returns bounds of measured values
+			 * for calculated signal, returns E_NOIMPL
+			 */
+			virtual HRESULT IfaceCalling Get_Discrete_Bounds(TBounds* const time_bounds, TBounds* const level_bounds, size_t *level_count) const = 0;
 
-		/* adds measured levels to internal containers
-		   for measured and calculated signals, dtto Get_Discrete_Levels
-		*/
-		virtual HRESULT IfaceCalling Update_Levels(const double *times, const double *levels, const size_t count) = 0;
+			/* adds measured levels to internal containers
+			 * for measured signal, updates the container with newly obtained levels
+			 * for calculated signal, returns E_NOIMPL
+			 */
+			virtual HRESULT IfaceCalling Update_Levels(const double *times, const double *levels, const size_t count) = 0;
 
-		/*
-			this method will be called in parallel by solvers and therefore it has to be const
+			/* retrieves continuous levels from given signal
+			 * this method will be called in parallel by solvers and therefore it has to be const
+			 * params - params from which to calculate the signal
+			 *          can be nullptr to indicate use of default parameters
+			 * times  - times at which to get the levels, i.e., y values for x values
+			 * levels - the levels, must be already allocated with size of count
+			 *        - level that cannot be calculated must be se to quiet nan
+			 * count  - the total number of times for which to get the levels
+			 * derivation_order - order of derivation requested
+			 */
+			virtual HRESULT IfaceCalling Get_Continuous_Levels(IModel_Parameter_Vector *params,
+				const double* times, double* const levels, const size_t count, const size_t derivation_order) const = 0;
 
-			params - params from which to calculate the signal
-						can be nullptr to indicate use of default parameters
-			times - times at which to get the levels, i.e., y values for x values
-			levels - the levels, must be already allocated with size of count
-					- level that cannot be calculated must be se to quiet nan
-			count - the total number of times for which to get the levels
-			derivation_order - order of derivation requested
-		*/
-		virtual HRESULT IfaceCalling Get_Continuous_Levels(IModel_Parameter_Vector *params,
-			const double* times, double* const levels, const size_t count, const size_t derivation_order) const = 0;
-
-		// returns default parameters on calculated signals, E_NOIMPL on measured signal
-		virtual HRESULT IfaceCalling Get_Default_Parameters(IModel_Parameter_Vector *parameters) const = 0;
+			/* returns default parameters on calculated signals, E_NOIMPL on measured signal */
+			virtual HRESULT IfaceCalling Get_Default_Parameters(IModel_Parameter_Vector *parameters) const = 0;
 	};
 
-
+	/* time segment interface */
 	class ITime_Segment : public virtual refcnt::IReferenced {
-	public:
-		// retrieves or creates signal with given id; calls AddRef on returned object
-		virtual HRESULT IfaceCalling Get_Signal(const GUID *signal_id, ISignal **signal) = 0;
+		public:
+			/* retrieves or creates signal with given id; calls AddRef on returned object */
+			virtual HRESULT IfaceCalling Get_Signal(const GUID *signal_id, ISignal **signal) = 0;
 	};
 
-	// segment provides source levels for the calculation
-	// only ITime_Segment::Get_Signal is supposed to call this function to avoid (although not probihit) creating of over-complex segment-graphs
-	// approx can be nullptr to use a default one
+	/* segment provides source levels for the calculation
+	 * only ITime_Segment::Get_Signal is supposed to call this function to avoid (although not probihit) creating of over-complex segment-graphs
+	 * approx can be nullptr to use a default one */
 	using TCreate_Signal = HRESULT(IfaceCalling *)(const GUID *calc_id, ITime_Segment *segment, const GUID *approx_id, ISignal **signal);
 
 	using TCreate_Device_Event = HRESULT(IfaceCalling *)(scgms::NDevice_Event_Code code, scgms::IDevice_Event **event);
