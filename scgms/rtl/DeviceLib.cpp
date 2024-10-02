@@ -40,6 +40,7 @@
 #include "rattime.h"
 #include "scgmsLib.h"
 
+
 namespace imported {
 	namespace {
 		//all these vars have _external suffix not to confuse linker when building the libraries
@@ -157,17 +158,21 @@ scgms::TDevice_Event* Get_Raw_Event(scgms::IDevice_Event *event) {
 	return result;
 }
 
-scgms::IDevice_Event* Create_Event(const scgms::NDevice_Event_Code code) {
-	scgms::IDevice_Event *result;
-	if (imported::create_device_event_external(code, &result) != S_OK) {
-		result = nullptr;
-	}
-	assert(result != nullptr);
-	return result;
-}
+#ifndef __wasm__
+	scgms::IDevice_Event* Create_Event(const scgms::NDevice_Event_Code code) {
 
-scgms::UDevice_Event::UDevice_Event(const scgms::NDevice_Event_Code code) noexcept : UDevice_Event(Create_Event(code)) {
-}
+		scgms::IDevice_Event *result;
+		if (imported::create_device_event_external(code, &result) != S_OK) {
+			result = nullptr;
+		}
+		assert(result != nullptr);
+		return result;
+	}
+
+
+	scgms::UDevice_Event::UDevice_Event(const scgms::NDevice_Event_Code code) noexcept : UDevice_Event(Create_Event(code)) {
+	}
+#endif
 
 scgms::UDevice_Event::UDevice_Event(scgms::UDevice_Event&& event) noexcept: mRaw(event.mRaw) {
 	event.release();

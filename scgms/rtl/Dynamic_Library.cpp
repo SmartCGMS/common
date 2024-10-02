@@ -46,6 +46,8 @@ namespace {
 	const wchar_t* rsShared_Object_Extension = L".dll";
 #elif __APPLE__
 	const wchar_t* rsShared_Object_Extension = L".dylib";
+#elif __wasm__
+	const wchar_t* rsShared_Object_Extension = nullptr;
 #else
 	const wchar_t* rsShared_Object_Extension = L".so";
 #endif
@@ -66,6 +68,7 @@ CDynamic_Library::~CDynamic_Library() noexcept {
 }
 
 bool CDynamic_Library::Load(const filesystem::path &file_path) noexcept {
+#ifndef __wasm__
 	mLib_Path = file_path.wstring(); // also needed to often buggy assignment operator (verified by valgrind)
 
 	const std::wstring converted_path{ mLib_Path.wstring() }; //we need to make a deep copy
@@ -92,7 +95,7 @@ bool CDynamic_Library::Load(const filesystem::path &file_path) noexcept {
 		const std::wstring converted_path2{ mLib_Path.wstring() };
 		mHandle = LoadLibraryW(converted_path2.c_str());
 	}
-
+#endif
 	return mHandle != NULL;
 }
 
