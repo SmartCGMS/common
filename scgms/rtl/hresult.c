@@ -51,6 +51,8 @@ const wchar_t* Describe_Error(const HRESULT error) {
 			return L"Cannot read from the given source";
 		case ERROR_DS_DRA_EXTN_CONNECTION_FAILED:
 			return L"No object to complete the operation";
+		case RPC_S_ENTRY_NOT_FOUND:
+			return L"Entry/element not found";
 		case E_NOTIMPL:
 			return L"Not implemented";
 		case E_UNEXPECTED:

@@ -477,6 +477,7 @@ extern const wchar_t* dsIHS;
 extern const wchar_t* dsSimplex;
 extern const wchar_t* dsSubplex;
 extern const wchar_t* dsPraxis;
+extern const wchar_t* dsCOBYLA;
 
 extern const char* dsMax_Generations;
 extern const char* dsPopulation_Size;
