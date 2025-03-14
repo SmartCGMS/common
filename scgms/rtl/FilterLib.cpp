@@ -310,7 +310,7 @@ namespace scgms {
 			for (auto iter = desc_begin; iter != desc_end; iter++) {
 				if (iter->id == id) {
 					//desc = *iter;							assign const won't work with const members and custom operator= will result into undefined behavior as it has const members (so it does not have to be const itself)
-					memcpy(&desc, iter, sizeof(decltype(desc)));	//=> memcpy https://stackoverflow.com/questions/9218454/struct-with-const-member
+					memcpy(reinterpret_cast<void*>(&desc), iter, sizeof(decltype(desc)));	//=> memcpy https://stackoverflow.com/questions/9218454/struct-with-const-member
 					result = true;
 					break;
 				}

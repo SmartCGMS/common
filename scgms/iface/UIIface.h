@@ -153,7 +153,7 @@ namespace scgms {
 
 #ifdef __cplusplus
 		inline TModel_Descriptor& operator= (const TModel_Descriptor& other) {
-			memcpy(this, &other, sizeof(TModel_Descriptor));
+			memcpy(reinterpret_cast<void*>(this), &other, sizeof(TModel_Descriptor));
 			return *this;
 		}
 #endif
