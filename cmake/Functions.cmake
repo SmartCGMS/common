@@ -224,6 +224,16 @@ MACRO(SCGMS_ADD_LIBRARY TARGET_NAME)
 	LIST(APPEND TARGETS_LIBRARIES ${TARGET_NAME} CACHE INTERNAL "" FORCE)
 ENDMACRO()
 
+# link common libraries
+MACRO(SCGMS_LINK_COMMON_LIBRARIES TARGET_NAME)
+	TARGET_LINK_LIBRARIES(${TARGET_NAME} scgms-common)
+	
+	# link TBB as parallelism backend on MacOS
+	IF (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+		TARGET_LINK_LIBRARIES(${TARGET_NAME} tbb)
+	ENDIF()
+ENDMACRO()
+
 SET(OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/compiled/" CACHE PATH "Where to store compiled binaries")
 
 # function to configure output parameters of common target according to project settings
