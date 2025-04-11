@@ -546,6 +546,9 @@ extern const wchar_t* dsSignal_GUI_Name_IOB;
 extern const wchar_t* dsSignal_GUI_Name_COB;
 extern const wchar_t* dsSignal_GUI_Name_Carbs;
 extern const wchar_t* dsSignal_GUI_Name_Carb_Rescue;
+extern const wchar_t* dsSignal_GUI_Name_Proteins;
+extern const wchar_t* dsSignal_GUI_Name_Fats;
+extern const wchar_t* dsSignal_GUI_Name_Fiber;
 extern const wchar_t* dsSignal_GUI_Name_Physical_Activity;
 
 extern const wchar_t* dsSignal_GUI_Name_Skin_Temperature;
