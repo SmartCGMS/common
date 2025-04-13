@@ -228,8 +228,17 @@ ENDMACRO()
 MACRO(SCGMS_LINK_COMMON_LIBRARIES TARGET_NAME)
 	TARGET_LINK_LIBRARIES(${TARGET_NAME} scgms-common)
 	
-	# link TBB as parallelism backend on MacOS
+	# link TBB as parallelism backend on MacOS, or when using clang as a compiler except on Windows
+	SET(USE_TBB OFF)
 	IF (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+		SET(USE_TBB ON)
+	ELSE()
+		IF (CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR CMAKE_CXX_COMPILER_ID STREQUAL "Intel")
+			SET(USE_TBB ON)
+		ENDIF()
+	ENDIF()
+
+	IF (USE_TBB)
 		TARGET_LINK_LIBRARIES(${TARGET_NAME} tbb)
 	ENDIF()
 ENDMACRO()
