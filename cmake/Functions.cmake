@@ -172,6 +172,10 @@ FUNCTION(APPLY_SCGMS_LIBRARY_BUILD_SETTINGS TARGET_NAME)
 
 		# debug build = no optimization, add debug symbols
 		LIST(APPEND TARGET_COMPILE_FLAGS_DEBUG -g)
+		IF (BUILDOPT_DEVEL)
+			# append debug symbols even if explicitly requested)
+			LIST(APPEND TARGET_COMPILE_FLAGS_RELEASE -g)
+		ENDIF()
 
 		# release build = maximum optimization, use all available mechanisms for given platform/architecture
 		IF (ANDROID)
