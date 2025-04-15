@@ -145,13 +145,13 @@ namespace debug_drawing
 			size_t x = i % lineWidth;
 			size_t y = i / lineWidth;
 
-			line_group.Add<drawing::Text>(x * singleWidth + singleWidth / 2 - 8, y * singleHeight + 36, drawing.first).Set_Font_Size(32.0).Set_Fill_Color(RGBColor(0, 0, 0));
+			line_group.Add<drawing::Text>(static_cast<double>(x * singleWidth + singleWidth / 2 - 8), static_cast<double>(y * singleHeight + 36), drawing.first).Set_Font_Size(32.0).Set_Fill_Color(RGBColor(0, 0, 0));
 
 			// draw a rectangle around the group
 			drawing::Rectangle& rect = line_group.Add<drawing::Rectangle>();
-			rect.Set_Position(x * singleWidth, y * singleHeight);
-			rect.Set_Width(singleWidth);
-			rect.Set_Height(singleHeight);
+			rect.Set_Position(static_cast<double>(x * singleWidth), static_cast<double>(y * singleHeight));
+			rect.Set_Width(static_cast<double>(singleWidth));
+			rect.Set_Height(static_cast<double>(singleHeight));
 			rect.Set_Stroke_Width(1.0);
 			rect.Set_Stroke_Color(RGBColor(0, 0, 0));
 			rect.Set_Fill_Opacity(0.0);
