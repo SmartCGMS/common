@@ -529,6 +529,10 @@ int64_t str_2_int(const wchar_t* wstr) {
 
 template <typename I, typename C, typename W>
 I str_2_xint(const C* wstr, bool& ok, W func) {
+	if ((wstr == nullptr) || (*wstr == 0)) {
+		ok = false;
+		return static_cast<I>(0);
+	}
 	C* end_char;
 	I value = func(wstr, &end_char, get_base(wstr));
 	ok = *end_char == 0;
