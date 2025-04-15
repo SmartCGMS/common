@@ -50,6 +50,8 @@ namespace scgms {
 				const wchar_t* scgms_dynamic_lib_name = L"scgms.dll";
 			#elif __APPLE__
 				const wchar_t* scgms_dynamic_lib_name = L"libscgms.dylib";
+			#elif __wasm__
+				const wchar_t* scgms_dynamic_lib_name = nullptr;	//No way to load dll in a browser
 			#else
 				const wchar_t* scgms_dynamic_lib_name = L"libscgms.so";
 			#endif
@@ -59,6 +61,9 @@ namespace scgms {
 
 			void* resolve_scgms_symbol(const char* symbol_name) noexcept {
 
+#ifdef __wasm__
+				return nullptr;
+#else
 				if (!gScgms_Library.Is_Loaded()) {
 					const filesystem::path base{ base_search_path };
 					const std::wstring lib_path{ (base / scgms_dynamic_lib_name).wstring() };
@@ -68,6 +73,7 @@ namespace scgms {
 				}
 
 				return gScgms_Library.Resolve(symbol_name);
+#endif
 			}
 
 			namespace {

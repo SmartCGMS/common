@@ -368,15 +368,16 @@ namespace scgms {
 		count
 	};
 
-	/* supported diagnosis (legacy) */
-	enum class TDiagnosis : size_t
-	{
-		Type1 = 0,
+	/* supported diagnosis */
+	enum class NDiagnosis : size_t {
+		Unknown = 0,
+		Healthy,
+		Type1,
 		Type2,
 		Gestational,
+		Prediabetes,
 
 		count,
-		NotSpecified = Type1
 	};
 
 	/* interface of an object that holds an internal clock */
@@ -412,7 +413,7 @@ namespace scgms {
 			/* are there any new data available? Returns S_OK if yes, S_FALSE otherwise */
 			virtual HRESULT IfaceCalling New_Data_Available() = 0;
 			/* retrieves generated SVG for given drawing type and diagnosis */
-			virtual HRESULT IfaceCalling Draw(TDrawing_Image_Type type, TDiagnosis diagnosis, refcnt::str_container *svg, refcnt::IVector_Container<uint64_t> *segmentIds, refcnt::IVector_Container<GUID> *signalIds) = 0;
+			virtual HRESULT IfaceCalling Draw(TDrawing_Image_Type type, NDiagnosis diagnosis, refcnt::str_container *svg, refcnt::IVector_Container<uint64_t> *segmentIds, refcnt::IVector_Container<GUID> *signalIds) = 0;
 	};
 
 	// event export callback function prototype; used in filters implementing IEvent_Export_Filter_Inspection iface

@@ -55,6 +55,7 @@
 	#define ERROR_FILE_NOT_FOUND					((HRESULT)2L)
 	#define ERROR_READ_FAULT						((HRESULT)30L)
 	#define ERROR_DS_DRA_EXTN_CONNECTION_FAILED		((HRESULT)8466L)
+	#define RPC_S_ENTRY_NOT_FOUND					((HRESULT)1761L)
 
 	#define E_NOTIMPL								((HRESULT)0x80004001L)
 	#define E_UNEXPECTED							((HRESULT)0x8000FFFFL)
@@ -73,8 +74,7 @@
 	#define E_HANDLE								((HRESULT)0x80070006L)
 	#define E_OUTOFMEMORY							((HRESULT)0x8007000EL)
 	#define E_NOT_SET								((HRESULT)0x80070490L)
-	#define E_UAC_DISABLED							((HRESULT)0x80270252L)
-
+	#define E_UAC_DISABLED							((HRESULT)0x80270252L)	
 #endif
 
 #ifdef __cplusplus

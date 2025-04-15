@@ -219,7 +219,7 @@ namespace scgms {
 		return filter_desc;
 	}
 
-
+#ifndef __wasm__
 	SFilter_Parameter SFilter_Configuration_Link::Add_Parameter(const scgms::NParameter_Type type, const wchar_t *conf_name) {
 		SFilter_Parameter result;
 		scgms::IFilter_Parameter *parameter;
@@ -262,6 +262,13 @@ namespace scgms {
 		}
 	}
 
+	SFilter_Executor::SFilter_Executor(refcnt::SReferenced<scgms::IFilter_Chain_Configuration> configuration, scgms::TOn_Filter_Created on_filter_created, const void* on_filter_created_data, refcnt::Swstr_list error_description, scgms::IFilter* output) {
+		scgms::IFilter_Executor* executor;
+		if (Succeeded(imported::execute_filter_configuration_external(configuration.get(), on_filter_created, on_filter_created_data, output, &executor, error_description.get()))) {
+			reset(executor, [](scgms::IFilter_Executor* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });
+		}
+	}
+#endif
 
 	SPersistent_Filter_Chain_Configuration::operator SFilter_Chain_Configuration() {
 		SFilter_Chain_Configuration result;
@@ -276,19 +283,14 @@ namespace scgms {
 	}
 
 
-	SFilter_Executor::SFilter_Executor(refcnt::SReferenced<scgms::IFilter_Chain_Configuration> configuration, scgms::TOn_Filter_Created on_filter_created, const void* on_filter_created_data, refcnt::Swstr_list error_description, scgms::IFilter *output) {
-		scgms::IFilter_Executor *executor;
-		if (Succeeded(imported::execute_filter_configuration_external(configuration.get(), on_filter_created, on_filter_created_data, output, &executor, error_description.get()))) {
-			reset(executor, [](scgms::IFilter_Executor* obj_to_release) { if (obj_to_release != nullptr) obj_to_release->Release(); });
-		}
-	}
-
 
 	HRESULT SFilter_Executor::Execute(scgms::UDevice_Event &&event) {
 		scgms::IDevice_Event *raw_event = event.get();
 		event.release();
 		return get()->Execute(raw_event);
 	}
+
+#ifndef __wasm__
 
 	std::vector<TFilter_Descriptor> get_filter_descriptor_list() {
 		std::vector<TFilter_Descriptor> result;
@@ -300,6 +302,7 @@ namespace scgms {
 
 		return result;
 	}
+
 
 	bool get_filter_descriptor_by_id(const GUID &id, TFilter_Descriptor &desc) {
 		TFilter_Descriptor *desc_begin, *desc_end;
@@ -319,6 +322,7 @@ namespace scgms {
 
 		return result;
 	}
+#endif
 
 	
 	CBase_Filter::CBase_Filter(scgms::IFilter* output, const GUID& device_id) noexcept : mOutput(output), mDevice_ID(device_id) {

@@ -484,6 +484,7 @@ const wchar_t* dsIHS = L"Improved Harmony Search";
 const wchar_t* dsSimplex = L"Simplex";
 const wchar_t* dsSubplex = L"Subplex";
 const wchar_t* dsPraxis = L"Praxis";
+const wchar_t* dsCOBYLA = L"COBYLA";
 
 const char* dsMax_Generations = "Maximum generations";
 const char* dsPopulation_Size = "Population size";
