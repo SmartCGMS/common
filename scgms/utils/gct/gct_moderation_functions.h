@@ -95,6 +95,29 @@ namespace gct {
 	};
 
 	/**
+	 * Transfer is moderated by the capacity of the target
+	 * basically a (1-x/c) function, where "c" is the capacity defined as parameter
+	 */
+	class CCapacity_Moderation_Function : public CModeration_Function {
+		protected:
+			const double mCapacity = 1.0;
+
+		public:
+			CCapacity_Moderation_Function(double modFactor, double capacity)
+				: mCapacity(capacity) {
+				//
+			}
+
+			virtual double Get_Moderation_Input(double moderatorAmount) const override {
+				return (1.0 - moderatorAmount / mCapacity);
+			}
+
+			virtual double Get_Elimination_Input(double moderatorAmount) const override {
+				return 0.0;
+			}
+	};
+
+	/**
 	 * Transfer is moderated in proportionally to moderator with base of 1.0
 	 * Moderator does not get eliminated
 	 * e.g.; moderation of transfers, that would happen even without the presence of the moderator
