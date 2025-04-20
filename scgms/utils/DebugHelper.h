@@ -36,50 +36,6 @@
 
 #pragma once
 
-#define TrackLeaks
-	//Sometimes, e.g. SaveFileDialog with Qt causes hangup
-	//not that new(std::nothrow) will not compile with CrtDbg-like new_operator_replacement
-
-#ifdef TrackLeaks
-
-	//Visual Leak Detector - vld.codeplex.com
-	//This will cause problems, if a dll enabling VLD is loaded in a thread that does not finish as the last one.
-	// VLD should never be enabled again as the VS2019 is unofficial, and VS2022 is none.
-//	#define prefer_vld
-
-	#if defined(_MSC_VER) 
-		#ifdef prefer_vld
-			// local-specific path to VLD; left here for compatibility/legacy reasons
-			#if __has_include("../../../Third Party/Visual Leak Detector/include/vld.h")
-				#include "../../../Third Party/Visual Leak Detector/include/vld.h"
-			#else
-				#include <vld.h>
-			#endif
-		#else
-
-			//The Thread Building Blocks has to include prior redefining new
-			#ifdef TBB_USE_DEBUG
-				#include "tbb/tbb.h"
-				#include "tbb/task.h"
-				#include "tbb/atomic.h"
-			#endif
-
-			#define _CRTDBG_MAP_ALLOC
-			#include <crtdbg.h>
-
-/*			The following defines are obsolete constructions, which cause problems
-*			when using new(std::nothow) type_t[size_t];
-* 
-			#define DEBUG_CLIENTBLOCK   new( _CLIENT_BLOCK, __FILE__, __LINE__)
-			#define DEBUG_NORMALBLOCK   new( _NORMAL_BLOCK, __FILE__, __LINE__)
-			#define new_operator_replacement DEBUG_CLIENTBLOCK
-			#define new new_operator_replacement
-*/
-		#endif
-	#endif
-
-#endif
-
 #include <iostream>
 #include <sstream>
 #include <fstream>
