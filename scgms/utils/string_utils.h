@@ -43,7 +43,7 @@
 #include <locale>
 #include <vector>
 
-/* compile - time type + value selector - ending part */
+/* compile-time type + value selector - ending part */
 template<typename T, typename A0>
 static constexpr T char_type_selector(A0 arg0) {
 	if constexpr (std::is_same_v<T, A0>) {

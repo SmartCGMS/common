@@ -65,7 +65,7 @@ CPriority_Guard::~CPriority_Guard() {
 }
 
 
-TCPU_Strings  Get_CPU_Strings() {
+TCPU_Strings Get_CPU_Strings() {
 
 	[[maybe_unused]] auto append_extension = [](std::string& target, const std::string& desc, const auto set) {
 		if (set != 0) {
