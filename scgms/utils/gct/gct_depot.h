@@ -644,9 +644,9 @@ namespace gct
 
 	/**
 	 * Class representing a model, consisting of multiple compartments
-	 * The enumerator is 
+	 * The enumerator required as the first type parameter is used to identify compartments
 	 */
-	template<typename NCompartment_Id, typename NCompartment_Id CompartmentCount>
+	template<typename NCompartment_Id, /* typename */ NCompartment_Id CompartmentCount>
 	class CModel final : public std::vector<CCompartment> {
 		public:
 			CModel() : std::vector<CCompartment>(static_cast<size_t>(CompartmentCount)) {

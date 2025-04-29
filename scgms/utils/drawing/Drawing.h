@@ -45,9 +45,14 @@
 /* a class representing RGB-encoded color */
 struct RGBColor {
 
-	uint8_t r;
-	uint8_t g;
-	uint8_t b;
+	RGBColor() = default;
+	RGBColor(uint8_t _r, uint8_t _g, uint8_t _b, uint8_t _a = 255) :
+		r(_r), g(_g), b(_b), a(_a) {
+	}
+
+	uint8_t r = 0;
+	uint8_t g = 0;
+	uint8_t b = 0;
 
 	uint8_t a = 255;
 
