@@ -491,41 +491,41 @@ namespace scgms {
 	};
 
 	/* shared pointer to the drawing filter inspection instance */
-	class SDrawing_Filter_Inspection : public std::shared_ptr<IDrawing_Filter_Inspection> {
+	class SDrawing_Filter_Inspection : public virtual refcnt::SReferenced<IDrawing_Filter_Inspection> {
 		public:
 			SDrawing_Filter_Inspection() noexcept {};
-			SDrawing_Filter_Inspection(const SFilter &drawing_filter);
+			SDrawing_Filter_Inspection(SFilter drawing_filter);
 	};
 
 	/* shared pointer to the drawing filter v2 inspection instance */
-	class SDrawing_Filter_Inspection_v2 : public std::shared_ptr<IDrawing_Filter_Inspection_v2> {
+	class SDrawing_Filter_Inspection_v2 : public virtual refcnt::SReferenced<IDrawing_Filter_Inspection_v2> {
 		public:
 			SDrawing_Filter_Inspection_v2() noexcept {};
-			SDrawing_Filter_Inspection_v2(const SFilter& drawing_filter);
+			SDrawing_Filter_Inspection_v2(SFilter drawing_filter);
 	};
 
 	/* shared pointer to the logging filter inspection instance */
-	class SLog_Filter_Inspection : public std::shared_ptr<ILog_Filter_Inspection> {
+	class SLog_Filter_Inspection : public virtual refcnt::SReferenced<ILog_Filter_Inspection> {
 		public:
 			SLog_Filter_Inspection() noexcept {};
-			SLog_Filter_Inspection(const SFilter &log_filter);
+			SLog_Filter_Inspection(SFilter log_filter);
 
 			/* transparently calls the Pop method if the inspection interface */
-			bool pop(std::shared_ptr<refcnt::wstr_list> &list);
+			bool pop(refcnt::SReferenced<refcnt::wstr_list> &list);
 	};
 
 	/* shared pointer to the signal error inspection instance */
 	class SSignal_Error_Inspection : public virtual refcnt::SReferenced<scgms::ISignal_Error_Inspection> {
 		public:
 			SSignal_Error_Inspection() noexcept {};
-			SSignal_Error_Inspection(const SFilter &signal_error_filter);
+			SSignal_Error_Inspection(SFilter signal_error_filter);
 	};
 
 	/* shared pointer to the event export inspection instance (legacy) */
-	class SEvent_Export_Filter_Inspection : public std::shared_ptr<scgms::IEvent_Export_Filter_Inspection> {
+	class SEvent_Export_Filter_Inspection : public virtual refcnt::SReferenced<scgms::IEvent_Export_Filter_Inspection> {
 		public:
 			SEvent_Export_Filter_Inspection() noexcept {};
-			SEvent_Export_Filter_Inspection(const SFilter &event_export_filter);
+			SEvent_Export_Filter_Inspection(SFilter event_export_filter);
 	};
 
 

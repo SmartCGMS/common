@@ -85,19 +85,66 @@ namespace refcnt {
 
 	/* shared pointer implementation of IReferenced object */
 	template <typename I>
-	class SReferenced : public std::shared_ptr<I> {
+	class SReferenced {
+		private:
+			std::shared_ptr<I> mPtr;
+
 		public:
-			SReferenced() : std::shared_ptr<I>() {}
+			SReferenced() = default;
 
 			SReferenced(I *obj) {
 				if (obj) {
 					obj->AddRef();
 				}
-				std::shared_ptr<I>::reset(obj, [](I* obj_to_release) {
+				mPtr.reset(obj, [](I* obj_to_release) {
 					if (obj_to_release != nullptr) {
 						obj_to_release->Release();
 					}
 				});
+			}
+
+			template<typename Deleter>
+			void reset(I* obj, Deleter deleter) {
+				mPtr.reset(obj, deleter);
+			}
+
+			void reset(I* obj = nullptr) {
+				if (obj) {
+					obj->AddRef();
+				}
+				mPtr.reset(obj, [](I* obj_to_release) {
+					if (obj_to_release != nullptr) {
+						obj_to_release->Release();
+					}
+				});
+			}
+
+			I* operator->() {
+				return mPtr.get();
+			}
+
+			I* operator->() const {
+				return mPtr.get();
+			}
+
+			I* get() {
+				return mPtr.get();
+			}
+
+			I* get() const {
+				return mPtr.get();
+			}
+
+			I& operator*() {
+				return *mPtr;
+			}
+
+			I& operator*() const {
+				return *mPtr;
+			}
+
+			operator bool() const {
+				return mPtr != nullptr;
 			}
 
 			virtual ~SReferenced() = default;
@@ -106,6 +153,25 @@ namespace refcnt {
 			template< class Y, class Deleter >
 			SReferenced& operator=(std::unique_ptr<Y, Deleter>&& r) = delete;
 	};
+
+	/* constructs a std::shared_ptr from IReferenced; this is a helper function to call make_shared_reference_ext */
+	template <typename I>
+	SReferenced<I> make_shared_reference(I* obj, bool add_reference) {
+		return make_shared_reference_ext<SReferenced<I>, I>(obj, add_reference);
+	}
+
+	/* queries the interface of given object, fills the target shared_ptr with accordingly initialized interface object, if succeeds */
+	template <typename I, typename Q>
+	void Query_Interface(I* obj, const GUID& id, SReferenced<Q>& target) {
+		Q* queried;
+		if (obj->QueryInterface(&id, reinterpret_cast<void**>(&queried)) == S_OK) {
+			target.reset(queried, [](Q* obj_to_release) {
+				if (obj_to_release != nullptr) {
+					obj_to_release->Release();
+				}
+			});
+		}
+	}
 
 	/* helper function to manufacture SReferenced from given IReferenced type */
 	template <class T, class I, class S, typename... Args>
@@ -308,7 +374,7 @@ namespace refcnt {
 
 	/* shared pointer wrapper implementation of vector container */
 	template <typename T>
-	class SVector_Container : public std::shared_ptr<IVector_Container<T>> {
+	class SVector_Container : public SReferenced<IVector_Container<T>> {
 		protected:
 			T* get_bound(const bool first) const {
 				//Do not cache these values as we cannot track every possible modification of the underlying vector.
@@ -317,7 +383,7 @@ namespace refcnt {
 				T* e = nullptr;
 
 				if (this->operator bool()) {
-					if (std::shared_ptr<IVector_Container<T>>::get()->get(&b, &e) != S_OK) {
+					if (SReferenced<IVector_Container<T>>::get()->get(&b, &e) != S_OK) {
 						return nullptr;
 					}
 				}
@@ -406,7 +472,7 @@ namespace refcnt {
 	/* converts a wstring to a container of wide characters */
 	wstr_container* WString_To_WChar_Container(const wchar_t* str);
 	/* converts a wstring to a shared pointer wrapper container of wide characters */
-	std::shared_ptr<wstr_container> WString_To_WChar_Container_shared(const wchar_t* str);
+	SReferenced<wstr_container> WString_To_WChar_Container_shared(const wchar_t* str);
 
 	/* compares a string and vector container of characters for equality */
 	bool WChar_Container_Equals_WString(wstr_container *container, const wchar_t* str, size_t offset = 0, size_t maxCount = (size_t)-1);

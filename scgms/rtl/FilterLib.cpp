@@ -107,7 +107,7 @@ namespace scgms {
 	}
 
 	HRESULT SFilter_Parameter::set_wstring(const wchar_t *str) {
-		std::shared_ptr<refcnt::wstr_container> wstr = refcnt::WString_To_WChar_Container_shared(str);
+		SReferenced<refcnt::wstr_container> wstr = refcnt::WString_To_WChar_Container_shared(str);
 		return get()->Set_WChar_Container(wstr.get());
 	}
 
@@ -401,25 +401,25 @@ namespace scgms {
 		}
 	}
 	
-	SDrawing_Filter_Inspection::SDrawing_Filter_Inspection(const SFilter &drawing_filter) {
+	SDrawing_Filter_Inspection::SDrawing_Filter_Inspection(SFilter drawing_filter) {
 		if (drawing_filter) {
 			refcnt::Query_Interface<scgms::IFilter, scgms::IDrawing_Filter_Inspection>(drawing_filter.get(), IID_Drawing_Filter_Inspection, *this);
 		}
 	}
 
-	SDrawing_Filter_Inspection_v2::SDrawing_Filter_Inspection_v2(const SFilter& drawing_filter) {
+	SDrawing_Filter_Inspection_v2::SDrawing_Filter_Inspection_v2(SFilter drawing_filter) {
 		if (drawing_filter) {
 			refcnt::Query_Interface<scgms::IFilter, scgms::IDrawing_Filter_Inspection_v2>(drawing_filter.get(), IID_Drawing_Filter_Inspection_v2, *this);
 		}
 	}
 
-	SLog_Filter_Inspection::SLog_Filter_Inspection(const SFilter &log_filter) {
+	SLog_Filter_Inspection::SLog_Filter_Inspection(SFilter log_filter) {
 		if (log_filter) {
 			refcnt::Query_Interface<scgms::IFilter, scgms::ILog_Filter_Inspection>(log_filter.get(), IID_Log_Filter_Inspection, *this);
 		}
 	}
 
-	bool SLog_Filter_Inspection::pop(std::shared_ptr<refcnt::wstr_list> &list) {
+	bool SLog_Filter_Inspection::pop(refcnt::SReferenced<refcnt::wstr_list> &list) {
 		bool result = false;
 		auto ptr_get = get();
 		if (ptr_get) {
@@ -433,18 +433,17 @@ namespace scgms {
 		return result;
 	}
 
-	SSignal_Error_Inspection::SSignal_Error_Inspection(const SFilter &signal_error_filter) {
+	SSignal_Error_Inspection::SSignal_Error_Inspection(SFilter signal_error_filter) {
 		if (signal_error_filter) {
 			refcnt::Query_Interface<scgms::IFilter, scgms::ISignal_Error_Inspection>(signal_error_filter.get(), IID_Signal_Error_Inspection, *this);
 		}
 	}
 
-	SEvent_Export_Filter_Inspection::SEvent_Export_Filter_Inspection(const SFilter &event_export_filter) {
+	SEvent_Export_Filter_Inspection::SEvent_Export_Filter_Inspection(SFilter event_export_filter) {
 		if (event_export_filter) {
 			refcnt::Query_Interface<scgms::IFilter, scgms::IEvent_Export_Filter_Inspection>(event_export_filter.get(), IID_Event_Export_Filter_Inspection, *this);
 		}
 	}
-
 
 	std::tuple<bool, std::wstring> Is_Variable_Name(const std::wstring& str) {
 		std::wstring trimmed{ str };

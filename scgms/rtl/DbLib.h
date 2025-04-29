@@ -37,6 +37,7 @@
 #pragma once
 
 #include "../iface/DbIface.h"
+#include "referencedImpl.h"
 
 #include <vector>
 #include <string>
@@ -238,7 +239,7 @@ namespace db {
 			SDb_Connection Connect(const std::wstring &host, const std::wstring &provider, uint16_t port, const std::wstring &name, const std::wstring &user_name, const std::wstring &password);
 	};
 
-	using SDb_Sink = std::shared_ptr<IDb_Sink>;
+	using SDb_Sink = refcnt::SReferenced<IDb_Sink>;
 
 	/* is the provider marking a database engine that uses a file-based database (e.g., SQLite)? */
 	bool is_file_db(const std::wstring& provider);

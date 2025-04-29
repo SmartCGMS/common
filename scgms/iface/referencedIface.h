@@ -99,25 +99,6 @@ namespace refcnt {
 		return result;
 	}
 
-	/* constructs a std::shared_ptr from IReferenced; this is a helper function to call make_shared_reference_ext */
-	template <typename I>
-	std::shared_ptr<I> make_shared_reference(I *obj, bool add_reference) {
-		return make_shared_reference_ext<std::shared_ptr<I>, I>(obj, add_reference);
-	}
-
-	/* queries the interface of given object, fills the target shared_ptr with accordingly initialized interface object, if succeeds */
-	template <typename I, typename Q>
-	void Query_Interface(I *obj, const GUID &id, std::shared_ptr<Q> &target) {
-		Q* queried;
-		if (obj->QueryInterface(&id, reinterpret_cast<void**>(&queried)) == S_OK) {
-			target.reset(queried, [](Q* obj_to_release) {
-				if (obj_to_release != nullptr) {
-					obj_to_release->Release();
-				}
-			});
-		}
-	}
-
 	/* are all objects given as parameters non-nullptr? */
 	template <typename T>
 	bool Shared_Valid_All(const T& a) {

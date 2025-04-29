@@ -161,10 +161,10 @@ namespace scgms {
 	};
 
 	/* calculating filter inspection */
-	class SCalculate_Filter_Inspection : public std::shared_ptr<ICalculate_Filter_Inspection> {
+	class SCalculate_Filter_Inspection : public virtual refcnt::SReferenced<ICalculate_Filter_Inspection> {
 		public:
 			SCalculate_Filter_Inspection() noexcept {};
-			SCalculate_Filter_Inspection(const SFilter &calculate_filter);
+			SCalculate_Filter_Inspection(SFilter calculate_filter);
 	};
 
 	/* optimize parameters based on given params */
