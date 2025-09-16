@@ -102,7 +102,7 @@ namespace scgms {
 			for (auto iter = desc_begin; iter != desc_end; iter++) {
 				if (iter->id == id) {
 					//desc = *iter;							assign const won't work with const members and custom operator= will result into undefined behavior as it has const members (so it does not have to be const itself)
-					memcpy(&desc, iter, sizeof(decltype(desc)));	//=> memcpy https://stackoverflow.com/questions/9218454/struct-with-const-member
+					std::memcpy(static_cast<void*>(&desc), iter, sizeof(decltype(desc)));	//=> memcpy https://stackoverflow.com/questions/9218454/struct-with-const-member
 					result = true;
 					break;
 				}
@@ -126,7 +126,7 @@ namespace scgms {
 				for (size_t i = 0; i < iter->number_of_calculated_signals; i++) {
 					if (iter->calculated_signal_ids[i] == signal_id) {
 						//desc = *iter;							assign const won't work with const members and custom operator= will result into undefined behavior as it has const members (so it does not have to be const itself)
-						memcpy(&desc, iter, sizeof(decltype(desc)));	//=> memcpy https://stackoverflow.com/questions/9218454/struct-with-const-member
+						std::memcpy(static_cast<void*>(&desc), iter, sizeof(decltype(desc)));	//=> memcpy https://stackoverflow.com/questions/9218454/struct-with-const-member
 						result = true;
 						break;
 					}
@@ -247,7 +247,7 @@ namespace scgms {
 	bool CSignal_Description::Get_Descriptor(const GUID& signal_id, TSignal_Descriptor& desc) const {
 		const auto result = mSignal_Descriptors.find(signal_id);
 		if (result != mSignal_Descriptors.end()) {
-			memcpy(&desc, &(result->second), sizeof(decltype(desc)));
+			std::memcpy(static_cast<void*>(&desc), &(result->second), sizeof(decltype(desc)));
 			return true;
 		}
 		else {
