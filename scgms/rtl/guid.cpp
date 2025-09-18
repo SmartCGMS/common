@@ -38,9 +38,14 @@
 
 #include <random>
 
-GUID Generate_GUIDv4() {
+#ifdef _WIN32
+	#include <Rpc.h>
+#endif 
 
-	GUID guid;
+
+GUID Generate_GUIDv4_Rand() {
+
+	GUID guid = Invalid_GUID;
 
 	static std::random_device rdev;
 
@@ -52,5 +57,30 @@ GUID Generate_GUIDv4() {
 		guid.Data4[i] = static_cast<std::remove_reference_t<decltype(guid.Data4[0])>>(rdev());
 	}
 
+	//got it random, make it to adhere to version 4
+	//encode GUID version - let's encode just the two most significant bits=>variant 1
+	const uint16_t masked_version_bits = guid.Data3 & 0x0FFF;
+	guid.Data3 = masked_version_bits | 0x4000;
+
+	//encode the variant 1, i.e., just two most significant bits
+	const std::array<uint8_t, 4> variant_bits = { 0x80, 0x90, 0xA0, 0xB0 };
+	const uint8_t variant_sign = variant_bits[static_cast<uint8_t>(rdev()) % variant_bits.size()];
+	const uint8_t masked_data4_0 = guid.Data4[0] & 0x0F;
+	guid.Data4[0] = masked_data4_0 | variant_sign;
+
 	return guid;
+}
+
+#include <iostream>
+
+GUID Generate_GUID() {
+	//when possible, let's try to prefer version 7 instead of version 4
+	#ifdef _WIN32	
+		GUID result = Invalid_GUID;
+		if (UuidCreate(&result) != RPC_S_OK)
+			result = Generate_GUIDv4_Rand();
+		return result;
+	#else
+		return Generate_GUIDv4_Rand();
+	#endif
 }

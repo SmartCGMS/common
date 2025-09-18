@@ -138,7 +138,7 @@
 
 	// Generates a new GUID version 4 (completely random, suitable for network traffic)
 	// C++ code only for simplicity as C++ has more powerful tools for randnom numbers out of the box
-	GUID Generate_GUIDv4();
+	GUID Generate_GUID();
 #endif
 
 #endif
