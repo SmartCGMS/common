@@ -158,7 +158,7 @@ scgms::TDevice_Event* Get_Raw_Event(scgms::IDevice_Event *event) {
 	return result;
 }
 
-#ifndef __wasm__
+#if !(defined(__wasm__) || (SCGMS_MONOLITH))
 	scgms::IDevice_Event* Create_Event(const scgms::NDevice_Event_Code code) {
 
 		scgms::IDevice_Event *result;

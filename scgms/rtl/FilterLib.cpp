@@ -39,7 +39,6 @@
 #include "UILib.h"
 #include "../utils/string_utils.h"
 
-
 #include <wchar.h>
 #include "manufactory.h"
 
@@ -219,7 +218,7 @@ namespace scgms {
 		return filter_desc;
 	}
 
-#ifndef __wasm__
+#if !(defined(__wasm__) || defined(SCGMS_MONOLITH))
 	SFilter_Parameter SFilter_Configuration_Link::Add_Parameter(const scgms::NParameter_Type type, const wchar_t *conf_name) {
 		SFilter_Parameter result;
 		scgms::IFilter_Parameter *parameter;
@@ -286,11 +285,11 @@ namespace scgms {
 
 	HRESULT SFilter_Executor::Execute(scgms::UDevice_Event &&event) {
 		scgms::IDevice_Event *raw_event = event.get();
-		event.release();
+		event.release();			
 		return get()->Execute(raw_event);
 	}
 
-#ifndef __wasm__
+#if !(defined(__wasm__) || (SCGMS_MONOLITH))
 
 	std::vector<TFilter_Descriptor> get_filter_descriptor_list() {
 		std::vector<TFilter_Descriptor> result;

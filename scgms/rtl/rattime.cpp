@@ -75,6 +75,12 @@ time_t Rat_Time_To_Unix_Time(const double rt) {
 	return result;
 }
 
+double Rat_Time_Now() {
+	const auto sys_now = std::chrono::time_point<std::chrono::system_clock>{};
+	std::time_t epoch_time = std::chrono::system_clock::to_time_t(sys_now);
+	return Unix_Time_To_Rat_Time(epoch_time);
+}
+
 void convert_dbl(const double rt, std::string& str) {
 	str = dbl_2_str(rt);
 }

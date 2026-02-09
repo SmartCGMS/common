@@ -56,6 +56,8 @@ double Unix_Time_To_Rat_Time(const time_t qdt);
 /* converts given rat time to unix timestamp */
 time_t Rat_Time_To_Unix_Time(const double rt);
 
+double Rat_Time_Now();
+
 /* fmt is the string formatting used by C++ standard library
  * second_fraction_threshold says a precision of a second fraction, which should be outputed => 0.0 precision to 1 second */
 std::string Rat_Time_To_Local_Time_Str(const double rt, const char *fmt, const double second_fraction_threshold = 0.0);

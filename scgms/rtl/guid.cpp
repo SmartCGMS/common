@@ -37,6 +37,8 @@
 #include "guid.h"
 
 #include <random>
+#include <array>
+#include <cstdint>
 
 #ifdef _WIN32
 	#include <Rpc.h>
